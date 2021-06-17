@@ -30,26 +30,53 @@ internal class S01c02p13Test {
     }
 
     @Test
-    @DisplayName( "test with made up string for overlapping substrings")
-    fun countRepeatedTargetsWithOverlapMadeUpStrings() {
-
-        val genome2 = "blahbbbblahblahblahb"
-        val target2 = "bb"
-        val foundCount = countRepeatedTargetsWithOverlap(genome2, target2)
-
-        assertEquals(foundCount, 3)
-
-    }
-
-    @Test
     @DisplayName( "test with how now brown cow")
     fun countRepeatedTargetsWithOverlapMadeUpStrings02() {
 
         val genome2 = "how now brown cow"
-        val target2 = "ow"
-        val foundCount = countRepeatedTargetsWithOverlap(genome2, target2)
+        val runLength2 = 2
+        val matchString = scanForMatchesOfLength(genome2, runLength2)
+        val expectedResult = "ow"
 
-        assertEquals(foundCount, 4)
+        assertEquals(matchString.trimEnd(), expectedResult)
+
+    }
+
+    @Test
+    @DisplayName( "test to find max TTT string")
+    fun findMaxTTTstring() {
+
+        val genome3 =
+"""CCGGGTTTTAAATTTT"""
+        val runLength3 = 4
+        val matchString = scanForMatchesOfLength(genome3, runLength3)
+        val expectedResult = "TTTT"
+
+        assertEquals(expectedResult, matchString.trimEnd())
+
+    }
+
+    /* GIVEN:
+     *   Sample Input:
+
+    ACGTTGCATGTCGCATGATGCATGAGAGCT
+    4
+
+    Sample Output:
+
+    CATG GCAT
+     */
+    @Test
+    @DisplayName( "test with given short sample")
+    fun testWithGivenSample() {
+
+        val genome4 =
+            """ACGTTGCATGTCGCATGATGCATGAGAGCT"""
+        val runLength4 = 4
+        val matchString = scanForMatchesOfLength(genome4, runLength4)
+        val expectedResult = "CATG GCAT"
+
+        assertEquals(expectedResult, matchString.trimEnd())
 
     }
 }
