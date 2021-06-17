@@ -3,7 +3,7 @@ https://stepik.org/course/55789/syllabus
 
 ### Solutions to homework implemented in Kotlin
 
-Updated through chapter 2.
+Updated through chapter 2..
 
 Note: the problems in this repo were solved using the Kotlin language.
 The repo is configured for the Intellij IDEA system and gradle.
