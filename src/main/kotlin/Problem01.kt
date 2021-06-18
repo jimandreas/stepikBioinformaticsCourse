@@ -1,7 +1,7 @@
 fun main() {
-    println("Hello world, genome data length is ${GenomeData.genomeData.length}")
+    println("Hello world, genome data length is ${GenomeData.genomeDataVibrioCholerae.length}")
 
-    for (c in GenomeData.genomeData) {
+    for (c in GenomeData.genomeDataVibrioCholerae) {
         when (c) {
             'A' -> {}
             'C' -> {}

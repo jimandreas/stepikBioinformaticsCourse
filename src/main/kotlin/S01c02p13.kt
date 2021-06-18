@@ -3,15 +3,13 @@
 // 1.2 Hidden Messages in the Replication Origin
 
 // Code Challenge: Solve the Frequent Words Problem.
+//
+//    Input: A string Text and an integer k.
+//    Output: All most frequent k-mers in Text.
 
 import java.lang.Integer.max
 
-// code credit: https://www.techiedelight.com/increment-value-map-kotlin/
 
-fun <K> increment(map: MutableMap<K, Int>, key: K) {
-    map.putIfAbsent(key, 0)
-    map[key] = map[key]!! + 1
-}
 
 fun main() {
 
@@ -31,6 +29,10 @@ fun main() {
     println(returnedValue)
 }
 
+/**
+ *    Input: A string Text and an integer k. (kmerLength)
+ *    Output: All most frequent k-mers in Text.
+ */
 fun scanForMatchesOfLength(genome: String, runLength: Int): String {
     val map: MutableMap<String, Int> = HashMap()
     var maxValue = 0
@@ -54,4 +56,17 @@ fun scanForMatchesOfLength(genome: String, runLength: Int): String {
         }
     }
     return retStr
+}
+
+// code credit: https://www.techiedelight.com/increment-value-map-kotlin/
+
+/**
+ * add the [key] to the [map].   Increment the count of they key in the map.
+ * @param map - a mutable map of type K
+ * @param key - they key of type K to add to the map
+ * @link https://www.techiedelight.com/increment-value-map-kotlin/
+ */
+private fun <K> increment(map: MutableMap<K, Int>, key: K) {
+    map.putIfAbsent(key, 0)
+    map[key] = map[key]!! + 1
 }
