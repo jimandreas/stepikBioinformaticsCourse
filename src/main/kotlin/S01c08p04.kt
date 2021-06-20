@@ -1,4 +1,4 @@
-@file:Suppress("SameParameterValue", "UnnecessaryVariable")
+@file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE")
 
 import util.hammingDistance
 
@@ -46,13 +46,14 @@ fun main() {
     val breakTarget = "AAAAA"
     val breakMismatches = 2
 
-//    val g = examGenome
-//    val t = examTarget
-//    val m = examMismatches
+    val step6Genome = "GTAGGCGAAGAAAGTGCTCGAAAAGCGGAAGTGCCCTGTAGACGAAAAAGGCGGCGCCAGGCGCAGGCGCGGTTTATTGCCGCGTCGAAAACGCACCCGCCAAGTGGTGGCTCGCAAAGGCTTCGACTAGAACATTGCTCTTGGCCGTGTCCCGCGCACTGGAGGGTCGCCGCTTCATCCTGGCAAGTAACAACTACCGCCGAAGCCACCACTCGAGCACACGCACTGTTTTACCTACGAAATTTTGCTAGTTTTTACGGCTATATGCCCCCTCACGTCAACCTAGGGTCCGGATCTAGACGCAACTCCCATTCGTAGGCCCGCAATGCATTCTTTCAACAGATTGCCCAGGTTATTTG"
+    val step6Target = "TATTGCC"
+    val step6Mismatches = 2
+    // answer was 9
 
-    val g = breakGenome
-    val t = breakTarget
-    val m = breakMismatches
+    val g = step6Genome
+    val t = step6Target
+    val m = step6Mismatches
 
     val matchList = matchPatternWithErrorRate(g, t, m)
     println("quantity = ${matchList.size}")  // step 5
