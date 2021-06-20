@@ -1,7 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE")
 
-import util.frequenceWordsWithMismatches
-import util.hammingDistance
+import util.frequentWordsWithMismatches
 
 /**
  * @link: https://stepik.org/lesson/240221/step/9?unit=212567
@@ -34,13 +33,11 @@ fun main() {
     val examkmerSize = 6
     val examMismatches = 2  // answer was TCAATA - correct!
 
-    // answer was 9
-
     val g = examGenome
     val k = examkmerSize
     val m = examMismatches
 
-    val matchList = frequenceWordsWithMismatches(g, k, m).sorted()
+    val matchList = frequentWordsWithMismatches(g, k, m).sorted()
     println("quantity = ${matchList.size}")  // step 5
     for (i in matchList) {
         print("$i ")

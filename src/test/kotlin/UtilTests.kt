@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import util.findClumps
-import util.frequenceWordsWithMismatches
+import util.frequentWordsWithMismatches
 import util.frequencyTable
 import util.neighbors
 
@@ -139,7 +139,7 @@ internal class UtilTests {
         val k = kmerSize2
         val m = mismatches2
 
-        val matchList = frequenceWordsWithMismatches(g, k, m).sorted()
+        val matchList = frequentWordsWithMismatches(g, k, m).sorted()
 
         var answer = ""
         for (s in matchList) {

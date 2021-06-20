@@ -4,7 +4,6 @@ package util
  *
 
 1.11 CS: Generating the Neighborhood of a String
-3 out of 6 steps passed
 
 Now, consider a (k − 1)-mer Pattern’ belonging to Neighbors(Suffix(Pattern), d).
 By the definition of the d-neighborhood Neighbors(Suffix(Pattern), d),
@@ -52,8 +51,13 @@ fun neighbors(pattern: String, hammingDistance: Int): List<String> {
     return neighborhood
 }
 
-fun frequenceWordsWithMismatches(givenString: String, length: Int, hammingDistance: Int): List<String> {
-    val patterns : MutableList<String> = arrayListOf()
+fun frequentWordsWithMismatches(
+    givenString: String,
+    length: Int,
+    hammingDistance: Int,
+    scanReverseComplements: Boolean = false): List<String> {
+
+    //val patterns : MutableList<String> = arrayListOf()
     val freqMap : HashMap<String, Int> = hashMapOf()
 
     for (i in 0..givenString.length - length) {
@@ -61,6 +65,12 @@ fun frequenceWordsWithMismatches(givenString: String, length: Int, hammingDistan
         val neighborhood = neighbors(pattern, hammingDistance)
         for (s in neighborhood) {
             increment(freqMap, s)  // add s if necessary, otherwise increment it
+        }
+        if (scanReverseComplements) {
+            val reversedNeighborhood = neighbors(reverseComplement(pattern), hammingDistance)
+            for (s in reversedNeighborhood) {
+                increment(freqMap, s)
+            }
         }
     }
 
