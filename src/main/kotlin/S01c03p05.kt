@@ -1,6 +1,4 @@
-@file:Suppress("SameParameterValue", "UnnecessaryVariable")
-
-import org.junit.platform.commons.annotation.Testable
+@file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE")
 
 // 1.3 Some Hidden Messages are More Surprising than Others
 
@@ -28,7 +26,9 @@ fun main() {
 //    val g = genomeTest
 //    val t = targetTest
 
-    val g = GenomeData.genomeDataVibrioCholerae
+    val r = ResourceReader3()
+    val g = r.getResourceAsText("VibrioCholerae.txt")
+
     val t = "CTTGATCAT"
     println(printRepeatedTargetIndexesWithOverlap(g, t))
 }
@@ -47,4 +47,12 @@ fun printRepeatedTargetIndexesWithOverlap(genome: String, target: String): Strin
         }
     }
     return foundIndex
+}
+
+private class ResourceReader3 {
+    fun getResourceAsText(path: String): String {
+        val ress = this.javaClass.getResource(path)
+        val retStr = ress!!.readText()
+        return retStr
+    }
 }

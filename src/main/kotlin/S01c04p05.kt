@@ -65,9 +65,6 @@ fun main() {
 }
 
 class Foo {
-
-    fun loadResource(file: String) = {}::class.java.getResource(file).readText()
-
     fun getResourceAsText(path: String): String {
         val ress = this.javaClass.getResource(path)
         val retStr = ress.readText()
