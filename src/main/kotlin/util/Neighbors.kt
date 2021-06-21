@@ -1,3 +1,5 @@
+@file:Suppress("LiftReturnOrAssignment")
+
 package util
 
 /**
@@ -79,6 +81,59 @@ fun frequentWordsWithMismatches(
     val returnList = freqMap.filter {(/* str */ _, value) -> value == max }.keys
     return returnList.toList()
 
+}
+
+fun neighborsOfGivenLength(
+    givenString: String,
+    length: Int,
+    hammingDistance: Int,
+    scanReverseComplements: Boolean = false): List<String> {
+
+    val patterns : MutableList<String> = arrayListOf()
+
+    for (i in 0..givenString.length - length) {
+        val pattern = givenString.substring(i, i + length)
+        val neighborhood = neighbors(pattern, hammingDistance)
+        patterns += neighborhood
+        if (scanReverseComplements) {
+            val reversedNeighborhood = neighbors(reverseComplement(pattern), hammingDistance)
+            patterns += reversedNeighborhood
+        }
+    }
+    return patterns.sorted().distinct()
+}
+
+
+/**
+ *
+Implanted Motif Problem: Find all (k, d)-motifs in a collection of strings.
+
+Input: A collection of strings Dna, and integers k and d.
+Output: All (k, d)-motifs in Dna.
+
+Brute force (also known as exhaustive search) is a general problem-solving technique
+that explores all possible solution candidates and checks whether each candidate
+solves the problem. Such algorithms require little effort to design and are
+guaranteed to produce a correct solution, but they may take an enormous amount of time,
+and the number of candidates may be too large to check.
+ */
+fun motifEnumeration(
+    dnaList: List<String>,
+    kmer: Int,
+    distance: Int,
+    scanReverseComplements: Boolean = false): List<String> {
+
+    var accumulatorList : List<String> = mutableListOf()
+    for (g in dnaList) {
+        val neighborList = neighborsOfGivenLength(g, kmer, distance)
+        if (accumulatorList.isEmpty()) {
+            accumulatorList = neighborList.sorted()
+        } else {
+            accumulatorList = accumulatorList.intersect(neighborList).toList()
+        }
+    }
+    accumulatorList = accumulatorList.sorted().distinct()
+    return accumulatorList
 }
 
 /**
