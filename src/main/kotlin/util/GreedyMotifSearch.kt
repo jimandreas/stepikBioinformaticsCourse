@@ -29,12 +29,12 @@ fun greedyMotifSearch(dnaList: List<String>, kmerLength: Int, applyLaplace: Bool
         val motifs: MutableList<String> = mutableListOf()
         val currentMotif = dnaList[0].substring(i, i + kmerLength)
         motifs.add(currentMotif)
-        var probabilityList = createProfile(motifs)
+        var probabilityList = createProfile(motifs, applyLaplace)
         for (j in 1 until dnaList.size) {
             val bestMotifInThisString = mostProbableKmerGivenProbList(dnaList[j], kmerLength, probabilityList.toList())
             //println("best is $bestMotifInThisString for string ${dnaList[j]}")
             motifs.add(bestMotifInThisString)
-            probabilityList = createProfile(motifs)
+            probabilityList = createProfile(motifs, applyLaplace)
         }
 
         //println("new best: $motifs score ${scoreTheMotifs(motifs)} vs ${scoreTheMotifs(bestMotifs)}")
@@ -51,11 +51,20 @@ fun greedyMotifSearch(dnaList: List<String>, kmerLength: Int, applyLaplace: Bool
  * accumulate a 4 row matrix where each column contains the count
  * of the ACGT occurrences in the strings.   This count is then
  * normalized by the number of motifs in the list.
+ *
+ * Added: pseudoCounts -
+ * @link: https://en.wikipedia.org/wiki/Additive_smoothing#Pseudocount
+ * "In order to improve this unfair scoring, bioinformaticians often substitute zeroes with small numbers called pseudocounts."
  */
-fun createProfile(motifsList: List<String>): FloatArray {
+fun createProfile(motifsList: List<String>, applyLaplace: Boolean = false): FloatArray {
     val kmerLength = motifsList[0].length
 
     val profile = FloatArray(4 * kmerLength)
+    if (applyLaplace) {
+        for (i in profile.indices) {
+            profile[i] = 1.0f  // all entries have a base probability
+        }
+    }
 
     for (motif in motifsList) {
         for (i in motif.indices) {
@@ -63,7 +72,10 @@ fun createProfile(motifsList: List<String>): FloatArray {
             profile[nucleotide * kmerLength + i]++
         }
     }
-    val divisor = motifsList.size.toFloat()
+    var divisor = motifsList.size.toFloat()
+    if (applyLaplace) {
+        divisor += 4.0f
+    }
     for (i in profile.indices) {
         profile[i] = profile[i] / divisor
     }

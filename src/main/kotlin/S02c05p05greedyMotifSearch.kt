@@ -14,15 +14,6 @@ GreedyMotifSearch
 
 fun main() {
 
-
-    /**
-    This dataset checks that your code always picks the first-occurring Profile-most Probable
-    k-mer in a given sequence of Dna. In the first sequence (“GCCCAA”), “GCC” and “CCA” are
-    both Profile-most Probable k-mers. However, you must return “GCC” since it occurs earlier than
-    “CCA”. Thus, if the first sequence of your output is “CCA”, this test case fails your code.
-     */
-
-
     val dnaList = listOf(
         "CATCACAACTGTCCTAACTTGCCGAAAACAGGTTATTTGACCAGACGCTCGAACATTTAAGCCCGTGATTGGACGGTATTGGTCGCGAATGTACGACTGGGGCTTCCTAGGAAACGGGGCATAAAATATCTTTGTCGGTGATAGCTTCTTTATTCG",
         "AGGGCCCGCAGTTCCGGACGGCAATTCCTGAGCAATCGACGGCTTAACCGTGATTATCACCAGCCGTGGCAACGGGCCAATCTCGCGCTTAAAACCAATACCTGTGAATAAGTTCTTACATGTTGGTGGTTGTGGTATTGAGTACTAGTCCCGAGT",
@@ -53,14 +44,7 @@ fun main() {
         )
     val kmerLength = 12
 
-    val expectedResult = listOf(
-        "GCC",
-        "GCC",
-        "AAC",
-        "TTC"
-    ).sortedDescending()
-
-    val result = greedyMotifSearch(dnaList, kmerLength)
+    val result = greedyMotifSearch(dnaList, kmerLength)  // note: do NOT sort result
     for (i in result) {
         print("$i ")
     }

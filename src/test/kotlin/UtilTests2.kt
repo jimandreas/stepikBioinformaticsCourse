@@ -105,6 +105,35 @@ internal class UtilTests2 {
     }
 
     /**
+     * test teh createProfile function with laplace
+     *
+     * This is a bit complex so lets break it down:
+     *
+    one trivial motif:
+    "AAAA"
+    should produce an ACGT profile of:
+    1   1   1   1
+    0   0   0   0
+    0   0   0   0
+    0   0   0   0
+
+     */
+    @Test
+    @DisplayName("createProfile function trivial input with laplace")
+    fun testCreateProfileTrivialInputWithLaplace() {
+        val inputMotif = listOf("AAAA")
+        val expectedOutput = floatArrayOf(
+            2.0f/5.0f, 2.0f/5.0f, 2.0f/5.0f, 2.0f/5.0f,   // 5 = one for laplace non-zer base plus 4 for ACGT
+            1.0f/5.0f, 1.0f/5.0f, 1.0f/5.0f, 1.0f/5.0f,
+            1.0f/5.0f, 1.0f/5.0f, 1.0f/5.0f, 1.0f/5.0f,
+            1.0f/5.0f, 1.0f/5.0f, 1.0f/5.0f, 1.0f/5.0f,
+        )
+
+        val result = createProfile(inputMotif, applyLaplace = true)
+        assertContentEquals(expectedOutput, result, "OOPSIE")
+    }
+
+    /**
      * test the createProfile function
      *
      * This is a bit complex so lets break it down:
@@ -200,6 +229,40 @@ internal class UtilTests2 {
     }
 
     /**
+     * test the createProfile function with laplace
+     *
+     * Three motif strings now:
+     *
+
+    "AAAAAAA"
+    "TTTTGGG"
+    "CCCCCCC"
+    should produce an ACGT profile of:
+    1/3 1/3 1/3 1/3 1/3 1/3 1/3
+    1/3 1/3 1/3 1/3 1/3 1/3 1/3
+    0   0   0   0   1/3 1/3 1/3
+    1/3 1/3 1/3 1/3 0   0   0
+     */
+    @Test
+    @DisplayName("createProfile function trivial with laplace input04")
+    fun testCreateProfileTrivialInputWithLaplace04() {
+        val inputMotif = listOf(
+            "AAAAAAA",
+            "TTTTGGG",
+            "CCCCCCC"
+        )
+        val expectedOutput = floatArrayOf(
+            2 / 7f, 2 / 7f, 2 / 7f, 2 / 7f, 2 / 7f, 2 / 7f, 2 / 7f,  // 3 motifs plus ACGT = 7
+            2 / 7f, 2 / 7f, 2 / 7f, 2 / 7f, 2 / 7f, 2 / 7f, 2 / 7f,
+            1 / 7f, 1 / 7f, 1 / 7f, 1 / 7f, 2 / 7f, 2 / 7f, 2 / 7f,
+            2 / 7f, 2 / 7f, 2 / 7f, 2 / 7f, 1 / 7f, 1 / 7f, 1 / 7f,
+        )
+
+        val result = createProfile(inputMotif, applyLaplace = true)
+        assertContentEquals(expectedOutput, result, "OOPSIE")
+    }
+
+    /**
      * test the score function
      *
     one trivial motif:
@@ -230,6 +293,8 @@ internal class UtilTests2 {
         assertEquals(0, score)
 
     }
+
+
 
     /**
      * test the score function
@@ -446,6 +511,44 @@ internal class UtilTests2 {
             "GCATC",
             "GGTAT",
             "GCAAC"
+            ).sortedDescending()
+
+        val result = greedyMotifSearch(dnaList, kmerLength).sortedDescending()
+        assertContentEquals(expectedResult, result)
+    }
+
+
+    /**
+    This dataset checks if your code has an off-by-one error at the beginning of each
+    sequence of Dna. Notice that the all of the motifs of the solution except for the last one occur at
+    the beginning of their respective sequences in Dna, so if your code did not check the first k-mer
+    in each sequence of Dna, it would not find these sequences.
+     */
+    @Test
+    @DisplayName("greedy motif search with pseudocounts / laplace - test 1")
+    fun greedyMotifSearchWithPseudocounts01() {
+        val dnaList = listOf(
+            "AGGCGGCACATCATTATCGATAACGATTCGCCGCATTGCC",
+            "ATCCGTCATCGAATAACTGACACCTGCTCTGGCACCGCTC",
+            "AAGCGTCGGCGGTATAGCCAGATAGTGCCAATAATTTCCT",
+            "AGTCGGTGGTGAAGTGTGGGTTATGGGGAAAGGCAGACTG",
+            "AACCGGACGGCAACTACGGTTACAACGCAGCAAGAATATT",
+            "AGGCGTCTGTTGTTGCTAACACCGTTAAGCGACGGCAACT",
+            "AAGCGGCCAACGTAGGCGCGGCTTGGCATCTCGGTGTGTG",
+            "AATTGAAAGGCGCATCTTACTCTTTTCGCTTTCAAAAAAA",
+
+            )
+        val kmerLength = 5
+
+        val expectedResult = listOf(
+            "AGGCG",
+            "ATCCG",
+            "AAGCG",
+            "AGTCG",
+            "AACCG",
+            "AGGCG",
+            "AGGCG",
+            "AGGCG"
             ).sortedDescending()
 
         val result = greedyMotifSearch(dnaList, kmerLength).sortedDescending()
