@@ -1,0 +1,112 @@
+@file:Suppress("UnnecessaryVariable", "unused")
+
+package util
+
+/**
+ *  reference:
+ *  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-2
+ */
+
+/**
+ *  @link: https://stepik.org/lesson/240241/step/4?unit=212587
+ *  for each kmer in the first dna in the list,
+ *  scan all other kmers in the following list entries and score them
+ */
+/*fun greedyMotifSearch(dnaList: List<String>, kmerLength: Int, applyLaplace: Boolean = false): List<String> {
+    val bestMotifs: MutableList<String> = mutableListOf()
+    for (i in 0..dnaList[0].length - kmerLength) {
+        val motifs: MutableList<String> = mutableListOf()
+        val currentMotif = dnaList[0].substring(i, i + kmerLength)
+        motifs.add(currentMotif)
+
+        var probabilityList = createProfile(motifs)
+
+        *//*
+         * scan the remaining dna strings and pull the best kmer candidate given the current state of the probability matrix
+         *//*
+        for (j in 1 until dnaList.size) {
+            val bestMotifInThisString = mostProbableKmerGivenProbList(dnaList[j], kmerLength, probabilityList.toList())
+            motifs.add(bestMotifInThisString)
+            probabilityList = createProfile(motifs)
+        }
+    }
+}*/
+
+/**
+ * for a list of candidate motif strings,
+ * accumulate a 4 row matrix where each column contains the count
+ * of the ACGT occurrences in the strings.   This count is then
+ * normalized by the number of motifs in the list.
+ */
+fun createProfile(motifsList: List<String>): FloatArray {
+    val kmerLength = motifsList[0].length
+
+    val profile = FloatArray(4 * kmerLength)
+
+    for (motif in motifsList) {
+        for (i in motif.indices) {
+            val nucleotide = motif[i].fromNucleotide()
+            profile[nucleotide * kmerLength + i]++
+        }
+    }
+    val divisor = motifsList.size.toFloat()
+    for (i in profile.indices) {
+        profile[i] = profile[i] / divisor
+    }
+    return profile
+}
+
+fun Char.fromNucleotide(): Int {
+    return when (this) {
+        'A' -> 0
+        'C' -> 1
+        'G' -> 2
+        'T' -> 3
+        else -> 0
+    }
+}
+
+fun Int.fromIdentifier(): Char {
+    return when (this) {
+        0 -> 'A'
+        1 -> 'C'
+        2 -> 'G'
+        3 -> 'T'
+        else -> ' '
+    }
+}
+
+
+/**
+ * the [scoreTheMotifs] of a set of motif candidates is the sum
+ * of the mismatches across all letters.
+ * The mismatches are determined by what is left over after subtracting
+ * the dominant fraction in the profile.
+ * @param motifs - the list of candidate motif strings
+ */
+fun scoreTheMotifs(motifs: List<String>): Int {
+    val profileMatrix = createProfile(motifs)
+    val mlen = motifs[0].length
+    var score = 0
+    for (i in 0 until motifs[0].length) {
+        val maxVal = maxValueForColumn(profileMatrix, mlen, i)
+        score += (motifs.size.toFloat() * (1.0f - maxVal)+0.00001).toInt()
+    }
+    return score
+}
+
+/**
+ * return the max value in the profile matrix for [column]
+ * @param len - the length of a rwo in the profile matrix
+ */
+private fun maxValueForColumn(profileMatrix: FloatArray, len: Int, column: Int): Float {
+    val anuc = profileMatrix[len * 0 + column]
+    val cnuc = profileMatrix[len * 1 + column]
+    val gnuc = profileMatrix[len * 2 + column]
+    val tnuc = profileMatrix[len * 3 + column]
+    val maxVal = maxOf(anuc, maxOf(cnuc, maxOf(gnuc, tnuc)))
+    return maxVal
+}
+
+
+

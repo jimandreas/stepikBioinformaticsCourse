@@ -27,6 +27,22 @@ fun mostProbableKmer(genome: String, kmerLength: Int, probString: String): Strin
     return bestKmerString
 }
 
+fun mostProbableKmerGivenProbList(genome: String, kmerLength: Int, probList: List<Float>): String {
+    var maxProb = 0f
+    var bestKmerString = ""
+
+    for (i in 0..genome.length-kmerLength) {
+        val candidateKmer = genome.substring(i, i + kmerLength)
+        val prob = probForGivenKmer(candidateKmer, probList)
+        //println("$candidateKmer $prob")
+        if (prob > maxProb) {
+            maxProb = prob
+            bestKmerString = candidateKmer
+        }
+    }
+    return bestKmerString
+}
+
 /**
  *  calculate the probability of a kmer string given
  *  a prob matrix of the form:
