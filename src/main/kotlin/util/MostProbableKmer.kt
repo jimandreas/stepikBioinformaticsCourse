@@ -29,7 +29,7 @@ fun mostProbableKmer(genome: String, kmerLength: Int, probString: String): Strin
 
 fun mostProbableKmerGivenProbList(genome: String, kmerLength: Int, probList: List<Float>): String {
     var maxProb = 0f
-    var bestKmerString = ""
+    var bestKmerString = genome.substring(0, kmerLength)
 
     for (i in 0..genome.length-kmerLength) {
         val candidateKmer = genome.substring(i, i + kmerLength)

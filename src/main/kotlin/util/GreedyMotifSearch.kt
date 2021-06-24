@@ -12,25 +12,39 @@ package util
  *  for each kmer in the first dna in the list,
  *  scan all other kmers in the following list entries and score them
  */
-/*fun greedyMotifSearch(dnaList: List<String>, kmerLength: Int, applyLaplace: Boolean = false): List<String> {
-    val bestMotifs: MutableList<String> = mutableListOf()
+fun greedyMotifSearch(dnaList: List<String>, kmerLength: Int, applyLaplace: Boolean = false): List<String> {
+
+    // initial conditions - just take the first kmer of each dna in the dnaList
+    var bestMotifs: MutableList<String> = mutableListOf()
+    for (d in dnaList) {
+        bestMotifs.add(d.substring(0, kmerLength))
+    }
+
+    /*
+     * now loop through each kmer substring in the first dnaList string.
+     *   make a profile for it and then use the profile to get the most
+     * probable match in each of the following strings in the dnaList.
+     */
     for (i in 0..dnaList[0].length - kmerLength) {
         val motifs: MutableList<String> = mutableListOf()
         val currentMotif = dnaList[0].substring(i, i + kmerLength)
         motifs.add(currentMotif)
-
         var probabilityList = createProfile(motifs)
-
-        *//*
-         * scan the remaining dna strings and pull the best kmer candidate given the current state of the probability matrix
-         *//*
         for (j in 1 until dnaList.size) {
             val bestMotifInThisString = mostProbableKmerGivenProbList(dnaList[j], kmerLength, probabilityList.toList())
+            //println("best is $bestMotifInThisString for string ${dnaList[j]}")
             motifs.add(bestMotifInThisString)
             probabilityList = createProfile(motifs)
         }
+
+        //println("new best: $motifs score ${scoreTheMotifs(motifs)} vs ${scoreTheMotifs(bestMotifs)}")
+        if (scoreTheMotifs(motifs) < scoreTheMotifs(bestMotifs)) {
+
+            bestMotifs = motifs
+        }
     }
-}*/
+    return bestMotifs
+}
 
 /**
  * for a list of candidate motif strings,

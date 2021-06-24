@@ -235,8 +235,6 @@ internal class UtilTests2 {
      * test the score function
      *
      * Two motif strings now:
-     *
-    one trivial motif:
     "AAAA"
     "TTTT"
     should produce an ACGT profile of:
@@ -264,6 +262,194 @@ internal class UtilTests2 {
         // now look at the score - it should be 4 - scoring one point for each mis-match in each column
         val score = scoreTheMotifs(inputMotif)
         assertEquals(4, score)
+    }
+
+    /**
+     * test the score function
+     *
+    "AAAA"
+    "AAAC"
+    "TTTT"
+    should produce an ACGT profile of:
+    1/2 1/2 1/2 1/2
+    0   0   0   0
+    0   0   0   0
+    1/2 1/2 1/2 1/2
+     */
+    @Test
+    @DisplayName("scoreFunction - test3")
+    fun testScoreFunction3() {
+        val inputMotif = listOf(
+            "AAAA",
+            "AAAC",
+            "TTTT"
+        )
+        val expectedOutput = floatArrayOf(
+            2/3f, 2/3f, 2/3f, 1/3f,
+            0f, 0f, 0f, 1/3f,
+            0f, 0f, 0f, 0f,
+            1/3f, 1/3f, 1/3f, 1/3f
+        )
+
+        val result = createProfile(inputMotif)
+        assertContentEquals(expectedOutput, result, "OOPSIE")
+        // now look at the score - it should be 5 - 3 x 1 mismatch and 2 on the last column
+        val score = scoreTheMotifs(inputMotif)
+        assertEquals(5, score)
+    }
+
+    /**
+     *
+     */
+    @Test
+    @DisplayName("greedy motif search - test 1")
+    fun greedyMotifSearch01() {
+        val dnaList = listOf(
+            "GGCGTTCAGGCA",
+            "AAGAATCAGTCA",
+            "CAAGGAGTTCGC",
+            "CACGTCAATCAC",
+            "CAATAATATTCG"
+            )
+
+        val expectedResult = listOf(
+            "CAG",
+            "CAG",
+            "CAA",
+            "CAA",
+            "CAA"
+            ).sortedDescending()
+
+        val result = greedyMotifSearch(dnaList, 3).sortedDescending()
+        assertContentEquals(expectedResult, result)
+    }
+
+    /**
+    This dataset checks that your code always picks the first-occurring Profile-most Probable
+    k-mer in a given sequence of Dna. In the first sequence (“GCCCAA”), “GCC” and “CCA” are
+    both Profile-most Probable k-mers. However, you must return “GCC” since it occurs earlier than
+    “CCA”. Thus, if the first sequence of your output is “CCA”, this test case fails your code.
+     */
+    @Test
+    @DisplayName("greedy motif search - test 2")
+    fun greedyMotifSearch02() {
+        val dnaList = listOf(
+            "GCCCAA",
+            "GGCCTG",
+            "AACCTA",
+            "TTCCTT"
+            )
+
+        val expectedResult = listOf(
+            "GCC",
+            "GCC",
+            "AAC",
+            "TTC"
+            ).sortedDescending()
+
+        val result = greedyMotifSearch(dnaList, 3).sortedDescending()
+        assertContentEquals(expectedResult, result)
+    }
+
+    /**
+    This dataset checks if your code has an off-by-one error at the beginning of each
+    sequence of Dna. Notice that the first four motifs of the solution occur at the beginning of their
+    respective sequences in Dna, so if your code did not check the first k-mer in each sequence of
+    Dna, it would not find these sequences.
+     */
+    @Test
+    @DisplayName("greedy motif search - test 3")
+    fun greedyMotifSearch03() {
+        val dnaList = listOf(
+            "GAGGCGCACATCATTATCGATAACGATTCGCCGCATTGCC",
+            "TCATCGAATCCGATAACTGACACCTGCTCTGGCACCGCTC",
+            "TCGGCGGTATAGCCAGAAAGCGTAGTGCCAATAATTTCCT",
+            "GAGTCGTGGTGAAGTGTGGGTTATGGGGAAAGGCAGACTG",
+            "GACGGCAACTACGGTTACAACGCAGCAACCGAAGAATATT",
+            "TCTGTTGTTGCTAACACCGTTAAAGGCGGCGACGGCAACT",
+            "AAGCGGCCAACGTAGGCGCGGCTTGGCATCTCGGTGTGTG",
+            "AATTGAAAGGCGCATCTTACTCTTTTCGCTTTCAAAAAAA"
+            )
+        val kmerLength = 5
+
+        val expectedResult = listOf(
+            "GAGGC",
+            "TCATC",
+            "TCGGC",
+            "GAGTC",
+            "GCAGC",
+            "GCGGC",
+            "GCGGC",
+            "GCATC"
+            ).sortedDescending()
+
+        val result = greedyMotifSearch(dnaList, kmerLength).sortedDescending()
+        assertContentEquals(expectedResult, result)
+    }
+
+    /**
+    This dataset checks if your code has an off-by-one error at the end of each sequence of Dna.
+    Notice that the first two motifs of the solution occur at the end of their respective sequences in
+    Dna, so if your code did not check the end k-mer in each sequence of Dna, it would not find
+    these sequences.
+     */
+    @Test
+    @DisplayName("greedy motif search - test 4")
+    fun greedyMotifSearch04() {
+        val dnaList = listOf(
+            "GCAGGTTAATACCGCGGATCAGCTGAGAAACCGGAATGTGCGT",
+            "CCTGCATGCCCGGTTTGAGGAACATCAGCGAAGAACTGTGCGT",
+            "GCGCCAGTAACCCGTGCCAGTCAGGTTAATGGCAGTAACATTT",
+            "AACCCGTGCCAGTCAGGTTAATGGCAGTAACATTTATGCCTTC",
+            "ATGCCTTCCGCGCCAATTGTTCGTATCGTCGCCACTTCGAGTG"
+        )
+        val kmerLength = 6
+
+        val expectedResult = listOf(
+            "GTGCGT",
+            "GTGCGT",
+            "GCGCCA",
+            "GTGCCA",
+            "GCGCCA"
+            ).sortedDescending()
+
+        val result = greedyMotifSearch(dnaList, kmerLength).sortedDescending()
+        assertContentEquals(expectedResult, result)
+    }
+
+    /**
+    This test dataset checks if your code is correctly breaking ties when calling Profile-most
+    Probable k-mer. Specifically, it makes sure that, when you call Profile-most Probable k-mer, in
+    the event of a tie, you choose the first-occurring k-mer.
+     */
+    @Test
+    @DisplayName("greedy motif search - test 5")
+    fun greedyMotifSearch05() {
+        val dnaList = listOf(
+            "GACCTACGGTTACAACGCAGCAACCGAAGAATATTGGCAA",
+            "TCATTATCGATAACGATTCGCCGGAGGCCATTGCCGCACA",
+            "GGAGTCTGGTGAAGTGTGGGTTATGGGGCAGACTGGGAAA",
+            "GAATCCGATAACTGACACCTGCTCTGGCACCGCTCTCATC",
+            "AAGCGCGTAGGCGCGGCTTGGCATCTCGGTGTGTGGCCAA",
+            "AATTGAAAGGCGCATCTTACTCTTTTCGCTTAAAATCAAA",
+            "GGTATAGCCAGAAAGCGTAGTTAATTTCGGCTCCTGCCAA",
+            "TCTGTTGTTGCTAACACCGTTAAAGGCGGCGACGGCAACT"
+        )
+        val kmerLength = 5
+
+        val expectedResult = listOf(
+            "GCAGC",
+            "TCATT",
+            "GGAGT",
+            "TCATC",
+            "GCATC",
+            "GCATC",
+            "GGTAT",
+            "GCAAC"
+            ).sortedDescending()
+
+        val result = greedyMotifSearch(dnaList, kmerLength).sortedDescending()
+        assertContentEquals(expectedResult, result)
     }
 
 
