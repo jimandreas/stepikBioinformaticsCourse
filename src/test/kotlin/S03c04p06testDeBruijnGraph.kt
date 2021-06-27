@@ -1093,7 +1093,7 @@ TTTTTTCAAGA -> TTTTTCAAGAG
             outString += foundList.joinToString(separator = ",")
             outString += "\n"
         }
-        assertEquals(expectedString, outString)
+        assertEquals(expectedString.toSortedSet(), outString.toSortedSet())
 
     }
 
