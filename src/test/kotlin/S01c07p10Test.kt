@@ -109,7 +109,7 @@ internal class S01c07p10Test {
 
         val loader = Foo()
         val testString = loader.getResourceAsText("S01c07p10testInput.txt")
-        val output = "89969 89970 89971 90345 90346"
+
         val outputList = listOf(89969, 89970, 89971, 90345, 90346)
 
         val minList = scanForSkew(testString)

@@ -1,32 +1,37 @@
-@file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ControlFlowWithEmptyBody")
+@file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ControlFlowWithEmptyBody", "unused")
+
 package util
-
-import java.util.*
-
 
 /**
  * find an Eulerian Path through a list of nodes with connected edges.
- *
- * @param graph - a list of nodes each with a list of connections
- *   assumes list is zero based and the index into the first
- *   list is the same as the node number
  *
  * See also:
  * @link: https://www.youtube.com/watch?v=8MpoO2zA2l4
  * @link: https://github.com/williamfiset/Algorithms
  *        EulerianPathDirectedEdgesAdjacencyList.java
  */
-class EulerianPath(private val graph: List<List<Int>>) {
+data class EulerConnectionData(val nodeNum: Int, val connections: MutableList<Int>)
+
+class EulerianPath() {
+    private var graph: List<List<Int>> = mutableListOf()
     private var n = 0
     private var edgeCount = 0
-    private val inEdges: MutableList<Int> = mutableListOf()
-    private val outEdges: MutableList<Int> = mutableListOf()
-    private var path: LinkedList<Int>
+    private lateinit var inEdges: Array<Int>
+    private lateinit var outEdges: Array<Int>
+    private var path: MutableList<Int> = mutableListOf()
 
-    init {
+    /**
+     * @param graph - a list of nodes each with a list of connections
+     *   assumes list is zero based and the index into the first
+     *   list is the same as the node number
+     */
+    fun setGraph(graph: List<List<Int>>) {
+        this.graph = graph
         n = graph.size
-        path = LinkedList()
+        inEdges = Array(n){0}
+        outEdges = Array(n){0}
     }
+
 
     fun solveEulerianPath() : List<Int> {
         initializeVariables()
@@ -37,11 +42,7 @@ class EulerianPath(private val graph: List<List<Int>>) {
 
         depthFirstSearch(scanForStartingNode())
 
-        val outList : MutableList<Int> = mutableListOf()
-        while (!path.isEmpty()) {
-            outList.add(path.removeFirst())
-        }
-        return outList
+        return path
     }
 
     /**
@@ -110,9 +111,80 @@ class EulerianPath(private val graph: List<List<Int>>) {
 
     private fun depthFirstSearch(nodeNum: Int) {
         while (outEdges[nodeNum] != 0) {
-            val nextNode = graph[nodeNum][outEdges[nodeNum]--]
+            val thisNode= graph[nodeNum]
+            val nextNode = thisNode[--outEdges[nodeNum]]
             depthFirstSearch(nextNode)
         }
-        path.addFirst(nodeNum)
+        path.add(0,nodeNum) // prepend the current node to solution list
+    }
+
+
+    /**
+     * scan a list of node connections (node1 -> node2,node3)
+     * and return a map of the node to an EulerConnectionData list
+     */
+    fun eulerCycleMap(connList: String): List<EulerConnectionData> {
+        val ep = EulerianPath()
+        val list : MutableList<EulerConnectionData> = mutableListOf()
+        val reader = connList.reader()
+        val lines = reader.readLines()
+
+        for (s in lines) {
+            val connData = ep.eulerCycleParseLine(s)
+            list.add(connData)
+        }
+        return list
+    }
+
+    /**
+     * given a line of the form:
+     * 106 -> 107,395,632,888
+     * return a EulerConnectionData record with 106 as the nodeNum and the list of connections
+     */
+    fun eulerCycleParseLine(line: String): EulerConnectionData {
+
+        val nodeNumber = parseInt(line.substring(0, line.indexOfFirst { it == ' ' }))
+
+        val connectionList = line.substringAfter("-> ").split(',')
+        val resultMap: MutableList<Int> = mutableListOf()
+        for (conn in connectionList) {
+            resultMap.add(parseInt(conn))
+        }
+
+        return EulerConnectionData(nodeNumber,  resultMap)
+    }
+
+    /**
+     * convert EulerConnectionData list to an array list
+     *     Error check the list - it should span 0 to N matching the node numbers in the
+     *     eulerDataList after sorting.
+     */
+    fun eulerCycleConvertData(eulerDataList: List<EulerConnectionData>): List<List<Int>> {
+        val outList : MutableList<MutableList<Int>> = mutableListOf()
+        val sortedList = eulerDataList.sortedBy {
+            it.nodeNum
+        }
+        // error check the sorted list.   The node num must match the array position
+        val n = sortedList.size
+        if ((sortedList[0].nodeNum != 0) || (sortedList[n-1].nodeNum != n-1)) {
+            println("ERROR in euler list conversion - data doesn't match position")
+        }
+        for (entry in sortedList) {
+            outList.add(entry.connections)
+        }
+        return outList
+    }
+
+    private fun parseInt(s: String): Int {
+        var s1 = s
+        if (s1[0] == ' ') {
+            s1 = s.substring(1, s1.length)
+        }
+        return try {
+            s1.toInt()
+        } catch (e: RuntimeException) {
+            println("ERROR ON PARSE")
+            0
+        }
     }
 }

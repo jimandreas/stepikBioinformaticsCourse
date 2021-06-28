@@ -1,12 +1,14 @@
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
-import util.mostProbableKmer
+import org.junit.jupiter.api.Test
+import util.EulerConnectionData
+import util.EulerianPath
 
 internal class S03c08p02testEulerianCycleProblem {
+
+    private val ep = EulerianPath()
 
     @BeforeEach
     fun setUp() {
@@ -20,35 +22,78 @@ internal class S03c08p02testEulerianCycleProblem {
     @DisplayName("test eulerCycleParseLine 01")
     fun testEulerCycleParseLine() {
 
-        val eulerConnectionString = "101 -> 102,103,104"
+        val eulerConnectionString = "0 -> 1,2,3"
 
-        val result = eulerCycleParseLine(eulerConnectionString)
+        val result = ep.eulerCycleParseLine(eulerConnectionString)
 
-        val expectedResult = EulerConnectionData(101, listOf(102, 103, 104))
+        val expectedResult = EulerConnectionData(0, mutableListOf(1, 2, 3))
 
         assertEquals(expectedResult, result)
     }
 
+    /**
+     * data is from
+     * @link: https://stepik.org/lesson/240261/step/2?unit=212607
+     *
+     *
+     * Code Challenge: Solve the Eulerian Cycle Problem.
+
+    Input: The adjacency list of an Eulerian directed graph.
+    Output: An Eulerian cycle in this graph.
+
+     *
+     */
     @Test
     @DisplayName("test eulerCycleMap 01")
     fun testEulerCycleMap01() {
-        //fun eulerCycleMap( connList: String ): Map<Int, EulerConnectionData> {
 
         val eulerConnectionString = """
-            101 -> 102,103,104
-            102 -> 105
-            105 -> 101
-            103 -> 101
-            104 -> 101
+            0 -> 3
+            1 -> 0
+            2 -> 1,6
+            3 -> 2
+            4 -> 2
+            5 -> 4
+            6 -> 5,8
+            7 -> 9
+            8 -> 7
+            9 -> 6
         """.trimIndent()
-        val result = eulerCycleMap(eulerConnectionString)
+        val result = ep.eulerCycleMap(eulerConnectionString)
 
-        val expected1 = EulerConnectionData(101, listOf(102, 103, 104))
-        assertEquals(expected1, result[101])
-        val expected2 = EulerConnectionData(102, listOf(105))
-        assertEquals(expected2, result[102])
-        val expected3 = EulerConnectionData(104, listOf(101))
-        assertEquals(expected3, result[104])
+        val path = ep.eulerCycleConvertData(result)
+        assertEquals(result.size, path.size)
+
+        ep.setGraph(path)
+        val solution = ep.solveEulerianPath()
+        val expectedSolution = listOf(9, 6, 5, 4, 2, 1, 0, 3, 2, 6, 8, 7, 9)
+        assertEquals(expectedSolution, solution)
+    }
+
+    /**
+     *  A rather nice regular test case supplied in the test dataset
+     *    Very symmetric!
+     */
+    @Test
+    @DisplayName("test eulerCycleMap 02")
+    fun testEulerCycleMap02() {
+
+        val eulerConnectionString = """
+            0 -> 1,2,3,4
+            1 -> 0,2,3,4
+            2 -> 0,1,3,4
+            3 -> 0,1,2,4
+            4 -> 0,1,2,3
+        """.trimIndent()
+        val result = ep.eulerCycleMap(eulerConnectionString)
+
+        val path = ep.eulerCycleConvertData(result)
+        assertEquals(result.size, path.size)
+
+        ep.setGraph(path)
+        val solution = ep.solveEulerianPath()
+        val expectedValue = listOf(4, 3, 4, 2, 4, 1, 4, 0, 3, 2, 3, 1, 3, 0, 2, 1, 2, 0, 1, 0, 4)
+        assertEquals(expectedValue, solution)
     }
 
 }

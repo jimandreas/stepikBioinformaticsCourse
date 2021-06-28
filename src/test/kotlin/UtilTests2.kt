@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_VARIABLE")
+
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -49,7 +51,7 @@ internal class UtilTests2 {
             0.1 0.2 0.1 0.1 0.2
         """.trimIndent()
 
-        val expectedValue =
+        val expectedValue: List<Float> =
             listOf(
                 0.2f,
                 0.2f,
