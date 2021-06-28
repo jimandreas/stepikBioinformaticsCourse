@@ -1,7 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ControlFlowWithEmptyBody")
 
-import org.junit.jupiter.api.Assertions
-import util.EulerianPath
+import util.EulerianPathArrayBased
 import java.util.*
 
 /**
@@ -13,7 +12,7 @@ Input: The adjacency list of an Eulerian directed graph.
 Output: An Eulerian cycle in this graph.
 */
 
-private val ep = EulerianPath()
+private val ep = EulerianPathArrayBased()
 
 fun main() {
 //    val connectionString = """

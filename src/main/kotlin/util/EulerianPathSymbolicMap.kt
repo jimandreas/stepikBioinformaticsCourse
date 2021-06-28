@@ -10,14 +10,14 @@ package util
  * @link: https://github.com/williamfiset/Algorithms
  *        EulerianPathDirectedEdgesAdjacencyList.java
  */
-data class EulerConnectionData(val nodeNum: Int, val connections: MutableList<Int>)
+//data class EulerConnectionData(val nodeNum: Int, val connections: MutableList<Int>)
 
-class EulerianPath() {
-    private var graph: List<List<Int>> = mutableListOf()
+class EulerianPathSymbolicMap() {
+    private var graph: MutableMap<Int, MutableList<Int>> = mutableMapOf()
     private var n = 0
     private var edgeCount = 0
-    private lateinit var inEdges: Array<Int>
-    private lateinit var outEdges: Array<Int>
+    private lateinit var inEdgesMap: HashMap<Int, Int>
+    private lateinit var outEdgesMap: HashMap<Int, Int>
     private var path: MutableList<Int> = mutableListOf()
 
     /**
@@ -25,15 +25,15 @@ class EulerianPath() {
      *   assumes list is zero based and the index into the first
      *   list is the same as the node number
      */
-    fun setGraph(graph: List<List<Int>>) {
+    fun setGraph(graph: MutableMap<Int, MutableList<Int>>) {
         this.graph = graph
         n = graph.size
-        inEdges = Array(n){0}
-        outEdges = Array(n){0}
+        inEdgesMap = hashMapOf()
+        outEdgesMap = hashMapOf()
     }
 
 
-    fun solveEulerianPath() : List<Int> {
+    fun solveEulerianPath(): List<Int> {
         initializeVariables()
 
         if (!errorCheckGraph()) {
@@ -47,15 +47,45 @@ class EulerianPath() {
 
     /**
      * set up the count of "out" and "in" edges, and the overall edgecount
+     *    Using hashes instead of array indexing as the input set of nodes
+     *    is UNCONTROLLED.
      */
     private fun initializeVariables() {
-        for (i in 0 until n) {
-            for (nodeNum in graph[i]) {
-                inEdges[nodeNum]++
-                outEdges[i]++
+
+        // make sure the in and out edges maps are zeroed
+        // for the Euler Path there may be no in-edge
+        for (nodeNum in graph) {
+            clear(outEdgesMap, nodeNum.key)
+            clear(inEdgesMap, nodeNum.key)
+        }
+
+        for (nodeNumFrom in graph) {
+            for (edgeTo in nodeNumFrom.value) {
                 edgeCount++
+                increment(outEdgesMap, nodeNumFrom.key)
+                increment(inEdgesMap, edgeTo)
             }
         }
+    }
+
+    /**
+     * add the [key] to the [map].   Increment the count of they key in the map.
+     * @param map - a mutable map of type K
+     * @param key - they key of type K to add to the map
+     * @link https://www.techiedelight.com/increment-value-map-kotlin/
+     */
+    private fun <K> increment(map: MutableMap<K, Int>, key: K) {
+        map.putIfAbsent(key, 0)
+        map[key] = map[key]!! + 1
+    }
+
+    private fun <K> decrement(map: MutableMap<K, Int>, key: K) {
+        map.putIfAbsent(key, 0)
+        map[key] = map[key]!! - 1
+    }
+
+    private fun <K> clear(map: MutableMap<K, Int>, key: K) {
+        map.putIfAbsent(key, 0)
     }
 
     /**
@@ -71,12 +101,13 @@ class EulerianPath() {
         }
         var startNodes = 0
         var endNodes = 0
-        for (i in 0 until n) {
-            if (outEdges[i] - inEdges[i] > 1 || inEdges[i] - outEdges[i] > 1) {
+        for (node in graph) {
+            val i = node.key
+            if (outEdgesMap[i]!! - inEdgesMap[i]!! > 1 || inEdgesMap[i]!! - outEdgesMap[i]!! > 1) {
                 return false
-            } else if (outEdges[i] - inEdges[i] == 1) {
+            } else if (outEdgesMap[i]!! - inEdgesMap[i]!! == 1) {
                 startNodes++
-            } else if (inEdges[i] - outEdges[i] == 1) {
+            } else if (inEdgesMap[i]!! - outEdgesMap[i]!! == 1) {
                 endNodes++
             }
         }
@@ -98,11 +129,12 @@ class EulerianPath() {
      */
     private fun scanForStartingNode(): Int {
         var candidateNode = 0
-        for (i in 0 until n) {
-            if (outEdges[i] - inEdges[i] == 1) {
+        for (node in graph) {
+            val i = node.key
+            if (outEdgesMap[i]!! - inEdgesMap[i]!! == 1) {
                 return i
             }
-            if (outEdges[i] > 0) {
+            if (outEdgesMap[i]!! > 0) {
                 candidateNode = i
             }
         }
@@ -110,12 +142,16 @@ class EulerianPath() {
     }
 
     private fun depthFirstSearch(nodeNum: Int) {
-        while (outEdges[nodeNum] != 0) {
-            val thisNode= graph[nodeNum]
-            val nextNode = thisNode[--outEdges[nodeNum]]
+        while (outEdgesMap[nodeNum] != 0) {
+            val thisNode = graph[nodeNum]
+
+            decrement(outEdgesMap, nodeNum)
+            val outEdge = outEdgesMap[nodeNum]!!
+
+            val nextNode = thisNode!![outEdge]
             depthFirstSearch(nextNode)
         }
-        path.add(0,nodeNum) // prepend the current node to solution list
+        path.add(0, nodeNum) // prepend the current node to solution list
     }
 
 
@@ -124,8 +160,8 @@ class EulerianPath() {
      * and return a map of the node to an EulerConnectionData list
      */
     fun eulerCycleMap(connList: String): List<EulerConnectionData> {
-        val ep = EulerianPath()
-        val list : MutableList<EulerConnectionData> = mutableListOf()
+        val ep = EulerianPathArrayBased()
+        val list: MutableList<EulerConnectionData> = mutableListOf()
         val reader = connList.reader()
         val lines = reader.readLines()
 
@@ -151,26 +187,19 @@ class EulerianPath() {
             resultMap.add(parseInt(conn))
         }
 
-        return EulerConnectionData(nodeNumber,  resultMap)
+        return EulerConnectionData(nodeNumber, resultMap)
     }
 
     /**
-     * convert EulerConnectionData list to an array list
+     * convert EulerConnectionData list to an map list (not array list)
      *     Error check the list - it should span 0 to N matching the node numbers in the
      *     eulerDataList after sorting.
      */
-    fun eulerCycleConvertData(eulerDataList: List<EulerConnectionData>): List<List<Int>> {
-        val outList : MutableList<MutableList<Int>> = mutableListOf()
-        val sortedList = eulerDataList.sortedBy {
-            it.nodeNum
-        }
-        // error check the sorted list.   The node num must match the array position
-        val n = sortedList.size
-        if ((sortedList[0].nodeNum != 0) || (sortedList[n-1].nodeNum != n-1)) {
-            println("ERROR in euler list conversion - data doesn't match position")
-        }
-        for (entry in sortedList) {
-            outList.add(entry.connections)
+    fun eulerCycleConvertData(eulerDataList: List<EulerConnectionData>): MutableMap<Int, MutableList<Int>> {
+        val outList: MutableMap<Int, MutableList<Int>> = mutableMapOf()
+
+        for (entry in eulerDataList) {
+            outList.putIfAbsent(entry.nodeNum, entry.connections)
         }
         return outList
     }
