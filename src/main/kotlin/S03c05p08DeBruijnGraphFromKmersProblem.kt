@@ -1,5 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE")
 
+import util.deBruijnGraphFromKmers
 import java.io.File
 
 /**
@@ -45,7 +46,8 @@ fun main() {
 
 }
 
-fun deBruijnGraphFromKmers(d: List<String>): Map<String, List<String>> {
+// moved to util folder
+/*fun deBruijnGraphFromKmers(d: List<String>): Map<String, List<String>> {
 
     val strLen = d[0].length
     val resultMap : MutableMap<String, MutableList<String>> = mutableMapOf()
@@ -61,7 +63,7 @@ fun deBruijnGraphFromKmers(d: List<String>): Map<String, List<String>> {
         }
     }
     return( resultMap.toSortedMap())
-}
+}*/
 
 
 //    val outputMessagesFilePath = "stringsComposition.txt"
