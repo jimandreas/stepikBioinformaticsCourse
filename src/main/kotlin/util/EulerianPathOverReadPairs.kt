@@ -10,22 +10,21 @@ package util
  * @link: https://github.com/williamfiset/Algorithms
  *        EulerianPathDirectedEdgesAdjacencyList.java
  */
-//data class EulerConnectionData(val nodeNum: Int, val connections: MutableList<Int>)
 
-class EulerianPathSymbolicMap {
-    private var graph: MutableMap<Int, MutableList<Int>> = mutableMapOf()
+class EulerianPathOverReadPairs {
+    private var graph: Map<ReadPair, List<ReadPair>> = mutableMapOf()
     private var n = 0
     private var edgeCount = 0
-    private lateinit var inEdgesMap: HashMap<Int, Int>
-    private lateinit var outEdgesMap: HashMap<Int, Int>
-    private var path: MutableList<Int> = mutableListOf()
+    private lateinit var inEdgesMap: HashMap<ReadPair, Int>
+    private lateinit var outEdgesMap: HashMap<ReadPair, Int>
+    private var path: MutableList<ReadPair> = mutableListOf()
 
     /**
      * @param graph - a list of nodes each with a list of connections
      *   assumes list is zero based and the index into the first
      *   list is the same as the node number
      */
-    fun setGraph(graph: MutableMap<Int, MutableList<Int>>) {
+    fun setGraph(graph: Map<ReadPair, List<ReadPair>>) {
         this.graph = graph
         n = graph.size
         inEdgesMap = hashMapOf()
@@ -33,11 +32,11 @@ class EulerianPathSymbolicMap {
     }
 
 
-    fun solveEulerianPath(): List<Int> {
+    fun solveEulerianPath(): List<ReadPair> {
         initializeVariables()
 
         if (!errorCheckGraph()) {
-            return listOf(0)
+            return listOf(ReadPair("", ""))
         }
 
         depthFirstSearch(scanForStartingNode())
@@ -116,7 +115,8 @@ class EulerianPathSymbolicMap {
             return true
         }
         println("Bad graph : mismatched startNodes = $startNodes, endNodes = $endNodes")
-        return false
+        //return false
+        return true  // override
     }
 
     /**
@@ -127,31 +127,35 @@ class EulerianPathSymbolicMap {
      *    could be badly formed and some connection lists have
      *    zero entries (?) and are orphaned nodes
      */
-    private fun scanForStartingNode(): Int {
-        var candidateNode = 0
+    private fun scanForStartingNode(): ReadPair {
+        var candidateNode  = ReadPair("", "")
         for (node in graph) {
-            val i = node.key
-            if (outEdgesMap[i]!! - inEdgesMap[i]!! == 1) {
-                return i
+            val readPair = node.key
+            if (outEdgesMap[readPair]!! - inEdgesMap[readPair]!! == 1) {
+                return readPair
             }
-            if (outEdgesMap[i]!! > 0) {
-                candidateNode = i
+            if (outEdgesMap[readPair]!! > 0) {
+                candidateNode = readPair
             }
         }
         return candidateNode
     }
 
-    private fun depthFirstSearch(nodeNum: Int) {
-        while (outEdgesMap[nodeNum] != 0) {
-            val thisNode = graph[nodeNum]
+    private fun depthFirstSearch(keyPair: ReadPair) {
+        while (outEdgesMap[keyPair] != 0) {
 
-            decrement(outEdgesMap, nodeNum)
-            val outEdge = outEdgesMap[nodeNum]!!
+            // the PairedGraphs are always unbalanced - if there is no ending connection,
+            // then we are finished.
+
+            val thisNode = graph[keyPair] ?: break
+
+            decrement(outEdgesMap, keyPair)
+            val outEdge = outEdgesMap[keyPair]!!
 
             val nextNode = thisNode!![outEdge]
             depthFirstSearch(nextNode)
         }
-        path.add(0, nodeNum) // prepend the current node to solution list
+        path.add(0, keyPair) // prepend the current node to solution list
     }
 
 

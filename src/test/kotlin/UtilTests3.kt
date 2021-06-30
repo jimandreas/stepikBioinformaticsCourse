@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 
-import org.junit.jupiter.api.DisplayName
 import util.*
+import java.lang.RuntimeException
 import kotlin.math.exp
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -49,7 +47,72 @@ internal class UtilTests3 {
         assertEquals(expectedResult, result)
     }
 
+    /**
+     * basic test of prefix and suffix operations on ReadPair
+     */
 
+    @Test
+    @DisplayName("util: test prefix and suffix for ReadPair")
+    fun testReadPair() {
+        val testPair = ReadPair("1234", "5678")
+
+        val pre = testPair.prefix()
+        assertEquals(pre, ReadPair("123", "567"))
+
+        val suffix = testPair.suffix()
+        assertEquals(suffix, ReadPair("234", "678"))
+    }
+
+    /**
+     *  basic test on reassembling a string based on a list of ReadPairs
+     */
+    @Test
+    @DisplayName("util: test reassembling strings from a list of ReadPairs")
+    fun testReassembleString() {
+        val k = 2 // kmer length
+        val d = 1 // gap length
+        val pairList = listOf(
+            ReadPair("AB", "DE"),
+            ReadPair("BC", "EF")
+        )
+        val result = reassembleStringFromPairs(k, d, pairList)
+        assertEquals("ABCDEF", result)
+    }
+
+    /**
+     *  basic test on reassembling a string based on a list of ReadPairs
+     */
+    @Test
+    @DisplayName("util: test reassembling strings from a list of ReadPairs 02")
+    fun testReassembleString02() {
+        val k = 3 // kmer length
+        val d = 2 // gap length
+        val pairList = listOf(
+            ReadPair("ABC", "FGH"),
+            ReadPair("BCD", "GHI"),
+            ReadPair("CDE", "HIJ")
+        )
+        val result = reassembleStringFromPairs(k, d, pairList)
+        assertEquals("ABCDEFGHIJ", result)
+    }
+
+    /**
+     *  basic test on reassembling a string based on a list of ReadPairs
+     */
+    @Test
+    @DisplayName("util: test reassembling strings from a list of ReadPairs 03")
+    fun testReassembleString03() {
+        val k = 2 // kmer length
+        val d = 2 // gap length
+        val pairList = listOf(
+            ReadPair("AB", "EF"),
+            ReadPair("BC", "FG"),
+            ReadPair("CD", "GH"),
+            ReadPair("DE", "HI")
+        )
+        val result = reassembleStringFromPairs(k, d, pairList)
+        assertEquals("ABCDEFGHI", result)
+    }
 
 
 

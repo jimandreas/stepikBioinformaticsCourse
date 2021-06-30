@@ -5,7 +5,27 @@ import java.lang.StringBuilder
 /**
  * from a [d] list of kmer strings,
  *   produce a map of kmer to kmer connections
- */
+ *
+ *   Example:
+val input = listOf(
+        "GAGG",
+        "CAGG",
+        "GGGG",
+        "GGGA",
+        "CAGG",
+        "AGGG",
+        "GGAG"
+        )
+
+output: (as a map of string to list of strings)
+        AGG -> GGG
+        CAG -> AGG,AGG
+        GAG -> AGG
+        GGA -> GAG
+        GGG -> GGG,GGA
+*/
+
+
 fun deBruijnGraphFromKmers(d: List<String>): Map<String, List<String>> {
 
     val strLen = d[0].length
