@@ -9,7 +9,7 @@ import kotlin.math.exp
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
-internal class UtilTests4 {
+internal class CodonTesting {
 
     @BeforeEach
     fun setUp() {

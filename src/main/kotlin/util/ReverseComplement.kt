@@ -1,3 +1,5 @@
+@file:Suppress("LiftReturnOrAssignment")
+
 package util
 
 /**
