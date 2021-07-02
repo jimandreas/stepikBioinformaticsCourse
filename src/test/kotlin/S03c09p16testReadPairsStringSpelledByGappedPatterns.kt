@@ -117,32 +117,4 @@ internal class S03c09p16testReadPairsStringSpelledByGappedPatterns {
 // adjusting the gap to be one higher did the trick!
 
     }
-
-    @Test
-    @DisplayName("test reconstructing a string 06")
-    fun testReconstructingAString06() {
-        val k = 50
-        val d = 200
-
-        val pairsString = ""
-        val pairsList = parseGappedPatterns(pairsString)
-
-        val parsedKmerList = parseGappedPatterns(pairsString)
-
-        val dBGraph = deBruijnGraphFromPairedGraph(parsedKmerList)
-
-        val ep = EulerianPathOverReadPairs()
-        ep.setGraph(dBGraph)
-        val pathString = ep.solveEulerianPath()
-
-        val result = reassembleStringFromPairs(k-1, d+1, pathString)
-
-        println(result)
-
-//        val expectedResult =
-//            ""
-//        assertEquals(expectedResult, result)
-
-
-    }
 }
