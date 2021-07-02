@@ -65,7 +65,6 @@ fun probForGivenKmer(kmer: String, probMatrix: List<Float>): Float {
     }
     var prob: Float = 1.0f
     val nucMap: HashMap<Char, Int> = hashMapOf(Pair('a', 0), Pair('c', 1), Pair('g', 2), Pair('t', 3))
-    val iter = kmer.iterator()
 
     for (i in kmer.indices) {
         val offset = nucMap[kmer[i].lowercaseChar()]

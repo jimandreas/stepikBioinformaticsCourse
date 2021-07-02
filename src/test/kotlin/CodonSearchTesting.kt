@@ -86,6 +86,7 @@ ATAGTAGTGTGGTTCAAATACCTCCTT
 
         val total = result + resultR
         //total.forEach { println(it) }
+        assertEquals(lines.size, total.size)
         assertEquals(lines, total.sorted())
 
     }

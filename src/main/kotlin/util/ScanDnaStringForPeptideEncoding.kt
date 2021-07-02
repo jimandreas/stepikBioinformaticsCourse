@@ -20,18 +20,19 @@ fun scanDnaStringForPeptideEncoding(
         return listOf("")
     }
     val firstAminoAcid = peptideString[0].toString()
-    if (!aminoAcidToCodonList.containsKey(firstAminoAcid)) {
+    if (!aminoAcidToDnaCodonList.containsKey(firstAminoAcid)) {
         println("ERROR in peptideString $firstAminoAcid not found in table")
         return listOf("")
     }
 
     val matchingDnaStrings: MutableList<String> = mutableListOf()
+    val len = dnaString.length
 
-    for (i in 0..dnaString.length - 3) {
+    for (i in 0..len - 3) {
         var matchCount = 0
         val codon = dnaString.substring(i, i + 3)
 
-        if (aminoAcidToCodonList[firstAminoAcid]!!.contains(codon)) {
+        if (aminoAcidToDnaCodonList[firstAminoAcid]!!.contains(codon)) {
 
             /*
              * now try to match the reset of the peptide string against this position
@@ -47,19 +48,21 @@ fun scanDnaStringForPeptideEncoding(
                  * is a match.
                  */
                 if (matchCount == peptideString.length) {
-                    matchingDnaStrings.add(dnaString.substring(i, i + peptideString.length * 3))
+                    val match = dnaString.substring(i, i + peptideString.length * 3)
+                    matchingDnaStrings.add(match)
+                    //println(match)
                     break
                 }
                 val nextCodon = dnaString.substring(j, j + 3)
                 val nextAminoAcid = peptideString[matchCount]
-                if (!aminoAcidToCodonList.containsKey(nextAminoAcid.toString())) {
+                if (!aminoAcidToDnaCodonList.containsKey(nextAminoAcid.toString())) {
                     println("ERROR in peptideString $nextAminoAcid not found in table")
                     break
                 }
                 /*
                  * keep scanning as long as there are matches
                  */
-                if (!aminoAcidToCodonList[nextAminoAcid.toString()]!!.contains(nextCodon)) {
+                if (!aminoAcidToDnaCodonList[nextAminoAcid.toString()]!!.contains(nextCodon)) {
                     break
                 }
             }

@@ -152,7 +152,7 @@ class EulerianPathOverReadPairs {
             decrement(outEdgesMap, keyPair)
             val outEdge = outEdgesMap[keyPair]!!
 
-            val nextNode = thisNode!![outEdge]
+            val nextNode = thisNode[outEdge]
             depthFirstSearch(nextNode)
         }
         path.add(0, keyPair) // prepend the current node to solution list

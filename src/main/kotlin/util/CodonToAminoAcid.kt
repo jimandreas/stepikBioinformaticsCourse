@@ -1,8 +1,74 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "UnnecessaryVariable")
 
 package util
 
-val codonToAminoHashMap: HashMap<String, String> = hashMapOf(
+val rnaCodonToAminoHashMap : HashMap<String, String> = hashMapOf(
+    Pair("AAA", "K"),
+    Pair("AAC", "N"),
+    Pair("AAG", "K"),
+    Pair("AAU", "N"),
+    Pair("ACA", "T"),
+    Pair("ACC", "T"),
+    Pair("ACG", "T"),
+    Pair("ACU", "T"),
+    Pair("AGA", "R"),
+    Pair("AGC", "S"),
+    Pair("AGG", "R"),
+    Pair("AGU", "S"),
+    Pair("AUA", "I"),
+    Pair("AUC", "I"),
+    Pair("AUG", "M"),
+    Pair("AUU", "I"),
+    Pair("CAA", "Q"),
+    Pair("CAC", "H"),
+    Pair("CAG", "Q"),
+    Pair("CAU", "H"),
+    Pair("CCA", "P"),
+    Pair("CCC", "P"),
+    Pair("CCG", "P"),
+    Pair("CCU", "P"),
+    Pair("CGA", "R"),
+    Pair("CGC", "R"),
+    Pair("CGG", "R"),
+    Pair("CGU", "R"),
+    Pair("CUA", "L"),
+    Pair("CUC", "L"),
+    Pair("CUG", "L"),
+    Pair("CUU", "L"),
+    Pair("GAA", "E"),
+    Pair("GAC", "D"),
+    Pair("GAG", "E"),
+    Pair("GAU", "D"),
+    Pair("GCA", "A"),
+    Pair("GCC", "A"),
+    Pair("GCG", "A"),
+    Pair("GCU", "A"),
+    Pair("GGA", "G"),
+    Pair("GGC", "G"),
+    Pair("GGG", "G"),
+    Pair("GGU", "G"),
+    Pair("GUA", "V"),
+    Pair("GUC", "V"),
+    Pair("GUG", "V"),
+    Pair("GUU", "V"),
+    Pair("UAA", ""),
+    Pair("UAC", "Y"),
+    Pair("UAG", ""),
+    Pair("UAU", "Y"),
+    Pair("UCA", "S"),
+    Pair("UCC", "S"),
+    Pair("UCG", "S"),
+    Pair("UCU", "S"),
+    Pair("UGA", ""),
+    Pair("UGC", "C"),
+    Pair("UGG", "W"),
+    Pair("UGU", "C"),
+    Pair("UUA", "L"),
+    Pair("UUC", "F"),
+    Pair("UUG", "L"),
+    Pair("UUU", "F")
+)
+val dnaCodonToAminoHashMap: HashMap<String, String> = hashMapOf(
     Pair("AAA", "K"),
     Pair("AAC", "N"),
     Pair("AAG", "K"),
@@ -71,7 +137,31 @@ val codonToAminoHashMap: HashMap<String, String> = hashMapOf(
 
 data class AminoAcids(val code: Char, val abbreviation: String, val numCodons: Int, val aminoacid: String)
 
-val aminoAcidToCodonList: HashMap<String, List<String>> = hashMapOf(
+val aminoAcidToRnaCodonList: HashMap<String, List<String>> = hashMapOf(
+    Pair("*", listOf("UAA", "UAG", "UGA")), // stop codons
+    Pair("A", listOf("GCA", "GCC", "GCG", "GCU")),
+    Pair("C", listOf("UGU", "UGC")),
+    Pair("D", listOf("GAC", "GAU")),
+    Pair("E", listOf("GAA", "GAG")),
+    Pair("F", listOf("UUC", "UUU")),
+    Pair("G", listOf("GGA", "GGC", "GGG", "GGU")),
+    Pair("H", listOf("CAC", "CAU")),
+    Pair("I", listOf("AUA", "AUC", "AUU")),
+    Pair("K", listOf("AAA", "AAG")),
+    Pair("L", listOf("CUA", "CUC", "CUG", "UUA", "CUU", "UUG")),
+    Pair("M", listOf("AUG")),
+    Pair("N", listOf("AAC", "AAU")),
+    Pair("P", listOf("CCA", "CCC", "CCG", "CCU")),
+    Pair("Q", listOf("CAA", "CAG")),
+    Pair("R", listOf("AGA", "CGA", "CGC", "AGG", "CGG", "CGU")),
+    Pair("S", listOf("UCU", "AGC", "AGU", "UCA", "UCC", "UCG")),
+    Pair("T", listOf("ACA", "ACC", "ACG", "ACU")),
+    Pair("V", listOf("GUA", "GUC", "GUG", "GUU")),
+    Pair("W", listOf("UGG")),
+    Pair("Y", listOf("UAC", "UAU"))
+)
+
+val aminoAcidToDnaCodonList: HashMap<String, List<String>> = hashMapOf(
     Pair("*", listOf("TAA", "TAG", "TGA")), // stop codons
     Pair("A", listOf("GCA", "GCC", "GCG", "GCT")),
     Pair("C", listOf("TGT", "TGC")),
@@ -119,17 +209,50 @@ val aminoAcidsTable = listOf(
     AminoAcids('Y', "TYR", 2, "tyrosine")
 )
 
-fun translateCodonStringToAminoAcidString(codonString: String): String {
+fun translateRnaCodonStringToAminoAcidString(codonString: String): String {
 
     if (codonString.length % 3 != 0) {
         println("FAIL: codonString length is not multiple of 3 ($codonString.length: $codonString")
         return ""
     }
 
-    val translatedString = codonString.chunked(3).map {
-        codonToAminoHashMap[it]
+    val alist : MutableList<String> = mutableListOf()
+
+    val chunkedString = codonString.chunked(3)
+
+    for (item in chunkedString) {
+        val amino = rnaCodonToAminoHashMap[item]
+        if (amino == null) {
+            println("no amino for $item!!")
+        } else {
+            alist.add(amino)
+        }
+    }
+    val retVal = alist.joinToString(separator = "")
+    return retVal
+
+}
+
+fun translateDnaCodonStringToAminoAcidString(codonString: String): String {
+
+    if (codonString.length % 3 != 0) {
+        println("FAIL: codonString length is not multiple of 3 ($codonString.length: $codonString")
+        return ""
     }
 
-    return translatedString.joinToString(separator = "")
+    val alist : MutableList<String> = mutableListOf()
+
+    val chunkedString = codonString.chunked(3)
+
+    for (item in chunkedString) {
+        val amino = dnaCodonToAminoHashMap[item]
+        if (amino == null) {
+            println("no amino for $item!!")
+        } else {
+            alist.add(amino)
+        }
+    }
+    val retVal = alist.joinToString(separator = "")
+    return retVal
 
 }
