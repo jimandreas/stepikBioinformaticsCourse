@@ -298,7 +298,7 @@ in addition to the mass 0 and the mass of the entire peptide,
 with masses ordered from smallest to largest.
 
  */
-fun linearSpectrum(peptide: String): List<Int> {
+fun peptideMassSpectrum(peptide: String, isCyclicPeptide: Boolean = false): List<Int> {
     val prefixMass: MutableList<Int> = mutableListOf()
 
     when (peptide.length) {
@@ -308,22 +308,42 @@ fun linearSpectrum(peptide: String): List<Int> {
             return listOf(retVal ?: 0)
         }
     }
-    prefixMass.add(0) // initial element
-    for (i in 1..peptide.length) {
-        val mass = aminoAcidToDaltonHashMap[peptide[i-1]]
+    prefixMass.add(0) // initial mass list is seeded with zero
+
+    // the mass of each individual peptide
+    // plus its SUCCESSOR is added to the base mass array
+    for (i in 0 until peptide.length) {
+        val mass = aminoAcidToDaltonHashMap[peptide[i]]
         if (mass != null) {
-            prefixMass.add(prefixMass[i - 1] + mass)
+            prefixMass.add(prefixMass[i] + mass)
+        } else {
+            println("ERROR THE PEPTIDE GIVEN (${peptide[i]}) is not in the mass table!!")
         }
     }
+    println("Prefix masses are $prefixMass")
 
-    val linearSpectrum: MutableList<Int> = mutableListOf(0)
+    val massSpectrum: MutableList<Int> = mutableListOf(0)
+    val cyclicEndValue = prefixMass[peptide.length]
 
-    for (i in 0 until prefixMass.size) {
-        for (j in (i + 1) until prefixMass.size) {
-            print("i $i j $j ")
-            linearSpectrum.add(prefixMass[j] - prefixMass[i])
+    val loopEndOne = prefixMass.size-1
+    val loopEndTwo = prefixMass.size
+
+    for (i in 0 until loopEndOne) {
+        for (j in (i + 1) until loopEndTwo) {
+
+            massSpectrum.add(prefixMass[j] - prefixMass[i])
+
+            // add the masses that wrap around the end of cyclic Peptides
+            //    This uses a subtractive "hack" from the cyclicEndValue - that is the
+            //    summation of all masses in the peptide.
+
+            if (isCyclicPeptide && i > 0 && j < loopEndTwo-1) {
+                val extra = cyclicEndValue - (prefixMass[j] - prefixMass[i])
+                println("ADDING: $extra")
+                massSpectrum.add(cyclicEndValue - (prefixMass[j] - prefixMass[i]))
+            }
         }
-        print("\n")
     }
-    return linearSpectrum.sorted()
+    println(massSpectrum)
+    return massSpectrum.sorted()
 }
