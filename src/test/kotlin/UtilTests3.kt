@@ -114,6 +114,28 @@ internal class UtilTests3 {
         assertEquals("ABCDEFGHI", result)
     }
 
+    /**
+     * Code Challenge: Implement LinearSpectrum.
+
+    Input: An amino acid string Peptide.
+    Output: The linear spectrum of Peptide.
+
+    Extra Dataset
+
+    Sample Input: NQEL
+
+    Sample Output:
+    0 113 114 128 129 242 242 257 370 371 484
+     */
+    @Test
+    @DisplayName("util: test linearSpectrum function 01")
+    fun testLinearSpectrumFunction01() {
+        val peptide = "NQEL"
+        val expectedResult = listOf(0,113,114,128,129,242,242,257,370,371,484)
+
+        val result = linearSpectrum(peptide)
+        assertEquals(expectedResult, result)
+    }
 
 
 }
