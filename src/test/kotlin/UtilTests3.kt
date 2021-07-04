@@ -177,6 +177,7 @@ internal class UtilTests3 {
     }
 
 
+/*
 
     @Test
     @DisplayName("util: test linearSpectrum function 04")
@@ -187,6 +188,8 @@ internal class UtilTests3 {
         val result = peptideMassSpectrum(peptide, isCyclicPeptide = true)
         assertEquals(expectedResult, result)
     }
+*/
+
 
     /**
      * dataset : rosalind:
@@ -210,15 +213,17 @@ internal class UtilTests3 {
     }
 
     @Test
-    @DisplayName("util: test Cyclic NQEL Spectrum function 06")
-    fun testCyclicNQELspectrumFunction06() {
-        val peptide = "NQEL"
-        val expectedResult = listOf(0,99,113,114,128,227,257,299,355,356,370,371,484)
+    @DisplayName("util: test Cyclic Test Spectrum function 06")
+    fun testCyclicTestSpectrumFunction06() {
+        val peptide = "KLLKKMNTIGAYKEN"  // test peptide
+        
+        // test question answer: 
+        val expectedResult = listOf(0, 57, 71, 101, 113, 113, 113, 114, 114, 128, 128, 128, 128, 128, 129, 131, 163, 170, 214, 215, 226, 234, 241, 241, 241, 242, 243, 245, 256, 257, 259, 271, 291, 291, 328, 342, 346, 354, 354, 355, 362, 369, 371, 371, 373, 385, 387, 404, 419, 420, 456, 459, 468, 474, 482, 482, 484, 491, 499, 500, 501, 505, 516, 532, 534, 548, 587, 587, 596, 597, 602, 605, 610, 612, 613, 614, 619, 633, 644, 661, 662, 662, 715, 715, 715, 724, 725, 725, 727, 733, 741, 747, 750, 762, 772, 775, 775, 790, 828, 828, 843, 846, 853, 853, 855, 855, 876, 876, 878, 878, 885, 888, 903, 903, 941, 956, 956, 959, 969, 981, 984, 990, 998, 1004, 1006, 1006, 1007, 1016, 1016, 1016, 1069, 1069, 1070, 1087, 1098, 1112, 1117, 1118, 1119, 1121, 1126, 1129, 1134, 1135, 1144, 1144, 1183, 1197, 1199, 1215, 1226, 1230, 1231, 1232, 1240, 1247, 1249, 1249, 1257, 1263, 1272, 1275, 1311, 1312, 1327, 1344, 1346, 1358, 1360, 1360, 1362, 1369, 1376, 1377, 1377, 1385, 1389, 1403, 1440, 1440, 1460, 1472, 1474, 1475, 1486, 1488, 1489, 1490, 1490, 1490, 1497, 1505, 1516, 1517, 1561, 1568, 1600, 1602, 1603, 1603, 1603, 1603, 1603, 1617, 1617, 1618, 1618, 1618, 1630, 1660, 1674, 1731)
 
         val result = peptideMassSpectrum(peptide, isCyclicPeptide = true)
+        //println(result.joinToString(separator = " "))
         assertEquals(expectedResult, result)
+
     }
 
-    // NQEL
-    // 0,99,113,114,128,227,257,299,355,356,370,371,484
 }

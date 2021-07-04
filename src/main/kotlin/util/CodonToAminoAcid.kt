@@ -344,6 +344,6 @@ fun peptideMassSpectrum(peptide: String, isCyclicPeptide: Boolean = false): List
             }
         }
     }
-    println(massSpectrum)
+    println("num ${massSpectrum.size} $massSpectrum")
     return massSpectrum.sorted()
 }
