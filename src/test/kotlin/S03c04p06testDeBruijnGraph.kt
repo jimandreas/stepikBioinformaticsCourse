@@ -80,7 +80,7 @@ internal class S03c04p06testDeBruijnGraph {
 
     }
 
-    @Test
+  /*  @Test
     @DisplayName("test DeBruijnGraph 03")
     fun testDeBruijnGraph03() {
 
@@ -1095,7 +1095,7 @@ TTTTTTCAAGA -> TTTTTCAAGAG
         }
         assertEquals(expectedString.toSortedSet(), outString.toSortedSet())
 
-    }
+    }*/
 
 
 }

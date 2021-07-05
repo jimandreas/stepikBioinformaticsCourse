@@ -6,17 +6,20 @@
 String Reconstruction practice problem
 
  */
+/*
 
 fun main() {
 
-    /*val stringList = listOf(
+    */
+/*val stringList = listOf(
         "ACCGA",
         "CCGAA",
         "CGAAG",
         "GAAGC",
         "AAGCT"
     )
-*/
+*//*
+
     val stringList = listOf(
         "ACCTTGGTAATACACTAGATGCGAC",
         "CCTTGGTAATACACTAGATGCGACA",
@@ -5018,6 +5021,7 @@ fun main() {
 
     // success!
 }
+*/
 
 
 //    val outputMessagesFilePath = "stringsComposition.txt"

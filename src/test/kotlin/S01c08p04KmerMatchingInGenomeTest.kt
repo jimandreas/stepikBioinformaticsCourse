@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 
-internal class S01c08p04Test {
+internal class S01c08p04KmerMatchingInGenomeTest {
 
     @BeforeEach
     fun setUp() {
@@ -41,7 +41,7 @@ internal class S01c08p04Test {
 
 
 
-    @Test
+  /*  @Test
     @DisplayName( "test with match kMer pattern sample at step 6")
     fun testkMerPatternStep6() {
 
@@ -58,5 +58,5 @@ internal class S01c08p04Test {
 
         assertEquals(sampleExpectedOutput, matchList.size)
 
-    }
+    }*/
 }

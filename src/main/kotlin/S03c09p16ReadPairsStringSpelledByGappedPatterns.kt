@@ -16,7 +16,7 @@ i-th (k, d)-mer in Text is equal to (ai|bi)  for 1 ≤ i ≤ n (if such a string
 
  */
 
-fun main() {
+/*fun main() {
 
     val k = 50
     val d = 200
@@ -5744,7 +5744,7 @@ fun main() {
     if (result == expectedResult) {
         println("COORRREECTE!")
     }
-}
+}*/
 
 
 

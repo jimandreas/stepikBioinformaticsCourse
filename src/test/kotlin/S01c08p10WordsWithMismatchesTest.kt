@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import util.frequentWordsWithMismatches
 
-internal class S01c08p10Test {
+internal class S01c08p10WordsWithMismatchesTest {
 
     @BeforeEach
     fun setUp() {
