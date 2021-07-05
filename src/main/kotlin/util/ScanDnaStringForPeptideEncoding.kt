@@ -40,7 +40,7 @@ fun scanDnaStringForPeptideEncoding(
              */
             var j = i
 
-            while (j < dnaString.length - 3) {
+            while (j <= dnaString.length - 3) {
                 matchCount++
                 j += 3
                 /*
