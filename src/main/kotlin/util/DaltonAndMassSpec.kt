@@ -1,6 +1,11 @@
-@file:Suppress("ControlFlowWithEmptyBody", "UNUSED_VARIABLE", "unused", "ReplaceManualRangeWithIndicesCalls")
+@file:Suppress("ControlFlowWithEmptyBody", "UNUSED_VARIABLE", "unused", "ReplaceManualRangeWithIndicesCalls",
+    "LiftReturnOrAssignment"
+)
 
 package util
+
+import java.lang.Integer.min
+import java.util.*
 
 val aminoAcidToDaltonHashMap: HashMap<Char, Int> = hashMapOf(
     'G' to 57,
@@ -235,3 +240,30 @@ fun cyclopeptideSequencing(spectrum: List<Int>): List<List<Int>> {
     return finalPeptides
 
 }
+
+/**
+ *
+ * Cyclopeptide Scoring Problem: Compute the score of a cyclic peptide against a spectrum.
+
+Input: An amino acid string Peptide and a collection of integers Spectrum.
+Output: The score of Peptide against Spectrum, Score(Peptide, Spectrum).
+ */
+
+
+fun cyclopeptideScore(peptide: String, testSpectrum: List<Int>): Int {
+    val peptideMassSpectrum = peptideMassSpectrum(peptide, isCyclicPeptide = true)
+
+    val hackThisList = testSpectrum.toMutableList()
+
+    var count = 0
+    for (p in peptideMassSpectrum) {
+        if (hackThisList.contains(p)) {
+            count++
+            hackThisList.remove(p)
+        }
+    }
+    return count
+
+
+}
+
