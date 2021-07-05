@@ -84,7 +84,7 @@ fun peptideMassSpectrum(peptide: String, isCyclicPeptide: Boolean = false): List
             println("ERROR THE PEPTIDE GIVEN (${peptide[i]}) is not in the mass table!!")
         }
     }
-    println("Prefix masses are $prefixMass")
+    //println("Prefix masses are $prefixMass")
 
     val massSpectrum: MutableList<Int> = mutableListOf(0)
     val cyclicEndValue = prefixMass[peptide.length]
@@ -103,12 +103,12 @@ fun peptideMassSpectrum(peptide: String, isCyclicPeptide: Boolean = false): List
 
             if (isCyclicPeptide && i > 0 && j < loopEndTwo-1) {
                 val extra = cyclicEndValue - (prefixMass[j] - prefixMass[i])
-                println("ADDING: $extra")
+                //println("ADDING: $extra")
                 massSpectrum.add(cyclicEndValue - (prefixMass[j] - prefixMass[i]))
             }
         }
     }
-    println("num ${massSpectrum.size} $massSpectrum")
+    //println("num ${massSpectrum.size} $massSpectrum")
     return massSpectrum.sorted()
 }
 
@@ -147,12 +147,12 @@ fun peptideMassSpectrumFromMassList(massList: List<Int>, isCyclicPeptide: Boolea
 
             if (isCyclicPeptide && i > 0 && j < loopEndTwo-1) {
                 val extra = totalMassValue - (prefixMass[j] - prefixMass[i])
-                println("ADDING: $extra")
+                //println("ADDING: $extra")
                 massSpectrum.add(totalMassValue - (prefixMass[j] - prefixMass[i]))
             }
         }
     }
-    println("num ${massSpectrum.size} $massSpectrum")
+    //println("num ${massSpectrum.size} $massSpectrum")
     return massSpectrum.sorted()
 }
 
@@ -197,7 +197,6 @@ fun cyclopeptideSequencing(spectrum: List<Int>): List<List<Int>> {
 
     // loop until all proposed lists fail and are removed
     do {
-
         // expand the list - this is exponential(!) but it is immediately trimmed
         val expandedPeptides: MutableList<List<Int>> = ArrayList()
         for (p in candidatePeptides) {
@@ -210,7 +209,10 @@ fun cyclopeptideSequencing(spectrum: List<Int>): List<List<Int>> {
         candidatePeptides = expandedPeptides
 
         // now evaluate the candidates
-        for (w in candidatePeptides) {
+        // have to use an iterator or the JVM gets upset
+        val iter = candidatePeptides.iterator()
+        while (iter.hasNext()) {
+            val w = iter.next()
 
             // if this candidate amino combo adds up to the target peptide mass, then take a closer look
             if (w.sum() == maxMass) {
@@ -218,14 +220,14 @@ fun cyclopeptideSequencing(spectrum: List<Int>): List<List<Int>> {
                 if (spectrum == result) {
                     finalPeptides.add(w)
                 }
-                candidatePeptides.remove(w)
+                iter.remove()
             } else {
                 // otherwise check the aminos in the candidate to make sure
                 // that the composition matches given spectrum, if that fails,
                 // remove the candidate
                 val result = peptideMassSpectrumFromMassList(w, isCyclicPeptide = false)
                 if (!spectrum.containsAll(result)) {
-                    candidatePeptides.remove(w)
+                    iter.remove()
                 }
             }
         }
