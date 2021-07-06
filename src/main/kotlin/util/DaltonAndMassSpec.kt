@@ -5,6 +5,7 @@
 
 package util
 
+import java.lang.Integer.max
 import java.util.*
 
 val aminoAcidToDaltonHashMap: HashMap<Char, Int> = hashMapOf(
@@ -30,7 +31,8 @@ val aminoAcidToDaltonHashMap: HashMap<Char, Int> = hashMapOf(
     'W' to 186
 )
 
-val aminoUniqueMasses = listOf(
+
+val aminoUniqueMassesList = listOf(
     57,
     71,
     87,
@@ -51,6 +53,7 @@ val aminoUniqueMasses = listOf(
     186
 )
 
+var aminoUniqueMasses = aminoUniqueMassesList // can be overridden by a test for a custom list
 
 /**
  *
@@ -364,7 +367,8 @@ Return: LeaderPeptide after running LeaderboardCyclopeptideSequencing(Spectrum, 
 
 var matchingStrings = StringBuilder()
 val matchingLists : MutableList<List<Int>> = mutableListOf()
-var countOfEightyThrees = 0
+var countOfEightySevens = 0
+var maxScore = 0
 
 fun leaderboardCyclopeptideSequencing(trimLevel: Int, spectrum: List<Int>): List<Int> {
 
@@ -400,9 +404,9 @@ fun leaderboardCyclopeptideSequencing(trimLevel: Int, spectrum: List<Int>): List
 
                 val leaderScore = cyclopeptideScoreFromMasses(peptideLeadingCandidate, spectrum, true)
 
-                if (thisPeptideScore == 83) {
+                if (thisPeptideScore == 87) {
                     println(thisPeptideScore)
-                    countOfEightyThrees++
+                    countOfEightySevens++
                     matchingLists.add(p)
                     matchingStrings.append(p.joinToString("-"))
                     matchingStrings.append(" ")
@@ -410,6 +414,7 @@ fun leaderboardCyclopeptideSequencing(trimLevel: Int, spectrum: List<Int>): List
 
                 if (thisPeptideScore > leaderScore) {
                     peptideLeadingCandidate = p
+                    maxScore = max(maxScore, thisPeptideScore)
                 }
             } else {
                 // otherwise if the peptide is too big, then remove it

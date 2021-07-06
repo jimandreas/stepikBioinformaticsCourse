@@ -3,8 +3,6 @@
 import org.junit.jupiter.api.*
 import util.*
 import java.lang.StringBuilder
-import java.util.concurrent.TimeUnit
-import kotlin.math.exp
 import kotlin.test.assertEquals
 
 internal class UtilTestsLeaderboardCyclopeptideSequencing {
@@ -105,7 +103,7 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
         println("MassSum is ${result.sum()}")
         println(result.joinToString("-"))
 
-        println(countOfEightyThrees)
+        println(countOfEightySevens)
         val sizes = matchingLists.map { it.size }
         println("sizes are $sizes")
         println(matchingStrings)
@@ -124,9 +122,11 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
     @DisplayName("test LeaderboardCyclopeptideSequencing Extended Amino Acid Alphabet")
     fun testLeaderboardCyclopeptideSequencingExtendedAminoAlphabet() {
         val trimLevel = 1000
+        val extendedAminoAcidAlphabet = IntRange(57, 200).toList()
+        aminoUniqueMasses = extendedAminoAcidAlphabet // override standard
         // see links above for SPECTRUM10
         val spectrum10 = listOf(0, 97, 99, 114, 128, 147, 147, 163, 186, 227, 241, 242, 244, 260, 261, 262, 283, 291, 333, 340, 357, 385, 389, 390, 390, 405, 430, 430, 447, 485, 487, 503, 504, 518, 543, 544, 552, 575, 577, 584, 632, 650, 651, 671, 672, 690, 691, 738, 745, 747, 770, 778, 779, 804, 818, 819, 820, 835, 837, 875, 892, 917, 932, 932, 933, 934, 965, 982, 989, 1030, 1039, 1060, 1061, 1062, 1078, 1080, 1081, 1095, 1136, 1159, 1175, 1175, 1194, 1194, 1208, 1209, 1223, 1225, 1322)
-        val result = leaderboardCyclopeptideSequencing(trimLevel, spectrum)
+        val result = leaderboardCyclopeptideSequencing(trimLevel, spectrum10)
         val str = StringBuilder()
         for (i in result) {
             str.append(aminoAcidToDaltonHashMap.filter {
@@ -137,11 +137,12 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
         println("MassSum is ${result.sum()}")
         println(result.joinToString("-"))
 
-        println(countOfEightyThrees)
+        println("max score is $maxScore")
+
+        println("Yes there were $countOfEightySevens of 87s")
         val sizes = matchingLists.map { it.size }
         println("sizes are $sizes")
         println(matchingStrings)
-
 
     }
 
