@@ -1,10 +1,10 @@
-@file:Suppress("ControlFlowWithEmptyBody", "UNUSED_VARIABLE", "unused", "ReplaceManualRangeWithIndicesCalls",
-    "LiftReturnOrAssignment"
+@file:Suppress(
+    "ControlFlowWithEmptyBody", "UNUSED_VARIABLE", "unused", "ReplaceManualRangeWithIndicesCalls",
+    "LiftReturnOrAssignment", "UnnecessaryVariable"
 )
 
 package util
 
-import java.lang.Integer.min
 import java.util.*
 
 val aminoAcidToDaltonHashMap: HashMap<Char, Int> = hashMapOf(
@@ -52,8 +52,6 @@ val aminoUniqueMasses = listOf(
 )
 
 
-
-
 /**
  *
 Generating Theoretical Spectrum Problem: Generate the theoretical spectrum of a cyclic peptide.
@@ -94,7 +92,7 @@ fun peptideMassSpectrum(peptide: String, isCyclicPeptide: Boolean = false): List
     val massSpectrum: MutableList<Int> = mutableListOf(0)
     val cyclicEndValue = prefixMass[peptide.length]
 
-    val loopEndOne = prefixMass.size-1
+    val loopEndOne = prefixMass.size - 1
     val loopEndTwo = prefixMass.size
 
     for (i in 0 until loopEndOne) {
@@ -106,7 +104,7 @@ fun peptideMassSpectrum(peptide: String, isCyclicPeptide: Boolean = false): List
             //    This uses a subtractive "hack" from the cyclicEndValue - that is the
             //    summation of all masses in the peptide.
 
-            if (isCyclicPeptide && i > 0 && j < loopEndTwo-1) {
+            if (isCyclicPeptide && i > 0 && j < loopEndTwo - 1) {
                 val extra = cyclicEndValue - (prefixMass[j] - prefixMass[i])
                 //println("ADDING: $extra")
                 massSpectrum.add(cyclicEndValue - (prefixMass[j] - prefixMass[i]))
@@ -130,15 +128,18 @@ fun peptideMassSpectrum(peptide: String, isCyclicPeptide: Boolean = false): List
 fun peptideMassSpectrumFromMassList(massList: List<Int>, isCyclicPeptide: Boolean = false): List<Int> {
     val prefixMass: MutableList<Int> = mutableListOf(0)
     var previousMass = 0
+    if (massList.isEmpty()) {
+        return listOf(0)
+    }
     for (m in massList) {
         previousMass += m
         prefixMass.add(previousMass)
     }
 
     val massSpectrum: MutableList<Int> = mutableListOf(0)
-    val totalMassValue = prefixMass[prefixMass.size-1]
+    val totalMassValue = prefixMass[prefixMass.size - 1]
 
-    val loopEndOne = prefixMass.size-1
+    val loopEndOne = prefixMass.size - 1
     val loopEndTwo = prefixMass.size
 
     for (i in 0 until loopEndOne) {
@@ -150,7 +151,7 @@ fun peptideMassSpectrumFromMassList(massList: List<Int>, isCyclicPeptide: Boolea
             //    This uses a subtractive "hack" from the cyclicEndValue - that is the
             //    summation of all masses in the peptide.
 
-            if (isCyclicPeptide && i > 0 && j < loopEndTwo-1) {
+            if (isCyclicPeptide && i > 0 && j < loopEndTwo - 1) {
                 val extra = totalMassValue - (prefixMass[j] - prefixMass[i])
                 //println("ADDING: $extra")
                 massSpectrum.add(totalMassValue - (prefixMass[j] - prefixMass[i]))
@@ -191,10 +192,10 @@ fun peptideMassSpectrumFromMassList(massList: List<Int>, isCyclicPeptide: Boolea
 fun cyclopeptideSequencing(spectrum: List<Int>): List<List<Int>> {
 
     // scan the spectrum mass list of values for matches to amino masses
-    val massMatchesList = spectrum.filter { aminoUniqueMasses.contains( it )}
+    val massMatchesList = spectrum.filter { aminoUniqueMasses.contains(it) }
 
     // the maxMass is the mass of all peptides together - our target for the peptide
-    val maxMass = spectrum.maxOrNull()?: 0
+    val maxMass = spectrum.maxOrNull() ?: 0
 
     // two lists to work on.   One is the proposed list, and the other is the winners list
     var candidatePeptides: MutableList<List<Int>> = arrayListOf(listOf())
@@ -247,23 +248,178 @@ fun cyclopeptideSequencing(spectrum: List<Int>): List<List<Int>> {
 
 Input: An amino acid string Peptide and a collection of integers Spectrum.
 Output: The score of Peptide against Spectrum, Score(Peptide, Spectrum).
+
+The score is simply the count of the common elements in both the
+testSpectrum and the peptide being scored.
  */
 
 
-fun cyclopeptideScore(peptide: String, testSpectrum: List<Int>): Int {
-    val peptideMassSpectrum = peptideMassSpectrum(peptide, isCyclicPeptide = true)
+fun cyclopeptideScore(peptide: String, testSpectrum: List<Int>, isCyclicPeptide: Boolean = true): Int {
+    val peptideMassSpectrum = peptideMassSpectrum(peptide, isCyclicPeptide)
 
-    val hackThisList = testSpectrum.toMutableList()
+    val t = testSpectrum.toMutableList()
 
     var count = 0
     for (p in peptideMassSpectrum) {
-        if (hackThisList.contains(p)) {
+        if (t.contains(p)) {
             count++
-            hackThisList.remove(p)
+            t.remove(p)
         }
     }
     return count
-
-
 }
 
+fun cyclopeptideScoreFromMasses(peptide: List<Int>, testSpectrum: List<Int>, isCyclicPeptide: Boolean = true): Int {
+    val peptideMassSpectrum = peptideMassSpectrumFromMassList(peptide, isCyclicPeptide)
+
+    val t = testSpectrum.toMutableList()
+
+    var count = 0
+    for (p in peptideMassSpectrum) {
+        if (t.contains(p)) {
+            count++
+            t.remove(p)
+        }
+    }
+    return count
+}
+
+/**
+ * Trim
+ * trimLeaderboard()
+ * @link https://stepik.org/lesson/240288/step/3?unit=212634
+ * @link http://rosalind.info/problems/ba4l/
+ *
+ * Trim a leaderboard of peptides.
+
+Given: A leaderboard of linear peptides Leaderboard, a linear spectrum Spectrum, and an integer N.
+
+Return: The top N peptides from Leaderboard scored against Spectrum. Remember to use LinearScore.
+Note that ties at a givin scoring level are all included.
+ */
+fun trimLeaderboard(leaderPeptides: List<String>, givenSpectrum: List<Int>, trimLevel: Int): List<String> {
+
+    val leaderMap: MutableList<Pair<Int, String>> = mutableListOf()
+
+    for (p in leaderPeptides) {
+        leaderMap.add(Pair(cyclopeptideScore(p, givenSpectrum, false), p))
+    }
+
+    val levels = leaderMap.map { it.first }.sortedDescending().distinct()
+    val cutoff = levels[trimLevel - 1]
+
+    val outputPeptides = leaderMap.filter { it.first >= cutoff }
+    val outputPeptidesSorted = outputPeptides.sortedByDescending { it.first }
+    val outputStrings = outputPeptidesSorted.map { it.second }
+    val leaders = outputStrings
+
+    return leaders
+}
+
+fun trimLeaderboardMasses(
+    leaderPeptides: List<List<Int>>,
+    givenSpectrum: List<Int>,
+    trimLevel: Int
+): MutableList<List<Int>> {
+
+    if (leaderPeptides.size < trimLevel) {
+        return leaderPeptides.toMutableList()
+    }
+    val leaderMap: MutableList<Pair<Int, List<Int>>> = mutableListOf()
+
+    for (p in leaderPeptides) {
+        leaderMap.add(Pair(cyclopeptideScoreFromMasses(p, givenSpectrum, false), p))
+    }
+
+    val levels = leaderMap.map { it.first }.sortedDescending()
+    val index = if (trimLevel < levels.size - 1) {
+        trimLevel - 1
+    } else {
+        levels.size - 1
+    }
+    val cutoff = levels[index]
+
+    println("Cutoff = $cutoff levels size ${levels.size} $trimLevel")
+
+    val outputPeptides = leaderMap.filter { it.first >= cutoff }
+    val outputPeptidesSorted = outputPeptides.sortedByDescending { it.first }
+    val outputMasses = outputPeptidesSorted.map { it.second }
+
+    return outputMasses.toMutableList()
+}
+
+
+/**
+ * LeaderboardCyclopeptideSequencing
+ * @link https://stepik.org/lesson/240282/step/8?unit=212628
+ * @link http://rosalind.info/problems/ba4g/
+ *
+ * NOTE: in stepik the leaderboard pruning function is called "Trim", in rosalind "Cut"
+ * Here the usage is trimLeaderboard()
+ *
+Given: An integer N and a collection of integers Spectrum.
+
+Return: LeaderPeptide after running LeaderboardCyclopeptideSequencing(Spectrum, N).
+ */
+
+var matchingStrings = StringBuilder()
+val matchingLists : MutableList<List<Int>> = mutableListOf()
+var countOfEightyThrees = 0
+
+fun leaderboardCyclopeptideSequencing(trimLevel: Int, spectrum: List<Int>): List<Int> {
+
+    // the parentMass is the mass of all peptides together - our target for the peptide
+    val parentMass = spectrum.maxOrNull() ?: 0
+
+    var peptideCandidateLeaderboard: MutableList<List<Int>> = arrayListOf(listOf())
+    var peptideLeadingCandidate = listOf(0)
+
+    do {
+        // expand the leaderboard by all amino acids
+        // - this is exponential(!) but it is immediately trimmed
+        val expandedPeptides: MutableList<List<Int>> = ArrayList()
+        for (p in peptideCandidateLeaderboard) {
+            for (m in aminoUniqueMasses) {
+                val newPeptide: MutableList<Int> = ArrayList(p)
+                newPeptide.add(m)
+                expandedPeptides.add(newPeptide)
+            }
+        }
+        peptideCandidateLeaderboard = expandedPeptides
+
+        // now evaluate the candidates
+        // have to use an iterator or the JVM gets upset
+        val iter = peptideCandidateLeaderboard.iterator()
+        while (iter.hasNext()) {
+            val p = iter.next()
+
+            // if this candidate amino combo adds up to the target peptide mass, then take a closer look
+            if (p.sum() == parentMass) {
+
+                val thisPeptideScore = cyclopeptideScoreFromMasses(p, spectrum, true)
+
+                val leaderScore = cyclopeptideScoreFromMasses(peptideLeadingCandidate, spectrum, true)
+
+                if (thisPeptideScore == 83) {
+                    println(thisPeptideScore)
+                    countOfEightyThrees++
+                    matchingLists.add(p)
+                    matchingStrings.append(p.joinToString("-"))
+                    matchingStrings.append(" ")
+                }
+
+                if (thisPeptideScore > leaderScore) {
+                    peptideLeadingCandidate = p
+                }
+            } else {
+                // otherwise if the peptide is too big, then remove it
+                if (p.sum() > parentMass) {
+                    iter.remove()
+                }
+            }
+        }
+        peptideCandidateLeaderboard = trimLeaderboardMasses(peptideCandidateLeaderboard, spectrum, trimLevel)
+    } while (peptideCandidateLeaderboard.isNotEmpty())
+
+    return peptideLeadingCandidate
+}
