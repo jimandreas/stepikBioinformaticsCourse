@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE")
+@file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable")
 
 import org.junit.jupiter.api.*
 
@@ -109,6 +109,30 @@ internal class UtilTests3 {
         )
         val result = reassembleStringFromPairs(k, d, pairList)
         assertEquals("ABCDEFGHI", result)
+    }
+
+    /**
+     * test of utility function to return the top M elements of a map of elements and their multiplicity
+     */
+    @Test
+    @DisplayName("test of topM function - top M elements of a map of elements and their multiplicity")
+    fun testTopMFunction() {
+        val testMap: Map<Int, Int> = mapOf(
+            57 to 1,   // only one - 57
+            58 to 3,   // have three - 58's
+            200 to 2   // have two - 200's
+
+        )
+
+        // first test - not enough elements in map
+        val result = topM(4, testMap)  // should hit upper limit of entries
+        val expectedResult = listOf(57, 58, 200) // results are sorted
+        assertEquals(expectedResult, result)
+
+        // check for return of correct shortened list
+        val result2 = topM(2, testMap)
+        val expectedResult2 = listOf(58, 200) // should not include 57
+        assertEquals(expectedResult2, result2)
     }
 
 }

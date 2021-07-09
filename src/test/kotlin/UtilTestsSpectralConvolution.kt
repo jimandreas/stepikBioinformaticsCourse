@@ -1,0 +1,107 @@
+@file:Suppress("UNUSED_VARIABLE")
+
+import org.junit.jupiter.api.*
+import util.*
+import java.lang.StringBuilder
+import kotlin.test.assertEquals
+
+internal class UtilTestsSpectralConvolution {
+
+    @BeforeEach
+    fun setUp() {
+    }
+
+    @AfterEach
+    fun tearDown() {
+    }
+
+    /**
+     * Spectral Convolution Problem: Compute the convolution of a spectrum.
+
+    Input: A collection of integers Spectrum.
+    Output: The list of elements in the convolution of Spectrum.
+    If an element has multiplicity k, it should appear exactly k times;
+    you may return the elements in any order.
+     */
+
+    @Test
+    @DisplayName("test Spectral Convolution 01")
+    fun testSpectralConvolution01() {
+        val spectrum = listOf(0, 137, 186, 323)
+
+        val result = spectralConvolution(spectrum)
+        println(result)
+        
+        val expectedResult = "49 323 137 137 186 186 "
+
+        assertEquals(expectedResult, formatMap(result))
+
+
+    }
+
+    /**
+     * extra dataset
+     * @link: https://bioinformaticsalgorithms.com/data/extradatasets/antibiotics/spectral_convolution.txt
+     */
+/*
+    @Test
+    @DisplayName("test Spectral Convolution 02")
+    fun testSpectralConvolution02() {
+        val spectrum = listOf(465, 473, 998, 257, 0, 385, 664, 707, 147, 929, 87, 450, 748, 938, 998, 768, 234, 722, 851, 113, 700, 957, 265, 284, 250, 137, 317, 801, 128, 820, 321, 612, 956, 434, 534, 621, 651, 129, 421, 337, 216, 699, 347, 101, 464, 601, 87, 563, 738, 635, 386, 972, 620, 851, 948, 200, 156, 571, 551, 522, 828, 984, 514, 378, 363, 484, 855, 869, 835, 234, 1085, 764, 230, 885)
+
+        val result = spectralConvolution(spectrum)
+        println(result)
+
+        println(formatMap(result))
+    }
+*/
+
+    /**
+     * quiz
+     * @link https://stepik.org/lesson/240284/step/4?unit=212630
+     * @link http://rosalind.info/problems/ba4h/
+     */
+/*    @Test
+    @DisplayName("test Spectral Convolution 03")
+    fun testSpectralConvolution03() {
+        val spectrum = listOf(729, 590, 929, 320, 113, 1614, 1106, 1222, 1117, 470, 2067, 1486, 1218, 1903, 1819, 1696, 1891, 186, 333, 1220, 1760, 2037, 1032, 446, 1821, 1977, 598, 1593, 103, 599, 1003, 876, 931, 1294, 1303, 2037, 186, 427, 609, 2122, 496, 1494, 450, 101, 314, 1511, 1161, 1957, 163, 1385, 1119, 764, 1062, 287, 1657, 1104, 826, 877, 1587, 1459, 745, 1404, 505, 2037, 1346, 1383, 2109, 435, 1913, 1036, 1843, 1727, 2223, 1172, 1459, 1063, 1936, 601, 463, 1723, 2108, 892, 1936, 530, 633, 1649, 2110, 764, 291, 1373, 128, 1044, 1874, 933, 415, 716, 578, 217, 1810, 888, 1048, 1347, 2120, 1501, 1166, 722, 1532, 1532, 877, 2095, 310, 1909, 1466, 217, 1051, 1001, 712, 1750, 1218, 349, 838, 902, 1407, 1773, 404, 1622, 1753, 332, 840, 1179, 1890, 737, 1160, 0, 885, 505, 1191, 1777, 1005, 473, 1718, 816, 1005, 1622, 2060, 1436, 1939, 1808, 186, 1645, 1187, 266, 1740, 819, 1290, 1718, 1604, 2092, 636, 2076, 713, 1796, 218, 1486, 566, 601, 1633, 574, 1175, 163, 380, 413, 1057, 2095, 1624, 299, 1269, 920, 2005, 1567, 1335, 2120, 392, 1397, 1507, 1323, 1210, 241, 1199, 527, 1924, 900, 691, 103, 147, 954, 1851, 2060, 737, 115, 1220, 246, 128, 1982, 1024, 1693, 114, 1478, 1013, 619, 787, 483, 1625, 2006, 402, 1331, 500, 630, 1338, 656, 1292, 691, 850, 131, 1510, 1321, 2006, 1590, 1959, 1831, 1932, 1346, 372, 264, 747, 156, 1788, 1476, 757, 287, 1003, 284)
+
+        val result = spectralConvolution(spectrum)
+        //println(result)
+
+        println(formatMap(result))
+    }*/
+    
+    private fun formatMap(map: Map<Int, Int>): String {
+        val str = StringBuilder()
+        for (key in map.keys) {
+            for (m in 0 until map[key]!!) {
+                str.append(key)
+                str.append(" ")
+            }
+        }
+        return str.toString()
+    }
+
+    /**
+     * ConvolutionCyclopeptideSequencing
+     * We now have the outline for a new cyclopeptide sequencing algorithm.
+     * Given an experimental spectrum, we first compute the convolution of an
+     * experimental spectrum. We then select the M most frequent elements
+     * between 57 and 200 in the convolution to form an extended alphabet of
+     * candidate amino acid masses. In order to be fair, we should include the top M
+     * elements of the convolution "with ties". Finally, we run the algorithm
+     * LeaderboardCyclopeptideSequencing, where the amino acid masses are
+     * restricted to this alphabet. We call this algorithm ConvolutionCyclopeptideSequencing.
+     */
+
+    @Test
+    @DisplayName("test ConvolutionCyclopeptideSequencing 01")
+    fun testConvolutionCyclopeptideSequencing01() {
+        val spectrum = listOf(57, 57, 71, 99, 129, 137, 170, 186, 194, 208, 228, 265, 285, 299, 307, 323, 356, 364, 394, 422, 493)
+        //val result = convolutionCyclopeptideSequencing(20, 60, spectrum)
+        val result = convolutionCyclopeptideSequencing(20, 10, spectrum)
+        println(result)
+    }
+
+}

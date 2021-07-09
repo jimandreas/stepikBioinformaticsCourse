@@ -86,6 +86,7 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
      * Exercise Break: Run LeaderboardCyclopeptideSequencing on Spectrum25 with N = 1000.
      */
     @Test
+    @Disabled
     @DisplayName("test LeaderboardCyclopeptideSequencing 04")
     fun testLeaderboardCyclopeptideSequencing04() {
         val trimLevel = 1000
@@ -119,6 +120,7 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
      */
 
     @Test
+    @Disabled
     @DisplayName("test LeaderboardCyclopeptideSequencing Extended Amino Acid Alphabet")
     fun testLeaderboardCyclopeptideSequencingExtendedAminoAlphabet() {
         val trimLevel = 1000
