@@ -17,13 +17,29 @@ Output: A set of integers A such that ∆A = L.
 fun main() {
 
     val sampleInput = listOf(-10, -8, -7, -6, -5, -4, -3, -3, -2, -2, 0, 0, 0, 0, 0, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10)
-    val guessTopM = 5
-    val convolutionResult = spectralConvolution(sampleInput)
+    val output = turnpikeReconstructionProblem(sampleInput)
+    println(output.joinToString(separator = " "))
 
-    // override the amino masses used in the leaderboard analysis
-    aminoUniqueMasses = topM(guessTopM, convolutionResult)
-    println(aminoUniqueMasses)
+    // check the answer
 
+    val diffs = doDiffs(output)
+    if (sampleInput.containsAll(diffs) && diffs.containsAll(sampleInput)) {
+        println("Answer checks with diffs")
+    }
+
+
+}
+
+fun doDiffs(list: List<Int>): List<Int> {
+    val accum : MutableList<Int> = mutableListOf()
+
+    for (i in list) {
+        for (j in list) {
+            accum.add(i-j)
+        }
+    }
+    //println(accum.sorted())
+    return accum
 }
 
 
