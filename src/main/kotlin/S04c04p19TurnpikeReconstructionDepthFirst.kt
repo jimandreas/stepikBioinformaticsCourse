@@ -16,8 +16,10 @@ Output: A set of integers A such that ∆A = L.
 
 fun main() {
 
+    val tpbf = TurnpikeReconstructionBruteForce()
+
     val sampleInput = listOf(-10, -8, -7, -6, -5, -4, -3, -3, -2, -2, 0, 0, 0, 0, 0, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10)
-    val output = turnpikeReconstructionProblem(sampleInput)
+    val output = tpbf.turnpikeReconstructionProblem(sampleInput)
     println(output.joinToString(separator = " "))
 
     // check the answer
@@ -30,7 +32,7 @@ fun main() {
 
 }
 
-fun doDiffs(list: List<Int>): List<Int> {
+private fun doDiffs(list: List<Int>): List<Int> {
     val accum : MutableList<Int> = mutableListOf()
 
     for (i in list) {

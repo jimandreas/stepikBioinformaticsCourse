@@ -1,16 +1,16 @@
 @file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable")
 
 import org.junit.jupiter.api.*
-import util.turnpikeQualityControl
-import util.turnpikeReconstructionProblem
-import util.turnpikeSizeControl
+import util.TurnpikeReconstructionBruteForce
 import java.util.concurrent.TimeUnit
 import kotlin.test.Ignore
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
-internal class UtilTestsTurnpikeReconstructionProblem {
+internal class UtilTestsTurnpikeReconstructionBruteForce {
 
+    private val tpbf = TurnpikeReconstructionBruteForce()
+    
     @BeforeEach
     fun setUp() {
     }
@@ -40,7 +40,7 @@ internal class UtilTestsTurnpikeReconstructionProblem {
     fun testTurnpikeMultisetQualityControl() {
         val sampleInput = listOf(-10, -8, -7, -6, -5, -4, -3, -3, -2, -2, 0, 0, 0, 0, 0, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10)
 
-        val result = turnpikeQualityControl(sampleInput)
+        val result = tpbf.turnpikeQualityControl(sampleInput)
         val expectedResult = listOf(2, 2, 3, 3, 4, 5, 6, 7, 8, 10)
         assertEquals(expectedResult, result)
 
@@ -48,7 +48,7 @@ internal class UtilTestsTurnpikeReconstructionProblem {
 
         val sampleInputBroken = listOf(-8, -7, -6, -5, -4, -3, -3, -2, -2, 0, 0, 0, 0, 0, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10)
         val expectedResult2 = mutableListOf(0)
-        val result2 = turnpikeQualityControl(sampleInputBroken)
+        val result2 = tpbf.turnpikeQualityControl(sampleInputBroken)
         assertEquals(expectedResult2, result2)
 
     }
@@ -62,19 +62,19 @@ internal class UtilTestsTurnpikeReconstructionProblem {
     fun testturnpikeSizeControl() {
         val sampleInput = listOf(2, 2, 3, 3, 4, 5, 6, 7, 8, 10) // first standard test
         val expectedResult = 5
-        val result = turnpikeSizeControl(sampleInput)
+        val result = tpbf.turnpikeSizeControl(sampleInput)
         assertEquals(expectedResult, result)
 
         // try with broken list (remove leading 2)
 
         val sampleInput2 = listOf(2, 3, 3, 4, 5, 6, 7, 8, 10)
         val expectedResult2 = 0
-        val result2 = turnpikeSizeControl(sampleInput2)
+        val result2 = tpbf.turnpikeSizeControl(sampleInput2)
         assertEquals(expectedResult2, result2)
 
         val sampleInput3: List<Int> = emptyList() // error case
         val expectedResult3 = 0
-        val result3 = turnpikeSizeControl(sampleInput3)
+        val result3 = tpbf.turnpikeSizeControl(sampleInput3)
         assertEquals(expectedResult3, result3)
     }
 
@@ -95,7 +95,7 @@ internal class UtilTestsTurnpikeReconstructionProblem {
     fun testTurnpikeReconstructionProblem01() {
 
         val sampleInput = listOf(-10, -8, -7, -6, -5, -4, -3, -3, -2, -2, 0, 0, 0, 0, 0, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10)
-        val output = turnpikeReconstructionProblem(sampleInput)
+        val output = tpbf.turnpikeReconstructionProblem(sampleInput)
 
         println(output.joinToString(separator = " "))
 
@@ -120,9 +120,9 @@ internal class UtilTestsTurnpikeReconstructionProblem {
         // now have a list of integers from 0 to 100 with 0 and 100 wrapping the list
         val diffs = doDiffs(testListDistinct).sorted()
 
-        println(turnpikeQualityControl(diffs))
+        println(tpbf.turnpikeQualityControl(diffs))
 
-        val output = turnpikeReconstructionProblem(diffs)
+        val output = tpbf.turnpikeReconstructionProblem(diffs)
         println(output)
         println("$testListDistinct  ORIGINAL")
 
@@ -149,7 +149,7 @@ internal class UtilTestsTurnpikeReconstructionProblem {
         // sample large input:
         // link:
         val sampleInput = loader.getResourceAsList("S04c04p19TurnpikeReconstructionInput.txt")
-        val output = turnpikeReconstructionProblem(sampleInput)
+        val output = tpbf.turnpikeReconstructionProblem(sampleInput)
         println(output.joinToString(separator = " "))
 
         // check the answer
@@ -167,5 +167,17 @@ internal class UtilTestsTurnpikeReconstructionProblem {
             return list
         }
 
+    }
+
+    private fun doDiffs(list: List<Int>): List<Int> {
+        val accum : MutableList<Int> = mutableListOf()
+
+        for (i in list) {
+            for (j in list) {
+                accum.add(i-j)
+            }
+        }
+        //println(accum.sorted())
+        return accum
     }
 }
