@@ -1,6 +1,7 @@
 @file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable")
 
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import util.TurnpikeReconstructionBruteForce
 import java.util.concurrent.TimeUnit
 import kotlin.test.Ignore
@@ -10,7 +11,7 @@ import kotlin.test.assertEquals
 internal class UtilTestsTurnpikeReconstructionBruteForce {
 
     private val tpbf = TurnpikeReconstructionBruteForce()
-    
+
     @BeforeEach
     fun setUp() {
     }
@@ -109,8 +110,8 @@ internal class UtilTestsTurnpikeReconstructionBruteForce {
     @Timeout(value = 5, unit = TimeUnit.MINUTES)
     @DisplayName("test the turnpikeReconstructionProblem algorithm with a random dataset")
     fun testturnpikeReconstructionProblemWithRandomData() {
-        val testList : MutableList<Int> = mutableListOf()
-        for (i in 0..15) {
+        val testList: MutableList<Int> = mutableListOf()
+        for (i in 0..7) {
             testList.add((1..99).random())
         }
         val testListDistinct = testList.sorted().distinct().toMutableList()
@@ -130,11 +131,14 @@ internal class UtilTestsTurnpikeReconstructionBruteForce {
             println("Answer matches input set")
         }
 
-        val diffsOnOuput = doDiffs(output)
-        if (diffsOnOuput.containsAll(diffs) && diffs.containsAll(diffsOnOuput)) {
-            println("Answer checks with diffs")
+        val diffsOnOutput = doDiffs(output)
+        val check = diffsOnOutput.containsAll(diffs) && diffs.containsAll(diffsOnOutput)
+
+        if (check) {
+            println("answer checks with diffs")
         }
 
+        assertTrue(check)
     }
 
     // not yet operational
@@ -170,11 +174,11 @@ internal class UtilTestsTurnpikeReconstructionBruteForce {
     }
 
     private fun doDiffs(list: List<Int>): List<Int> {
-        val accum : MutableList<Int> = mutableListOf()
+        val accum: MutableList<Int> = mutableListOf()
 
         for (i in list) {
             for (j in list) {
-                accum.add(i-j)
+                accum.add(i - j)
             }
         }
         //println(accum.sorted())

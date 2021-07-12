@@ -1,6 +1,6 @@
 @file:Suppress(
     "ControlFlowWithEmptyBody", "UNUSED_VARIABLE", "unused", "ReplaceManualRangeWithIndicesCalls",
-    "LiftReturnOrAssignment", "UnnecessaryVariable"
+    "LiftReturnOrAssignment", "UnnecessaryVariable", "MemberVisibilityCanBePrivate"
 )
 
 package util
@@ -48,12 +48,12 @@ class TurnpikeReconstructionBruteForce {
         val bruteForceList = cleanedValues.toMutableList()
 
         /*
-     * BRUTE FORCE ALGORITHM.  Assume first element in turnpike is zero. (this is checked in Quality Control)
-     * Example:  0, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10
-     * Soln N = 5 naturally (10 elements)
-     *
-     * last element must be in solution. Remove it.
-     */
+         * BRUTE FORCE ALGORITHM.  Assume first element in turnpike is zero. (this is checked in Quality Control)
+         * Example:  0, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10
+         * Soln N = 5 naturally (10 elements)
+         *
+         * last element must be in solution. Remove it.
+         */
 
         val solution: MutableList<Int> = mutableListOf()
         val initialValue = bruteForceList[bruteForceList.size - 1]
@@ -87,7 +87,7 @@ class TurnpikeReconstructionBruteForce {
             }
             removeList.add(difference)
         }
-        for (e in removeList.distinct()) {
+        for (e in removeList) {
             b.remove(e)
         }
         return true
@@ -114,13 +114,13 @@ class TurnpikeReconstructionBruteForce {
 
             /* if (++debugIter % 50000 == 0) {
             println("$debugIter level $lvl i=$i of $initialSize  curSoln ${currentSolution}")
-        }*/
+            }*/
 
             val attemptSolution = b[initialSize - 1 - i] // work from high to low for candidates in the solution
 
-            if (i == initialSize - 1 && lvl < 10) {
+            /*if (i == initialSize - 1 && lvl < 10) {
                 println("level $lvl i=$i of $initialSize  attempt=$attemptSolution b $b")
-            }
+            }*/
 
             val c = mutableListOf<Int>().apply { addAll(b) } // make a copy of current diff list
 

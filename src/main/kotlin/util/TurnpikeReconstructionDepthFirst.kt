@@ -1,43 +1,17 @@
 @file:Suppress(
     "ControlFlowWithEmptyBody", "UNUSED_VARIABLE", "unused", "ReplaceManualRangeWithIndicesCalls",
-    "LiftReturnOrAssignment", "UnnecessaryVariable"
+    "LiftReturnOrAssignment", "UnnecessaryVariable", "MemberVisibilityCanBePrivate"
 )
 
 package util
 
-/**
+/*
  * Turnpike Reconstruction Problem
  * also known as:
  * find set of X satisfying the Difference Multiset
- * Example:
- *
-D=1 2 2 2 3 3 3 4 5 5 5 6 7 8 10
-1 2 2 2 3 3 3 4 5 5 5 6 7 8 { 10 }
-1   2 2 3 3 3 4 5 5 5 6 7   { 8, 10 }{ if 8 fails then 2 }
-Test 10-8=2, OK remove 8, 2
 
-2 2   3 3 4 5 5 5 6     { 7, 8, 10 }{ if 7 fails then 3 }
-Test 10-7=3, 8-7=1 OK, remove 1, 3, 7
 
-Try 6 then 4
-2 2   3 3 4 5 5 5       { 6, 7, 8, 10 } try 6
-10-6=4, 8-6=2 OK, but 7-6 = 1 not in delta set. **FAIL
-2 2   3 3   5 5 5 6     { 4, 7, 8, 10 } try 4
-10-4=6, 8-4-4 FAIL (as only one 4 is removed)  Both 6 and 4 fail, BACKTRACK
 
-1   2 2   3 3 4 5 5 5 6 7   { 3, 8, 10 } try 3 as 7 has failed
-1   2 2   3 3 4   5 5 6      10-3=7, 8-3=5 OK remove 5, 7
-
-1     2     3     5 5       { 6, 3, 8, 10 } Now try 6 then 4
-10-6=4, 8-6=2, 6-3=3  remove 2, 3, 4  OK
-
-1     2     3       5       { 5, 6, 3, 8, 10 }  Now try 5 (no then)
-try 5: 10-5=5, 8-5=3, 6-5=1, 5-3=2, 6-5=1 all OK
-empty  SUCCESS!
-
-Solution: 0,5,6,3,8,10
-
- *
  *  Stepik:  https://stepik.org/lesson/240294/step/1?unit=212640
  *  Turnpike Problem: Given all pairwise distances between points on a line segment, reconstruct the positions of those points.
  *
@@ -65,36 +39,120 @@ class TurnpikeReconstructionDepthFirst {
 
     fun turnpikeReconstructionDepthFirst(values: List<Int>): List<Int> {
 
-        // step 1 - do a quality analysis of the values, and verify that there is an n
+        // step 1 - do a quality analysis of the values
 
         val cleanedValues = turnpikeQualityControl(values)
+
+        // step 2 - verify that there is an n where n(n-1)=values.size
+
         val n = turnpikeSizeControl(cleanedValues)
         if (cleanedValues.isEmpty() || n == 0) {
             return emptyList()
         }
 
-        val bruteForceList = cleanedValues.toMutableList()
+        // now prepare the working list of deltas.
+        //    The end value of the list is the initial solution value in the solution list
 
-        val solution: MutableList<Int> = mutableListOf()
-        val initialValue = bruteForceList[bruteForceList.size - 1]
-        bruteForceList.removeAt(bruteForceList.size - 1)
-        val result = turnpikeBruteForceAttempt(1, bruteForceList, listOf(initialValue))
+        val deltaList = cleanedValues.toMutableList()
+        val solutionList: MutableList<Int> = mutableListOf()
+        val baseSolutionValue = deltaList.removeAt(deltaList.size - 1)
+
+        // solve
+
+        val result = turnpikeDepthFirstAlgorithm(1, baseSolutionValue, deltaList, mutableListOf(baseSolutionValue))
 
         if (!result.worked) {
             return listOf(0)
         }
         val r = result.solution.toMutableList()
-        // need to add 0 to front and initialValue to end
+        // need to add 0 to front and the baseSolutionValue to end
         r.add(0, 0)
-        r.add(r.size, initialValue)
+        r.add(r.size, baseSolutionValue)
         return r
+    }
+
+    data class Result(val worked: Boolean, val solution: List<Int>)
+
+    var debugIter = 0
+
+    /**
+     * Depth first algorithm.
+     *   pull the end value of the delta list and find its inverse (last value - end value)
+     *   then try each value as a solution through recursion.
+     *   If they fail, add the value back to the delta list and try the next value
+     */
+    fun turnpikeDepthFirstAlgorithm(lvl: Int, base: Int, deltas: MutableList<Int>, solution: MutableList<Int>): Result {
+
+        val deltaSize = deltas.size
+
+        // work from high to low for candidates in the solution
+        val attemptHi = deltas[deltaSize - 1]
+        val attemptLo = base - attemptHi
+
+        val deltasHi = mutableListOf<Int>().apply { addAll(deltas) } // make a copy of current diff list
+        deltasHi.remove(attemptHi)
+        val recurseSolution = mutableListOf<Int>().apply { addAll(solution) } // make a copy of current solution
+
+        // now attempt to remove all diffs from attemptHi and the recurseSolution
+        val worked = removeElementsWithDifferenceMatches(deltasHi, attemptHi, recurseSolution)
+        if (worked) {  // then the removal was successful
+            recurseSolution.add(attemptHi)
+            /*
+             * check for a solution.  This happens when all differences are consumed.
+             */
+            if (deltasHi.size == 0) {
+                return Result(true, listOf(attemptHi))
+            }
+
+            // now recurse depth first
+            val resultFromRecursion = turnpikeDepthFirstAlgorithm(lvl + 1, base, deltasHi, recurseSolution)
+            if (resultFromRecursion.worked) {
+                val s = resultFromRecursion.solution.toMutableList()
+                s.add(attemptHi)
+                return Result(true, s)
+            }
+            // did not work
+            recurseSolution.remove(attemptHi)
+        }
+
+        /*
+         * the attemptHi value didn't work.  Now try attemptLo
+         */
+        val deltasLo = mutableListOf<Int>().apply { addAll(deltas) } // make a copy of current diff list
+        deltasLo.remove(attemptLo)
+
+        // now attempt to remove all diffs from attemptLo and the recurseSolution
+        val workedLo = removeElementsWithDifferenceMatches(deltasLo, attemptLo, recurseSolution)
+        if (workedLo) {  // then the removal was successful
+            recurseSolution.add(attemptLo)
+            /*
+             * check for a solution.  This happens when all differences are consumed.
+             */
+            if (deltasLo.size == 0) {
+                return Result(true, listOf(attemptLo))
+            }
+
+            // now recurse depth first
+            val resultFromRecursion = turnpikeDepthFirstAlgorithm(lvl + 1, base, deltasLo, recurseSolution)
+            if (resultFromRecursion.worked) {
+                val s = resultFromRecursion.solution.toMutableList()
+                s.add(attemptLo)
+                return Result(true, s)
+            }
+            // did not work
+            recurseSolution.remove(attemptLo)
+        }
+
+        // failed to find a solution that worked in the iteration.
+        // Fail this subtree
+        return Result(false, listOf())
     }
 
     /**
      * test the input [testThisValue] against the differences in the [currentSolution]
      * All differences must be present in [b] for the [testThisValue] to be valid.
      */
-    fun removeElementsWithDifferenceMatches(
+    private fun removeElementsWithDifferenceMatches(
         b: MutableList<Int>,
         testThisValue: Int,
         currentSolution: List<Int>
@@ -107,73 +165,12 @@ class TurnpikeReconstructionDepthFirst {
             }
             removeList.add(difference)
         }
-        for (e in removeList.distinct()) {
+        for (e in removeList) {
             b.remove(e)
         }
         return true
     }
 
-
-    data class Result(val worked: Boolean, val solution: List<Int>)
-
-    /**
-     * The list [b] has been checked to be zero based.
-     * This means that each entry in the solution is represented in the
-     * list of differences by [itself - zero].
-     * list = [0,] 2, 2, 3, 3, 4, 5, 6, 7, 8 [,10]
-     */
-
-    var debugIter = 0
-    fun turnpikeBruteForceAttempt(lvl: Int, b: MutableList<Int>, currentSolution: List<Int>): Result {
-
-        val initialSize = b.size
-        val recurseSolution = mutableListOf<Int>().apply { addAll(currentSolution) } // make a copy of current solution
-
-        for (i in 0 until initialSize) {
-
-
-            /* if (++debugIter % 50000 == 0) {
-            println("$debugIter level $lvl i=$i of $initialSize  curSoln ${currentSolution}")
-        }*/
-
-            val attemptSolution = b[initialSize - 1 - i] // work from high to low for candidates in the solution
-
-            if (i == initialSize - 1 && lvl < 10) {
-                println("level $lvl i=$i of $initialSize  attempt=$attemptSolution b $b")
-            }
-
-            val c = mutableListOf<Int>().apply { addAll(b) } // make a copy of current diff list
-
-            c.remove(attemptSolution)
-            val worked = removeElementsWithDifferenceMatches(c, attemptSolution, recurseSolution)
-            if (worked) {
-                recurseSolution.add(attemptSolution)
-
-                /*
-             * check for a solution.  This happens when all differences are consumed.
-             */
-                if (c.size == 0) {
-                    return Result(true, listOf(attemptSolution))
-                }
-
-                // now recurse
-                val resultFromRecursion = turnpikeBruteForceAttempt(lvl + 1, c, recurseSolution)
-                if (resultFromRecursion.worked) {
-                    val s = resultFromRecursion.solution.toMutableList()
-                    s.add(attemptSolution)
-                    return Result(true, s)
-                } else {
-                    recurseSolution.remove(attemptSolution)
-                    c.add(attemptSolution)
-                }
-            } else {
-                c.add(attemptSolution)
-            }
-        }
-        // failed to find a solution that worked in the iteration.
-        // Fail this subtree
-        return Result(false, listOf())
-    }
 
     private fun abs(a: Int): Int {
         if (a > 0) {
@@ -258,5 +255,6 @@ class TurnpikeReconstructionDepthFirst {
 
         return 0
     }
+
 
 }

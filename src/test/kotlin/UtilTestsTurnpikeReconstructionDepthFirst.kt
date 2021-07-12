@@ -3,7 +3,6 @@
 import org.junit.jupiter.api.*
 import util.TurnpikeReconstructionDepthFirst
 import java.util.concurrent.TimeUnit
-import kotlin.math.exp
 import kotlin.test.Ignore
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
@@ -28,10 +27,26 @@ internal class UtilTestsTurnpikeReconstructionDepthFirst {
 
     Code Challenge: Solve the Turnpike Problem.
     @link: https://stepik.org/lesson/240294/step/1?unit=212640
+    @link: http://rosalind.info/problems/ba4m/
+
+    and for reference:
+
     @link: http://rosalind.info/problems/pdpl/
     @link: http://rosalind.info/glossary/difference-multiset/
      */
 
+    @Test
+    @DisplayName("test the turnpikeReconstructionDepthFirst with study data")
+    fun testturnpikeReconstructionStudyData() {
+        val testList = listOf(0, 1, 2, 2, 2, 3, 3, 3, 4, 5, 5, 5, 6, 7, 8, 10)
+
+        val output = tpdf.turnpikeReconstructionDepthFirst(testList)
+        println(output)
+
+        val expectedResult = listOf(0, 5, 6, 3, 8, 10)
+        assertEquals(output.sorted(), expectedResult.sorted())
+
+    }
 
     /**
      * test turnpike multiset quality - see the module for the quality requirements
@@ -79,17 +94,7 @@ internal class UtilTestsTurnpikeReconstructionDepthFirst {
         assertEquals(expectedResult3, result3)
     }
 
-    /**
-     * Turnpike Problem: Given all pairwise distances between points on a line segment, reconstruct the positions of those points.
 
-    Input: A collection of integers L.
-    Output: A set of integers A such that ∆A = L.
-
-    Code Challenge: Solve the Turnpike Problem.
-
-    @link: https://stepik.org/lesson/240294/step/1?unit=212640
-
-     */
 
     @Test
     @DisplayName("test the actual turnpikeReconstructionProblem algorithm")
@@ -108,8 +113,8 @@ internal class UtilTestsTurnpikeReconstructionDepthFirst {
     @Timeout(value = 5, unit = TimeUnit.MINUTES)
     @DisplayName("test the turnpikeReconstructionProblem algorithm with a random dataset")
     fun testturnpikeReconstructionProblemWithRandomData() {
-        val testList : MutableList<Int> = mutableListOf()
-        for (i in 0..15) {
+        val testList: MutableList<Int> = mutableListOf()
+        for (i in 0..20) {
             testList.add((1..99).random())
         }
         val testListDistinct = testList.sorted().distinct().toMutableList()
@@ -129,11 +134,14 @@ internal class UtilTestsTurnpikeReconstructionDepthFirst {
             println("Answer matches input set")
         }
 
-        val diffsOnOuput = doDiffs(output)
-        if (diffsOnOuput.containsAll(diffs) && diffs.containsAll(diffsOnOuput)) {
-            println("Answer checks with diffs")
+        val diffsOnOutput = doDiffs(output)
+        val check = diffsOnOutput.containsAll(diffs) && diffs.containsAll(diffsOnOutput)
+
+        if (check) {
+            println("answer checks with diffs")
         }
 
+        Assertions.assertTrue(check)
     }
 
     // not yet operational
