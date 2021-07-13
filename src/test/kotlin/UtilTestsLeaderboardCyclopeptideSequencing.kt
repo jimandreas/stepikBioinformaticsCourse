@@ -90,10 +90,10 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
     @DisplayName("test LeaderboardCyclopeptideSequencing 04")
     fun testLeaderboardCyclopeptideSequencing04() {
         val trimLevel = 1000
-        val spectrum = listOf(
+        val spectrum25 = listOf(
             0, 97, 99, 113, 114, 115, 128, 128, 147, 147, 163, 186, 227, 241, 242, 244, 244, 256, 260, 261, 262, 283, 291, 309, 330, 333, 340, 347, 385, 388, 389, 390, 390, 405, 435, 447, 485, 487, 503, 504, 518, 544, 552, 575, 577, 584, 599, 608, 631, 632, 650, 651, 653, 672, 690, 691, 717, 738, 745, 770, 779, 804, 818, 819, 827, 835, 837, 875, 892, 892, 917, 932, 932, 933, 934, 965, 982, 989, 1039, 1060, 1062, 1078, 1080, 1081, 1095, 1136, 1159, 1175, 1175, 1194, 1194, 1208, 1209, 1223, 1322
         )
-        val result = leaderboardCyclopeptideSequencing(trimLevel, spectrum)
+        val result = leaderboardCyclopeptideSequencing(trimLevel, spectrum25)
         val str = StringBuilder()
         for (i in result) {
             str.append(aminoAcidToDaltonHashMap.filter {
@@ -146,6 +146,28 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
         println("sizes are $sizes")
         println(matchingStrings)
 
+    }
+
+
+    class Foo {
+        fun getResourceAsList(path: String): List<Int> {
+            val ress = this.javaClass.getResource(path)
+            val retStr = ress!!.readText()
+            val list: List<Int> = retStr.split(" ").map { it.toInt() }.toList()
+            return list
+        }
+    }
+
+    private fun doDiffs(list: List<Int>): List<Int> {
+        val accum : MutableList<Int> = mutableListOf()
+
+        for (i in list) {
+            for (j in list) {
+                accum.add(i-j)
+            }
+        }
+        //println(accum.sorted())
+        return accum
     }
 
 

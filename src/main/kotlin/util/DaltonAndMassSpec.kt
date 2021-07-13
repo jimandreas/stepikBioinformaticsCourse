@@ -342,11 +342,13 @@ fun trimLeaderboardMasses(
     }
     val cutoff = levels[index]
 
-    println("Cutoff = $cutoff levels size ${levels.size} $trimLevel")
+
 
     val outputPeptides = leaderMap.filter { it.first >= cutoff }
     val outputPeptidesSorted = outputPeptides.sortedByDescending { it.first }
     val outputMasses = outputPeptidesSorted.map { it.second }
+
+    println("Cutoff = $cutoff levels size ${levels.size} $trimLevel size after trim ${outputMasses.size}")
 
     return outputMasses.toMutableList()
 }
@@ -368,6 +370,7 @@ Return: LeaderPeptide after running LeaderboardCyclopeptideSequencing(Spectrum, 
 var matchingStrings = StringBuilder()
 val matchingLists : MutableList<List<Int>> = mutableListOf()
 var countOfEightySevens = 0
+var countOfEightyTwos = 0
 var maxScore = 0
 
 fun leaderboardCyclopeptideSequencing(trimLevel: Int, spectrum: List<Int>): List<Int> {
@@ -405,8 +408,16 @@ fun leaderboardCyclopeptideSequencing(trimLevel: Int, spectrum: List<Int>): List
                 val leaderScore = cyclopeptideScoreFromMasses(peptideLeadingCandidate, spectrum, true)
 
                 if (thisPeptideScore == 87) {
-                    println(thisPeptideScore)
+                    //println(thisPeptideScore)
                     countOfEightySevens++
+                    matchingLists.add(p)
+                    matchingStrings.append(p.joinToString("-"))
+                    matchingStrings.append(" ")
+                }
+
+                if (thisPeptideScore == 82) {
+                    //println(thisPeptideScore)
+                    countOfEightyTwos++
                     matchingLists.add(p)
                     matchingStrings.append(p.joinToString("-"))
                     matchingStrings.append(" ")

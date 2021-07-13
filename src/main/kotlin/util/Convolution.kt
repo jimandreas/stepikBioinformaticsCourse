@@ -6,7 +6,6 @@
 
 package util
 
-import java.lang.Integer.max
 import java.util.*
 
 /**
@@ -55,31 +54,34 @@ private fun <K> increment(map: MutableMap<K, Int>, key: K) {
  * utility function to return the top M elements of a map of elements and their multiplicity
  *
  *  select the M most frequent elements between 57 and 200
+ *  ties for the same frequency level are included
  *
  * @param topElementsM  how many to return
- * @param map map of elements to multiplicty (unsorted)
+ * @param mapOfElementsToMultiplicity map of elements to multiplicty (unsorted)
  * @return top M list
  */
-fun topM(topElementsM: Int, map: Map<Int, Int>): List<Int> {
-    val tempList: MutableList<Int> = mutableListOf()
-    val sortedMapSave = map.toList()  // need this for the threshold
-    val sortedMap = sortedMapSave
-        .sortedByDescending { (key, value) -> value }
-        .toMap()
+fun topM(topElementsM: Int, mapOfElementsToMultiplicity: Map<Int, Int>): List<Int> {
 
-    val iter = sortedMap.iterator().withIndex()
-    val threshold = sortedMapSave[topElementsM].first
-    while (iter.hasNext()) {
-        val m = iter.next()
-        if (tempList.size >= threshold || m.index > sortedMap.size) {
-            break
+    var threshold = 0
+
+    // filter the elements (keys) to the 57 to 200 inclusive range
+    //   and note the multiplicity (value) at the topElement index
+    val topListByM = mapOfElementsToMultiplicity
+        .toList()
+        .filter {(key, value) -> key >= 57 && key <= 200}
+        .sortedByDescending { (key, value) -> value }
+        .mapIndexed { index, item ->
+            if (index == topElementsM-1) {
+                threshold = item.second
+            }
+            item
         }
-        val candidate = m.value.key
-        if (candidate >= 57 && candidate <= 200) {
-            tempList.add(m.value.key)
-        }
+
+    // pull out the top elements (keys, now first in the pairs)
+    val filterToTopElements = topListByM.filter { it.second >= threshold}.map{
+        it.first
     }
-    return tempList.sorted()
+    return filterToTopElements
 }
 
 /**

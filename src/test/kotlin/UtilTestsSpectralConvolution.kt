@@ -99,9 +99,137 @@ internal class UtilTestsSpectralConvolution {
     @DisplayName("test ConvolutionCyclopeptideSequencing 01")
     fun testConvolutionCyclopeptideSequencing01() {
         val spectrum = listOf(57, 57, 71, 99, 129, 137, 170, 186, 194, 208, 228, 265, 285, 299, 307, 323, 356, 364, 394, 422, 493)
-        //val result = convolutionCyclopeptideSequencing(20, 60, spectrum)
-        val result = convolutionCyclopeptideSequencing(20, 10, spectrum)
+
+        val result = convolutionCyclopeptideSequencing(20, 60, spectrum)
         println(result)
+    }
+
+    @Test
+    @DisplayName("test ConvolutionCyclopeptideSequencing ExtraDataset 01")
+    fun testConvolutionCyclopeptideSequencingExtraDataset01() {
+        val loader = Foo()
+        val spectrum = loader.getResourceAsList("S04c09p07ConvolutionCyclopeptideExtra.txt")
+
+        val result = convolutionCyclopeptideSequencing(17, 366, spectrum)
+        println(result.joinToString("-"))
+
+        // Note: result expected is:
+        // 113-115-114-128-97-163-131-129-129-147-57-57-129
+        // answer from this algorithm is rotated:
+
+        val expectedResult = listOf(129, 129, 147, 57, 57, 129, 113, 115, 114, 128, 97, 163, 131)
+        assertEquals(expectedResult, result)
+    }
+
+    @Test
+    @DisplayName("test ConvolutionCyclopeptideSequencing Quiz 01")
+    fun testConvolutionCyclopeptideSequencingQuizDataset01() {
+        val loader = Foo()
+        val spectrum = loader.getResourceAsList("S04c09p07ConvolutionCyclopeptideQuiz.txt")
+
+        //val result = convolutionCyclopeptideSequencing(20, 373, spectrum) stepik
+        val result = convolutionCyclopeptideSequencing(18, 325, spectrum)
+        println(result.joinToString("-"))
+
+        // note: worked!!   passed both stepik and rosalind quizzes.
+    }
+
+    /**
+     * link: https://stepik.org/lesson/240284/step/8
+     * Exercise Break: Run ConvolutionCyclopeptideSequencing on Spectrum25
+     * with N = 1000 and M = 20. Identify the 86 highest-scoring peptides
+     * using the cyclic scoring function. (Return the peptides in integer
+     * format separated by a single space, e.g., 123-57-200-143 199-143-121-60)
+     *
+     * ** Note that the spectrum that seems to **WORK** is sourced from the
+     * earlier problem:
+     * @link https://stepik.org/lesson/240282/step/10?unit=212628
+     *
+     */
+
+    @Test
+    @DisplayName("test ConvolutionCyclopeptideSequencing Spectrum25 01")
+    fun testConvolutionCyclopeptideSequencingSpectrum25() {
+
+        val spectrum25 = listOf(
+            0, 97, 99, 113, 114, 115, 128, 128, 147, 147, 163, 186,
+            227, 241, 242, 244, 244, 256, 260, 261, 262, 283, 291, 309,
+            330, 333, 340, 347, 385, 388, 389, 390, 390, 405, 435,
+            447, 485, 487, 503, 504, 518, 544, 552, 575,
+            577, 584, 599, 608, 631, 632, 650, 651, 653, 672, 690,
+            691, 717, 738, 745, 770, 779, 804, 818, 819, 827,
+            835, 837, 875, 892, 892, 917, 932, 932, 933, 934, 965, 982,
+            989, 1039, 1060, 1062, 1078, 1080, 1081, 1095, 1136, 1159,
+            1175, 1175, 1194, 1194, 1208, 1209, 1223, 1322
+        )
+        
+        val spectrum25perQuiz = listOf(
+            0, 97, 99, 113, 114, 115, 128, 128, 147, 147, 163, 186,
+            227, 241, 242, 244, 244, 256, 260, 261, 262, 283, 291, 309,
+            330, 333, 340, 347, 385, 388, 389, 390, 390, 405, 435,
+            447, 485, 487, 503, 504, 518, 544, 552, 575,
+            577, 584, 599, 608, 631, 632, 650, 651, 653, 672, 690,
+            691, 717, 738, 745, 770, 779, 804, 818, 819, 827,
+            835, 837, 875, 892, 892, 917, 932, 932, 933, 934, 965, 982,
+            989, 1039, 1060, 1062, 1078, 1080, 1081, 1095, 1136, 1159,
+            1175, 1175, 1194, 1194, 1208, 1209, 1223, 1322)
+
+
+        val cmp = spectrum25.equals(spectrum25perQuiz)
+        val result = convolutionCyclopeptideSequencing(
+            topElementsM = 20,
+            leaderBoardN = 1000,
+            spectrum = spectrum25)
+
+
+        // note that these values are from wired-in variables that capture the
+        //  solutions in question.
+        //  An efficient hack but a hack nonetheless.
+        println("max score is $maxScore")
+        println("Count of 82s is $countOfEightyTwos")
+
+        println(matchingStrings)
+
+        // for curiosity try the spectrum provided.
+        // I get 172 matches to the max score.
+
+        maxScore = 0
+        countOfEightyTwos = 0
+        matchingStrings = StringBuilder()
+        val result2 = convolutionCyclopeptideSequencing(
+            topElementsM = 20,
+            leaderBoardN = 1000,
+            spectrum = spectrum25perQuiz)
+        // note that these values are from wired-in variables that capture the
+        //  solutions in question.
+        //  An efficient hack but a hack nonetheless.
+        println("max score is $maxScore")
+        println("Count of 82s is $countOfEightyTwos")
+
+        println(matchingStrings)
+    }
+
+
+
+    class Foo {
+        fun getResourceAsList(path: String): List<Int> {
+            val ress = this.javaClass.getResource(path)
+            val retStr = ress!!.readText()
+            val list: List<Int> = retStr.split(" ").map { it.toInt() }.toList()
+            return list
+        }
+    }
+
+    private fun doDiffs(list: List<Int>): List<Int> {
+        val accum : MutableList<Int> = mutableListOf()
+
+        for (i in list) {
+            for (j in list) {
+                accum.add(i-j)
+            }
+        }
+        //println(accum.sorted())
+        return accum
     }
 
 }
