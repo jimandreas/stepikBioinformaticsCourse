@@ -35,7 +35,7 @@ fun main() {
         val baseKmer = iter.next()
         print("${baseKmer.value} -> ")
         writer.write("${baseKmer.value} -> ")
-        val foundList = foundArray.get(baseKmer.index)
+        val foundList = foundArray[baseKmer.index]
         print(foundList.joinToString(separator = ","))
         writer.write(foundList.joinToString(separator = ","))
         print("\n")

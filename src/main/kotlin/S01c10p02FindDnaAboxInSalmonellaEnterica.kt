@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE")
+@file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable")
 
 import util.frequentWordsWithMismatches
 import java.lang.StringBuilder

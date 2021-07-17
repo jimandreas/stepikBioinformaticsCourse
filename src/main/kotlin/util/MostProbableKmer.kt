@@ -63,7 +63,7 @@ fun probForGivenKmer(kmer: String, probMatrix: List<Float>): Float {
         println("ERROR mismatch of kmer and probMatrix lengths")
         return 0f
     }
-    var prob: Float = 1.0f
+    var prob = 1.0f
     val nucMap: HashMap<Char, Int> = hashMapOf(Pair('a', 0), Pair('c', 1), Pair('g', 2), Pair('t', 3))
 
     for (i in kmer.indices) {

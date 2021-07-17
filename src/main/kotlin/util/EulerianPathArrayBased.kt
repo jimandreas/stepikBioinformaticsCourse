@@ -12,7 +12,7 @@ package util
  */
 data class EulerConnectionData(val nodeNum: Int, val connections: MutableList<Int>)
 
-class EulerianPathArrayBased() {
+class EulerianPathArrayBased {
     private var graph: List<List<Int>> = mutableListOf()
     private var n = 0
     private var edgeCount = 0

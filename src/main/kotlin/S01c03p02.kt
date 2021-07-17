@@ -1,3 +1,5 @@
+@file:Suppress("MayBeConstant", "unused")
+
 import util.reverseComplement
 
 // 1.3 Some Hidden Messages are More Surprising than Others

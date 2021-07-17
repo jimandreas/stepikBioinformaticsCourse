@@ -18,7 +18,7 @@ fun main() {
         val exists = entries.filter {
             it.letter == c
         }
-        if (exists.size == 0) {
+        if (exists.isEmpty()) {
             entries.add(CodeEntry(c, 1))
         } else {
             entries.forEach {

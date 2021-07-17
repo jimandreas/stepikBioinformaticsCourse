@@ -1,12 +1,11 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.*
-
-import util.*
-import java.lang.RuntimeException
-import java.util.*
-import kotlin.math.exp
-import kotlin.test.assertContentEquals
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
+import util.reverseComplement
+import util.scanDnaStringForPeptideEncoding
 import kotlin.test.assertEquals
 
 internal class CodonSearchTesting {

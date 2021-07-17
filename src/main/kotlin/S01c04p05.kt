@@ -1,8 +1,7 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS",
-    "UNUSED_VARIABLE"
+    "UNUSED_VARIABLE", "unused"
 )
 
-import org.junit.platform.commons.annotation.Testable
 import util.findClumps
 
 // 1.4 An Explosion of Hidden Messages

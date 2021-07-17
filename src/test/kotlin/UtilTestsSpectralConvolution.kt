@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE")
+@file:Suppress("UNUSED_VARIABLE", "unused", "UnnecessaryVariable")
 
 import org.junit.jupiter.api.*
 import util.*
@@ -175,7 +175,7 @@ internal class UtilTestsSpectralConvolution {
             1175, 1175, 1194, 1194, 1208, 1209, 1223, 1322)
 
 
-        val cmp = spectrum25.equals(spectrum25perQuiz)
+        val cmp = spectrum25 == spectrum25perQuiz
         val result = convolutionCyclopeptideSequencing(
             topElementsM = 20,
             leaderBoardN = 1000,
@@ -215,7 +215,7 @@ internal class UtilTestsSpectralConvolution {
         fun getResourceAsList(path: String): List<Int> {
             val ress = this.javaClass.getResource(path)
             val retStr = ress!!.readText()
-            val list: List<Int> = retStr.split(" ").map { it.toInt() }.toList()
+            val list = retStr.split(" ").map { it.toInt() }.toList()
             return list
         }
     }

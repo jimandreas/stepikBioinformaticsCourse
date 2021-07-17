@@ -4,7 +4,6 @@
 
 package util
 
-import java.lang.StringBuilder
 import kotlin.math.max
 
 /**
@@ -37,7 +36,7 @@ class LongestCommonSubsequenceLCS {
 
         // note that the array is filled with zeros
         val twoD = Array(nRows+1) { IntArray(mCols+1) }
-        val backtrack2D = Array(nRows+1) { Array<Dir>(mCols+1) { Dir.NOTSET } }
+        val backtrack2D = Array(nRows+1) { Array(mCols+1) { Dir.NOTSET } }
 
         for (iRow in 1..nRows) {
             for (jCol in 1..mCols) {

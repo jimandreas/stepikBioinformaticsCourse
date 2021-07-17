@@ -1,7 +1,9 @@
-@file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ControlFlowWithEmptyBody")
+@file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ControlFlowWithEmptyBody", "unused")
 
-import util.*
-import java.util.*
+import util.EulerianPathStrings
+import util.deBruijnDirectedGraphConversion
+import util.deBruijnGraphFromKmers
+import util.pathToGenome
 
 /**
  * @link: https://stepik.org/lesson/240261/step/11?unit=212607

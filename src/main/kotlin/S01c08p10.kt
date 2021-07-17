@@ -1,7 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE")
 
 import util.frequentWordsWithMismatches
-import util.reverseComplement
 
 /**
  * @link: https://stepik.org/lesson/240221/step/10?unit=212567

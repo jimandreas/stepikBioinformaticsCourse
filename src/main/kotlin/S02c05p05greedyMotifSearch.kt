@@ -1,9 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
 import util.greedyMotifSearch
-import util.mostProbableKmer
 
 /**
  * @link: https://stepik.org/lesson/240241/step/5?unit=212587

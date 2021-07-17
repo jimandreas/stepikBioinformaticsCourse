@@ -1,6 +1,5 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE")
 
-import util.greedyMotifSearch
 import java.io.File
 
 /**

@@ -1,8 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls")
 
 import util.LongestCommonSubsequenceLCS
-import util.ManhattanTouristProblem
-import java.lang.StringBuilder
 
 
 /**

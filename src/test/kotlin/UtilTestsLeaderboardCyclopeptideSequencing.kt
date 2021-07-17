@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE")
+@file:Suppress("UNUSED_VARIABLE", "unused", "UnnecessaryVariable")
 
 import org.junit.jupiter.api.*
 import util.*
@@ -153,7 +153,7 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
         fun getResourceAsList(path: String): List<Int> {
             val ress = this.javaClass.getResource(path)
             val retStr = ress!!.readText()
-            val list: List<Int> = retStr.split(" ").map { it.toInt() }.toList()
+            val list = retStr.split(" ").map { it.toInt() }.toList()
             return list
         }
     }
@@ -169,7 +169,4 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
         //println(accum.sorted())
         return accum
     }
-
-
-
 }

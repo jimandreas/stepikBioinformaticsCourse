@@ -1,7 +1,5 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE")
 
-import util.*
-
 
 /**
  * @link: https://stepik.org/lesson/240262/step/16?unit=212608

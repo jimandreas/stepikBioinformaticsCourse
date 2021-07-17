@@ -95,6 +95,7 @@ class TurnpikeReconstructionBruteForce {
 
 
     data class Result(val worked: Boolean, val solution: List<Int>)
+    var debugIter = 0
 
     /**
      * The list [b] has been checked to be zero based.
@@ -102,8 +103,6 @@ class TurnpikeReconstructionBruteForce {
      * list of differences by [itself - zero].
      * list = [0,] 2, 2, 3, 3, 4, 5, 6, 7, 8 [,10]
      */
-
-    var debugIter = 0
     fun turnpikeBruteForceAttempt(lvl: Int, b: MutableList<Int>, currentSolution: List<Int>): Result {
 
         val initialSize = b.size

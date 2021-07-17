@@ -2,11 +2,9 @@
 
 package util
 
-data class ClumpFrequenceMap( val clumpString: String, val clumpFrequency: Int)
 
 /**
- * Returns a new character sequence that is a subsequence of this character sequence,
- * starting at the specified [startIndex] and ending right before the specified [endIndex].
+ * Returns a new character sequence that is a subsequence of this character sequence
  *
  * @param stringToSearch where to look for clumps
  * @param occurenceMin filter level for number of clumps in a window

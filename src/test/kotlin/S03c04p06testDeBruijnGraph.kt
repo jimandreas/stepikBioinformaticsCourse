@@ -1,10 +1,8 @@
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
-import util.mostProbableKmer
+import org.junit.jupiter.api.Test
 
 internal class S03c04p06testDeBruijnGraph {
 
@@ -42,7 +40,7 @@ internal class S03c04p06testDeBruijnGraph {
         while (iter.hasNext()) {
             val baseKmer = iter.next()
             outString += "${baseKmer.value} -> "
-            val foundList = foundArray.get(baseKmer.index)
+            val foundList = foundArray[baseKmer.index]
             outString += foundList.joinToString(separator = ",")
             outString += "\n"
         }
@@ -72,7 +70,7 @@ internal class S03c04p06testDeBruijnGraph {
         while (iter.hasNext()) {
             val baseKmer = iter.next()
             outString += "${baseKmer.value} -> "
-            val foundList = foundArray.get(baseKmer.index)
+            val foundList = foundArray[baseKmer.index]
             outString += foundList.joinToString(separator = ",")
             outString += "\n"
         }
