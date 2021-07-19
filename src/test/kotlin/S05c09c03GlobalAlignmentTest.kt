@@ -6,9 +6,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import util.GlobalAlignment
-import util.LongestPathInDirectedGraph
-import kotlin.test.assertContentEquals
-import kotlin.test.assertNotNull
 
 /**
 Code Challenge: Solve the Global Alignment Problem.
@@ -34,13 +31,17 @@ internal class S05c09c03GlobalAlignmentTest {
     fun tearDown() {
     }
 
-    val ga = GlobalAlignment()
 
+    /**
+     * Test the scoring function - this checks to make sure the BLOSUM62
+     * match matrix is set up for those tests that use it.
+     */
 
     @Test
     @DisplayName("global alignment - matrix input test")
     fun globalAlignmentMatrixInputTest() {
 
+        val ga = GlobalAlignment(0, 0, 0, useBLOSUM62 = true)
         val test1 = ga.score('Y', 'Y')
         assertEquals(7, test1)
 
@@ -48,6 +49,245 @@ internal class S05c09c03GlobalAlignmentTest {
         assertEquals(4, test2)
     }
 
+    /*
+     * VERY basic test.
+     */
+    @Test
+    @DisplayName("global alignment test 01")
+    fun globalAlignmentTest01() {
 
+//        val sCol = "A"
+//        val sRow = "A"
+//        val resultMatrix = ga.backtrack(sCol, sRow)
+//
+//        val str = StringBuilder()
+//        val lcsStringBuilderString = ga.outputLCS(resultMatrix, sCol, sCol.length, sRow.length, str)
+//
+//        val max = ga.maxCellVal
+//        assertEquals(4, max) // value in BLOSSUM62 table for A=A
+//
+//        val result = lcsStringBuilderString.toString()
+//        val expectedResult = "A"
+//        assertEquals(expectedResult, result)
+    }
+
+    /*
+     * verify corners of the BLOSUM62 matrix (A=A, Y=Y)
+     */
+    @Test
+    @DisplayName("global alignment test 02")
+    fun globalAlignmentTest02() {
+
+//        val sCol = "AY"
+//        val sRow = "AY"
+//        val resultMatrix = ga.backtrack(sCol, sRow)
+//
+//        val str = StringBuilder()
+//        val lcsStringBuilderString = ga.outputLCS(resultMatrix, sCol, sCol.length, sRow.length, str)
+//
+//        val max = ga.maxCellVal
+//        assertEquals(11, max) // value in BLOSSUM62 table for A=A + Y=Y
+//
+//        val result = lcsStringBuilderString.toString()
+//        val expectedResult = "AY"
+//        assertEquals(expectedResult, result)
+    }
+
+    /*
+     * first sample in the Test Dataset
+     */
+    @Test
+    @DisplayName("global alignment test 03")
+    fun globalAlignmentTest03() {
+
+        val sample = """
+            Input:
+            1 1 2
+            GAGA
+            GAT
+            Output:
+            -1
+            GAGA
+            GA-T
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+    /*
+    * second sample in the Test Dataset
+    */
+    @Test
+    @DisplayName("global alignment test 04")
+    fun globalAlignmentTest04() {
+
+        val sample = """
+            Input:
+            1 3 1
+            ACG
+            ACT
+            Output:
+            0
+            AC-G
+            ACT-
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+    @Test
+    @DisplayName("global alignment test 05")
+    fun globalAlignmentTest05() {
+
+        val sample = """
+            Input:
+            1 1 1
+            AT
+            AG
+            Output:
+            0
+            AT
+            AG
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+    /**
+     * 	This test makes sure that your code allows for an output
+     * 	beginning with an indel. If your code doesn’t make use of
+     * 	the base cases (first row and column of the dynamic programming matrix)
+     * 	scores then the correct score of 3 cannot be found.
+     * 	Be sure to correctly fill out your bases cases and consider them in your recursive cases.
+     */
+
+    @Test
+    @DisplayName("global alignment test 06")
+    fun globalAlignmentTest06() {
+
+        val sample = """
+            Input:
+            2 5 1
+            TCA
+            CA
+            Output:
+            3
+            TCA
+            -CA
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+    /**
+     * This test makes sure that your code can handle multiple indels in a row
+     */
+    @Test
+    @DisplayName("global alignment test 07")
+    fun globalAlignmentTest07() {
+
+        val sample = """
+            Input:
+            1 10 1
+            TTTTCCTT
+            CC
+            Output:
+            -4
+            TTTTCCTT
+            ----CC--
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+    /**
+     * This test makes sure that your code can handles inputs
+     * in which the two strings differ drastically in length.
+     */
+    @Test
+    @DisplayName("global alignment test 08")
+    fun globalAlignmentTest08() {
+
+        val sample = """
+            Input:
+            2 3 2
+            ACAGATTAG
+            T
+            Output:
+            -14
+            ACAGATTAG
+            ------T--
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+    /**
+     * This test makes sure that your code can handles
+     * inputs in which the two strings differ drastically in length.
+     * This dataset is similar to the previous dataset
+     * except in this dataset string s is much shorter than string t instead of vice-versa.
+     * NOTE:
+     * original expected:             ------G---
+     */
+    @Test
+    @DisplayName("global alignment test 09")
+    fun globalAlignmentTest09() {
+
+        val sample = """
+            Input:
+            3 1 2
+            G
+            ACATACGATG
+            Output:
+            -15
+            ---------G
+            ACATACGATG
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+    fun runTest(sample: String) {
+        val reader = sample.reader()
+        val lines = reader.readLines()
+        val parms = lines[1].split(" ").map { it.toInt() }
+        val match = parms[0]
+        val mismatch = parms[1]
+        val gap = parms[2]
+
+        val ga = GlobalAlignment(match, mismatch, gap)
+        val sRow = lines[2]
+        val tCol = lines[3]
+
+        val scoreExpected = lines[5].toInt()
+        val sRowAlignedExpected = lines[6]
+        val tColAlignedExpected = lines[7]
+
+        val result = ga.globalAlignment(sRow, tCol)
+
+        val scoreResult = result.first
+        val sRowResult = result.second
+        val tColResult = result.third
+        assertEquals(scoreExpected, scoreResult)
+        assertEquals(sRowAlignedExpected, sRowResult)
+        assertEquals(tColAlignedExpected, tColResult)
+    }
+
+    /*
+    * the sample problem
+    */
+    @Test
+    @DisplayName("global alignment test 99")
+    fun globalAlignmentTest99() {
+
+//        val sRow = "PLEASANTLY"
+//        val sCol = "MEANLY"
+//
+//        val result = ga.globalAlignment(sCol, sRow)
+//
+//        val expectedResult = "A"
+//        assertEquals(expectedResult, result)
+    }
 
 }

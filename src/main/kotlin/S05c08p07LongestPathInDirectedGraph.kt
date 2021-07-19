@@ -17,7 +17,7 @@ Output: The length of a longest path in the graph, followed by a longest path.
  *
  * See also:
  * stepik: @link: https://stepik.org/lesson/240303/step/7?unit=212649
- * rosalind: @link: http://rosalind.info/users/jimandreas/
+ * rosalind: @link: http://rosalind.info/problems/ba5d/
  * book (5.8):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */
 
