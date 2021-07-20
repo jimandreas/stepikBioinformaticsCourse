@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import util.GlobalAlignment
+import kotlin.math.exp
 
 /**
 Code Challenge: Solve the Global Alignment Problem.
@@ -276,18 +277,27 @@ internal class S05c09c03GlobalAlignmentTest {
 
     /*
     * the sample problem
+    * @link: http://rosalind.info/problems/ba5e/
+    * Note that the answer differs from that given in the problem statement.
     */
     @Test
-    @DisplayName("global alignment test 99")
-    fun globalAlignmentTest99() {
+    @DisplayName("global alignment test sample")
+    fun globalAlignmentTestSample() {
 
-//        val sRow = "PLEASANTLY"
-//        val sCol = "MEANLY"
-//
-//        val result = ga.globalAlignment(sCol, sRow)
-//
-//        val expectedResult = "A"
-//        assertEquals(expectedResult, result)
+        val sRow = "PLEASANTLY"
+        val tCol = "MEANLY"
+
+        val ga = GlobalAlignment(0, 0, 5, useBLOSUM62 = true)
+        val result = ga.globalAlignment(sRow, tCol)
+
+        val scoreResult = result.first
+        val sRowResult = result.second
+        val tColResult = result.third
+
+        val expectedScoreResult = 8
+        assertEquals(expectedScoreResult, scoreResult)
+        val expectedtColResult = "-ME--AN-LY"
+        assertEquals(expectedtColResult, tColResult)
     }
 
 }
