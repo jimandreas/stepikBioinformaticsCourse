@@ -36,7 +36,7 @@ for each cell.
  * book (5.10):  http://rosalind.info/problems/ba5f/
  */
 
-internal class S05c09c10LocalAlignmentTest {
+internal class S05c10c10LocalAlignmentTest {
 
     @BeforeEach
     fun setUp() {
