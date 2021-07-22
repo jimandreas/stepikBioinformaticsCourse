@@ -176,7 +176,40 @@ internal class S05c10c10LocalAlignmentTest {
         runTest(sample)
     }
 
+    /**
+    Problem from Description
+    TODO: build a test that compares the Global, Local, and Fitting algorithms as per the text
 
+    “Fitting” w to v requires finding a substring v′ of v that
+    maximizes the global alignment score between v′ and w among all substrings of v.
+    For example, the best global, local, and fitting alignments of v = CGTAGGCTTAAGGTTA
+    and w = ATAGATA are shown in the figure below (with mismatch and indel penalties equal to 1).
+
+    @link: https://stepik.org/lesson/240306/step/4?unit=212652
+
+     "Note in the figure that the optimal local alignment (with score 3)
+    is not a valid fitting alignment. On the other hand, the score of the
+    optimal global alignment (6 - 9 - 1 = -4) is smaller than that of
+    the best fitting alignment (5 - 2 - 2 = +1)."
+
+     */
+    @Test
+    @DisplayName("local alignment text example")
+    fun localAlignmentTextExampleTest() {
+
+        val sample = """
+            Input:
+            1 1 1
+            CGTAGGCTTAAGGTTA
+            ATAGATA
+            Output:
+            3
+            TAG
+            TAG
+        """.trimIndent()
+
+        runTest(sample)
+    }
 
     fun runTest(sample: String, usePAM250: Boolean = false) {
         val reader = sample.reader()
