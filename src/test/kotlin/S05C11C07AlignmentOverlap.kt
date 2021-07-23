@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.OverlapAlignment
+import util.AlignmentOverlap
 
 /**
 
@@ -24,7 +24,7 @@ matches count +1 and both the mismatch and indel penalties are 2.
  * book (5.11):  http://rosalind.info/problems/ba5f/
  */
 
-internal class S05c11c07OverlapAlignment {
+internal class S05C11C07AlignmentOverlap {
 
     @BeforeEach
     fun setUp() {
@@ -230,7 +230,7 @@ TAC-TGGTCCTGACCCAC-CTCACTT-TGATGTCCCCTTTTCTCGTTTGCGCATCAAGATC-TGGC-CCGCA-A-CTAT-
         val mismatch = parms[1]
         val gap = parms[2]
 
-        val oa = OverlapAlignment(match, mismatch, gap)
+        val oa = AlignmentOverlap(match, mismatch, gap)
         val sRow = lines[2]
         val tCol = lines[3]
 

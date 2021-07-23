@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.GlobalAlignment
-import kotlin.math.exp
+import util.AlignmentGlobal
 
 /**
 Code Challenge: Solve the Global Alignment Problem.
@@ -22,7 +21,7 @@ mismatches as well as the indel penalty σ = 5.
  * book (5.10):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */
 
-internal class S05c10c03GlobalAlignmentTest {
+internal class S05C10C03AlignmentGlobalTest {
 
     @BeforeEach
     fun setUp() {
@@ -42,7 +41,7 @@ internal class S05c10c03GlobalAlignmentTest {
     @DisplayName("global alignment - matrix input test")
     fun globalAlignmentMatrixInputTest() {
 
-        val ga = GlobalAlignment(0, 0, 0, useBLOSUM62 = true)
+        val ga = AlignmentGlobal(0, 0, 0, useBLOSUM62 = true)
         val test1 = ga.score('Y', 'Y')
         assertEquals(7, test1)
 
@@ -257,7 +256,7 @@ internal class S05c10c03GlobalAlignmentTest {
         val mismatch = parms[1]
         val gap = parms[2]
 
-        val ga = GlobalAlignment(match, mismatch, gap)
+        val ga = AlignmentGlobal(match, mismatch, gap)
         val sRow = lines[2]
         val tCol = lines[3]
 
@@ -287,7 +286,7 @@ internal class S05c10c03GlobalAlignmentTest {
         val sRow = "PLEASANTLY"
         val tCol = "MEANLY"
 
-        val ga = GlobalAlignment(0, 0, 5, useBLOSUM62 = true)
+        val ga = AlignmentGlobal(0, 0, 5, useBLOSUM62 = true)
         val result = ga.globalAlignment(sRow, tCol)
 
         val scoreResult = result.first

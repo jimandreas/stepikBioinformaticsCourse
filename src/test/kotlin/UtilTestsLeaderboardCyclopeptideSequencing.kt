@@ -31,7 +31,8 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
         val result = leaderboardCyclopeptideSequencing(trimLevel, spectrum)
         println(result)
 
-        val expectedResult = "113-147-71-129"
+//        val expectedResult = "113-147-71-129"
+        val expectedResult = "71-147-113-129" // same thing in a cyclic peptide
         val formattedResult = result.joinToString(separator = "-")
         assertEquals(expectedResult, formattedResult)
     }

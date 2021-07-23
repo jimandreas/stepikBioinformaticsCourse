@@ -1,6 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls")
 
-import util.LocalAlignment
+import util.AlignmentLocal
 
 /**
  * Code Challenge: Solve the Local Alignment Problem.
@@ -43,7 +43,7 @@ TWSWHRSFSEITYMEMNKPVDINEGQSHMEGAANNWECRMRTDKGQIYKDWEMLFSPEYGRQPIDSKRPSFVEKILKIYS
     val reader = sample.reader()
     val lines = reader.readLines()
 
-    val la = LocalAlignment(0, 0, 5, usePAM250 = true)
+    val la = AlignmentLocal(0, 0, 5, usePAM250 = true)
     val sRow = lines[0]
     val tCol = lines[1]
 

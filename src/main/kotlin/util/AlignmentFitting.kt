@@ -31,7 +31,7 @@ for each cell.
  * book (5.11):  http://rosalind.info/problems/ba5f/
  */
 
-class FittingAlignment(
+class AlignmentFitting(
     val mMatchValue: Int,
     val uMismatchValue: Int,
     val sigmaGapPenalty: Int
@@ -72,7 +72,7 @@ class FittingAlignment(
         return Triple(maxVal, strPair.first, strPair.second)
     }
 
-    fun debugPrintout(maxVal: Int, sRow: String, tCol: String, wRowSolution: String, vColumnSolution: String, backtrack2D: Array<Array<LocalAlignment.Dir>>) {
+    fun debugPrintout(maxVal: Int, sRow: String, tCol: String, wRowSolution: String, vColumnSolution: String, backtrack2D: Array<Array<AlignmentLocal.Dir>>) {
 
         val nRows: Int = tCol.length
         val mCols: Int = sRow.length
@@ -149,24 +149,24 @@ class FittingAlignment(
      *   allow an override of the "taxi" free ride value for independent axis
      */
 
-    fun backtrack(wRow: String, vColumn: String, iFR: Int = 0, jFR: Int = 0): Array<Array<LocalAlignment.Dir>> {
+    fun backtrack(wRow: String, vColumn: String, iFR: Int = 0, jFR: Int = 0): Array<Array<AlignmentLocal.Dir>> {
         val nRows: Int = vColumn.length
         val mCols: Int = wRow.length
 
         val align2D = Array(nRows + 1) { IntArray(mCols + 1) }
-        val backtrack2D = Array(nRows + 1) { Array(mCols + 1) { LocalAlignment.Dir.NOTSET } }
+        val backtrack2D = Array(nRows + 1) { Array(mCols + 1) { AlignmentLocal.Dir.NOTSET } }
 
         for (i in 0..nRows) {
             //align2D[i][0] = i * -sigmaGapPenalty
             align2D[i][0] = i * -iFR // free ride value
             //backtrack2D[i][0] = Dir.DELETION_DOWN
-            backtrack2D[i][0] = LocalAlignment.Dir.NOTSET
+            backtrack2D[i][0] = AlignmentLocal.Dir.NOTSET
         }
         for (j in 0..mCols) {
             //align2D[0][j] = j * -sigmaGapPenalty
             align2D[0][j] = j * -jFR // free ride value
             //backtrack2D[0][j] = Dir.INSERTION_RIGHT
-            backtrack2D[0][j] = LocalAlignment.Dir.NOTSET
+            backtrack2D[0][j] = AlignmentLocal.Dir.NOTSET
         }
 
         var dRow = '0'
@@ -196,17 +196,17 @@ class FittingAlignment(
                 when {
 
                     maxCellVal == diag -> {
-                        backtrack2D[iRow][jCol] = LocalAlignment.Dir.MATCHMISMATCH
+                        backtrack2D[iRow][jCol] = AlignmentLocal.Dir.MATCHMISMATCH
                     }
 
                     maxCellVal == left -> {
-                        backtrack2D[iRow][jCol] = LocalAlignment.Dir.INSERTION_RIGHT
+                        backtrack2D[iRow][jCol] = AlignmentLocal.Dir.INSERTION_RIGHT
                     }
 
 
 
                     maxCellVal == up -> {
-                        backtrack2D[iRow][jCol] = LocalAlignment.Dir.DELETION_DOWN
+                        backtrack2D[iRow][jCol] = AlignmentLocal.Dir.DELETION_DOWN
                     }
                 }
             }
@@ -217,7 +217,7 @@ class FittingAlignment(
     }
 
     fun outputLCS(
-        backtrack2D: Array<Array<LocalAlignment.Dir>>,
+        backtrack2D: Array<Array<AlignmentLocal.Dir>>,
         wRow: String,
         vColumn: String,
         j: Int,
@@ -230,7 +230,7 @@ class FittingAlignment(
             return Pair(strRow.toString(), strCol.toString())
         }
         when {
-            backtrack2D[i][j] == LocalAlignment.Dir.NOTSET -> { // indicates the end of the Local Alignment
+            backtrack2D[i][j] == AlignmentLocal.Dir.NOTSET -> { // indicates the end of the Local Alignment
 //                return Pair(strRow.toString(), strCol.toString())
 //                if (i >= 1 && j >= 1) {
 //                    strCol.insert(0, vColumn[i - 1])
@@ -238,14 +238,14 @@ class FittingAlignment(
 //                }
                 return Pair(strRow.toString(), strCol.toString())
             }
-            backtrack2D[i][j] == LocalAlignment.Dir.DELETION_DOWN -> {
+            backtrack2D[i][j] == AlignmentLocal.Dir.DELETION_DOWN -> {
                 return outputLCS(
                     backtrack2D, wRow, vColumn, j, i - 1,
                     strCol.insert(0, vColumn[i - 1]),
                     strRow.insert(0, '-')
                 )
             }
-            backtrack2D[i][j] == LocalAlignment.Dir.INSERTION_RIGHT -> {
+            backtrack2D[i][j] == AlignmentLocal.Dir.INSERTION_RIGHT -> {
                 return outputLCS(
                     backtrack2D, wRow, vColumn, j - 1, i,
                     strCol.insert(0, '-'),

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.FittingAlignment
+import util.AlignmentFitting
 import kotlin.test.Ignore
 
 /**
@@ -33,7 +33,7 @@ for each cell.
  * book (5.11):  http://rosalind.info/problems/ba5f/
  */
 
-internal class S05c11c05FittingAlignment {
+internal class S05C11C05AlignmentFitting {
 
     @BeforeEach
     fun setUp() {
@@ -256,7 +256,7 @@ internal class S05c11c05FittingAlignment {
         val mismatch = parms[1]
         val gap = parms[2]
 
-        val fa = FittingAlignment(match, mismatch, gap)
+        val fa = AlignmentFitting(match, mismatch, gap)
         val sRow = lines[2]
         val tCol = lines[3]
 

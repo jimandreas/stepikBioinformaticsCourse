@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.LocalAlignment
+import util.AlignmentLocal
 
 /**
  * Code Challenge: Solve the Local Alignment Problem.
@@ -36,7 +36,7 @@ for each cell.
  * book (5.10):  http://rosalind.info/problems/ba5f/
  */
 
-internal class S05c10c10LocalAlignmentTest {
+internal class S05C10C10AlignmentLocalTest {
 
     @BeforeEach
     fun setUp() {
@@ -56,7 +56,7 @@ internal class S05c10c10LocalAlignmentTest {
     @DisplayName("local alignment - matrix input test")
     fun localAlignmentMatrixInputTest() {
 
-        val la = LocalAlignment(0, 0, 0, usePAM250 = true)
+        val la = AlignmentLocal(0, 0, 0, usePAM250 = true)
         val test1 = la.score('Y', 'Y')
         assertEquals(10, test1)
 
@@ -219,7 +219,7 @@ internal class S05c10c10LocalAlignmentTest {
         val mismatch = parms[1]
         val gap = parms[2]
 
-        val la = LocalAlignment(match, mismatch, gap, usePAM250)
+        val la = AlignmentLocal(match, mismatch, gap, usePAM250)
         val sRow = lines[2]
         val tCol = lines[3]
 

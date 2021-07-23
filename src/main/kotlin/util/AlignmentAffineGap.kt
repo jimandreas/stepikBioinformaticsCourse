@@ -9,19 +9,15 @@ import ResourceReader
 import kotlin.math.max
 
 /**
- * Code Challenge: Solve the Global Alignment Problem.
+ * Code Challenge: Solve the Alignment with Affine Gap Penalties Problem.
 
-Input: Two protein strings written in the single-letter amino acid alphabet.
-Output: The maximum alignment score of these strings followed by an alignment
-achieving this maximum score. Use the BLOSUM62 scoring matrix for matches and
-mismatches as well as the indel penalty σ = 5.
+Input: Two amino acid strings v and w (each of length at most 100).
 
-Note: this is a modified version of the LongestCommonSubsequenceLCS code.
+Output: The maximum alignment score between v and w, followed by an
+alignment of v and w achieving this maximum score.
+Use the BLOSUM62 scoring matrix, a gap opening penalty of 11, and a gap extension penalty of 1.
 
-MODIFIED: to accept:
-A match score m, a mismatch penalty μ, a gap penalty σ
-
-These are set up when the class is instantiated.
+Note: this is a modified version of the AlignmentGlobal code.
 
 A modal flag indicates whether to use the BLOSUM62 match/mismatch matrix.
 
@@ -29,12 +25,12 @@ The changes involve using the scoring matrix to calculate the winning value
 for each cell.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240305/step/3?unit=212651
- * rosalind: @link: http://rosalind.info/problems/ba5e/
- * book (5.9):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
+ * stepik: @link: https://stepik.org/lesson/240307/step/8?unit=212653
+ * rosalind: @link: http://rosalind.info/problems/ba5j/
+ * book (5.12):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */
 
-class GlobalAlignment(
+class AlignmentAffineGap(
     val mMatchValue: Int,
     val uMismatchValue: Int,
     val sigmaGapPenalty: Int,
@@ -44,6 +40,7 @@ class GlobalAlignment(
     private var blosum62: Array<IntArray> = Array(20) { IntArray(20) }
 
     var alignmentScoreResult = 0
+    lateinit var align2Dvalues: Array<IntArray>
 
     init {
         readBLOSUM62()
@@ -82,7 +79,7 @@ class GlobalAlignment(
     /**
      * @return Triple of score, alignedRow, alignedCol
      */
-    fun globalAlignment(sRow: String, tCol: String): Triple<Int, String, String> {
+    fun affineAlignment(sRow: String, tCol: String): Triple<Int, String, String> {
 
         val resultMatrix = backtrack(sRow, tCol)
 
@@ -90,6 +87,8 @@ class GlobalAlignment(
         val strRow = StringBuilder()
 
         val strPair = outputLCS(resultMatrix, sRow, tCol, sRow.length, tCol.length, strRow, strCol)
+
+        //debugPrintout(maxVal, sRow, tCol, strPair.first, strPair.second, resultMatrix)
 
         return Triple(alignmentScoreResult, strPair.first, strPair.second)
     }
@@ -147,6 +146,7 @@ class GlobalAlignment(
             }
         }
         alignmentScoreResult = align2D[nRows][mCols]
+        align2Dvalues = align2D
         return backtrack2D
     }
 
@@ -183,6 +183,50 @@ class GlobalAlignment(
                     strRow.insert(0, wRow[j - 1])
                 )
             }
+        }
+    }
+
+    /**
+     * A nicely formatted printout of the score matrix with v (row/horizontal/s) string
+     * across and the w (column/t) string down at the axes.
+     */
+    fun debugPrintout(maxVal: Int, sRow: String, tCol: String, wRowSolution: String, vColumnSolution: String, backtrack2D: Array<Array<AlignmentLocal.Dir>>) {
+
+        val nRows: Int = tCol.length
+        val mCols: Int = sRow.length
+
+        // print header
+        for (jCol in 0..mCols) {
+            val colVal = String.format("%2d", jCol)
+            when (jCol) {
+                0 -> {print("         0${sRow[0]}")}
+                mCols -> {println("")}
+                else -> print("  $colVal${sRow[jCol]}")
+            }
+        }
+
+
+        // print matrix
+        for (iRow in 0..nRows) {
+            for (jCol in 0..mCols) {
+
+                val indexB = backtrack2D[iRow][jCol].ordinal
+                val backtrackChar = "NMRD"[indexB]
+                //String.format("%+5.2f", leftX)
+                val numVal = String.format("%+3d", align2Dvalues[iRow][jCol])
+                when (jCol) {
+                    0 -> {
+                        val rowVal = String.format("%2d", iRow)
+                        if (iRow > 0) {
+                            print("$rowVal${tCol[iRow-1]}: $numVal$backtrackChar")
+                        } else {
+                            print("$rowVal : $numVal$backtrackChar")
+                        }
+                    }
+                    else -> print(" $numVal$backtrackChar")
+                }
+            }
+            print("\n")
         }
     }
 

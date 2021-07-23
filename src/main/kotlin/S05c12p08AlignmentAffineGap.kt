@@ -1,22 +1,27 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls")
 
-import util.AlignmentOverlap
+import util.AlignmentAffineGap
 
 /**
+ * Code Challenge: Solve the Alignment with Affine Gap Penalties Problem.
 
-Code Challenge: Solve the Overlap Alignment Problem.
+Input: Two amino acid strings v and w (each of length at most 100).
 
-Input: Two strings v and w, each of length at most 1000.
+Output: The maximum alignment score between v and w, followed by an
+alignment of v and w achieving this maximum score.
+Use the BLOSUM62 scoring matrix, a gap opening penalty of 11, and a gap extension penalty of 1.
 
-Output: The score of an optimal overlap alignment of v and w,
-followed by an alignment of a suffix v' of v and a prefix w' of w
-achieving this maximum score. Use an alignment score in which
-matches count +1 and both the mismatch and indel penalties are 2.
+Note: this is a modified version of the AlignmentGlobal code.
+
+A modal flag indicates whether to use the BLOSUM62 match/mismatch matrix.
+
+The changes involve using the scoring matrix to calculate the winning value
+for each cell.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240306/step/7?unit=212652
- * rosalind: @link: http://rosalind.info/problems/ba5i/
- * book (5.11):  http://rosalind.info/problems/ba5f/
+ * stepik: @link: https://stepik.org/lesson/240307/step/8?unit=212653
+ * rosalind: @link: http://rosalind.info/problems/ba5j/
+ * book (5.12):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */
 
 fun main() {
@@ -36,14 +41,12 @@ TTTAACCCCCATACGAGATACTAAGAGCATCGCTACTTAATTCTATTTCGGGCTCAGCGCTAGCACCTCGCCATATGATG
     val mismatch = 2
     val gap = 2
 
-    val oa = AlignmentOverlap(match, mismatch, gap)
+    val aag = AlignmentAffineGap(match, mismatch, gap, useBLOSUM62 = true)
 
-    val result = oa.overlapAlignment(sRow, tCol)
+    val result = aag.affineAlignment(sRow, tCol)
     println(result.first)
     println(result.second)
     println(result.third)
-
-    // correct!
 
 }
 

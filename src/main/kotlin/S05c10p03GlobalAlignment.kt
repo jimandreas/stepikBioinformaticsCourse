@@ -1,8 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls")
 
-import org.junit.jupiter.api.Assertions
-import util.GlobalAlignment
-import util.LongestPathInDirectedGraph
+import util.AlignmentGlobal
 
 /**
 Code Challenge: Solve the Global Alignment Problem.
@@ -30,7 +28,7 @@ VAVYKIDNQRMSLHQCESSDATGKANIFENKDEPICCDETGLIHFHTIHPFSHFTNNLDDPHPFVCCCSHCHVGQNRVTG
     val reader = sample.reader()
     val lines = reader.readLines()
 
-    val ga = GlobalAlignment(0, 0, 5, useBLOSUM62 = true)
+    val ga = AlignmentGlobal(0, 0, 5, useBLOSUM62 = true)
     val sRow = lines[0]
     val tCol = lines[1]
 

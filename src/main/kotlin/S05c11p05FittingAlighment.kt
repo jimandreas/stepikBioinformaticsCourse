@@ -1,6 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls")
 
-import util.FittingAlignment
+import util.AlignmentFitting
 
 /**
 
@@ -45,7 +45,7 @@ TAAATCACTTATGGTTCTTTCTTCTTTAATTCTGAGAGAGAAGCAAATTTTGAAACTTTAGCGATCCAATCATAAACCCG
     val mismatch = 1
     val gap = 1
 
-    val fa = FittingAlignment(match, mismatch, gap)
+    val fa = AlignmentFitting(match, mismatch, gap)
 
     val result = fa.fittingAlignment(sRow, tCol)
     println(result.first)

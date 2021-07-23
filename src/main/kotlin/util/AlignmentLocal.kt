@@ -37,7 +37,7 @@ for each cell.
  * book (5.10):  http://rosalind.info/problems/ba5f/
  */
 
-class LocalAlignment(
+class AlignmentLocal(
     val mMatchValue: Int,
     val uMismatchValue: Int,
     val sigmaGapPenalty: Int,

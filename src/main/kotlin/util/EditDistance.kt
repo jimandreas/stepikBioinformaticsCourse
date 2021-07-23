@@ -31,7 +31,7 @@ class EditDistance(
 ) {
 
     fun calcEditDistance(sRow: String, tCol: String): Int {
-        val ga = GlobalAlignment(mMatchValue, uMismatchValue, sigmaGapPenalty, useBLOSUM62)
+        val ga = AlignmentGlobal(mMatchValue, uMismatchValue, sigmaGapPenalty, useBLOSUM62)
         val resultArray = ga.backtrack(sRow, tCol)
 
         val editResult = ga.alignmentScoreResult
