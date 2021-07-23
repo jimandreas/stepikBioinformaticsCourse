@@ -1,6 +1,6 @@
 @file:Suppress(
     "UnnecessaryVariable", "unused", "MemberVisibilityCanBePrivate", "LiftReturnOrAssignment",
-    "IntroduceWhenSubject"
+    "IntroduceWhenSubject", "VARIABLE_WITH_REDUNDANT_INITIALIZER"
 )
 
 package util

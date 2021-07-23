@@ -10,33 +10,30 @@ import kotlin.math.max
 
 /**
 
-Code Challenge: Solve the Fitting Alignment Problem.
+Code Challenge: Solve the Overlap Alignment Problem.
 
-Input: Two nucleotide strings v and w, where v has length at most 1000 and w has length at most 100.
-Output: A highest-scoring fitting alignment between v and w.
-for the Quiz: Use the simple scoring method in which matches count +1 and both the mismatch and indel penalties are 1.
+Input: Two strings v and w, each of length at most 1000.
 
-Otherwise:
+Output: The score of an optimal overlap alignment of v and w,
+followed by an alignment of a suffix v' of v and a prefix w' of w
+achieving this maximum score. Use an alignment score in which
+matches count +1 and both the mismatch and indel penalties are 2.
 
-A match score m, a mismatch penalty μ, a gap penalty σ
-
-These are set up when the class is instantiated.
-
-The changes involve using the scoring matrix to calculate the winning value
-for each cell.
+ Settings:
+ Free ride penalty at zero for col = 0 and row = 0
+ Deletion of v (horizontal) is prioritized.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240306/step/5?unit=212652
- * rosalind: @link: http://rosalind.info/problems/ba5h/
+ * stepik: @link: https://stepik.org/lesson/240306/step/7?unit=212652
+ * rosalind: @link: http://rosalind.info/problems/ba5i/
  * book (5.11):  http://rosalind.info/problems/ba5f/
  */
 
-class FittingAlignment(
+class OverlapAlignment(
     val mMatchValue: Int,
     val uMismatchValue: Int,
     val sigmaGapPenalty: Int
 ) {
-
 
     enum class Dir(val debugChar: Char) { NOTSET('N'), MATCHMISMATCH('M'), INSERTION_RIGHT('R'), DELETION_DOWN('D') }
 
@@ -45,14 +42,11 @@ class FittingAlignment(
     lateinit var align2Dvalues: Array<IntArray>
 
     /**
-     * fittingAlignment
-     *
+     * overlapAlignment
      *
      * @return Triple of score, alignedRow, alignedCol
      */
-    fun fittingAlignment(sRow: String, tCol: String): Triple<Int, String, String> {
-
-//        val la = LocalAlignment(mMatchValue, uMismatchValue, sigmaGapPenalty)
+    fun overlapAlignment(sRow: String, tCol: String): Triple<Int, String, String> {
 
         val resultMatrix = backtrack(sRow, tCol, iFR = 0, jFR = 0)
 
@@ -63,8 +57,6 @@ class FittingAlignment(
 
         val strCol = StringBuilder()
         val strRow = StringBuilder()
-
-        //val strPair = outputLCS(resultMatrix, sRow, tCol, sRow.length, tCol.length, strRow, strCol)
         val strPair = outputLCS(resultMatrix, sRow, tCol, maxRow, maxCol, strRow, strCol)
 
         //debugPrintout(maxVal, sRow, tCol, strPair.first, strPair.second, resultMatrix)
@@ -72,6 +64,10 @@ class FittingAlignment(
         return Triple(maxVal, strPair.first, strPair.second)
     }
 
+    /**
+     * A nicely formatted printout of the score matrix with v (row/horizontal/s) string
+     * across and the w (column/t) string down at the axes.
+     */
     fun debugPrintout(maxVal: Int, sRow: String, tCol: String, wRowSolution: String, vColumnSolution: String, backtrack2D: Array<Array<LocalAlignment.Dir>>) {
 
         val nRows: Int = tCol.length
@@ -112,6 +108,9 @@ class FittingAlignment(
         }
     }
 
+    /**
+     * overlap alignment: find max iterates down the last column of the scoring
+     */
     fun findMax(wRow: String, vColumn: String): Triple<Int, Int, Int> {
         val nRows: Int = vColumn.length
         val mCols: Int = wRow.length
@@ -120,16 +119,17 @@ class FittingAlignment(
         var rowMaxCoord = 0
         var colMaxCoord = 0
 
-//        for (iRow in 1..nRows) {
-        val iRow = nRows
-        for (jCol in nRows..mCols) {
+        for (iRow in 1..nRows) {
+        //val iRow = nRows
+        //for (jCol in nRows..mCols) {
+            val jCol = mCols
             if (align2Dvalues[iRow][jCol] > maxVal) {
                 maxVal = align2Dvalues[iRow][jCol]
                 rowMaxCoord = iRow
                 colMaxCoord = jCol
             }
         }
-//        }
+        //}
         return Triple(maxVal, rowMaxCoord, colMaxCoord)
     }
 
@@ -195,6 +195,10 @@ class FittingAlignment(
 
                 when {
 
+                    maxCellVal == up -> {
+                        backtrack2D[iRow][jCol] = LocalAlignment.Dir.DELETION_DOWN
+                    }
+
                     maxCellVal == diag -> {
                         backtrack2D[iRow][jCol] = LocalAlignment.Dir.MATCHMISMATCH
                     }
@@ -204,10 +208,6 @@ class FittingAlignment(
                     }
 
 
-
-                    maxCellVal == up -> {
-                        backtrack2D[iRow][jCol] = LocalAlignment.Dir.DELETION_DOWN
-                    }
                 }
             }
         }
