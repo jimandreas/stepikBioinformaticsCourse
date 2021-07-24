@@ -51,7 +51,7 @@ internal class S05c08c05LongestCommonSubsequenceTest {
         val lcsString = lcs.outputLCS(result, "ABC", 3, 3, str)
 
         val expectedResult = "BC"
-        assertEquals(expectedResult, lcsString)
+        assertEquals(expectedResult, lcsString.toString())
     }
 
     @Test
@@ -67,7 +67,7 @@ internal class S05c08c05LongestCommonSubsequenceTest {
         val lcsString = lcs.outputLCS(result, sCol, sCol.length, sRow.length, str)
 
         val expectedResult = "AA"
-        assertEquals(expectedResult, lcsString)
+        assertEquals(expectedResult, lcsString.toString())
 
     }
 
@@ -83,9 +83,8 @@ internal class S05c08c05LongestCommonSubsequenceTest {
         val str = StringBuilder()
         val lcsString = lcs.outputLCS(result, sCol, sCol.length, sRow.length, str)
 
-        println(lcsString)
-//        val expectedResult = "AA"
-//        assertEquals(expectedResult, lcsString)
+        val expectedResult = "BC"
+        assertEquals(expectedResult, lcsString.toString())
 
     }
 

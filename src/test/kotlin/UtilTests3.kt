@@ -126,7 +126,7 @@ internal class UtilTests3 {
 
         // first test - not enough elements in map
         val result = topM(4, testMap)  // should hit upper limit of entries
-        val expectedResult = listOf(57, 58, 200) // results are sorted
+        val expectedResult = listOf(58, 200, 57)
         assertEquals(expectedResult, result)
 
         // check for return of correct shortened list

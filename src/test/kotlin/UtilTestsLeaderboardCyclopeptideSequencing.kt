@@ -25,10 +25,11 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
     @Test
     @DisplayName("test LeaderboardCyclopeptideSequencing 01")
     fun testLeaderboardCyclopeptideSequencing01() {
+        val l = LeaderboardCyclopeptideSequencing()
         val trimLevel = 10
         val spectrum = listOf(0, 71, 113, 129, 147, 200, 218, 260, 313, 331, 347, 389, 460)
 
-        val result = leaderboardCyclopeptideSequencing(trimLevel, spectrum)
+        val result = l.leaderboardCyclopeptideSequencing(trimLevel, spectrum)
         println(result)
 
 //        val expectedResult = "113-147-71-129"
@@ -63,11 +64,12 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
 
     @DisplayName("test LeaderboardCyclopeptideSequencing 03")
     fun testLeaderboardCyclopeptideSequencing03() {
+        val l = LeaderboardCyclopeptideSequencing()
         val trimLevel = 2000
         val spectrum = listOf(
             0, 97, 99, 114, 147, 163, 186, 227, 241, 242, 244, 260, 261, 283, 291, 333, 340, 357, 389, 405, 430, 447, 485, 487, 543, 544, 552, 575, 577, 584, 671, 672, 690, 691, 738, 770, 804, 818, 819, 835, 917, 932, 982, 1031, 1060, 1095, 1159, 1223, 1322
         )
-        val result = leaderboardCyclopeptideSequencing(trimLevel, spectrum)
+        val result = l.leaderboardCyclopeptideSequencing(trimLevel, spectrum)
         val str = StringBuilder()
         for (i in result) {
             str.append(aminoAcidToDaltonHashMap.filter {
@@ -90,11 +92,12 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
     @Disabled
     @DisplayName("test LeaderboardCyclopeptideSequencing 04")
     fun testLeaderboardCyclopeptideSequencing04() {
+        val l = LeaderboardCyclopeptideSequencing()
         val trimLevel = 1000
         val spectrum25 = listOf(
             0, 97, 99, 113, 114, 115, 128, 128, 147, 147, 163, 186, 227, 241, 242, 244, 244, 256, 260, 261, 262, 283, 291, 309, 330, 333, 340, 347, 385, 388, 389, 390, 390, 405, 435, 447, 485, 487, 503, 504, 518, 544, 552, 575, 577, 584, 599, 608, 631, 632, 650, 651, 653, 672, 690, 691, 717, 738, 745, 770, 779, 804, 818, 819, 827, 835, 837, 875, 892, 892, 917, 932, 932, 933, 934, 965, 982, 989, 1039, 1060, 1062, 1078, 1080, 1081, 1095, 1136, 1159, 1175, 1175, 1194, 1194, 1208, 1209, 1223, 1322
         )
-        val result = leaderboardCyclopeptideSequencing(trimLevel, spectrum25)
+        val result = l.leaderboardCyclopeptideSequencing(trimLevel, spectrum25)
         val str = StringBuilder()
         for (i in result) {
             str.append(aminoAcidToDaltonHashMap.filter {
@@ -105,11 +108,10 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
         println("MassSum is ${result.sum()}")
         println(result.joinToString("-"))
 
-        println(countOfEightySevens)
-        val sizes = matchingLists.map { it.size }
+        println(l.countOfEightySevens)
+        val sizes = l.matchingLists.map { it.size }
         println("sizes are $sizes")
-        println(matchingStrings)
-
+        println(l.matchingStrings)
 
     }
 
@@ -124,12 +126,13 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
     @Disabled
     @DisplayName("test LeaderboardCyclopeptideSequencing Extended Amino Acid Alphabet")
     fun testLeaderboardCyclopeptideSequencingExtendedAminoAlphabet() {
+        val l = LeaderboardCyclopeptideSequencing()
         val trimLevel = 1000
         val extendedAminoAcidAlphabet = IntRange(57, 200).toList()
         aminoUniqueMasses = extendedAminoAcidAlphabet // override standard
         // see links above for SPECTRUM10
         val spectrum10 = listOf(0, 97, 99, 114, 128, 147, 147, 163, 186, 227, 241, 242, 244, 260, 261, 262, 283, 291, 333, 340, 357, 385, 389, 390, 390, 405, 430, 430, 447, 485, 487, 503, 504, 518, 543, 544, 552, 575, 577, 584, 632, 650, 651, 671, 672, 690, 691, 738, 745, 747, 770, 778, 779, 804, 818, 819, 820, 835, 837, 875, 892, 917, 932, 932, 933, 934, 965, 982, 989, 1030, 1039, 1060, 1061, 1062, 1078, 1080, 1081, 1095, 1136, 1159, 1175, 1175, 1194, 1194, 1208, 1209, 1223, 1225, 1322)
-        val result = leaderboardCyclopeptideSequencing(trimLevel, spectrum10)
+        val result = l.leaderboardCyclopeptideSequencing(trimLevel, spectrum10)
         val str = StringBuilder()
         for (i in result) {
             str.append(aminoAcidToDaltonHashMap.filter {
@@ -140,12 +143,12 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
         println("MassSum is ${result.sum()}")
         println(result.joinToString("-"))
 
-        println("max score is $maxScore")
+        println("max score is $l.maxScore")
 
-        println("Yes there were $countOfEightySevens of 87s")
-        val sizes = matchingLists.map { it.size }
+        println("Yes there were $l.countOfEightySevens of 87s")
+        val sizes = l.matchingLists.map { it.size }
         println("sizes are $sizes")
-        println(matchingStrings)
+        println(l.matchingStrings)
 
     }
 

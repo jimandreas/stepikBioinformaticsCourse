@@ -48,7 +48,7 @@ internal class UtilTestsTurnpikeReconstructionBruteForce {
         // now break the input a little bit and make sure the control returns an error
 
         val sampleInputBroken = listOf(-8, -7, -6, -5, -4, -3, -3, -2, -2, 0, 0, 0, 0, 0, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10)
-        val expectedResult2 = mutableListOf(0)
+        val expectedResult2 = emptyList<Int>()
         val result2 = tpbf.turnpikeQualityControl(sampleInputBroken)
         assertEquals(expectedResult2, result2)
 

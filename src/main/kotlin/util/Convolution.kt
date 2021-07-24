@@ -98,14 +98,17 @@ and where the size of Leaderboard is restricted to the top N (and ties).
  * youtube: @link: https://www.youtube.com/watch?v=qSJSM1dJ6ZY&list=PLQ-85lQlPqFPdIS_5qv_Q3XWieobVPLlc&index=8
  */
 
-fun convolutionCyclopeptideSequencing(topElementsM: Int, leaderBoardN: Int, spectrum: List<Int>): List<Int> {
+fun convolutionCyclopeptideSequencing(
+    l: LeaderboardCyclopeptideSequencing,
+    topElementsM: Int, leaderBoardN: Int, spectrum: List<Int>): List<Int> {
+
     val convolutionResult = spectralConvolution(spectrum)
 
     // override the amino masses used in the leaderboard analysis
     aminoUniqueMasses = topM(topElementsM, convolutionResult)
     println(aminoUniqueMasses)
 
-    val results = leaderboardCyclopeptideSequencing(leaderBoardN, spectrum)
+    val results = l.leaderboardCyclopeptideSequencing(leaderBoardN, spectrum)
     return results
 
 }

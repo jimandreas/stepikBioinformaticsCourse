@@ -367,75 +367,78 @@ Given: An integer N and a collection of integers Spectrum.
 Return: LeaderPeptide after running LeaderboardCyclopeptideSequencing(Spectrum, N).
  */
 
-var matchingStrings = StringBuilder()
-val matchingLists : MutableList<List<Int>> = mutableListOf()
-var countOfEightySevens = 0
-var countOfEightyTwos = 0
-var maxScore = 0
+class LeaderboardCyclopeptideSequencing {
 
-fun leaderboardCyclopeptideSequencing(trimLevel: Int, spectrum: List<Int>): List<Int> {
+    var matchingStrings = StringBuilder()
+    val matchingLists: MutableList<List<Int>> = mutableListOf()
+    var countOfEightySevens = 0
+    var countOfEightyTwos = 0
+    var maxScore = 0
 
-    // the parentMass is the mass of all peptides together - our target for the peptide
-    val parentMass = spectrum.maxOrNull() ?: 0
+    fun leaderboardCyclopeptideSequencing(trimLevel: Int, spectrum: List<Int>): List<Int> {
 
-    var peptideCandidateLeaderboard: MutableList<List<Int>> = arrayListOf(listOf())
-    var peptideLeadingCandidate = listOf(0)
+        // the parentMass is the mass of all peptides together - our target for the peptide
+        val parentMass = spectrum.maxOrNull() ?: 0
 
-    do {
-        // expand the leaderboard by all amino acids
-        // - this is exponential(!) but it is immediately trimmed
-        val expandedPeptides: MutableList<List<Int>> = ArrayList()
-        for (p in peptideCandidateLeaderboard) {
-            for (m in aminoUniqueMasses) {
-                val newPeptide: MutableList<Int> = ArrayList(p)
-                newPeptide.add(m)
-                expandedPeptides.add(newPeptide)
-            }
-        }
-        peptideCandidateLeaderboard = expandedPeptides
+        var peptideCandidateLeaderboard: MutableList<List<Int>> = arrayListOf(listOf())
+        var peptideLeadingCandidate = listOf(0)
 
-        // now evaluate the candidates
-        // have to use an iterator or the JVM gets upset
-        val iter = peptideCandidateLeaderboard.iterator()
-        while (iter.hasNext()) {
-            val p = iter.next()
-
-            // if this candidate amino combo adds up to the target peptide mass, then take a closer look
-            if (p.sum() == parentMass) {
-
-                val thisPeptideScore = cyclopeptideScoreFromMasses(p, spectrum, true)
-
-                val leaderScore = cyclopeptideScoreFromMasses(peptideLeadingCandidate, spectrum, true)
-
-                if (thisPeptideScore == 87) {
-                    //println(thisPeptideScore)
-                    countOfEightySevens++
-                    matchingLists.add(p)
-                    matchingStrings.append(p.joinToString("-"))
-                    matchingStrings.append(" ")
-                }
-
-                if (thisPeptideScore == 82) {
-                    //println(thisPeptideScore)
-                    countOfEightyTwos++
-                    matchingLists.add(p)
-                    matchingStrings.append(p.joinToString("-"))
-                    matchingStrings.append(" ")
-                }
-
-                if (thisPeptideScore > leaderScore) {
-                    peptideLeadingCandidate = p
-                    maxScore = max(maxScore, thisPeptideScore)
-                }
-            } else {
-                // otherwise if the peptide is too big, then remove it
-                if (p.sum() > parentMass) {
-                    iter.remove()
+        do {
+            // expand the leaderboard by all amino acids
+            // - this is exponential(!) but it is immediately trimmed
+            val expandedPeptides: MutableList<List<Int>> = ArrayList()
+            for (p in peptideCandidateLeaderboard) {
+                for (m in aminoUniqueMasses) {
+                    val newPeptide: MutableList<Int> = ArrayList(p)
+                    newPeptide.add(m)
+                    expandedPeptides.add(newPeptide)
                 }
             }
-        }
-        peptideCandidateLeaderboard = trimLeaderboardMasses(peptideCandidateLeaderboard, spectrum, trimLevel)
-    } while (peptideCandidateLeaderboard.isNotEmpty())
+            peptideCandidateLeaderboard = expandedPeptides
 
-    return peptideLeadingCandidate
+            // now evaluate the candidates
+            // have to use an iterator or the JVM gets upset
+            val iter = peptideCandidateLeaderboard.iterator()
+            while (iter.hasNext()) {
+                val p = iter.next()
+
+                // if this candidate amino combo adds up to the target peptide mass, then take a closer look
+                if (p.sum() == parentMass) {
+
+                    val thisPeptideScore = cyclopeptideScoreFromMasses(p, spectrum, true)
+
+                    val leaderScore = cyclopeptideScoreFromMasses(peptideLeadingCandidate, spectrum, true)
+
+                    if (thisPeptideScore == 87) {
+                        //println(thisPeptideScore)
+                        countOfEightySevens++
+                        matchingLists.add(p)
+                        matchingStrings.append(p.joinToString("-"))
+                        matchingStrings.append(" ")
+                    }
+
+                    if (thisPeptideScore == 82) {
+                        //println(thisPeptideScore)
+                        countOfEightyTwos++
+                        matchingLists.add(p)
+                        matchingStrings.append(p.joinToString("-"))
+                        matchingStrings.append(" ")
+                    }
+
+                    if (thisPeptideScore > leaderScore) {
+                        peptideLeadingCandidate = p
+                        maxScore = max(maxScore, thisPeptideScore)
+                    }
+                } else {
+                    // otherwise if the peptide is too big, then remove it
+                    if (p.sum() > parentMass) {
+                        iter.remove()
+                    }
+                }
+            }
+            peptideCandidateLeaderboard = trimLeaderboardMasses(peptideCandidateLeaderboard, spectrum, trimLevel)
+        } while (peptideCandidateLeaderboard.isNotEmpty())
+
+        return peptideLeadingCandidate
+    }
 }

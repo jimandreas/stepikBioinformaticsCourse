@@ -100,7 +100,8 @@ internal class UtilTestsSpectralConvolution {
     fun testConvolutionCyclopeptideSequencing01() {
         val spectrum = listOf(57, 57, 71, 99, 129, 137, 170, 186, 194, 208, 228, 265, 285, 299, 307, 323, 356, 364, 394, 422, 493)
 
-        val result = convolutionCyclopeptideSequencing(20, 60, spectrum)
+        val l = LeaderboardCyclopeptideSequencing()
+        val result = convolutionCyclopeptideSequencing(l, 20, 60, spectrum)
         println(result)
     }
 
@@ -110,7 +111,8 @@ internal class UtilTestsSpectralConvolution {
         val loader = Foo()
         val spectrum = loader.getResourceAsList("S04c09p07ConvolutionCyclopeptideExtra.txt")
 
-        val result = convolutionCyclopeptideSequencing(17, 366, spectrum)
+        val l = LeaderboardCyclopeptideSequencing()
+        val result = convolutionCyclopeptideSequencing(l, 17, 366, spectrum)
         println(result.joinToString("-"))
 
         // Note: result expected is:
@@ -128,7 +130,8 @@ internal class UtilTestsSpectralConvolution {
         val spectrum = loader.getResourceAsList("S04c09p07ConvolutionCyclopeptideQuiz.txt")
 
         //val result = convolutionCyclopeptideSequencing(20, 373, spectrum) stepik
-        val result = convolutionCyclopeptideSequencing(18, 325, spectrum)
+        val l = LeaderboardCyclopeptideSequencing()
+        val result = convolutionCyclopeptideSequencing(l, 18, 325, spectrum)
         println(result.joinToString("-"))
 
         // note: worked!!   passed both stepik and rosalind quizzes.
@@ -176,7 +179,9 @@ internal class UtilTestsSpectralConvolution {
 
 
         val cmp = spectrum25 == spectrum25perQuiz
+        val l = LeaderboardCyclopeptideSequencing()
         val result = convolutionCyclopeptideSequencing(
+            l,
             topElementsM = 20,
             leaderBoardN = 1000,
             spectrum = spectrum25)
@@ -185,28 +190,29 @@ internal class UtilTestsSpectralConvolution {
         // note that these values are from wired-in variables that capture the
         //  solutions in question.
         //  An efficient hack but a hack nonetheless.
-        println("max score is $maxScore")
-        println("Count of 82s is $countOfEightyTwos")
+        println("max score is ${l.maxScore}")
+        println("Count of 82s is ${l.countOfEightyTwos}")
 
-        println(matchingStrings)
+        println(l.matchingStrings)
 
         // for curiosity try the spectrum provided.
         // I get 172 matches to the max score.
 
-        maxScore = 0
-        countOfEightyTwos = 0
-        matchingStrings = StringBuilder()
+        l.maxScore = 0
+        l.countOfEightyTwos = 0
+        l.matchingStrings = StringBuilder()
         val result2 = convolutionCyclopeptideSequencing(
+            l,
             topElementsM = 20,
             leaderBoardN = 1000,
             spectrum = spectrum25perQuiz)
         // note that these values are from wired-in variables that capture the
         //  solutions in question.
         //  An efficient hack but a hack nonetheless.
-        println("max score is $maxScore")
-        println("Count of 82s is $countOfEightyTwos")
+        println("max score is ${l.maxScore}")
+        println("Count of 82s is ${l.countOfEightyTwos}")
 
-        println(matchingStrings)
+        println(l.matchingStrings)
     }
 
 
