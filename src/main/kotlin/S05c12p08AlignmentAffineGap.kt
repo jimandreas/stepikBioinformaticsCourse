@@ -27,6 +27,8 @@ for each cell.
 fun main() {
 
     val sample = """
+        NPMEHWFNAYNLWQIVKNTVGTPHMATATGYDANMCQSFQNTGSGLGHHPTVDEIQAWGSLMRTCRCETQWMHEINGYYDHSIIVWLQ
+        HPMEHWFNAYNLYVSMNTPHMATATGYDANMCQSFQNTDIQADIPSGLGVHPTVKHNTVCEGMAWGRCETQWMHEINGYYDHSSVGQIVSAYKPLYQ
           """.trimIndent()
 
     val reader = sample.reader()
@@ -35,9 +37,9 @@ fun main() {
     val sRow = lines[0]
     val tCol = lines[1]
 
-    val match = 1
-    val mismatch = 2
-    val gap = 2
+    val match = 0
+    val mismatch = 0
+    val gap = 11
     val epsilonGapExtension = 1
 
     val aag = AlignmentAffineGap(match, mismatch, gap, epsilonGapExtension, useBLOSUM62 = true)

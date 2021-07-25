@@ -71,7 +71,7 @@ class AlignmentAffineGap(
 
         debugPrintoutAll(maxVal, sRow, tCol, strPair.first, strPair.second)
 
-        return Triple(alignmentScoreResult, strPair.first, strPair.second)
+        return Triple(alignmentScoreResult, strPair.second, strPair.first)
     }
 
     /**
@@ -88,9 +88,9 @@ class AlignmentAffineGap(
      *   The Dir enum is used to indicate the state of each entry in the backtrack2D matrix
      */
 
-    fun backtrack(wRow: String, vColumn: String) {
-        val nRows: Int = vColumn.length
-        val mCols: Int = wRow.length
+    fun backtrack(vRow: String, wColumn: String) {
+        val nRows: Int = vRow.length
+        val mCols: Int = wColumn.length
 
         upper = Array(nRows + 1) { IntArray(mCols + 1) }
         middle = Array(nRows + 1) { IntArray(mCols + 1) }
@@ -106,11 +106,6 @@ class AlignmentAffineGap(
         upper[0][0] = 0
         middle[0][0] = 0
         lower[0][0] = -1000000
-        // 1st cell in top row
-        upper[0][1] = -sigmaGapPenalty
-        middle[0][1] = -sigmaGapPenalty
-        lower[0][1] = -1000000
-        backtrack2D[0][1] = Dir.INSERTION_RIGHT
 
         for (j in 1..mCols) {  // no loop if mCols = 1
             upper[0][j] = -(sigmaGapPenalty + (j - 1) * epsilonGapExtensionPenalty)
@@ -154,7 +149,7 @@ class AlignmentAffineGap(
 
                 // references lower, upper at same coordinates against match/mismatch score
 
-                var middleDiag = score(vColumn[iRow - 1], wRow[jCol - 1])
+                var middleDiag = score(vRow[iRow - 1], wColumn[jCol - 1])
                 middleDiag += middle[iRow - 1][jCol - 1] // the diagonal match/mismatch cumulative score
                 val middleMax = max(lower[iRow][jCol], max(middleDiag, upper[iRow][jCol]))
                 middle[iRow][jCol] = middleMax
@@ -167,12 +162,15 @@ class AlignmentAffineGap(
                     middleMax == lowerMax -> {
                         backtrack2D[iRow][jCol] = Dir.DELETION_DOWN
                     }
+
                     middleMax == middleDiag -> {
                         backtrack2D[iRow][jCol] = Dir.MATCHMISMATCH
                     }
+
                     middleMax == upperMax -> {
                         backtrack2D[iRow][jCol] = Dir.INSERTION_RIGHT
                     }
+
                 }
             }
         }
@@ -182,10 +180,10 @@ class AlignmentAffineGap(
     }
 
     fun outputLCS(
-        wRow: String,
         vColumn: String,
-        j: Int,
+        wRow: String,
         i: Int,
+        j: Int,
         strCol: StringBuilder,
         strRow: StringBuilder
     ): Pair<String, String> {
@@ -196,21 +194,21 @@ class AlignmentAffineGap(
         when {
             backtrack2D[i][j] == Dir.DELETION_DOWN -> {
                 return outputLCS(
-                    wRow, vColumn, j, i - 1,
+                    vColumn, wRow, i - 1, j,
                     strCol.insert(0, vColumn[i - 1]),
                     strRow.insert(0, '-')
                 )
             }
             backtrack2D[i][j] == Dir.INSERTION_RIGHT -> {
                 return outputLCS(
-                    wRow, vColumn, j - 1, i,
+                    vColumn, wRow, i, j - 1,
                     strCol.insert(0, '-'),
                     strRow.insert(0, wRow[j - 1])
                 )
             }
             else -> {
                 return outputLCS(
-                    wRow, vColumn, j - 1, i - 1,
+                    vColumn, wRow, i - 1, j - 1,
                     strCol.insert(0, vColumn[i - 1]),
                     strRow.insert(0, wRow[j - 1])
                 )
@@ -234,20 +232,20 @@ class AlignmentAffineGap(
 
     fun debugPrintout(sRow: String, tCol: String, debugArray: Array<IntArray>) {
 
-        val nRows: Int = tCol.length
-        val mCols: Int = sRow.length
+        val nRows: Int = sRow.length
+        val mCols: Int = tCol.length
 
         // print header
         for (jCol in 0..mCols) {
             val colVal = String.format("%2d", jCol)
             when (jCol) {
                 0 -> {
-                    print("         0${sRow[0]}")
+                    print("         0${tCol[0]}")
                 }
                 mCols -> {
                     println("")
                 }
-                else -> print("  $colVal${sRow[jCol]}")
+                else -> print("  $colVal${tCol[jCol]}")
             }
         }
 
@@ -270,7 +268,7 @@ class AlignmentAffineGap(
                     0 -> {
                         val rowVal = String.format("%2d", iRow)
                         if (iRow > 0) {
-                            print("$rowVal${tCol[iRow - 1]}: $numVal$backtrackChar")
+                            print("$rowVal${sRow[iRow - 1]}: $numVal$backtrackChar")
                         } else {
                             print("$rowVal : $numVal$backtrackChar")
                         }
