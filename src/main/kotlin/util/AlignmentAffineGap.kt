@@ -1,6 +1,6 @@
 @file:Suppress(
     "UnnecessaryVariable", "unused", "MemberVisibilityCanBePrivate", "LiftReturnOrAssignment",
-    "IntroduceWhenSubject", "VARIABLE_WITH_REDUNDANT_INITIALIZER", "UNUSED_PARAMETER"
+    "IntroduceWhenSubject", "VARIABLE_WITH_REDUNDANT_INITIALIZER", "UNUSED_PARAMETER", "UNUSED_VARIABLE"
 )
 
 package util
@@ -44,8 +44,11 @@ class AlignmentAffineGap(
     lateinit var lower: Array<IntArray>
     lateinit var middle: Array<IntArray>
     lateinit var upper: Array<IntArray>
+    lateinit var backtrack2D: Array<Array<Dir>>
+    lateinit var blosum62: Array<IntArray>
 
     var alignmentScoreResult = 0
+    var maxVal = -1000000
 
     init {
         readBLOSUM62()
@@ -58,14 +61,15 @@ class AlignmentAffineGap(
      */
     fun affineAlignment(sRow: String, tCol: String): Triple<Int, String, String> {
 
-        val resultMatrix = backtrack(sRow, tCol)
+        backtrack(sRow, tCol)
 
         val strCol = StringBuilder()
         val strRow = StringBuilder()
 
-        val strPair = outputLCS(resultMatrix, sRow, tCol, sRow.length, tCol.length, strRow, strCol)
+        val strPair = outputLCS(sRow, tCol, sRow.length, tCol.length, strRow, strCol)
+        // val strPair = Pair("", "")
 
-        //debugPrintout(maxVal, sRow, tCol, strPair.first, strPair.second, resultMatrix)
+        debugPrintoutAll(maxVal, sRow, tCol, strPair.first, strPair.second)
 
         return Triple(alignmentScoreResult, strPair.first, strPair.second)
     }
@@ -84,33 +88,34 @@ class AlignmentAffineGap(
      *   The Dir enum is used to indicate the state of each entry in the backtrack2D matrix
      */
 
-    fun backtrack(wRow: String, vColumn: String): Array<Array<Dir>> {
+    fun backtrack(wRow: String, vColumn: String) {
         val nRows: Int = vColumn.length
         val mCols: Int = wRow.length
 
         upper = Array(nRows + 1) { IntArray(mCols + 1) }
         middle = Array(nRows + 1) { IntArray(mCols + 1) }
         lower = Array(nRows + 1) { IntArray(mCols + 1) }
-
-        val backtrack2D = Array(nRows + 1) { Array(mCols + 1) { Dir.NOTSET } }
+        backtrack2D = Array(nRows + 1) { Array(mCols + 1) { Dir.NOTSET } }
 
         /*
          * Initialize: top row:
-         * upper: 0, sigma then epsilon
+         * upper: 0, sigma then +epsilon
          * middle: same as top
          * bottom: -infinity
          */
         upper[0][0] = 0
         middle[0][0] = 0
-        lower[0][0] = Int.MIN_VALUE
+        lower[0][0] = -1000000
+        // 1st cell in top row
         upper[0][1] = -sigmaGapPenalty
         middle[0][1] = -sigmaGapPenalty
-        lower[0][1] = Int.MIN_VALUE
+        lower[0][1] = -1000000
+        backtrack2D[0][1] = Dir.INSERTION_RIGHT
 
-        for (j in 2..mCols) {  // no loop if mCols = 1
-            upper[0][j] = upper[0][j-1] + (j-1) * -epsilonGapExtensionPenalty
-            middle[0][j] = middle[0][j-1] + (j-1) * -epsilonGapExtensionPenalty
-            lower[0][j] = Int.MIN_VALUE
+        for (j in 1..mCols) {  // no loop if mCols = 1
+            upper[0][j] = -(sigmaGapPenalty + (j - 1) * epsilonGapExtensionPenalty)
+            middle[0][j] = -(sigmaGapPenalty + (j - 1) * epsilonGapExtensionPenalty)
+            lower[0][j] = -1000000
             backtrack2D[0][j] = Dir.INSERTION_RIGHT
         }
 
@@ -118,13 +123,13 @@ class AlignmentAffineGap(
          * Initialize: left column:
          * upper: -infinity
          * middle: same as bottom
-         * bottom: 0, sigma then epsilon
+         * bottom: 0, sigma then +epsilon
          */
 
-        for (i in 2..nRows) {
-            upper[i][0] = Int.MIN_VALUE
-            middle[i][0] = middle[i-1][0] + (i-1) * -epsilonGapExtensionPenalty
-            lower[i][0] = lower[i-1][0] + (i-1) * -epsilonGapExtensionPenalty
+        for (i in 1..nRows) {
+            upper[i][0] = -1000000
+            middle[i][0] = -(sigmaGapPenalty + (i - 1) * epsilonGapExtensionPenalty)
+            lower[i][0] = -(sigmaGapPenalty + (i - 1) * epsilonGapExtensionPenalty)
             backtrack2D[i][0] = Dir.DELETION_DOWN
         }
 
@@ -134,37 +139,49 @@ class AlignmentAffineGap(
         for (iRow in 1..nRows) {
             for (jCol in 1..mCols) {
 
-                var diag = score(vColumn[iRow - 1], wRow[jCol - 1])
-                var up = -sigmaGapPenalty
-                var left = -sigmaGapPenalty
+                // references next row above for deletes
+                val lowerLower = lower[iRow - 1][jCol] - epsilonGapExtensionPenalty
+                val lowerMiddle = middle[iRow - 1][jCol] - sigmaGapPenalty
 
-                diag += middle[iRow - 1][jCol - 1]
-                up += middle[iRow - 1][jCol]
-                left += middle[iRow][jCol - 1]
+                // references next column left for insertions
+                val upperUpper = upper[iRow][jCol - 1] - epsilonGapExtensionPenalty
+                val upperMiddle = middle[iRow][jCol - 1] - sigmaGapPenalty
 
-                val maxCellVal = max(diag, max(up, left))
-                middle[iRow][jCol] = maxCellVal
+                val lowerMax = max(lowerLower, lowerMiddle)
+                val upperMax = max(upperUpper, upperMiddle)
+                lower[iRow][jCol] = lowerMax
+                upper[iRow][jCol] = upperMax
+
+                // references lower, upper at same coordinates against match/mismatch score
+
+                var middleDiag = score(vColumn[iRow - 1], wRow[jCol - 1])
+                middleDiag += middle[iRow - 1][jCol - 1] // the diagonal match/mismatch cumulative score
+                val middleMax = max(lower[iRow][jCol], max(middleDiag, upper[iRow][jCol]))
+                middle[iRow][jCol] = middleMax
+
+                /*
+                 * now compare the up/down and diag numbers for the direction
+                 */
 
                 when {
-                    maxCellVal == diag -> {
+                    middleMax == lowerMax -> {
+                        backtrack2D[iRow][jCol] = Dir.DELETION_DOWN
+                    }
+                    middleMax == middleDiag -> {
                         backtrack2D[iRow][jCol] = Dir.MATCHMISMATCH
                     }
-                    maxCellVal == left -> {
+                    middleMax == upperMax -> {
                         backtrack2D[iRow][jCol] = Dir.INSERTION_RIGHT
-                    }
-                    maxCellVal == up -> {
-                        backtrack2D[iRow][jCol] = Dir.DELETION_DOWN
                     }
                 }
             }
         }
         alignmentScoreResult = middle[nRows][mCols]
 
-        return backtrack2D
+        return
     }
 
     fun outputLCS(
-        backtrack2D: Array<Array<Dir>>,
         wRow: String,
         vColumn: String,
         j: Int,
@@ -178,20 +195,22 @@ class AlignmentAffineGap(
         }
         when {
             backtrack2D[i][j] == Dir.DELETION_DOWN -> {
-                return outputLCS(backtrack2D, wRow, vColumn, j,i - 1,
+                return outputLCS(
+                    wRow, vColumn, j, i - 1,
                     strCol.insert(0, vColumn[i - 1]),
                     strRow.insert(0, '-')
                 )
             }
             backtrack2D[i][j] == Dir.INSERTION_RIGHT -> {
-                return outputLCS(backtrack2D, wRow, vColumn, j - 1, i,
+                return outputLCS(
+                    wRow, vColumn, j - 1, i,
                     strCol.insert(0, '-'),
                     strRow.insert(0, wRow[j - 1])
                 )
             }
             else -> {
                 return outputLCS(
-                    backtrack2D, wRow, vColumn, j - 1,i - 1,
+                    wRow, vColumn, j - 1, i - 1,
                     strCol.insert(0, vColumn[i - 1]),
                     strRow.insert(0, wRow[j - 1])
                 )
@@ -202,8 +221,18 @@ class AlignmentAffineGap(
     /**
      * A nicely formatted printout of the score matrix with v (row/horizontal/s) string
      * across and the w (column/t) string down at the axes.
+     * MODIFIED: to print out lower/middle/upper affine scoring matrices
      */
-    fun debugPrintout(maxVal: Int, sRow: String, tCol: String, wRowSolution: String, vColumnSolution: String, backtrack2D: Array<Array<AlignmentLocal.Dir>>) {
+    fun debugPrintoutAll(maxVal: Int, sRow: String, tCol: String, wRowSolution: String, vColumnSolution: String) {
+        println("Upper")
+        debugPrintout(sRow, tCol, upper)
+        println("Middle")
+        debugPrintout(sRow, tCol, middle)
+        println("Lower")
+        debugPrintout(sRow, tCol, lower)
+    }
+
+    fun debugPrintout(sRow: String, tCol: String, debugArray: Array<IntArray>) {
 
         val nRows: Int = tCol.length
         val mCols: Int = sRow.length
@@ -212,8 +241,12 @@ class AlignmentAffineGap(
         for (jCol in 0..mCols) {
             val colVal = String.format("%2d", jCol)
             when (jCol) {
-                0 -> {print("         0${sRow[0]}")}
-                mCols -> {println("")}
+                0 -> {
+                    print("         0${sRow[0]}")
+                }
+                mCols -> {
+                    println("")
+                }
                 else -> print("  $colVal${sRow[jCol]}")
             }
         }
@@ -226,12 +259,18 @@ class AlignmentAffineGap(
                 val indexB = backtrack2D[iRow][jCol].ordinal
                 val backtrackChar = "NMRD"[indexB]
                 //String.format("%+5.2f", leftX)
-                val numVal = String.format("%+3d", middle[iRow][jCol])
+                var num = debugArray[iRow][jCol]
+                if (num > 900000) {
+                    num = 99
+                } else if (num < -900000) {
+                    num = -99
+                }
+                val numVal = String.format("%+3d", num)
                 when (jCol) {
                     0 -> {
                         val rowVal = String.format("%2d", iRow)
                         if (iRow > 0) {
-                            print("$rowVal${tCol[iRow-1]}: $numVal$backtrackChar")
+                            print("$rowVal${tCol[iRow - 1]}: $numVal$backtrackChar")
                         } else {
                             print("$rowVal : $numVal$backtrackChar")
                         }
@@ -246,7 +285,6 @@ class AlignmentAffineGap(
     private val aminos =
         listOf('A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y')
 
-    private var blosum62: Array<IntArray> = Array(20) { IntArray(20) }
 
     fun aminoToOffset(amino: Char): Int {
         return aminos.indexOf(amino)
@@ -276,6 +314,7 @@ class AlignmentAffineGap(
 
     private fun readBLOSUM62() {
 
+        blosum62 = Array(20) { IntArray(20) }
         val r = ResourceReader()
         val matrix = r.getResourceAsText("BLOSUM62.txt")
 
