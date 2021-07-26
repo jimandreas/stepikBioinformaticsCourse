@@ -45,6 +45,8 @@ class AlignmentAffineGap(
     lateinit var middle: Array<IntArray>
     lateinit var upper: Array<IntArray>
     lateinit var backtrack2D: Array<Array<Dir>>
+    lateinit var backtrack2Dlower: Array<Array<Dir>>
+    lateinit var backtrack2Dupper: Array<Array<Dir>>
     lateinit var blosum62: Array<IntArray>
 
     var alignmentScoreResult = 0
@@ -54,7 +56,11 @@ class AlignmentAffineGap(
         readBLOSUM62()
     }
 
-    enum class Dir { NOTSET, MATCHMISMATCH, INSERTION_RIGHT, DELETION_DOWN }
+    enum class Dir {
+        NOTSET, MATCHMISMATCH,
+        INSERTION_START_I, INSERTION_RIGHT_J, INSERTION_END_K,
+        DELETION_START_D, DELETION_DOWN_E, DELETION_END_F
+    }
 
     /**
      * @return Triple of score, alignedRow, alignedCol
@@ -66,7 +72,7 @@ class AlignmentAffineGap(
         val strCol = StringBuilder()
         val strRow = StringBuilder()
 
-        val strPair = outputLCS(sRow, tCol, sRow.length, tCol.length, strRow, strCol)
+        val strPair = outputLCS(sRow, tCol, sRow.length, tCol.length, strRow, strCol, WhereAmI.Middle)
         // val strPair = Pair("", "")
 
         debugPrintoutAll(maxVal, sRow, tCol, strPair.first, strPair.second)
@@ -96,6 +102,8 @@ class AlignmentAffineGap(
         middle = Array(nRows + 1) { IntArray(mCols + 1) }
         lower = Array(nRows + 1) { IntArray(mCols + 1) }
         backtrack2D = Array(nRows + 1) { Array(mCols + 1) { Dir.NOTSET } }
+        backtrack2Dlower = Array(nRows + 1) { Array(mCols + 1) { Dir.NOTSET } }
+        backtrack2Dupper = Array(nRows + 1) { Array(mCols + 1) { Dir.NOTSET } }
 
         /*
          * Initialize: top row:
@@ -111,7 +119,7 @@ class AlignmentAffineGap(
             upper[0][j] = -(sigmaGapPenalty + (j - 1) * epsilonGapExtensionPenalty)
             middle[0][j] = -(sigmaGapPenalty + (j - 1) * epsilonGapExtensionPenalty)
             lower[0][j] = -1000000
-            backtrack2D[0][j] = Dir.INSERTION_RIGHT
+            backtrack2D[0][j] = Dir.INSERTION_START_I
         }
 
         /*
@@ -125,7 +133,7 @@ class AlignmentAffineGap(
             upper[i][0] = -1000000
             middle[i][0] = -(sigmaGapPenalty + (i - 1) * epsilonGapExtensionPenalty)
             lower[i][0] = -(sigmaGapPenalty + (i - 1) * epsilonGapExtensionPenalty)
-            backtrack2D[i][0] = Dir.DELETION_DOWN
+            backtrack2D[i][0] = Dir.DELETION_START_D
         }
 
         /*
@@ -139,11 +147,11 @@ class AlignmentAffineGap(
                 val lowerMiddle = middle[iRow - 1][jCol] - sigmaGapPenalty
 
                 // references next column left for insertions
-                val upperUpper = upper[iRow][jCol - 1] - epsilonGapExtensionPenalty
+                val upperLeft = upper[iRow][jCol - 1] - epsilonGapExtensionPenalty
                 val upperMiddle = middle[iRow][jCol - 1] - sigmaGapPenalty
 
                 val lowerMax = max(lowerLower, lowerMiddle)
-                val upperMax = max(upperUpper, upperMiddle)
+                val upperMax = max(upperLeft, upperMiddle)
                 lower[iRow][jCol] = lowerMax
                 upper[iRow][jCol] = upperMax
 
@@ -154,23 +162,29 @@ class AlignmentAffineGap(
                 val middleMax = max(lower[iRow][jCol], max(middleDiag, upper[iRow][jCol]))
                 middle[iRow][jCol] = middleMax
 
-                /*
-                 * now compare the up/down and diag numbers for the direction
-                 */
+                // setup the backtracking information
 
-                when {
-                    middleMax == lowerMax -> {
-                        backtrack2D[iRow][jCol] = Dir.DELETION_DOWN
-                    }
+                if (lower[iRow][jCol] + epsilonGapExtensionPenalty == lower[iRow - 1][jCol]) {
+                    backtrack2Dlower[iRow][jCol] = Dir.DELETION_DOWN_E
+                } else {
+                    backtrack2Dlower[iRow][jCol] = Dir.DELETION_END_F
+                }
 
-                    middleMax == middleDiag -> {
-                        backtrack2D[iRow][jCol] = Dir.MATCHMISMATCH
-                    }
+                if (upper[iRow][jCol] + epsilonGapExtensionPenalty == upper[iRow][jCol - 1]) {
+                    backtrack2Dupper[iRow][jCol] = Dir.INSERTION_RIGHT_J
+                } else {
+                    backtrack2Dupper[iRow][jCol] = Dir.INSERTION_END_K
+                }
 
-                    middleMax == upperMax -> {
-                        backtrack2D[iRow][jCol] = Dir.INSERTION_RIGHT
-                    }
 
+                if (middleMax == lower[iRow][jCol]) {
+                    backtrack2D[iRow][jCol] = Dir.DELETION_START_D
+                } else if (middleMax == upper[iRow][jCol]) {
+                    backtrack2D[iRow][jCol] = Dir.INSERTION_START_I
+                } else if (middleMax == middleDiag) {
+                    backtrack2D[iRow][jCol] = Dir.MATCHMISMATCH
+                } else {
+                    println("ERROR bad state!!")
                 }
             }
         }
@@ -179,58 +193,113 @@ class AlignmentAffineGap(
         return
     }
 
+    enum class WhereAmI { Upper, Middle, Lower }
+
     fun outputLCS(
         vColumn: String,
         wRow: String,
         i: Int,
         j: Int,
         strCol: StringBuilder,
-        strRow: StringBuilder
+        strRow: StringBuilder,
+        where: WhereAmI
     ): Pair<String, String> {
 
         if (i <= 0 && j <= 0) {
             return Pair(strRow.toString(), strCol.toString())
         }
-        when {
-            backtrack2D[i][j] == Dir.DELETION_DOWN -> {
+
+        if (where == WhereAmI.Middle) {
+            when {
+                backtrack2D[i][j] == Dir.DELETION_START_D -> {
+                    return outputLCS(
+                        vColumn, wRow, i, j,
+                        strCol,
+                        strRow,
+                        WhereAmI.Lower
+                    )
+                }
+                backtrack2D[i][j] == Dir.INSERTION_START_I -> {
+                    return outputLCS(
+                        vColumn, wRow, i, j,
+                        strCol,
+                        strRow,
+                        WhereAmI.Upper
+                    )
+                }
+                backtrack2D[i][j] == Dir.MATCHMISMATCH -> {
+                    return outputLCS(
+                        vColumn, wRow, i - 1, j - 1,
+                        strCol.insert(0, vColumn[i - 1]),
+                        strRow.insert(0, wRow[j - 1]),
+                        WhereAmI.Middle
+                    )
+                }
+            }
+        }
+
+        if (where == WhereAmI.Lower) {
+            if (backtrack2Dlower[i][j] == Dir.DELETION_DOWN_E) {
                 return outputLCS(
                     vColumn, wRow, i - 1, j,
                     strCol.insert(0, vColumn[i - 1]),
-                    strRow.insert(0, '-')
+                    strRow.insert(0, '-'),
+                    WhereAmI.Lower
                 )
-            }
-            backtrack2D[i][j] == Dir.INSERTION_RIGHT -> {
+            } else {
                 return outputLCS(
-                    vColumn, wRow, i, j - 1,
-                    strCol.insert(0, '-'),
-                    strRow.insert(0, wRow[j - 1])
-                )
-            }
-            else -> {
-                return outputLCS(
-                    vColumn, wRow, i - 1, j - 1,
+                    vColumn, wRow, i - 1, j,
                     strCol.insert(0, vColumn[i - 1]),
-                    strRow.insert(0, wRow[j - 1])
+                    strRow.insert(0, '-'),
+                    WhereAmI.Middle
                 )
             }
         }
+
+        if (where == WhereAmI.Upper) {
+            if (backtrack2Dupper[i][j] == Dir.INSERTION_RIGHT_J) {
+                return outputLCS(
+                    vColumn, wRow, i, j - 1,
+                    strCol.insert(0, '-'),
+                    strRow.insert(0, wRow[j - 1]),
+                    WhereAmI.Upper
+                )
+            } else {
+                return outputLCS(
+                    vColumn, wRow, i, j - 1,
+                    strCol.insert(0, '-'),
+                    strRow.insert(0, wRow[j - 1]),
+                    WhereAmI.Middle
+                )
+            }
+        }
+        println("ERROR in outputLCS")
+        return Pair("", "")
     }
 
     /**
      * A nicely formatted printout of the score matrix with v (row/horizontal/s) string
      * across and the w (column/t) string down at the axes.
      * MODIFIED: to print out lower/middle/upper affine scoring matrices
+     *
+     *
+    NOTSET, MATCHMISMATCH,
+    INSERTION_START_I, INSERTION_RIGHT_J, INSERTION_END_K,
+    DELETION_START_D, DELETION_DOWN_E, DELETION_END_F }
+
      */
     fun debugPrintoutAll(maxVal: Int, sRow: String, tCol: String, wRowSolution: String, vColumnSolution: String) {
-        println("Upper")
-        debugPrintout(sRow, tCol, upper)
-        println("Middle")
-        debugPrintout(sRow, tCol, middle)
-        println("Lower")
-        debugPrintout(sRow, tCol, lower)
+        println("Upper - Insertion - Dash to go left a column in the Row string")
+        debugPrintout(sRow, tCol, upper, backtrack2Dupper)
+        println("Middle I=Istart J=Iright K=Iend D=DStart E=Ddown F=Dend")
+        debugPrintout(sRow, tCol, middle,backtrack2D)
+        println("Lower - Deletion - Dash to go up a row in the Column string")
+        debugPrintout(sRow, tCol, lower, backtrack2Dlower)
     }
 
-    fun debugPrintout(sRow: String, tCol: String, debugArray: Array<IntArray>) {
+    fun debugPrintout(sRow: String, tCol: String, debugArray: Array<IntArray>,
+                      b: Array<Array<Dir>>,
+                      showBacktrackChar: Boolean = true) {
 
         val nRows: Int = sRow.length
         val mCols: Int = tCol.length
@@ -254,8 +323,16 @@ class AlignmentAffineGap(
         for (iRow in 0..nRows) {
             for (jCol in 0..mCols) {
 
-                val indexB = backtrack2D[iRow][jCol].ordinal
-                val backtrackChar = "NMRD"[indexB]
+                val indexB = b[iRow][jCol].ordinal
+                var backtrackChar = "NMIJKDEF"[indexB]
+                if (!showBacktrackChar) {
+                    backtrackChar = ' '
+                }
+                /*
+                 NOTSET, MATCHMISMATCH,
+                 INSERTION_START_I, INSERTION_RIGHT_J, INSERTION_END_K,
+                 DELETION_START_D, DELETION_DOWN_E, DELETION_END_F }
+                 */
                 //String.format("%+5.2f", leftX)
                 var num = debugArray[iRow][jCol]
                 if (num > 900000) {
