@@ -25,7 +25,7 @@ matches count +1 and both the mismatch and indel penalties are 2.
  * book (5.11):  http://rosalind.info/problems/ba5f/
  */
 
-internal class S05C11C07AlignmentOverlap {
+internal class S05C11C07AlignmentOverlapTest {
 
     @BeforeEach
     fun setUp() {

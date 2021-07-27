@@ -30,7 +30,7 @@ for each cell.
  * youtube: @link: https://www.youtube.com/watch?v=Npv180dQ_4Y
  */
 
-internal class S05C12c08AlignmentAffineGap {
+internal class S05C12c08AlignmentAffineGapTest {
 
     @BeforeEach
     fun setUp() {

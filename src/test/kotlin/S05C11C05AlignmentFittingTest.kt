@@ -33,7 +33,7 @@ for each cell.
  * book (5.11):  http://rosalind.info/problems/ba5f/
  */
 
-internal class S05C11C05AlignmentFitting {
+internal class S05C11C05AlignmentFittingTest {
 
     @BeforeEach
     fun setUp() {
