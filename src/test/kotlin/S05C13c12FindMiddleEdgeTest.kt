@@ -219,6 +219,29 @@ internal class S05C13c12FindMiddleEdgeTest {
         runTest(sample, true)
     }
 
+    /**
+    Test with two vertical edges at middle column
+
+    @link: https://stepik.org/lesson/240308/step/7?unit=212654
+
+
+     */
+    @Test
+    @DisplayName("test middle edge with two vertical edges at middle column")
+    fun middleEdgeTestVerticalEdges() {
+
+        val sample = """
+            Input:
+            1 10 2
+            GAGCAATT
+            ACTTAATT
+            Output:
+            (0,0) (0,0)
+        """.trimIndent()
+
+        runTest(sample, false)
+    }
+
     fun runTest(sample: String, useBLOSUM62: Boolean = false) {
         val reader = sample.reader()
         val lines = reader.readLines()

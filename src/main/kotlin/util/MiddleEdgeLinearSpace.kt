@@ -7,6 +7,7 @@
 package util
 
 import ResourceReader
+import util.MiddleEdgeLinearSpace.Travel.*
 import kotlin.math.max
 
 /**
@@ -60,8 +61,13 @@ class MiddleEdgeLinearSpace(
     ): Pair<Pair<Int, Int>, Pair<Int, Int>> {
 
         val middleNode = findMiddleNode(sRow, tCol, halfWayRow)
+        val firstHalfPath = alignmentPath.toList()
 
-        return Pair(Pair(0, 0), Pair(0, 0))
+        alignmentPath = mutableListOf() // reset to zero
+        val reverseMiddleNode = findMiddleNode(sRow.reversed(), tCol.reversed(), sRow.length - halfWayRow)
+        val secondHalfPath = alignmentPath.reversed()
+
+        return Pair(middleNode, reverseMiddleNode)
     }
 
     /**
@@ -73,6 +79,8 @@ class MiddleEdgeLinearSpace(
      * if the path goes right, then iterate until it does not or reaches the middle
      * if the path goes down or diag, then loop
      */
+    enum class Travel { CRUISING, TRAVERSING_DOWN, ENDED }
+
     fun findMiddleNode(
         sRow: String, tCol: String,
         halfWayColumn: Int
@@ -82,7 +90,7 @@ class MiddleEdgeLinearSpace(
         alignmentPath.add(Pair(0, 0))
         var pathLength = 1
 
-        val scoreRow: Array<Int> = Array(halfWayColumn + 1) { 0 }
+        val scoreRow: Array<Int> = Array(halfWayColumn + 2) { 0 }
         val tColLen = tCol.length
 
         for (j in 0..halfWayColumn) {
@@ -90,37 +98,45 @@ class MiddleEdgeLinearSpace(
         }
 
         var previousRow = scoreRow
+        var arrivedAtMiddleColumn = CRUISING
         for (iRow in 1..tColLen) {
-            val newScoreRow = scoresForThisRow(sRow, tCol, iRow, halfWayColumn, previousRow)
-            for (j in curNode.second..halfWayColumn) {
-                when (whereTo(previousRow, newScoreRow, curNode)) {
+            if (curNode.second > halfWayColumn) {
+                arrivedAtMiddleColumn = TRAVERSING_DOWN
+            }
+            val newScoreRow = scoresForThisRow(sRow, tCol, iRow, halfWayColumn + 1, previousRow)
+            for (j in curNode.second..halfWayColumn + 1) {
+                when (whereTo(previousRow, newScoreRow, curNode, arrivedAtMiddleColumn)) {
                     'D' -> {  // down
                         val downNode = Pair(curNode.first, curNode.second - 1)
                         pathLength++
                         alignmentPath.add(downNode)
-                        curNode = Pair(downNode.first+1, downNode.second+1)
+                        curNode = Pair(downNode.first + 1, downNode.second + 1)
                         break
                     }
                     'M' -> {  // match/mismatch (diag to the right)
                         val diagNode = Pair(curNode.first, curNode.second)
                         pathLength++
                         alignmentPath.add(diagNode)
-                        curNode = Pair(diagNode.first+1, diagNode.second+1)
+                        curNode = Pair(diagNode.first + 1, diagNode.second + 1)
                         break
                     }
                     'R' -> {  // right
                         val rightNode = Pair(curNode.first - 1, curNode.second)
                         pathLength++
                         alignmentPath.add(rightNode)
-                        curNode = Pair(rightNode.first+1, rightNode.second+1)
+                        curNode = Pair(rightNode.first + 1, rightNode.second + 1)
                         continue
+                    }
+                    'B' -> { // arrived at middle column and whereTo is NOT down
+                        arrivedAtMiddleColumn = ENDED
+                        break
                     }
                 }
             }
             previousRow = newScoreRow
             val lastNode = alignmentPath[pathLength - 1]
             val columnReached = lastNode.second
-            if (columnReached >= halfWayColumn) {
+            if (arrivedAtMiddleColumn == ENDED) {
                 break
             }
         }
@@ -132,23 +148,33 @@ class MiddleEdgeLinearSpace(
      * where to go with the alignment path is based on the highest scoring node
      * to the left, or up, or self (diag) relative to the previous node.
      */
-    fun whereTo(previousRow: Array<Int>, newScoreRow: Array<Int>, curNode: Pair<Int, Int>): Char {
+    fun whereTo(
+        previousRow: Array<Int>,
+        newScoreRow: Array<Int>,
+        curNode: Pair<Int, Int>,
+        arrivedAtMiddleColumn: Travel
+    ): Char {
         val iRow = curNode.first
         val jCol = curNode.second
         val upVal = previousRow[jCol]
         val leftVal = newScoreRow[jCol - 1]
         val diagVal = newScoreRow[jCol]
         val maxVal = max(upVal, max(leftVal, diagVal))
+
         when {
+            arrivedAtMiddleColumn == TRAVERSING_DOWN && (maxVal == leftVal || maxVal == upVal) -> {
+                return 'B'  // signal to stop here (B = break)
+            }
+            maxVal == upVal -> {
+                return 'R'
+            }
             maxVal == leftVal -> {
                 return 'D'
             }
             maxVal == diagVal -> {
                 return 'M'
             }
-            maxVal == upVal -> {
-                return 'R'
-            }
+
         }
         println("ERRROR in the logic")
         return 'N'
@@ -161,7 +187,7 @@ class MiddleEdgeLinearSpace(
         previousRow: Array<Int>
     ): Array<Int> {
 
-        val scoreRow: Array<Int> = Array(numRowsOfColString + 1) { 0 }
+        val scoreRow: Array<Int> = Array(numRowsOfColString + 2) { 0 }
         scoreRow[0] = -sigmaGapPenalty * iRow
 
         for (j in 1..numRowsOfColString) {
