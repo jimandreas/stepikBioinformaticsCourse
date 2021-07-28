@@ -210,8 +210,8 @@ internal class S05C13c12FindMiddleEdgeTest {
         val sample = """
             Input:
             0 0 5
-            PLEASANTLY
             MEASNLY
+            PLEASANTLY
             Output:
             (4, 3) (5, 4)
         """.trimIndent()

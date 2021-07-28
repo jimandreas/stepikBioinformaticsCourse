@@ -299,40 +299,4 @@ internal class S05C10C03AlignmentGlobalTest {
         assertEquals(expectedtColResult, tColResult)
     }
 
-    /*
-    * the sample problem
-    * @link: http://rosalind.info/problems/ba5e/
-    * Note that the answer differs from that given in the problem statement.
-    */
-    @Test
-    @DisplayName("Test for future Space-Efficient Sequence Alignment sample")
-    fun globalSpaceEfficientBackTestSample() {
-
-        val sRow = "PLEASANTLY"
-        val tCol = "MEASNLY"
-
-        /**
-         * PLEASANTLY
-         * -MEAS-N-LY
-         */
-
-        val ga = AlignmentGlobal(0, 0, 5, useBLOSUM62 = true)
-
-        val result = ga.globalAlignment(sRow, tCol)
-        val scoreResult = result.first
-        val sRowResult = result.second
-        val tColResult = result.third
-
-        val resultR = ga.globalAlignment(sRow.reversed(), tCol.reversed())
-        val scoreResultR = resultR.first
-        val sRowResultR = resultR.second.reversed()
-        val tColResultR = resultR.third.reversed()
-
-        println(sRowResult)
-        println(sRowResultR)
-        println(tColResult)
-        println(tColResultR)
-
-    }
-
 }

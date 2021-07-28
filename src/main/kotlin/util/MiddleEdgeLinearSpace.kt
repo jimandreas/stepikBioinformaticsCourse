@@ -6,7 +6,6 @@
 package util
 
 import ResourceReader
-import java.lang.Math.min
 import kotlin.math.max
 
 /**
@@ -41,89 +40,77 @@ class MiddleEdgeLinearSpace(
     }
 
     fun findMiddleEdge(sRow: String, tCol: String): Pair<Pair<Int, Int>, Pair<Int, Int>> {
-
+        var halfWayRow = 1
+        var halfWayCol = 1
         if (sRow.length == 1) {
-            val halfWayCol = tCol.length / 2 + 1
-            return maxScore(sRow, tCol, 1, halfWayCol)
+            halfWayCol = tCol.length / 2 + 1
         } else if (tCol.length == 1) {
-            val halfWayRow = sRow.length / 2 + 1
-            return maxScore(sRow, tCol, halfWayRow, 1)
+            halfWayRow = sRow.length / 2 + 1
         } else {
-            val halfWayRow = kotlin.math.min(sRow.length / 2 + 0 + sRow.length % 2, sRow.length - 1)
-            val halfWayCol = kotlin.math.min(tCol.length / 2 + 1 + tCol.length % 2, tCol.length - 1)
-                return maxScore(sRow, tCol, halfWayRow, halfWayCol)
+            halfWayRow = kotlin.math.min(sRow.length / 2 /* + 0 + sRow.length % 2 */, sRow.length - 1)
+            halfWayCol = kotlin.math.min(tCol.length / 2 /* + 1 + tCol.length % 2 */, tCol.length - 1)
+                
         }
+        return calculateMiddleEdge(sRow, tCol, halfWayRow, halfWayCol)
 
     }
 
-    fun maxScore(
+    fun calculateMiddleEdge(
         sRow: String, tCol: String,
         numColsOfRowString: Int,
         numRowsOfColString: Int
     ): Pair<Pair<Int, Int>, Pair<Int, Int>> {
-        val scoreArray: Array<IntArray> = Array(numRowsOfColString + 1) { IntArray(numColsOfRowString + 1) }
 
-        for (i in 0..numRowsOfColString) {
-            scoreArray[i][0] = i * -sigmaGapPenalty
-        }
+        val middleNode = findMiddleNode(sRow, tCol, numColsOfRowString, numRowsOfColString)
+
+        return Pair(Pair(0,0), Pair(0,0))
+    }
+
+    fun findMiddleNode(
+        sRow: String, tCol: String,
+        numColsOfRowString: Int,
+        numRowsOfColString: Int
+    ): Pair<Int, Int> {
+        val scoreRow: Array<Int> = Array(numColsOfRowString + 1) { 0 }
 
         for (j in 0..numColsOfRowString) {
-            scoreArray[0][j] = j * -sigmaGapPenalty
+            scoreRow[j] = j * -sigmaGapPenalty
         }
 
-        var maxScore = -1000000
-        var fromPair = Pair(0, 0)
-        var toPair = Pair(0, 0)
-
-        for (iRow in 0..numRowsOfColString) {
-            for (jCol in 0..numColsOfRowString) {
-
-                // clip the side searches if the col string is of length 1
-                if (iRow > 0 && jCol == 0 && numColsOfRowString == 1 && numRowsOfColString > 1) {
-                    if (scoreArray[iRow][jCol] > maxScore) {
-                        maxScore = scoreArray[iRow][jCol]
-                        fromPair = Pair(iRow - 1, jCol)
-                        toPair = Pair(iRow, jCol)
-                    }
-                } else if (iRow == 0 && jCol > 0 && numColsOfRowString > 1 && numRowsOfColString == 1) {
-                    if (scoreArray[iRow][jCol] > maxScore && jCol == numColsOfRowString) {
-                        maxScore = scoreArray[iRow][jCol]
-                        fromPair = Pair(iRow, jCol - 1)
-                        toPair = Pair(iRow, jCol)
-                    }
-                } else if (iRow > 0 && jCol > 0) {
-
-                    var diag = score(tCol[iRow - 1], sRow[jCol - 1])
-                    var up = -sigmaGapPenalty
-                    var left = -sigmaGapPenalty
-
-                    diag += scoreArray[iRow - 1][jCol - 1]
-                    up += scoreArray[iRow - 1][jCol]
-                    left += scoreArray[iRow][jCol - 1]
-
-                    val maxCellVal = max(diag, max(up, left))
-                    scoreArray[iRow][jCol] = maxCellVal
-
-                    if (maxCellVal > maxScore && jCol == numColsOfRowString) {
-                        maxScore = maxCellVal
-                        toPair = Pair(iRow, jCol)
-                        when {
-                            maxCellVal == diag -> {
-                                fromPair = Pair(iRow - 1, jCol - 1)
-                            }
-                            maxCellVal == left -> {
-                                fromPair = Pair(iRow, jCol - 1)
-                            }
-                            maxCellVal == up -> {
-                                fromPair = Pair(iRow - 1, jCol)
-                            }
-                        }
-                    }
-                }
-
-            }
+        // iterate through the rows scoring as we go. (Linear Space concept)
+        var previousRow = scoreRow
+        for (iRow in 1..numRowsOfColString) {
+            val newScoreRow = scoresForThisRow(sRow, tCol,iRow, numColsOfRowString, previousRow)
+            previousRow = newScoreRow
         }
-        return Pair(fromPair, toPair)
+
+        val maxColVal = previousRow.indices.maxByOrNull { previousRow[it] } ?: -1 // https://stackoverflow.com/a/20774842
+        return Pair(numRowsOfColString, maxColVal)
+    }
+
+
+    fun scoresForThisRow(
+        sRow: String, tCol: String,
+        iRow: Int,
+        numRowsOfColString: Int,
+        previousRow: Array<Int>) : Array<Int> {
+
+        val scoreRow: Array<Int> = Array(numRowsOfColString + 1) { 0 }
+        scoreRow[0] = -sigmaGapPenalty * iRow
+
+        for (j in 1..numRowsOfColString) {
+            var diag = score(tCol[iRow - 1], sRow[j - 1])
+            var up = -sigmaGapPenalty
+            var left = -sigmaGapPenalty
+
+            diag += previousRow[j - 1]
+            up += previousRow[j]
+            left += scoreRow[j - 1]
+
+            val maxCellVal = max(diag, max(up, left))
+            scoreRow[j] = maxCellVal
+        }
+        return scoreRow
     }
 
 
