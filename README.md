@@ -45,6 +45,17 @@ the score is 100% the same in both directions.  However, the alignment
 strings in both column and row solutions were equal less than 
 50% of the time.
 
+As an experiment - I changed the priority of the backtrack assignment direction
+when the reverse solution did not match the forward solution.   The 
+priority change moved the Match/Mismatch assignment from first to last
+place in the decision tree.   On a condition that the first
+match failed, this resulted in about an 80% recovery of the failed
+solutions.  Here are the results from 10K trials of random amino acid strings:
+
+    score 10000 row 4834 col 4573 equivalence in 10000 tries
+    after priority change the following *matched*:  
+    row 4624 of attempts 5166  col 4853 of attempts 5427
+
 ## Building and running
 
 Note: the problems in this repo were solved using the Kotlin language.

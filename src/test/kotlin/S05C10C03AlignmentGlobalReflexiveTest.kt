@@ -101,8 +101,12 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
         var rowEquivalence = 0
         var colEquivalence = 0
         var scoreEquivalence = 0
+        var rowEquivalenceS = 0
+        var colEquivalenceS = 0
+        var rowPriorityAttempts = 0
+        var colPriorityAttempts = 0
 
-        val tries = 100000
+        val tries = 100
 
         for (i in 0 until tries) {
             val sRow = getRandomAminoString()
@@ -110,15 +114,27 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
 
             val ga = AlignmentGlobal(0, 0, 5, useBLOSUM62 = true)
 
+            //ga.downPriority = true
             val result = ga.globalAlignment(sRow, tCol)
             val scoreResult = result.first
             val sRowResult = result.second
             val tColResult = result.third
+            //ga.downPriority = false
 
+            //ga.downPriority = true
             val resultR = ga.globalAlignment(sRow.reversed(), tCol.reversed())
             val scoreResultR = resultR.first
             val sRowResultR = resultR.second.reversed()
             val tColResultR = resultR.third.reversed()
+            //ga.downPriority = false
+
+            /*
+             * Conditional probability:
+             *    if the reverse string match is not the same,
+             *       THEN try switching the scoring priorities (left swapped with up)
+             *
+             * Yes a global variable is a hack.
+             */
 
 //            println(scoreResult)
 //            println(scoreResultR)
@@ -132,13 +148,46 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
             }
             if (sRowResult == sRowResultR) {
                 rowEquivalence++
+            } else {
+                val state = ga.downPriority
+                ga.downPriority = true
+                val resultRP = ga.globalAlignment(sRow.reversed(), tCol.reversed())
+                val sRowResultRP = resultRP.second.reversed()
+                val tColResultRP = resultRP.third.reversed()
+
+                if (sRowResult == sRowResultRP) {
+                    rowEquivalenceS++
+
+//                    println(sRowResult)
+//                    println(sRowResultR)
+//                    println("$sRowResultRP ROW MATCH PRIORITY HACKED")
+                }
+                rowPriorityAttempts++
+                ga.downPriority = state
             }
             if (tColResult == tColResultR) {
                 colEquivalence++
+            } else {
+                val stateC = ga.downPriority
+                ga.downPriority = true
+                val resultRPC = ga.globalAlignment(sRow.reversed(), tCol.reversed())
+                val sRowResultRPC = resultRPC.second.reversed()
+                val tColResultRPC = resultRPC.third.reversed()
+                if (tColResult == tColResultRPC) {
+                    colEquivalenceS++
+
+//                    println(tColResult)
+//                    println(tColResultR)
+//                    println("$tColResultRPC COLUMN MATCH PRIORITY HACKED")
+                }
+                colPriorityAttempts++
+                ga.downPriority = stateC
             }
         }
 
         println("score $scoreEquivalence row $rowEquivalence col $colEquivalence equivalence in $tries tries")
+        println("after priority change the following matched:  ")
+        println("row $rowEquivalenceS of attempts $rowPriorityAttempts  col $colEquivalenceS of attempts $colPriorityAttempts")
     }
 
     /**
@@ -153,7 +202,7 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
         val str = StringBuilder()
         val len = (1..99).random()
         for (l in 0 until len) {
-            str.append(aminos[(0..aminos.size-1).random()])
+            str.append(aminos[(0..aminos.size - 1).random()])
         }
         return str.toString()
     }

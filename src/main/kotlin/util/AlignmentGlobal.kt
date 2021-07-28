@@ -49,6 +49,7 @@ class AlignmentGlobal(
         readBLOSUM62()
     }
 
+    var downPriority: Boolean = false
     private val aminos =
         listOf('A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y')
 
@@ -133,15 +134,38 @@ class AlignmentGlobal(
                 val maxCellVal = max(diag, max(up, left))
                 align2D[iRow][jCol] = maxCellVal
 
-                when {
-                    maxCellVal == diag -> {
-                        backtrack2D[iRow][jCol] = Dir.MATCHMISMATCH
+                // this is part of a test for reflexive (forward strings = reverse strings)
+                //   "relative to" priority
+                if (downPriority) {
+                    // hacked priority
+                    when {
+
+                        maxCellVal == up -> {
+                            backtrack2D[iRow][jCol] = Dir.DELETION_DOWN
+                        }
+
+                        maxCellVal == left -> {
+                            backtrack2D[iRow][jCol] = Dir.INSERTION_RIGHT
+                        }
+
+                        maxCellVal == diag -> {
+                            backtrack2D[iRow][jCol] = Dir.MATCHMISMATCH
+                        }
+
                     }
-                    maxCellVal == left -> {
-                        backtrack2D[iRow][jCol] = Dir.INSERTION_RIGHT
-                    }
-                    maxCellVal == up -> {
-                        backtrack2D[iRow][jCol] = Dir.DELETION_DOWN
+                }
+
+                else {
+                    when {
+                        maxCellVal == diag -> {
+                            backtrack2D[iRow][jCol] = Dir.MATCHMISMATCH
+                        }
+                        maxCellVal == left -> {
+                            backtrack2D[iRow][jCol] = Dir.INSERTION_RIGHT
+                        }
+                        maxCellVal == up -> {
+                            backtrack2D[iRow][jCol] = Dir.DELETION_DOWN
+                        }
                     }
                 }
             }
