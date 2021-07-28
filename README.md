@@ -67,6 +67,8 @@ Gradle can be used to build it
 All exercises contain a corresponding "Jupiter" (junit) test module located 
 in the `src/test/kotlin` folder.
 
+test.
+
 [Linear Space Alignment]: http://rosalind.info/problems/ba5l/
 [Global Alignment]: http://rosalind.info/problems/ba5e/
 [Rosalind]: http://rosalind.info/faq/
