@@ -93,7 +93,7 @@ class MiddleEdgeLinearSpace(
             firstRowStartBump = -1
         }
 
-        if (whereFromDir == 'R') {
+        if (whereFromDir == 'L') {
             halfwayColumnEndBump = 1
         }
 
@@ -178,10 +178,13 @@ class MiddleEdgeLinearSpace(
         columnScores: List<Int>,
         columnScoresNext: List<Int>
     ): Char {
-
-        val upVal = columnScoresNext[iRow - 1] - sigmaGapPenalty
-        val leftVal = columnScores[iRow] - sigmaGapPenalty
-        val diagVal = columnScores[iRow - 1] + score(tCol[iRow - 1], sRow[jCol - 1])
+        var iRowAdjusted = iRow
+        if (iRow == 0) {
+            return 'L'
+        }
+        val upVal = columnScoresNext[iRowAdjusted - 1] - sigmaGapPenalty
+        val leftVal = columnScores[iRowAdjusted] - sigmaGapPenalty
+        val diagVal = columnScores[iRowAdjusted - 1] + score(tCol[iRowAdjusted - 1], sRow[jCol - 1])
         val maxVal = max(upVal, max(leftVal, diagVal))
 
         when {

@@ -248,7 +248,7 @@ internal class S05C13c12FindMiddleEdgeTest {
             T
             AATCCC
             Output:
-            (0, 0) (1, 0)
+            (2, 0) (3, 1)
             
             original was:
             (0, 0) (1, 0)	OR	(1, 0) (2, 0)	OR	(2, 0) (3, 1)
