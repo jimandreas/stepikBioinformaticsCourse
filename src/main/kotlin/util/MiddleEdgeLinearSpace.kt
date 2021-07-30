@@ -1,13 +1,12 @@
 @file:Suppress(
     "UnnecessaryVariable", "unused", "MemberVisibilityCanBePrivate", "LiftReturnOrAssignment",
     "IntroduceWhenSubject", "VARIABLE_WITH_REDUNDANT_INITIALIZER", "UNUSED_PARAMETER", "UNUSED_VARIABLE",
-    "UNUSED_CHANGED_VALUE"
+    "UNUSED_CHANGED_VALUE", "UNUSED_VALUE", "ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE"
 )
 
 package util
 
 import ResourceReader
-import util.MiddleEdgeLinearSpace.Travel.*
 import kotlin.math.max
 
 /**
@@ -36,10 +35,14 @@ class MiddleEdgeLinearSpace(
 ) {
 
     lateinit var blosum62: Array<IntArray>  // scoring array
-    var alignmentPath: MutableList<Pair<Int, Int>> = mutableListOf()
+
+    lateinit var halfwayColumnScores: Array<Int>
+    lateinit var halfwayColumnScoresNext: Array<Int>
 
     init {
-        readBLOSUM62()
+        if (useBLOSUM62) {
+            readBLOSUM62()
+        }
     }
 
     /**
@@ -49,7 +52,7 @@ class MiddleEdgeLinearSpace(
      */
     fun findMiddleEdge(sRow: String, tCol: String): Pair<Pair<Int, Int>, Pair<Int, Int>> {
 
-        val halfWayColumn = kotlin.math.min(sRow.length / 2 /* + 0 + sRow.length % 2 */, sRow.length - 1)
+        val halfWayColumn = sRow.length / 2
 
         return calculateMiddleEdge(sRow, tCol, halfWayColumn)
 
@@ -57,152 +60,143 @@ class MiddleEdgeLinearSpace(
 
     fun calculateMiddleEdge(
         sRow: String, tCol: String,
-        halfWayRow: Int
+        halfwayColumn: Int
     ): Pair<Pair<Int, Int>, Pair<Int, Int>> {
 
-        val middleNode = findMiddleNode(sRow, tCol, halfWayRow)
-        val firstHalfPath = alignmentPath.toList()
+        val middleRow = findMiddleRow(sRow, tCol, halfwayColumn)
+        val halfwayColumnScoresSaved = halfwayColumnScores.toList()
+        val halfwayColumnScoresNextSaved = halfwayColumnScoresNext.toList()
 
-        alignmentPath = mutableListOf() // reset to zero
-        val reverseMiddleNode = findMiddleNode(sRow.reversed(), tCol.reversed(), sRow.length - halfWayRow)
-        val secondHalfPath = alignmentPath.reversed()
+        var notUsed = findMiddleRowReversed(sRow, tCol, halfwayColumn)
+        val scoringColumnNext = halfwayColumnScores.reversed()
 
-        return Pair(middleNode, reverseMiddleNode)
+        val comboNextScores =
+            (scoringColumnNext.indices).map { scoringColumnNext[it] + halfwayColumnScoresNextSaved[it] }
+        val minRow = comboNextScores.maxByOrNull { it }.let { comboNextScores.indexOf(it) }
+
+        val whereFromDir =
+            whereFrom(sRow, tCol, minRow, halfwayColumn + 1, halfwayColumnScoresSaved, halfwayColumnScoresNextSaved)
+        println(whereFromDir)
+
+        // adjust the coordinates given the direction of the edge
+        val firstRowCoord = minRow
+        var halfwayColumnEndBump = 0
+        var firstRowStartBump = 0
+
+        if (whereFromDir == 'M') {
+            firstRowStartBump = -1
+            halfwayColumnEndBump = 1
+        }
+
+        if (whereFromDir == 'U') {
+            halfwayColumnEndBump = 0
+            firstRowStartBump = -1
+        }
+
+        if (whereFromDir == 'R') {
+            halfwayColumnEndBump = 1
+        }
+
+        return Pair(
+            Pair(firstRowCoord + firstRowStartBump, halfwayColumn),
+            Pair(firstRowCoord, halfwayColumn + halfwayColumnEndBump)
+        )
+
     }
+
+    fun findMiddleRowReversed(
+        sRow: String, tCol: String,
+        halfWayColumn: Int
+    ): Int {
+        val pR = findMiddleRow(sRow.reversed(), tCol.reversed(), sRow.length - halfWayColumn - 1)
+        return pR
+    }
+
 
     /**
      * Strategy:
-     * 1) Initialize to node 0,0
-     * Loop:
-     * score the next row down
-     * check which is the next highest scoring node (right down diag)
-     * if the path goes right, then iterate until it does not or reaches the middle
-     * if the path goes down or diag, then loop
+     * score columns until the halfway column.   Then return the max scoring row.
      */
-    enum class Travel { CRUISING, TRAVERSING_DOWN, ENDED }
 
-    fun findMiddleNode(
+    fun findMiddleRow(
         sRow: String, tCol: String,
         halfWayColumn: Int
-    ): Pair<Int, Int> {
+    ): Int {
 
-        var curNode = Pair(1, 1)
-        alignmentPath.add(Pair(0, 0))
-        var pathLength = 1
+        val columnLength = tCol.length
+        val scoreColumn: Array<Int> = Array(columnLength + 1) { 0 }
 
-        val scoreRow: Array<Int> = Array(halfWayColumn + 2) { 0 }
-        val tColLen = tCol.length
-
-        for (j in 0..halfWayColumn) {
-            scoreRow[j] = j * -sigmaGapPenalty
+        for (i in 0..columnLength) {
+            scoreColumn[i] = i * -sigmaGapPenalty
         }
+        var previousColumn = scoreColumn
+        halfwayColumnScores = previousColumn
 
-        var previousRow = scoreRow
-        var arrivedAtMiddleColumn = CRUISING
-        for (iRow in 1..tColLen) {
-            if (curNode.second > halfWayColumn) {
-                arrivedAtMiddleColumn = TRAVERSING_DOWN
-            }
-            val newScoreRow = scoresForThisRow(sRow, tCol, iRow, halfWayColumn + 1, previousRow)
-            for (j in curNode.second..halfWayColumn + 1) {
-                when (whereTo(previousRow, newScoreRow, curNode, arrivedAtMiddleColumn)) {
-                    'D' -> {  // down
-                        val downNode = Pair(curNode.first, curNode.second - 1)
-                        pathLength++
-                        alignmentPath.add(downNode)
-                        curNode = Pair(downNode.first + 1, downNode.second + 1)
-                        break
-                    }
-                    'M' -> {  // match/mismatch (diag to the right)
-                        val diagNode = Pair(curNode.first, curNode.second)
-                        pathLength++
-                        alignmentPath.add(diagNode)
-                        curNode = Pair(diagNode.first + 1, diagNode.second + 1)
-                        break
-                    }
-                    'R' -> {  // right
-                        val rightNode = Pair(curNode.first - 1, curNode.second)
-                        pathLength++
-                        alignmentPath.add(rightNode)
-                        curNode = Pair(rightNode.first + 1, rightNode.second + 1)
-                        continue
-                    }
-                    'B' -> { // arrived at middle column and whereTo is NOT down
-                        arrivedAtMiddleColumn = ENDED
-                        break
-                    }
-                }
-            }
-            previousRow = newScoreRow
-            val lastNode = alignmentPath[pathLength - 1]
-            val columnReached = lastNode.second
-            if (arrivedAtMiddleColumn == ENDED) {
-                break
-            }
+        for (j in 1..halfWayColumn + 1) {
+            val scoredColumn = scoresForThisColumn(sRow, tCol, columnIndex = j, previousColumn)
+            halfwayColumnScoresNext = scoredColumn
+            halfwayColumnScores = previousColumn
+            previousColumn = scoredColumn
         }
-        return alignmentPath[pathLength - 1]
+        return previousColumn.indices.maxByOrNull { previousColumn[it] } ?: 0
     }
 
+    fun scoresForThisColumn(
+        sRow: String, tCol: String,
+        columnIndex: Int,
+        previousColumn: Array<Int>
+    ): Array<Int> {
+
+        val columnLength = tCol.length
+        val scoreColumn: Array<Int> = Array(columnLength + 1) { 0 }
+        scoreColumn[0] = columnIndex * -sigmaGapPenalty
+
+        for (i in 1..tCol.length) {
+            var diag = score(tCol[i - 1], sRow[columnIndex - 1])
+            var up = -sigmaGapPenalty
+            var left = -sigmaGapPenalty
+
+            diag += previousColumn[i - 1]
+            up += scoreColumn[i - 1]
+            left += previousColumn[i]
+
+            val maxCellVal = max(diag, max(up, left))
+            scoreColumn[i] = maxCellVal
+        }
+        return scoreColumn
+    }
+
+    enum class Dir { NOTSET, MATCHMISMATCH, INSERTION_RIGHT, DELETION_DOWN }
+
     /*
-     * curNode is the diag down from the previous node.
-     * where to go with the alignment path is based on the highest scoring node
-     * to the left, or up, or self (diag) relative to the previous node.
+    this calculates the direction of the edge back from the connecting node in the middle
      */
-    fun whereTo(
-        previousRow: Array<Int>,
-        newScoreRow: Array<Int>,
-        curNode: Pair<Int, Int>,
-        arrivedAtMiddleColumn: Travel
+    fun whereFrom(
+        sRow: String, tCol: String,
+        iRow: Int,
+        jCol: Int,
+        columnScores: List<Int>,
+        columnScoresNext: List<Int>
     ): Char {
-        val iRow = curNode.first
-        val jCol = curNode.second
-        val upVal = previousRow[jCol]
-        val leftVal = newScoreRow[jCol - 1]
-        val diagVal = newScoreRow[jCol]
+
+        val upVal = columnScoresNext[iRow - 1] - sigmaGapPenalty
+        val leftVal = columnScores[iRow] - sigmaGapPenalty
+        val diagVal = columnScores[iRow - 1] + score(tCol[iRow - 1], sRow[jCol - 1])
         val maxVal = max(upVal, max(leftVal, diagVal))
 
         when {
-            arrivedAtMiddleColumn == TRAVERSING_DOWN && (maxVal == leftVal || maxVal == upVal) -> {
-                return 'B'  // signal to stop here (B = break)
-            }
             maxVal == upVal -> {
-                return 'R'
+                return 'U'
             }
             maxVal == leftVal -> {
-                return 'D'
+                return 'L'
             }
             maxVal == diagVal -> {
                 return 'M'
             }
-
         }
-        println("ERRROR in the logic")
+        println("whereFrom: ****ERROR**** in the logic")
         return 'N'
-    }
-
-    fun scoresForThisRow(
-        sRow: String, tCol: String,
-        iRow: Int,
-        numRowsOfColString: Int,
-        previousRow: Array<Int>
-    ): Array<Int> {
-
-        val scoreRow: Array<Int> = Array(numRowsOfColString + 2) { 0 }
-        scoreRow[0] = -sigmaGapPenalty * iRow
-
-        for (j in 1..numRowsOfColString) {
-            var diag = score(tCol[iRow - 1], sRow[j - 1])
-            var up = -sigmaGapPenalty
-            var left = -sigmaGapPenalty
-
-            diag += previousRow[j - 1]
-            up += previousRow[j]
-            left += scoreRow[j - 1]
-
-            val maxCellVal = max(diag, max(up, left))
-            scoreRow[j] = maxCellVal
-        }
-        return scoreRow
     }
 
 
@@ -233,6 +227,87 @@ class MiddleEdgeLinearSpace(
             }
         }
         return result
+    }
+
+
+    fun invertSecondHalfPath(
+        sRow: String,
+        tCol: String,
+        alignmentPath: MutableList<Pair<Int, Int>>
+    ): MutableList<Pair<Int, Int>> {
+
+        val outputPath = alignmentPath.reversed().map {
+            Pair(tCol.length - it.first, sRow.length - it.second)
+        }
+        return outputPath.toMutableList()
+    }
+
+    fun fixConnectedNode(
+        sRow: String,
+        tCol: String,
+        middleNode: Pair<Int, Int>,
+        connectedNode: Pair<Int, Int>
+    ): Pair<Int, Int> {
+        var fixedNode = connectedNode
+        while (!isNeighbor(middleNode, fixedNode)) {
+            fixedNode = Pair(fixedNode.first - 1, fixedNode.second)
+            if (fixedNode.first < 0) {
+                println("ERROR underflow")
+                break
+            }
+        }
+        return fixedNode
+    }
+
+    fun isNeighbor(
+        upperNode: Pair<Int, Int>,
+        lowerNode: Pair<Int, Int>
+    ): Boolean {
+        val (r1, c1) = upperNode
+        val (r2, c2) = lowerNode
+        when {
+            r1 + 1 == r2 && c1 + 1 == c2 -> return true
+            r1 + 1 == r2 && c1 == c2 -> return true
+            r1 == r2 && c1 == c2 -> return true
+        }
+        return false
+    }
+
+    /*
+     * curNode is the diag down from the previous node.
+     * where to go with the alignment path is based on the highest scoring node
+     * to the left, or up, or self (diag) relative to the previous node.
+     */
+    fun whereTo(
+        previousRow: Array<Int>,
+        newScoreRow: Array<Int>,
+        curNode: Pair<Int, Int>,
+        halfWayColumn: Int
+    ): Char {
+        val iRow = curNode.first
+        val jCol = curNode.second
+        val upVal = previousRow[jCol]
+        val leftVal = newScoreRow[jCol - 1]
+        val diagVal = newScoreRow[jCol]
+        val maxVal = max(upVal, max(leftVal, diagVal))
+
+        when {
+            curNode.second == halfWayColumn + 1 && (maxVal == diagVal || maxVal == upVal) -> {
+                return 'B'  // signal to stop here (B = break)
+            }
+            maxVal == upVal -> {
+                return 'R'
+            }
+            maxVal == leftVal -> {
+                return 'D'
+            }
+            maxVal == diagVal -> {
+                return 'M'
+            }
+
+        }
+        println("ERRROR in the logic")
+        return 'N'
     }
 
 

@@ -248,6 +248,27 @@ internal class S05C10C03AlignmentGlobalTest {
         runTest(sample)
     }
 
+    /**
+     * added a test to check basic results to compare to Middle Edge test
+     */
+    @Test
+    @DisplayName("Basic string test")
+    fun findMiddleEdgeBasicFunction03() {
+        val sample = """
+            Input:
+            1 1 5
+            TT
+            TTTTT
+            Output:
+            -13
+            ---TT
+            TTTTT
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+
     fun runTest(sample: String) {
         val reader = sample.reader()
         val lines = reader.readLines()

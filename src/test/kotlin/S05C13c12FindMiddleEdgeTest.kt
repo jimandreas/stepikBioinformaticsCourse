@@ -36,6 +36,91 @@ internal class S05C13c12FindMiddleEdgeTest {
     }
 
     /**
+     * Basic Function:
+     * Should find the center of a simple test
+     */
+    @Test
+    @DisplayName("middle edge basic function 01")
+    fun findMiddleEdgeBasicFunction01() {
+
+        val sample = """
+            Input:
+            1 1 1
+            TTTT
+            TTTT
+            Output:
+            (2, 2) (3, 3)
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+    /**
+     * Basic Function:
+     * Should find the center of a simple test
+     */
+    @Test
+    @DisplayName("middle edge basic function 02")
+    fun findMiddleEdgeBasicFunction02() {
+
+        val sample = """
+            Input:
+            1 1 1
+            TTTTT
+            TTTTT
+            Output:
+            (2, 2) (3, 3)
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+    /**
+     * Basic Function:
+     * Should find the center of a simple test
+     *
+    Input:
+    1 1 5
+    TT
+    TTTTT
+    Output:
+    -13
+    ---TT
+    TTTTT
+     */
+    @Test
+    @DisplayName("middle edge basic function 03")
+    fun findMiddleEdgeBasicFunction03() {
+
+        val sample = """
+            Input:
+            1 1 5
+            TT
+            TTTTT
+            Output:
+            (1, 1) (2, 2)
+        """.trimIndent()
+
+        runTest(sample)
+    }
+
+    @Test
+    @DisplayName("middle edge basic function 04")
+    fun findMiddleEdgeBasicFunction04() {
+
+        val sample = """
+            Input:
+            1 1 5
+            GGAT
+            AT
+            Output:
+            (0, 2) (1, 3)
+        """.trimIndent()
+
+        runTest(sample, useBLOSUM62 = true)
+    }
+
+    /**
      * TEST DATASET 1:
      * This test makes sure that your code can identify horizontal middle edges.
      */
@@ -171,6 +256,24 @@ internal class S05C13c12FindMiddleEdgeTest {
         """.trimIndent()
 
         runTest(sample)
+    }
+@Test
+    fun findMiddleEdgeTest06clone() {
+
+        val sample = """
+            Input:
+            0 0 5
+            T
+            AATCCC
+            Output:
+            (0, 0) (1, 0)
+            
+            original was:
+            (0, 0) (1, 0)	OR	(1, 0) (2, 0)	OR	(2, 0) (3, 1)
+
+        """.trimIndent()
+
+        runTest(sample, useBLOSUM62 = true)
     }
 
 
