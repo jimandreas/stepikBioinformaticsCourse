@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.AlignmentLinearSpaceMiddleEdge
-import util.MiddleEdgeLinearSpace
+import util.AlignmentLinearSpace
 
 /**
  * Code Challenge: Solve the Middle Edge in Linear Space Problem (for protein strings).
@@ -25,7 +24,7 @@ Output: A middle edge in the alignment graph in the form "(i, j) (k, l)", where 
  * youtube: @link: https://www.youtube.com/watch?v=3TfDm8GpWRU  Space-Efficient Sequence Alignment
  */
 
-internal class S05C13c12FindMiddleEdgeTest {
+internal class S05C13c14AlignmentLinearSpace {
 
     @BeforeEach
     fun setUp() {
@@ -35,109 +34,25 @@ internal class S05C13c12FindMiddleEdgeTest {
     fun tearDown() {
     }
 
-    /**
-     * Basic Function:
-     * Should find the center of a simple test
-     */
-    @Test
-    @DisplayName("middle edge basic function 01")
-    fun findMiddleEdgeBasicFunction01() {
-
-        val sample = """
-            Input:
-            1 1 1
-            TTTT
-            TTTT
-            Output:
-            (2, 2) (3, 3)
-        """.trimIndent()
-
-        runTest(sample)
-    }
-
-    /**
-     * Basic Function:
-     * Should find the center of a simple test
-     */
-    @Test
-    @DisplayName("middle edge basic function 02")
-    fun findMiddleEdgeBasicFunction02() {
-
-        val sample = """
-            Input:
-            1 1 1
-            TTTTT
-            TTTTT
-            Output:
-            (2, 2) (3, 3)
-        """.trimIndent()
-
-        runTest(sample)
-    }
-
-    /**
-     * Basic Function:
-     * Should find the center of a simple test
-     *
-    Input:
-    1 1 5
-    TT
-    TTTTT
-    Output:
-    -13
-    ---TT
-    TTTTT
-     */
-    @Test
-    @DisplayName("middle edge basic function 03")
-    fun findMiddleEdgeBasicFunction03() {
-
-        val sample = """
-            Input:
-            1 1 5
-            TT
-            TTTTT
-            Output:
-            (1, 1) (2, 2)
-        """.trimIndent()
-
-        runTest(sample)
-    }
-
-    @Test
-    @DisplayName("middle edge basic function 04")
-    fun findMiddleEdgeBasicFunction04() {
-
-        val sample = """
-            Input:
-            1 1 5
-            GGAT
-            AT
-            Output:
-            (0, 2) (1, 3)
-        """.trimIndent()
-
-        runTest(sample, useBLOSUM62 = true)
-    }
 
     /**
      * TEST DATASET 1:
-     * This test makes sure that your code can identify horizontal middle edges.
+     * This test makes sure that your code can handle runs of indels in the reconstructed alignment.
      */
     @Test
-    @DisplayName("middle edge test 01")
+    @DisplayName("linear space alignment test 01")
     fun findMiddleEdgeTest01() {
 
         val sample = """
             Input:
             1 5 1
-            TTTT
+            TT
             CC
             Output:
-            (0, 2) (0, 3)
-            
-            was original:
-            (0, 2) (0, 3)	OR	(1, 2) (1, 3)
+            -4
+            --TT
+            CC--
+
         """.trimIndent()
 
         runTest(sample)
@@ -145,19 +60,21 @@ internal class S05C13c12FindMiddleEdgeTest {
 
     /**
      * TEST DATASET 2:
-     * This test makes sure that your code can handle finding the middle edge when the first string has an odd length.
+     * This test makes sure that your code correctly mismatches characters when the ideal alignment requires it.
      */
     @Test
-    @DisplayName("middle edge test 02")
+    @DisplayName("linear space alignment test 02")
     fun findMiddleEdgeTest02() {
 
         val sample = """
             Input:
-            1 1 2
-            GAT
-            AT
+            1 1 5
+            TT
+            CC
             Output:
-            (0, 1) (1, 2)
+            -2
+            TT
+            CC
         """.trimIndent()
 
         runTest(sample)
@@ -165,22 +82,22 @@ internal class S05C13c12FindMiddleEdgeTest {
 
     /**
      * TEST DATASET 3:
-     * This test makes sure that your code can identify vertical middle edges.
+     * This test makes sure that your code correctly aligns the
+     * upper and lower sub-matrices after recursive calls.
      */
     @Test
-    @DisplayName("middle edge test 03")
+    @DisplayName("linear space alignment test 03")
     fun findMiddleEdgeTest03() {
 
         val sample = """
             Input:
-            1 1 1
-            TTTT
-            TTCTT
+            1 5 1
+            GAACGATTG
+            GGG
             Output:
-            (3, 2) (4, 3)
-            
-            was original:
-            (2, 2) (3, 2)	OR	(3, 2) (4, 3) 
+            -3
+            GAACGATTG
+            G---G---G
         """.trimIndent()
 
         runTest(sample)
@@ -188,21 +105,23 @@ internal class S05C13c12FindMiddleEdgeTest {
 
     /**
      * TEST DATASET 4:
-     * This test makes sure that your code correctly identifies the middle edge
-     * when the maximum value in Length is the last value.
+     * This test makes sure that your code correctly handles
+     * inputs in which the match score is not equal to one.
      */
 
     @Test
-    @DisplayName("middle edge test 04")
+    @DisplayName("linear space alignment test 04")
     fun findMiddleEdgeTest04() {
 
         val sample = """
             Input:
-            1 5 1
-            GAACCC
-            G
+            2 3 1
+            GCG
+            CT
             Output:
-            (1, 3) (1, 4)
+            -1
+            GCG-
+            -C-T
         """.trimIndent()
 
         runTest(sample)
@@ -210,23 +129,23 @@ internal class S05C13c12FindMiddleEdgeTest {
 
     /**
      * TEST DATASET 5:
-     * This test makes sure that your code correctly handle inputs in which
-     * the match score is not equal to one.
+     * This test makes sure that your code correctly handles
+     * inputs in which string t is one character long.
      */
 
     @Test
-    @DisplayName("middle edge test 05")
+    @DisplayName("linear space alignment test 05")
     fun findMiddleEdgeTest05() {
 
         val sample = """
             Input:
-            2 3 1
-            ACAGT
-            CAT
+            1 2 3
+            ACAGCTA
+            G
             Output:
-            (1, 2) (2, 3)
-
-
+            -17
+            ACAGCTA
+            ---G---
         """.trimIndent()
 
         runTest(sample)
@@ -234,25 +153,23 @@ internal class S05C13c12FindMiddleEdgeTest {
 
     /**
      * TEST DATASET 6:
-     * This test makes sure that your code correctly handle inputs
-     * where the length of string s is equal to one.
+     * This test makes sure that your code correctly
+     * handles inputs in which string s is one character long.
      */
 
     @Test
-    @DisplayName("middle edge test 06")
+    @DisplayName("linear space alignment test 06")
     fun findMiddleEdgeTest06() {
 
         val sample = """
             Input:
-            2 5 3
-            T
-            AATCCC
+            3 4 1
+            A
+            CGGAGTGCC
             Output:
-            (2, 0) (3, 1)
-            
-            original was:
-            (0, 0) (1, 0)	OR	(1, 0) (2, 0)	OR	(2, 0) (3, 1)
-
+            -5
+            ---A-----
+            CGGAGTGCC
         """.trimIndent()
 
         runTest(sample)
@@ -271,8 +188,9 @@ internal class S05C13c12FindMiddleEdgeTest {
             GAGA
             GAT
             Output:
-            (2, 2) (2, 3)
-
+            -1
+            GAGA
+            GA-T
         """.trimIndent()
 
         runTest(sample)
@@ -280,10 +198,7 @@ internal class S05C13c12FindMiddleEdgeTest {
 
     /**
     SAMPLE GIVEN DATASET PROBLEM
-     Note:
-     global alignment gives this solution
-     * PLEASANTLY
-     * -MEAS-N-LY
+
      */
     @Test
     @DisplayName("sample dataset extra")
@@ -292,10 +207,12 @@ internal class S05C13c12FindMiddleEdgeTest {
         val sample = """
             Input:
             0 0 5
-            MEASNLY
             PLEASANTLY
+            MEANLY
             Output:
-            (4, 3) (5, 4)
+            8
+            PLEASANTLY
+            -MEA--N-LY
         """.trimIndent()
 
         runTest(sample, true)
@@ -305,7 +222,7 @@ internal class S05C13c12FindMiddleEdgeTest {
     Extra Dataset
 
      */
-    @Test
+/*    @Test
     @DisplayName("extra dataset extra")
     fun findMiddleEdgeExtraDatasetTest() {
 
@@ -319,7 +236,7 @@ internal class S05C13c12FindMiddleEdgeTest {
         """.trimIndent()
 
         runTest(sample, true)
-    }
+    }*/
 
     fun runTest(sample: String, useBLOSUM62: Boolean = false) {
         val reader = sample.reader()
@@ -329,20 +246,29 @@ internal class S05C13c12FindMiddleEdgeTest {
         val mismatch = parms[1]
         val gap = parms[2]
 
-        val alsme = MiddleEdgeLinearSpace(match, mismatch, gap, useBLOSUM62)
+        val linear = AlignmentLinearSpace(match, mismatch, gap, useBLOSUM62)
 
         val sRow = lines[2]
         val tCol = lines[3]
-        val result = alsme.findMiddleEdge(sRow, tCol)
+        val result = linear.alignmentLinearSpace(sRow, tCol)
 
-        val pairsExpected = lines[5]
+        val sRowAlignedExpected = lines[6]
+        val tColAlignedExpected = lines[7]
+        val sRowResult = result.second
+        val tColResult = result.third
 
-        val pair1 = result.first.toList().joinToString(", ")
-        val pair2 = result.second.toList().joinToString(", ")
-        val resultString = "($pair1) ($pair2)"
-        println(resultString)
+        println("RowE: $sRowAlignedExpected")
+        println("RowR: $sRowResult")
+        println("ColE: $tColAlignedExpected")
+        println("ColR: $tColResult")
 
-        assertEquals(pairsExpected, resultString)
+        val scoreExpected = lines[5].toInt()
+        val scoreResult = result.first
+
+        assertEquals(sRowAlignedExpected, sRowResult)
+        assertEquals(tColAlignedExpected, tColResult)
+
+        assertEquals(scoreExpected, scoreResult)
 
     }
 
