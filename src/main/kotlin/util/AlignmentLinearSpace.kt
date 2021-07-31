@@ -34,11 +34,12 @@ class AlignmentLinearSpace(
 
 
     val alsme = AlignmentLinearSpaceMiddleEdge(mMatchValue, uMismatchValue, sigmaGapPenalty, useBLOSUM62)
+    var score = 0
 
     /**
      * Alignment using linear space (plus a bit of recursion!!)
      *
-     * @return Triple of score, alignedRow, alignedCol
+     * @return Pair of score, alignedRow, alignedCol
      */
     fun alignmentLinearSpace(sRow: String, tCol: String): Triple<Int, String, String> {
         val sRowOut = StringBuilder()
@@ -50,7 +51,7 @@ class AlignmentLinearSpace(
             0, sRow.length,
             sRowOut, tColOut
         )
-        return Triple(0, sRowOut.toString(), tColOut.toString())
+        return Triple(score, sRowOut.toString(), tColOut.toString())
     }
 
     /*
@@ -81,25 +82,47 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
         top: Int, bottom: Int,
         left: Int, right: Int,
         sRowOut: StringBuilder, tColOut: StringBuilder
-    ): Triple<Int, StringBuilder, StringBuilder> {
+    ): Pair<StringBuilder, StringBuilder> {
 
         if (left == right) {
-            return Triple(0, sRowOut, tColOut)
+            if (top != bottom) {
+                if (sRow.isNotEmpty()) {
+                    sRowOut.append(sRow)
+                    tColOut.append(sRow.map { '-' }.joinToString(separator = ""))
+                    score -= sRow.length * sigmaGapPenalty
+                } else {
+                    sRowOut.append(tCol.map {'-'}.joinToString(separator = ""))
+                    tColOut.append(tCol)
+                    score -= tCol.length * sigmaGapPenalty
+                }
+            }
+            return Pair(sRowOut, tColOut)
         }
         if (top == bottom) {
-            return Triple(0, sRowOut, tColOut)
+            if (left != right) {
+                if (sRow.isNotEmpty()) {
+                    sRowOut.append(sRow)
+                    tColOut.append(sRow.map { '-' }.joinToString(separator = ""))
+                    score -= sRow.length * sigmaGapPenalty
+                } else {
+                    sRowOut.append(tCol.map {'-'}.joinToString(separator = ""))
+                    tColOut.append(tCol)
+                    score -= tCol.length * sigmaGapPenalty
+                }
+            }
+            return Pair(sRowOut, tColOut)
         }
 
         var middle = (left + right) / 2
         val middleEdge = alsme.findMiddleEdge(sRow, tCol)
         var midNodeColIndex = middleEdge.first.first
-        val midNodeRowIndex = middleEdge.first.second
+        var midNodeRowIndex = middleEdge.first.second
 
         // work up new substrings for top left quadrant
         val sRowTopLeft = sRow.substring(0, midNodeRowIndex)
         val tColTopLeft = tCol.substring(0, midNodeColIndex)
 
-        println("'$sRowTopLeft' '$tColTopLeft' TOP LEFT")
+        println("'$sRowTopLeft' '$tColTopLeft' TOP LEFT middle edge $middleEdge")
 
         val topLeft = linearSpaceAlignmentRecursive(
             sRowTopLeft, tColTopLeft,
@@ -111,16 +134,35 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
         val dir = middleEdgeDir(middleEdge)
         if (dir == 'R' || dir == 'M') {
             middle++
+            midNodeRowIndex++
         }
         if (dir == 'D' || dir == 'M') {
             midNodeColIndex++
         }
 
         // work up new substrings for top left quadrant
-        val sRowBottomRight = sRow.substring(middle, sRow.length)
+        val sRowBottomRight = sRow.substring(midNodeRowIndex, sRow.length)
         val tColBottomRight = tCol.substring(midNodeColIndex, tCol.length)
 
         println("'$sRowBottomRight' '$tColBottomRight' BOTTOM RIGHT")
+
+        when (dir) {
+            'R' -> {
+                sRowOut.append("-")
+                tColOut.append(tCol[midNodeColIndex])
+                score -= sigmaGapPenalty
+            }
+            'D' -> {
+                sRowOut.append(sRow[midNodeRowIndex-1])
+                tColOut.append("-")
+                score -= sigmaGapPenalty
+            }
+            'M' -> {
+                sRowOut.append(sRow[middle-1])
+                tColOut.append(tCol[midNodeColIndex-1])
+                score += alsme.score(sRow[middle-1], tCol[midNodeColIndex-1])
+            }
+        }
 
         val bottomRight = linearSpaceAlignmentRecursive(
             sRowBottomRight, tColBottomRight,
@@ -129,22 +171,9 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
             sRowOut, tColOut
         )
 
-        when (dir) {
-            'R' -> {
-                sRowOut.append(sRow[middle-1])
-                tColOut.append("-")
-            }
-            'D' -> {
-                sRowOut.append("-")
-                tColOut.append(tCol[midNodeColIndex])
-            }
-            'M' -> {
-                sRowOut.append(sRow[middle-1])
-                tColOut.append(tCol[midNodeColIndex-1])
-            }
-        }
 
-        return Triple(0, sRowOut, tColOut)
+
+        return Pair(sRowOut, tColOut)
     }
 
     /**

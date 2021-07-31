@@ -257,17 +257,17 @@ internal class S05C13c14AlignmentLinearSpace {
         val sRowResult = result.second
         val tColResult = result.third
 
+        val scoreExpected = lines[5].toInt()
+        val scoreResult = result.first
+
         println("RowE: $sRowAlignedExpected")
         println("RowR: $sRowResult")
         println("ColE: $tColAlignedExpected")
         println("ColR: $tColResult")
-
-        val scoreExpected = lines[5].toInt()
-        val scoreResult = result.first
+        println("ScoreE: $scoreExpected  ScoreR: $scoreResult")
 
         assertEquals(sRowAlignedExpected, sRowResult)
         assertEquals(tColAlignedExpected, tColResult)
-
         assertEquals(scoreExpected, scoreResult)
 
     }
