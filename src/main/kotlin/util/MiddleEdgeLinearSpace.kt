@@ -188,15 +188,20 @@ class MiddleEdgeLinearSpace(
         val maxVal = max(upVal, max(leftVal, diagVal))
 
         when {
+            maxVal == diagVal -> {
+                return 'M'
+            }
+
             maxVal == upVal -> {
                 return 'U'
             }
             maxVal == leftVal -> {
                 return 'L'
             }
-            maxVal == diagVal -> {
-                return 'M'
-            }
+            // move MATCH / MISMATCH to the top priority
+//            maxVal == diagVal -> {
+//                return 'M'
+//            }
         }
         println("whereFrom: ****ERROR**** in the logic")
         return 'N'

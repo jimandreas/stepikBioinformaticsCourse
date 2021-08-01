@@ -201,8 +201,8 @@ internal class S05C13c14AlignmentLinearSpace {
 
      */
     @Test
-    @DisplayName("sample dataset extra")
-    fun findMiddleEdgeGivenProblemTest() {
+    @DisplayName("sample dataset extraR")
+    fun findMiddleEdgeGivenProblemRTest() {
 
         val sample = """
             Input:
@@ -213,6 +213,28 @@ internal class S05C13c14AlignmentLinearSpace {
             8
             PLEASANTLY
             -MEA--N-LY
+        """.trimIndent()
+
+        runTest(sample, true)
+    }
+
+    /**
+    SAMPLE GIVEN DATASET PROBLEM
+
+     */
+    @Test
+    @DisplayName("sample dataset extra")
+    fun findMiddleEdgeGivenProblemTest() {
+
+        val sample = """
+            Input:
+            0 0 5
+            MEANLY
+            PLEASANTLY
+            Output:
+            8
+            -MEA--N-LY
+            PLEASANTLY
         """.trimIndent()
 
         runTest(sample, true)

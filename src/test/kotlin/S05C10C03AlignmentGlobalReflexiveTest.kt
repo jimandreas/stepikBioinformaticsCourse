@@ -92,6 +92,41 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
     }
 
     /*
+     * try the "MEANLY" problem in forwards and reverse directions
+     */
+    @Test
+    @DisplayName("Test for MEANLY forwards and backwards Sequence Alignment sample")
+    fun globalSpaceEfficientMEANLYSample() {
+
+        val sRow = "PLEASANTLY"
+        val tCol = "MEANLY"
+
+        /**
+         * PLEASANTLY
+         * -MEA--N-LY
+         */
+
+        val ga = AlignmentGlobal(0, 0, 5, useBLOSUM62 = true)
+
+        val result = ga.globalAlignment(sRow, tCol)
+        val scoreResult = result.first
+        val sRowResult = result.second
+        val tColResult = result.third
+
+        val resultR = ga.globalAlignment(sRow.reversed(), tCol.reversed())
+        val scoreResultR = resultR.first
+        val sRowResultR = resultR.second.reversed()
+        val tColResultR = resultR.third.reversed()
+
+        println("$sRowResult FORWARDS")
+        println(sRowResultR)
+        println("$tColResultR BACKARDS")
+        println(tColResultR)
+        println("Score: forwards: $scoreResult backwards: $scoreResultR")
+
+    }
+
+    /*
     * try random strings both forward and backwards
     */
     @Test

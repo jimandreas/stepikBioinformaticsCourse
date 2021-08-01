@@ -302,6 +302,27 @@ internal class S05C13c12FindMiddleEdgeTest {
     }
 
     /**
+    MEANLY
+
+     to compare to LinearSpace solution
+     */
+    @Test
+    @DisplayName("sample dataset MEANLY")
+    fun findMiddleEdgeGivenMEANLYProblemTest() {
+
+        val sample = """
+            Input:
+            0 0 5
+            PLEASANTLY
+            MEANLY
+            Output:
+            (2, 5) (3, 6)
+        """.trimIndent()
+
+        runTest(sample, true)
+    }
+
+    /**
     Extra Dataset
 
      */
