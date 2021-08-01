@@ -90,11 +90,12 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
                     sRowOut.append(sRow)
                     tColOut.append(sRow.map { '-' }.joinToString(separator = ""))
                     score -= sRow.length * sigmaGapPenalty
-                } else {
-                    sRowOut.append(tCol.map {'-'}.joinToString(separator = ""))
-                    tColOut.append(tCol)
-                    score -= tCol.length * sigmaGapPenalty
                 }
+//                else {
+//                    sRowOut.append(tCol.map {'-'}.joinToString(separator = ""))
+//                    tColOut.append(tCol)
+//                    score -= tCol.length * sigmaGapPenalty
+//                }
             }
             return Pair(sRowOut, tColOut)
         }
@@ -140,9 +141,17 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
             midNodeColIndex++
         }
 
-        // work up new substrings for top left quadrant
-        val sRowBottomRight = sRow.substring(middle, sRow.length)
-        val tColBottomRight = tCol.substring(midNodeColIndex, tCol.length)
+        // work up new substrings for bottom right
+
+        var sRowBottomRight = ""
+        var tColBottomRight = ""
+
+        if (middle < sRow.length) {
+            sRowBottomRight = sRow.substring(middle, sRow.length)
+        }
+        if (midNodeColIndex < tCol.length) {
+            tColBottomRight = tCol.substring(midNodeColIndex, tCol.length)
+        }
 
         println("'$sRowBottomRight' '$tColBottomRight' BOTTOM RIGHT")
 
@@ -150,7 +159,7 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
 
         when (dir) {
             'R' -> {
-                sRowOut.append(sRow[midNodeRowIndex-1])
+                sRowOut.append(sRow[midNodeRowIndex])
                 tColOut.append("-")
                 score -= sigmaGapPenalty
             }
@@ -172,10 +181,6 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
             midNodeColIndex, tCol.length,
             sRowOut, tColOut
         )
-
-
-
-
 
         return Pair(sRowOut, tColOut)
     }
