@@ -134,27 +134,29 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
         val dir = middleEdgeDir(middleEdge)
         if (dir == 'R' || dir == 'M') {
             middle++
-            midNodeRowIndex++
+            //midNodeRowIndex++
         }
         if (dir == 'D' || dir == 'M') {
             midNodeColIndex++
         }
 
         // work up new substrings for top left quadrant
-        val sRowBottomRight = sRow.substring(midNodeRowIndex, sRow.length)
+        val sRowBottomRight = sRow.substring(middle, sRow.length)
         val tColBottomRight = tCol.substring(midNodeColIndex, tCol.length)
 
         println("'$sRowBottomRight' '$tColBottomRight' BOTTOM RIGHT")
 
+
+
         when (dir) {
             'R' -> {
-                sRowOut.append("-")
-                tColOut.append(tCol[midNodeColIndex])
+                sRowOut.append(sRow[midNodeRowIndex-1])
+                tColOut.append("-")
                 score -= sigmaGapPenalty
             }
             'D' -> {
-                sRowOut.append(sRow[midNodeRowIndex-1])
-                tColOut.append("-")
+                sRowOut.append("-")
+                tColOut.append(tCol[midNodeColIndex-1])
                 score -= sigmaGapPenalty
             }
             'M' -> {
@@ -170,6 +172,8 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
             midNodeColIndex, tCol.length,
             sRowOut, tColOut
         )
+
+
 
 
 
