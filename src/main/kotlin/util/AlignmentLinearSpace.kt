@@ -1,7 +1,7 @@
 @file:Suppress(
     "UnnecessaryVariable", "unused", "MemberVisibilityCanBePrivate", "LiftReturnOrAssignment",
     "IntroduceWhenSubject", "VARIABLE_WITH_REDUNDANT_INITIALIZER", "UNUSED_PARAMETER", "UNUSED_VARIABLE",
-    "UNUSED_CHANGED_VALUE"
+    "UNUSED_CHANGED_VALUE", "CanBeParameter"
 )
 
 package util
@@ -33,7 +33,7 @@ class AlignmentLinearSpace(
 ) {
 
 
-    val alsme = AlignmentLinearSpaceMiddleEdge(mMatchValue, uMismatchValue, sigmaGapPenalty, useBLOSUM62)
+    val alsme = MiddleEdgeLinearSpace(mMatchValue, uMismatchValue, sigmaGapPenalty, useBLOSUM62)
     var score = 0
 
     /**
@@ -125,7 +125,7 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
         val sRowTopLeft = sRow.substring(0, midNodeRowIndex)
         val tColTopLeft = tCol.substring(0, midNodeColIndex)
 
-        println("'$sRowTopLeft' '$tColTopLeft' TOP LEFT middle edge $middleEdge")
+        //println("'$sRowTopLeft' '$tColTopLeft' TOP LEFT middle edge $middleEdge")
 
         val topLeft = linearSpaceAlignmentRecursive(
             sRowTopLeft, tColTopLeft,
@@ -135,8 +135,6 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
         )
 
         val dir = middleEdgeDir(middleEdge)
-
-
 
         when (dir) {
             'R' -> {
@@ -172,7 +170,7 @@ LinearSpaceAlignment(v, w, top, bottom, left, right)
             tColBottomRight = tCol.substring(midNodeColIndex, tCol.length)
         }
 
-        println("'$sRowBottomRight' '$tColBottomRight' BOTTOM RIGHT")
+        //println("'$sRowBottomRight' '$tColBottomRight' BOTTOM RIGHT")
 
 
         val bottomRight = linearSpaceAlignmentRecursive(

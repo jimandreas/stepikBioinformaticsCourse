@@ -76,7 +76,7 @@ class MiddleEdgeLinearSpace(
 
         val whereFromDir =
             whereFrom(sRow, tCol, minRow, halfwayColumn + 1, halfwayColumnScoresSaved, halfwayColumnScoresNextSaved)
-        println(whereFromDir)
+        //println(whereFromDir)
 
         // adjust the coordinates given the direction of the edge
         val firstRowCoord = minRow
@@ -178,7 +178,7 @@ class MiddleEdgeLinearSpace(
         columnScores: List<Int>,
         columnScoresNext: List<Int>
     ): Char {
-        var iRowAdjusted = iRow
+        val iRowAdjusted = iRow
         if (iRow == 0) {
             return 'L'
         }
