@@ -11,8 +11,10 @@ repositories {
 
 dependencies {
     implementation("org.junit.jupiter:junit-jupiter:5.7.2")
-    testImplementation(kotlin("test"))
+    implementation( "org.jetbrains.kotlinx:multik-api:0.0.1")
+    implementation( "org.jetbrains.kotlinx:multik-default:0.0.1")
 
+    testImplementation(kotlin("test"))
     testImplementation(platform("org.junit:junit-bom:5.7.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
