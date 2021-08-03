@@ -8,6 +8,8 @@ package util
 
 import org.jetbrains.kotlinx.multik.api.d3array
 import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.ndarray.data.get
+import org.jetbrains.kotlinx.multik.ndarray.data.set
 
 /**
  * In the Multiple Longest Common Subsequence Problem,
@@ -36,13 +38,51 @@ Output: The length of a longest common subsequence of these three strings, follo
  * to generate the strings.
  *  This is extended into 3 dimensions for the 3 strings in parallel.
  */
-class MultipleLongestCommonSubsequence(r: String, s: String, t: String) {
+class MultipleLongestCommonSubsequence(val iS: String, val jS: String, val kS: String) {
 
-    val scoreArray = mk.d3array(r.length+1, s.length+1, t.length+1) { 0 }
+    val scoreArray = mk.d3array(iS.length + 1, jS.length + 1, kS.length + 1) { 0 }
+    val backtrackArray = mk.d3array(iS.length + 1, jS.length + 1, kS.length + 1) { 0 }
 
     fun score(): Int {
 
-        return 0
+        if (iS.isEmpty() || jS.isEmpty() || kS.isEmpty()) {
+            return 0
+        }
+        for (i in 1..iS.length) {
+            for (j in 1..jS.length) {
+                for (k in 1..kS.length) {
+                    scoreCalc(i, j, k)
+                }
+            }
+        }
+        return  scoreArray[iS.length, jS.length, kS.length]
+    }
+
+    fun scoreCalc(i: Int, j: Int, k: Int) {
+        val curScore = if (equivalence(i, j, k)) {
+            1
+        } else {
+            0
+        }
+        val axes = listOf(
+            scoreArray[i - 1, j, k],
+            scoreArray[i, j - 1, k],
+            scoreArray[i, j, k - 1],
+            scoreArray[i - 1, j - 1, k],
+            scoreArray[i - 1, j, k - 1],
+            scoreArray[i, j - 1, k - 1],
+            scoreArray[i - 1, j - 1, k - 1] + curScore
+        )
+        val maxVal = axes.maxOf { it }
+        scoreArray[i,j,k] = maxVal
+        backtrackArray[i, j, k] = axes.indexOf(maxVal)
+    }
+
+    fun equivalence(i: Int, j: Int, k: Int): Boolean {
+        if (iS[i-1] == jS[j-1] && jS[j-1] == kS[k-1]) {
+            return true
+        }
+        return false
     }
 
     fun outputStrings(): Triple<String, String, String> {

@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.AlignmentLinearSpace
 import util.MultipleLongestCommonSubsequence
 
 /**
@@ -235,19 +233,25 @@ internal class S05C14c05MultipleAlignmentTest {
     fun runTest(sample: String, useBLOSUM62: Boolean = false) {
         val reader = sample.reader()
         val lines = reader.readLines()
-        val r = lines[1]
-        val s = lines[2]
-        val t = lines[3]
+        val i = lines[1]
+        val j = lines[2]
+        val k = lines[3]
 
-        val multi = MultipleLongestCommonSubsequence(r, s, t)
+        val multi = MultipleLongestCommonSubsequence(i, j, k)
         val scoreResult = multi.score()
+        val strings = multi.outputStrings()
 
         val scoreExpected = lines[5].toInt()
-        val rExpected = lines[6]
-        val sExpected = lines[7]
-        val tExpected = lines[8]
+        val iExpected = lines[6]
+        val jExpected = lines[7]
+        val kExpected = lines[8]
+        
+        val iResult = strings.first
+        val jResult = strings.second
+        val kResult = strings.third
 
-        println("Expected: $rExpected, $sExpected, $tExpected, $scoreExpected")
+        println("Result  : $iResult, $jResult, $kResult, $scoreResult")
+        println("Expected: $iExpected, $jExpected, $kExpected, $scoreExpected")
     }
 
 }
