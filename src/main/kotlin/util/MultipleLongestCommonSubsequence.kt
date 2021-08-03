@@ -9,6 +9,7 @@ package util
 import org.jetbrains.kotlinx.multik.api.d3array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.get
+import org.jetbrains.kotlinx.multik.ndarray.data.rangeTo
 import org.jetbrains.kotlinx.multik.ndarray.data.set
 
 /**
@@ -42,6 +43,29 @@ class MultipleLongestCommonSubsequence(val iS: String, val jS: String, val kS: S
 
     val scoreArray = mk.d3array(iS.length + 1, jS.length + 1, kS.length + 1) { 0 }
     val backtrackArray = mk.d3array(iS.length + 1, jS.length + 1, kS.length + 1) { 0 }
+
+    /*
+     * set up the backtrack array with default
+     * outputs
+     */
+    init {
+        for (j in 1..jS.length) {
+            backtrackArray[0, j, 0] = 1
+
+            for (i in 1..iS.length) {
+                backtrackArray[i, j, 0] = 3
+            }
+            for (k in 1..kS.length) {
+                backtrackArray[0, j, k] = 5
+            }
+        }
+        for (k in 1..kS.length) {
+            backtrackArray[0, 0, k] = 2
+            for (i in 1..iS.length) {
+                backtrackArray[i, 0, k] = 4
+            }
+        }
+    }
 
     fun score(): Int {
 
@@ -86,7 +110,56 @@ class MultipleLongestCommonSubsequence(val iS: String, val jS: String, val kS: S
     }
 
     fun outputStrings(): Triple<String, String, String> {
-        val retString = Triple("", "", "")
-        return retString
+        val iSB = StringBuilder()
+        val jSB = StringBuilder()
+        val kSB = StringBuilder()
+        var i = iS.length
+        var j = jS.length
+        var k = kS.length
+        do {
+            when (backtrackArray[i, j, k]) {
+                0 -> {
+                    iSB.append(iS[--i])
+                    jSB.append('-')
+                    kSB.append('-')
+                }
+                1 -> {
+                    iSB.append('-')
+                    jSB.append(jS[--j])
+                    kSB.append('-')
+                }
+                2 -> {
+                    iSB.append('-')
+                    jSB.append('-')
+                    kSB.append(kS[--k])
+                }
+                3 -> {
+                    iSB.append(iS[--i])
+                    jSB.append(jS[--j])
+                    kSB.append('-')
+                }
+                4 -> {
+                    iSB.append(iS[--i])
+                    jSB.append('-')
+                    kSB.append(kS[--k])
+                }
+                5 -> {
+                    iSB.append('-')
+                    jSB.append(jS[--j])
+                    kSB.append(kS[--k])
+                }
+                6 -> {
+                    iSB.append(iS[--i])
+                    jSB.append(jS[--j])
+                    kSB.append(kS[--k])
+                }
+            }
+        } while (!(i == 0 && j == 0 && k == 0))
+
+        return Triple(
+            iSB.toString().reversed(),
+            jSB.toString().reversed(),
+            kSB.toString().reversed()
+            )
     }
 }
