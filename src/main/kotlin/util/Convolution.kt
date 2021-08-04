@@ -6,8 +6,6 @@
 
 package util
 
-import java.util.*
-
 /**
  * Convolution
  * Ch 4.9 : @link: https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-4

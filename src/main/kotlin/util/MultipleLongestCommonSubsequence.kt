@@ -9,7 +9,6 @@ package util
 import org.jetbrains.kotlinx.multik.api.d3array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.get
-import org.jetbrains.kotlinx.multik.ndarray.data.rangeTo
 import org.jetbrains.kotlinx.multik.ndarray.data.set
 
 /**

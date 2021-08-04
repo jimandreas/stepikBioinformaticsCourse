@@ -1,7 +1,5 @@
 package util
 
-import java.lang.StringBuilder
-
 fun pathToGenome(stringList: List<String>): String {
 
     var baseString = stringList[0]

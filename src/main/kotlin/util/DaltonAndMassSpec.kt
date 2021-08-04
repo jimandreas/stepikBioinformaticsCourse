@@ -6,7 +6,6 @@
 package util
 
 import java.lang.Integer.max
-import java.util.*
 
 val aminoAcidToDaltonHashMap: HashMap<Char, Int> = hashMapOf(
     'G' to 57,

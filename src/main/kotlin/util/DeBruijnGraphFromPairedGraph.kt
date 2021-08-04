@@ -2,8 +2,6 @@
 
 package util
 
-import java.lang.StringBuilder
-
 /**
  * from a [d] list of paired Kmer strings
  *   produce a map of kmer to kmer connections
