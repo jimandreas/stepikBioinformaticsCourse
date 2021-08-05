@@ -1,17 +1,15 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 
 import org.jetbrains.kotlinx.multik.api.d1array
-import org.jetbrains.kotlinx.multik.api.d3array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.api.toNDArray
-import org.jetbrains.kotlinx.multik.ndarray.data.D1Array
+import org.jetbrains.kotlinx.multik.ndarray.data.set
+import org.jetbrains.kotlinx.multik.ndarray.operations.toList
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import util.GreedySorting
-import util.MultipleLongestCommonSubsequence
-import kotlin.math.exp
 import kotlin.test.assertEquals
 
 /**
@@ -102,6 +100,55 @@ internal class S06C04c04GreedySortingTest {
         """.trimIndent()
 
         runTest(permutation, expectedString)
+    }
+
+    /**
+     *  A test function to home in on the answer to
+     *  @link: https://stepik.org/lesson/240319/step/5?unit=212665
+     */
+    @Test
+    @DisplayName("Determine maximum")
+    fun findMaxReversalsTest() {
+
+        for (i in 3..100) {
+
+            val testList = (i downTo 1).toList().toTypedArray().toList()
+            val w = genWorstCaseP(i)
+            val gs = GreedySorting(w.size)
+            gs.gArr = w.toNDArray()
+            gs.sort()
+
+            val pos = gs.outStr.toString().lines().size - 1
+
+//            val testListN = testList.map { if (it%2 == 0) {it} else {-it} }
+            val testListN = testList.map { -it }
+            val gsN = GreedySorting(testListN.size)
+            gsN.gArr = testListN.toNDArray()
+            gsN.sort()
+
+            val neg = gsN.outStr.toString().lines().size - 1
+
+            println("$i pos $pos neg $neg")
+
+        }
+    }
+
+    fun genWorstCaseP(size: Int): List<Int> {
+        val m = mk.d1array(size) { 0 }
+        for (i in 1..size) {
+            if (i == size) {
+                if (i % 2 == 1) {
+                    m[i / 2] = i
+                } else {
+                    m[i / 2] = -(i - 1)
+                }
+            } else if (i % 2 == 1) {
+                m[i / 2] = -(i + 1)
+            } else {
+                m[size - i / 2] = i - 1
+            }
+        }
+        return m.toList()
     }
 
 
