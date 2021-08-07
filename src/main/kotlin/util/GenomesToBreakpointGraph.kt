@@ -108,10 +108,24 @@ class GenomesToBreakpointGraph {
     Sample Output:
 
     (2, 4), (3, 6), (5, 1), (8, 9), (10, 12), (11, 7)
+
+     NOTES: this simply removes the first edge coordinate from each chromosome
+     and tacks it onto the back of the chromosome thus circularizing it.
+     The appended circular chromosomes are returned as a contatenated list
+     for ease of future processing.
      */
 
-    fun coloredEdges(g: List<List<Int>>): List<Pair<Int, Int>> {
+    fun coloredEdges(g: List<List<Int>>): List<Int> {
 
-        return listOf(Pair(0,0))
+        val allEdges: MutableList<Int> = mutableListOf()
+
+        for (chro in g) {
+            val cycleList = chromosomeToCycle(chro)
+            val allButZeroElement = cycleList.filterIndexed { index, i -> index != 0 }
+            allEdges.addAll(allButZeroElement)
+            allEdges.add(cycleList[0])
+        }
+
+        return allEdges
     }
 }
