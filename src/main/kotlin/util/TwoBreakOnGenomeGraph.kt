@@ -45,7 +45,56 @@ class TwoBreakOnGenomeGraph {
      */
     fun twoBreakOnGenomeGraph(graph: List<Int>, breakEdges: List<Int>): List<Int> {
 
-        return listOf(0)
+        val find1 = findPair(breakEdges[0], breakEdges[1], graph)
+        val find2 = findPair(breakEdges[2], breakEdges[3], find1.third)
+        val outList = find2.third.toMutableList()
+        when {
+            find1.second == DIR.FORWARD && find2.second == DIR.FORWARD -> {
+                outList.add(breakEdges[0])
+                outList.add(breakEdges[2])
+                outList.add(breakEdges[1])
+                outList.add(breakEdges[3])
+            }
+            find1.second == DIR.FORWARD && find2.second == DIR.REVERSE -> {
+                outList.add(breakEdges[0])
+                outList.add(breakEdges[2])
+                outList.add(breakEdges[3])
+                outList.add(breakEdges[1])
+            }
+            find1.second == DIR.REVERSE && find2.second == DIR.FORWARD -> {
+                outList.add(breakEdges[2])
+                outList.add(breakEdges[0])
+                outList.add(breakEdges[1])
+                outList.add(breakEdges[3])
+            }
+            find1.second == DIR.FORWARD && find2.second == DIR.REVERSE -> {
+                outList.add(breakEdges[0])
+                outList.add(breakEdges[2])
+                outList.add(breakEdges[3])
+                outList.add(breakEdges[1])
+            }
+        }
+        return outList
+    }
+
+    private enum class DIR { FORWARD, REVERSE, NOTFOUND }
+    private fun findPair(p1: Int, p2: Int, graph: List<Int>): Triple<Int, DIR, List<Int>> {
+        var i = 0
+        val newGraph = graph.toMutableList()
+        while (i < graph.size) {
+            if (graph[i] == p1 && graph[i + 1] == p2) {
+                newGraph.removeAt(i)
+                newGraph.removeAt(i)
+                return Triple(i, DIR.FORWARD, newGraph)
+            } else if (graph[i] == p2 && graph[i + 1] == p1) {
+                newGraph.removeAt(i)
+                newGraph.removeAt(i)
+                return Triple(i, DIR.REVERSE, newGraph)
+            }
+            i += 2
+        }
+        return Triple(0, DIR.NOTFOUND, emptyList())
+
     }
 
     /**

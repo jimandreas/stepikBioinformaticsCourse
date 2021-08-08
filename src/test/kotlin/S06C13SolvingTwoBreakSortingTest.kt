@@ -76,13 +76,64 @@ internal class S06C13SolvingTwoBreakSortingTest {
         val genomeGraph = genomeGraphString.parsePairsToList()
         val breakList = breakListString.split(", ").map { it.toInt()}
 
+            // was (2, 4), (3, 1), (7, 5), (6, 8)
         val resultString = """
-            (2, 4), (3, 1), (7, 5), (6, 8)
+            (2, 4), (7, 5), (3, 1), (6, 8)
         """.trimIndent()
         val expectedResult = resultString.parsePairsToList()
 
         val result = twoBreak.twoBreakOnGenomeGraph(genomeGraph, breakList)
         assertEquals(expectedResult, result)
+    }
+
+    @Test
+    @DisplayName("two Break on Genome Graph Extra Dataset Test 02")
+    fun twoBreakOnGenomeGraphExtraTest02() {
+
+        val genomeGraphString = """
+            (2, 4), (3, 5), (6, 8), (7, 10), (9, 12), (11, 13), (14, 15), (16, 17), (18, 19), (20, 21), (22, 24), (23, 25), (26, 28), (27, 30), (29, 32), (31, 33), (34, 35), (36, 37), (38, 40), (39, 42), (41, 44), (43, 45), (46, 47), (48, 49), (50, 51), (52, 53), (54, 56), (55, 58), (57, 59), (60, 61), (62, 64), (63, 66), (65, 68), (67, 69), (70, 72), (71, 73), (74, 75), (76, 77), (78, 80), (79, 81), (82, 83), (84, 86), (85, 88), (87, 90), (89, 92), (91, 94), (93, 96), (95, 98), (97, 99), (100, 102), (101, 104), (103, 106), (105, 107), (108, 109), (110, 111), (112, 113), (114, 116), (115, 117), (118, 120), (119, 121), (122, 124), (123, 126), (125, 128), (127, 129), (130, 132), (131, 134), (133, 136), (135, 1)
+        """.trimIndent()
+        val breakListString = """
+            87, 90, 74, 75
+        """.trimIndent()
+
+        val genomeGraph = genomeGraphString.parsePairsToList()
+        val breakList = breakListString.split(", ").map { it.toInt()}
+
+        // was (2, 4), (3, 1), (7, 5), (6, 8)
+        val resultString = """
+            (2, 4), (3, 5), (6, 8), (7, 10), (9, 12), (11, 13), (14, 15), (16, 17), (18, 19), (20, 21), (22, 24), (23, 25), (26, 28), (27, 30), (29, 32), (31, 33), (34, 35), (36, 37), (38, 40), (39, 42), (41, 44), (43, 45), (46, 47), (48, 49), (50, 51), (52, 53), (54, 56), (55, 58), (57, 59), (60, 61), (62, 64), (63, 66), (65, 68), (67, 69), (70, 72), (71, 73), (76, 77), (78, 80), (79, 81), (82, 83), (84, 86), (85, 88), (89, 92), (91, 94), (93, 96), (95, 98), (97, 99), (100, 102), (101, 104), (103, 106), (105, 107), (108, 109), (110, 111), (112, 113), (114, 116), (115, 117), (118, 120), (119, 121), (122, 124), (123, 126), (125, 128), (127, 129), (130, 132), (131, 134), (133, 136), (135, 1), (87, 74), (90, 75)
+        """.trimIndent()
+        val expectedResult = resultString.parsePairsToList()
+
+        val result = twoBreak.twoBreakOnGenomeGraph(genomeGraph, breakList)
+        assertEquals(expectedResult, result)
+    }
+
+    @Test
+    @DisplayName("two Break on Genome Graph Quiz Test 03")
+    fun twoBreakOnGenomeGraphQuizTest03() {
+
+        val genomeGraphString = """
+            (2, 3), (4, 5), (6, 8), (7, 9), (10, 11), (12, 13), (14, 15), (16, 18), (17, 19), (20, 22), (21, 24), (23, 25), (26, 27), (28, 29), (30, 31), (32, 33), (34, 36), (35, 38), (37, 39), (40, 42), (41, 44), (43, 46), (45, 47), (48, 49), (50, 52), (51, 53), (54, 56), (55, 58), (57, 60), (59, 62), (61, 64), (63, 66), (65, 67), (68, 69), (70, 71), (72, 73), (74, 76), (75, 77), (78, 80), (79, 81), (82, 84), (83, 85), (86, 88), (87, 90), (89, 92), (91, 94), (93, 96), (95, 98), (97, 99), (100, 102), (101, 103), (104, 105), (106, 107), (108, 109), (110, 111), (112, 113), (114, 116), (115, 118), (117, 120), (119, 121), (122, 123), (124, 125), (126, 127), (128, 130), (129, 132), (131, 1)
+        """.trimIndent()
+        val breakListString = """
+            65, 67, 104, 105
+        """.trimIndent()
+
+        val genomeGraph = genomeGraphString.parsePairsToList()
+        val breakList = breakListString.split(", ").map { it.toInt()}
+
+        // was (2, 4), (3, 1), (7, 5), (6, 8)
+        val resultString = """
+            (2, 4), (3, 5), (6, 8), (7, 10), (9, 12), (11, 13), (14, 15), (16, 17), (18, 19), (20, 21), (22, 24), (23, 25), (26, 28), (27, 30), (29, 32), (31, 33), (34, 35), (36, 37), (38, 40), (39, 42), (41, 44), (43, 45), (46, 47), (48, 49), (50, 51), (52, 53), (54, 56), (55, 58), (57, 59), (60, 61), (62, 64), (63, 66), (65, 68), (67, 69), (70, 72), (71, 73), (76, 77), (78, 80), (79, 81), (82, 83), (84, 86), (85, 88), (89, 92), (91, 94), (93, 96), (95, 98), (97, 99), (100, 102), (101, 104), (103, 106), (105, 107), (108, 109), (110, 111), (112, 113), (114, 116), (115, 117), (118, 120), (119, 121), (122, 124), (123, 126), (125, 128), (127, 129), (130, 132), (131, 134), (133, 136), (135, 1), (87, 74), (90, 75)
+        """.trimIndent()
+        val expectedResult = resultString.parsePairsToList()
+
+        val result = twoBreak.twoBreakOnGenomeGraph(genomeGraph, breakList)
+        val outString = pairTheList(result).toString()
+        println(outString)
+//        assertEquals(expectedResult, result)
     }
 
 
@@ -115,8 +166,10 @@ internal class S06C13SolvingTwoBreakSortingTest {
             1, 6, 3, 8
         """.trimIndent()
 
-        val genomeList = genomeString.parsePairsToList()
-        val genomeGraph = twoBreakUtils.chromosomeToCycle(genomeList)
+        val genomeGraph = genomeString.removePrefix("(")
+            .removeSuffix(")")
+            .split(" ")
+            .map { it.toInt() }
         val breakList = breakListString.split(", ").map { it.toInt()}
 
         val resultString = """
