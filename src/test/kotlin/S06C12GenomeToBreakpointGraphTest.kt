@@ -4,8 +4,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.GenomesToBreakpointGraph
-import java.lang.StringBuilder
+import util.TwoBreakGenomesToBreakpointGraph
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
@@ -30,11 +29,11 @@ Various functions that handle pieces of the breakpoint graph processing.
 
 internal class S06C12GenomeToBreakpointGraphTest {
 
-    lateinit var gtbg: GenomesToBreakpointGraph
+    lateinit var twoBreakFunctions: TwoBreakGenomesToBreakpointGraph
 
     @BeforeEach
     fun setUp() {
-        gtbg = GenomesToBreakpointGraph()
+        twoBreakFunctions = TwoBreakGenomesToBreakpointGraph()
     }
 
     @AfterEach
@@ -68,7 +67,7 @@ internal class S06C12GenomeToBreakpointGraphTest {
         """.trimIndent()
         val expectedResult = resultString.split(' ').map { it.toInt() }
 
-        val result = gtbg.chromosomeToCycle(chromosome)
+        val result = twoBreakFunctions.chromosomeToCycle(chromosome)
         assertEquals(expectedResult, result)
     }
 
@@ -86,7 +85,7 @@ internal class S06C12GenomeToBreakpointGraphTest {
         """.trimIndent()
         val expectedResult = resultString.split(' ').map { it.toInt() }
 
-        val result = gtbg.chromosomeToCycle(chromosome)
+        val result = twoBreakFunctions.chromosomeToCycle(chromosome)
         assertEquals(expectedResult, result)
     }
 
@@ -121,7 +120,7 @@ internal class S06C12GenomeToBreakpointGraphTest {
         """.trimIndent()
         val expectedResult = resultString.split(' ').map { it.toInt() }
 
-        val result = gtbg.cycleToChromosome(cycle)
+        val result = twoBreakFunctions.cycleToChromosome(cycle)
         assertEquals(expectedResult, result)
     }
 
@@ -139,7 +138,7 @@ internal class S06C12GenomeToBreakpointGraphTest {
         """.trimIndent()
         val expectedResult = resultString.split(' ').map { it.toInt() }
 
-        val result = gtbg.cycleToChromosome(cycle)
+        val result = twoBreakFunctions.cycleToChromosome(cycle)
         assertEquals(expectedResult, result)
     }
 
@@ -153,7 +152,7 @@ internal class S06C12GenomeToBreakpointGraphTest {
         val cycle = cString.split(' ').map { it.toInt() }
 
 
-        val result = gtbg.cycleToChromosome(cycle).joinToString(" ") { String.format("%+d", it) }
+        val result = twoBreakFunctions.cycleToChromosome(cycle).joinToString(" ") { String.format("%+d", it) }
         println("($result)")
     }
 
@@ -224,7 +223,7 @@ internal class S06C12GenomeToBreakpointGraphTest {
             listOfLists.add(tempList)
         }
 
-        val resultList = gtbg.coloredEdges(listOfLists)
+        val resultList = twoBreakFunctions.coloredEdges(listOfLists)
         val resultPairs = pairTheList(resultList)
 
         //println(resultPairs)
@@ -286,7 +285,7 @@ internal class S06C12GenomeToBreakpointGraphTest {
             expectedListOfChromosomes.add(tempList)
         }
 
-        val resultListOfChromosomes = gtbg.graphToGenome(nodeList)
+        val resultListOfChromosomes = twoBreakFunctions.graphToGenome(nodeList)
 
         //printChromosomes(resultListOfChromosomes)
         assertContentEquals(expectedListOfChromosomes, resultListOfChromosomes)

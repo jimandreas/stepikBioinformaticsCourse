@@ -23,7 +23,7 @@ Various functions that handle pieces of the breakpoint graph processing.
  *
  */
 
-class GenomesToBreakpointGraph {
+class TwoBreakGenomesToBreakpointGraph {
 
     /**
 
