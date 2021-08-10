@@ -1,8 +1,6 @@
-@file:Suppress("MemberVisibilityCanBePrivate", "UnnecessaryVariable")
+@file:Suppress("MemberVisibilityCanBePrivate", "UnnecessaryVariable", "LiftReturnOrAssignment")
 
 package util
-
-import java.lang.Integer.max
 
 /**
  *
@@ -98,6 +96,23 @@ class TwoBreakGenomesToBreakpointGraph {
         return outList
     }
 
+    fun cycleToChromosomeDivideBy2(cycle: List<Int>): List<Int> {
+
+        val outList: MutableList<Int> = mutableListOf()
+
+        for (i in 0 until cycle.size / 2) {
+            val first = cycle[i * 2]
+            val second = cycle[i * 2 + 1]
+            if (first < second) {
+                outList.add(cycle[i * 2 + 1] / 2)
+            } else {
+                outList.add(-cycle[i * 2] / 2)
+            }
+
+        }
+        return outList
+    }
+
     /**
      * Code Challenge: Implement ColoredEdges.
 
@@ -151,7 +166,7 @@ class TwoBreakGenomesToBreakpointGraph {
     NOTES: the graph is passed in as a list rather than a series of pairs
      */
 
-    fun graphToGenome(graph: List<Int>): List<List<Int>> {
+    fun graphToGenome(graph: List<Int>, divideByTwo: Boolean = false): List<List<Int>> {
         val listOfChromosomes: MutableList<List<Int>> = mutableListOf()
         val currentCycle: MutableList<Int> = mutableListOf()
 
@@ -166,7 +181,12 @@ class TwoBreakGenomesToBreakpointGraph {
                 currentCycle.add(graph[i])
                 currentCycle.add(0, graph[i + 1]) // insert at start of list
                 if (i != graph.size - 2) {
-                    val chromosome = cycleToChromosome(currentCycle, chromosomeBaseValue)
+                    val chromosome: List<Int>
+                    if (divideByTwo) {
+                        chromosome = cycleToChromosomeDivideBy2(currentCycle)
+                    } else {
+                        chromosome = cycleToChromosome(currentCycle, chromosomeBaseValue)
+                    }
                     listOfChromosomes.add(chromosome)
                     chromosomeBaseValue += chromosome.size
                     currentCycle.clear()
@@ -182,7 +202,110 @@ class TwoBreakGenomesToBreakpointGraph {
             }
             i += 2
         }
-        listOfChromosomes.add(cycleToChromosome(currentCycle, chromosomeBaseValue))
+
+        if (divideByTwo) {
+            listOfChromosomes.add(cycleToChromosomeDivideBy2(currentCycle))
+        } else {
+            listOfChromosomes.add(cycleToChromosome(currentCycle, chromosomeBaseValue))
+        }
+        return listOfChromosomes
+    }
+
+    /**
+     *  modified to divide the elements by two rather than running a linear count
+     */
+    fun graphToGenomeImproved(graph: List<Int>): List<List<Int>> {
+        val g = graph.toMutableList()
+        val listOfChromosomes: MutableList<List<Int>> = mutableListOf()
+        val currentCycle: MutableList<Int> = mutableListOf()
+
+        var startOfChromosome = true
+        var firstElement = 0
+        var bindingElement = 0
+
+        var i = 0
+        while (g.size > 0) {
+            var first = 0
+            var second = 0
+            if (startOfChromosome) {
+                first = g[i]
+                second = g[i+1]
+                i = 0
+            } else {
+                // find the bindingElement
+                val index = g.indexOf(bindingElement)
+                if (index != 0) {
+                    println("NonZero")
+                }
+                if (index == -1) {
+                    println("OOPSIE")
+                }
+                if (index % 2 == 0) {
+                    first = g[index]
+                    second = g[index+1]
+                    i = index
+                } else {
+                    first = g[index-1]
+                    second = g[index]
+                    i = index-1
+                }
+            }
+            g.removeAt(i)
+            g.removeAt(i)
+
+            if (startOfChromosome) {
+                startOfChromosome = false
+                firstElement = first
+                bindingElement = second + 1
+                if (second % 2 == 0) {
+                    bindingElement = second - 1
+                }
+                currentCycle.add(first)
+                currentCycle.add(second)
+
+            } else {
+
+                if (bindingElement == first) {
+                    currentCycle.add(first)
+                    currentCycle.add(second)
+                    bindingElement = second + 1
+                    if (second % 2 == 0) {
+                        bindingElement = second - 1
+                    }
+                } else {
+                    currentCycle.add(second)
+                    currentCycle.add(first)
+                    bindingElement = first + 1
+                    if (first % 2 == 0) {
+                        bindingElement = first - 1
+                    }
+                }
+                println(bindingElement)
+                if (bindingElement == firstElement) {
+                    // rotate the cycle one position
+                    val size = currentCycle.size
+                    val lastElement = currentCycle[size - 1]
+                    currentCycle.add(0, lastElement)
+                    currentCycle.removeAt(size)
+
+                    val chromosome = cycleToChromosomeDivideBy2(currentCycle)
+
+                    listOfChromosomes.add(chromosome)
+                    currentCycle.clear()
+
+                    startOfChromosome = true
+                }
+
+            }
+        }
+
+//        // rotate the cycle one position
+//        val size = currentCycle.size
+//        val lastElement = currentCycle[size - 1]
+//        currentCycle.add(0, lastElement)
+//        currentCycle.removeAt(size)
+//        listOfChromosomes.add(cycleToChromosomeDivideBy2(currentCycle))
+
         return listOfChromosomes
     }
 }
