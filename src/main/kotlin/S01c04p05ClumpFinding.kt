@@ -4,10 +4,10 @@
 
 import util.findClumps
 
-// 1.4 An Explosion of Hidden Messages
-
 /**
- * @link https://stepik.org/lesson/240217/step/5?unit=212563
+ *
+
+1.4 An Explosion of Hidden Messages
 
 Code Challenge: Solve the Clump Finding Problem (restated below).
 
@@ -24,6 +24,10 @@ CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA
 Sample Output:
 
 CGACA GAAGA
+
+See also:
+ stepik: https://stepik.org/lesson/240217/step/5?unit=212563
+ rosalind: http://rosalind.info/problems/ba1e/
 
 */
 

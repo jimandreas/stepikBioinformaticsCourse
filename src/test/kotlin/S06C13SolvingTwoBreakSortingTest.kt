@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import util.TwoBreakGenomesToBreakpointGraph
 import util.TwoBreakOnGenomeGraph
 import java.lang.StringBuilder
+import kotlin.math.exp
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
@@ -172,8 +173,9 @@ internal class S06C13SolvingTwoBreakSortingTest {
             .map { it.toInt() }
         val breakList = breakListString.split(", ").map { it.toInt()}
 
+//        (+1 -2)(-3 +4)
         val resultString = """
-            (+1 -2)(-3 +4)
+            (+1 -2)(-4 +3)
         """.trimIndent()
 
         val expectedListsOfLists: MutableList<List<Int>> = mutableListOf()
@@ -204,8 +206,9 @@ internal class S06C13SolvingTwoBreakSortingTest {
             .map { it.toInt() }
         val breakList = breakListString.split(", ").map { it.toInt()}
 
-        val resultString = """
-            (-67 -1 +2 -3 -4 -5 -6 -7 +8 +9 +10 +11 +12 +13 +14 +15 -16 -17 -18 +19 -20 +21 +22 -23 -24 +25 -26 -27 +28 -29 -30 +31 +32 +33 -34 -35 +36 -59 -60 -61 +62 -63 +64 +65 -66)(+58 +37 +38 +39 -40 +41 +42 -43 +44 +45 +46 -47 +48 +49 +50 -51 +52 +53 +54 -55 -56 -57) 
+        // (-67 -1 +2 -3 -4 -5 -6 -7 +8 +9 +10 +11 +12 +13 +14 +15 -16 -17 -18 +19 -20 +21 +22 -23 -24 +25 -26 -27 +28 -29 -30 +31 +32 +33 -34 -35 +36 -59 -60 -61 +62 -63 +64 +65 -66)(+58 +37 +38 +39 -40 +41 +42 -43 +44 +45 +46 -47 +48 +49 +50 -51 +52 +53 +54 -55 -56 -57)
+        val resultString = """             
+            (-1 +2 -3 -4 -5 -6 -7 +8 +9 +10 +11 +12 +13 +14 +15 -16 -17 -18 +19 -20 +21 +22 -23 -24 +25 -26 -27 +28 -29 -30 +31 +32 +33 -34 -35 +36 -59 -60 -61 +62 -63 +64 +65 -66 -67)(+37 +38 +39 -40 +41 +42 -43 +44 +45 +46 -47 +48 +49 +50 -51 +52 +53 +54 -55 -56 -57 +58) 
         """.trimIndent()
 
         val expectedListsOfLists: MutableList<List<Int>> = mutableListOf()
@@ -216,7 +219,9 @@ internal class S06C13SolvingTwoBreakSortingTest {
         }
 
         val result = twoBreak.twoBreakOnGenome(genomeGraph, breakList)
-        assertContentEquals(expectedListsOfLists, result)
+
+        assertEquals(expectedListsOfLists[0], result[0])
+        assertEquals(expectedListsOfLists[1], result[1])
     }
 
     @Test

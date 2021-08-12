@@ -59,7 +59,9 @@ fun scanForSkew(str: String): List<Int> {
             'T' -> {
                 //print("$level ")
             }
-            else -> {println("scanForSkew c is $c in str $str")}
+            else -> {
+                //println("scanForSkew c is $c in str $str")
+            }
         }
         skewList.add(level)
     }

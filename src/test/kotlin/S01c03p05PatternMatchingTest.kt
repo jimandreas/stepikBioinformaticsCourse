@@ -5,7 +5,21 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 
-internal class S01c03p05Test {
+/**
+ *  1.3 Some Hidden Messages are More Surprising than Others
+
+Code Challenge: Solve the Pattern Matching Problem.
+
+Input: Two strings, Pattern and Genome.
+Output: A collection of space-separated integers specifying
+all starting positions where Pattern appears as a substring of Genome.
+
+See also:
+stepik: https://stepik.org/lesson/240215/step/5?unit=212562
+rosalind: http://rosalind.info/problems/ba1d/
+ */
+
+internal class S01c03p05PatternMatchingTest {
 
     @BeforeEach
     fun setUp() {

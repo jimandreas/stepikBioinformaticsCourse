@@ -7,6 +7,33 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 
+/**
+ *
+
+1.4 An Explosion of Hidden Messages
+
+Code Challenge: Solve the Clump Finding Problem (restated below).
+
+Clump Finding Problem: Find patterns forming clumps in a string.
+
+Input: A string Genome, and integers k, L, and t.
+Output: All distinct k-mers forming (L, t)-clumps in Genome.
+
+Sample Input:
+
+CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA
+5 50 4    // k = kmer, L = window length, t = min occurences
+
+Sample Output:
+
+CGACA GAAGA
+
+See also:
+stepik: https://stepik.org/lesson/240217/step/5?unit=212563
+rosalind: http://rosalind.info/problems/ba1e/
+
+ */
+
 internal class S01c07p10Test {
 
     @BeforeEach

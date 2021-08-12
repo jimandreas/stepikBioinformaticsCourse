@@ -5,7 +5,20 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 
-internal class S01c02p13Test {
+/**
+ *  1.2 Hidden Messages in the Replication Origin
+
+Code Challenge: Solve the Frequent Words Problem.
+
+Input: A string Text and an integer k.
+Output: All most frequent k-mers in Text.
+
+See also:
+stepik: https://stepik.org/lesson/240214/step/13?unit=212561
+rosalind: http://rosalind.info/problems/ba1b/
+ */
+
+internal class S01c02p13FrequentWordsTest {
 
     @BeforeEach
     fun setUp() {

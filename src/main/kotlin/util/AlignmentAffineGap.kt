@@ -75,7 +75,7 @@ class AlignmentAffineGap(
         val strPair = outputLCS(sRow, tCol, sRow.length, tCol.length, strRow, strCol, WhereAmI.Middle)
         // val strPair = Pair("", "")
 
-        debugPrintoutAll(maxVal, sRow, tCol, strPair.first, strPair.second)
+        //debugPrintoutAll(maxVal, sRow, tCol, strPair.first, strPair.second)
 
         return Triple(alignmentScoreResult, strPair.second, strPair.first)
     }
@@ -278,6 +278,7 @@ class AlignmentAffineGap(
     }
 
     /**
+     * DEBUG
      * A nicely formatted printout of the score matrix with v (row/horizontal/s) string
      * across and the w (column/t) string down at the axes.
      * MODIFIED: to print out lower/middle/upper affine scoring matrices

@@ -5,7 +5,19 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 
-internal class S01c02p06Test {
+/**
+ *  1.2 Hidden Messages in the Replication Origin
+
+Code Challenge: Implement PatternCount (reproduced below).
+Input: Strings Text and Pattern.
+Output: Count(Text, Pattern).
+
+See also:
+stepik: https://stepik.org/lesson/240214/step/6?unit=212561
+rosalind: http://rosalind.info/problems/ba1a/
+ */
+
+internal class S01c02p06PatternCountTest {
 
     @BeforeEach
     fun setUp() {

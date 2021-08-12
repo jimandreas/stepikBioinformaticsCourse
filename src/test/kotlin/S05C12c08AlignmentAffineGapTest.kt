@@ -243,10 +243,10 @@ internal class S05C12c08AlignmentAffineGapTest {
             CAGTGTCAGTA
             Output:
             -7
-            -------A--A
+            -A--------A
             CAGTGTCAGTA
         """.trimIndent()
-
+//        -------A--A  (original)
         runTest(sample)
     }
 
@@ -348,12 +348,12 @@ YHEDV----AHE------DAIAQMVNTFGFVWQICLNQFPSMMMKIYWIAVLSAHVADRKTWSKHMSCRWLPI----ISA
         val scoreExpected = lines[5].toInt()
         val scoreResult = result.first
 
-        println("RowE: $sRowExpected")
-        println("RowR: $sRowResult")
-        println("ColE: $tColExpected")
-        println("ColR: $tColResult")
-        println("ScoreE: $scoreExpected")
-        println("ScoreR: $scoreResult")
+//        println("RowE: $sRowExpected")
+//        println("RowR: $sRowResult")
+//        println("ColE: $tColExpected")
+//        println("ColR: $tColResult")
+//        println("ScoreE: $scoreExpected")
+//        println("ScoreR: $scoreResult")
 
         assertEquals(sRowExpected, sRowResult)
         assertEquals(tColExpected, tColResult)

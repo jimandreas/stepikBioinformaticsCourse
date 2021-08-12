@@ -234,12 +234,7 @@ class TwoBreakGenomesToBreakpointGraph {
             } else {
                 // find the bindingElement
                 val index = g.indexOf(bindingElement)
-                if (index != 0) {
-                    println("NonZero")
-                }
-                if (index == -1) {
-                    println("OOPSIE")
-                }
+//                +-
                 if (index % 2 == 0) {
                     first = g[index]
                     second = g[index+1]
@@ -280,7 +275,7 @@ class TwoBreakGenomesToBreakpointGraph {
                         bindingElement = first - 1
                     }
                 }
-                println(bindingElement)
+                //println(bindingElement)
                 if (bindingElement == firstElement) {
                     // rotate the cycle one position
                     val size = currentCycle.size
@@ -298,13 +293,6 @@ class TwoBreakGenomesToBreakpointGraph {
 
             }
         }
-
-//        // rotate the cycle one position
-//        val size = currentCycle.size
-//        val lastElement = currentCycle[size - 1]
-//        currentCycle.add(0, lastElement)
-//        currentCycle.removeAt(size)
-//        listOfChromosomes.add(cycleToChromosomeDivideBy2(currentCycle))
 
         return listOfChromosomes
     }
