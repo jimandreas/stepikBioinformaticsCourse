@@ -6,6 +6,36 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import util.frequentWordsWithMismatches
 
+/**
+ * @link: https://stepik.org/lesson/240221/step/10?unit=212567
+
+1.8 Some Hidden Messages are More Elusive than Others
+
+We now redefine the Frequent Words Problem to account for both mismatches and reverse complements.
+Recall that Patternrc refers to the reverse complement of Pattern.
+
+Frequent Words with Mismatches and Reverse Complements Problem:
+Find the most frequent k-mers (with mismatches and reverse complements) in a string.
+
+Input: A DNA string Text as well as integers k and d.
+Output: All k-mers Pattern maximizing the sum Countd(Text, Pattern)+ Countd(Text, Patternrc) over all possible k-mers.
+
+Code Challenge: Solve the Frequent Words with Mismatches and Reverse Complements Problem.
+
+Sample Input:
+
+ACGTTGCATGTCGCATGATGCATGAGAGCT
+4 1
+
+Sample Output:
+
+ATGT ACAT
+
+See also:
+stepik: https://stepik.org/lesson/240221/step/10?unit=212567
+rosalind: http://rosalind.info/problems/ba1j/
+ */
+
 internal class S01c08p10WordsWithMismatchesTest {
 
     @BeforeEach

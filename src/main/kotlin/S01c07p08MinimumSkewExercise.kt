@@ -1,10 +1,14 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-// 1.7 Peculiar Statistics of the Forward and Reverse Half-Strands
-
 /**
 
+1.7 Peculiar Statistics of the Forward and Reverse Half-Strands
 Exercise Break: Give all values of Skewi (GAGCCACCGCGATA) for i ranging from 0 to 14.
+
+Minimum Skew Problem: Find a position in a genome where the skew diagram attains a minimum.
+
+Input: A DNA string Genome.
+Output: All integer(s) i minimizing Skewi (Genome) among all values of i (from 0 to |Genome|).
 
 Sample Input:
 CATGGGCATCGGCCATACGCC
@@ -12,9 +16,9 @@ CATGGGCATCGGCCATACGCC
 Sample Output:
 0 -1 -1 -1 0 1 2 1 1 1 0 1 2 1 0 0 0 0 -1 0 -1 -2
 0 -1 -1 -1 0 1 2 1 1 1 0 1 2 1 0 0 0 0 -1 0 -1 -2  // test checks.
+
+
  */
-
-
 
 fun main() {
 

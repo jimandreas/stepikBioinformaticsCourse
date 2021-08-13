@@ -23,7 +23,7 @@ fun findClumps(stringToSearch: String, clumpLengthMin: Int, windowLen: Int, occu
         // filter out any with occurence less than occurenceMin
         val passingStrings = foundStrings.filter { it.value >= occurenceMin }
 
-        if (passingStrings.isNotEmpty()) println(passingStrings)
+        //if (passingStrings.isNotEmpty()) println(passingStrings)
         accumulationMap += passingStrings
     }
 

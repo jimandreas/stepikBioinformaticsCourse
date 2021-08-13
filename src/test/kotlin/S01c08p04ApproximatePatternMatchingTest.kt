@@ -7,7 +7,40 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 
-internal class S01c08p04KmerMatchingInGenomeTest {
+/**
+ *
+1.8 Some Hidden Messages are More Elusive than Others
+We say that a k-mer Pattern appears as a substring of Text
+with at most d mismatches if there is some k-mer substring Pattern' of Text
+having d or fewer mismatches with Pattern, i.e., HammingDistance(Pattern, Pattern') ≤ d.
+Our observation that a DnaA box may appear with slight variations leads to the following
+generalization of the Pattern Matching Problem.
+
+Approximate Pattern Matching Problem: Find all approximate occurrences of a pattern in a string.
+
+Input: Strings Pattern and Text along with an integer d.
+Output: All starting positions where Pattern appears as a substring of Text with at most d mismatches.
+
+Code Challenge: Solve the Approximate Pattern Matching Problem.
+
+Extra Dataset
+
+Debug Datasets
+
+Sample Input:
+
+ATTCTGGA
+CGCCCGAATCCAGAACGCATTCCCATATTTCGGGACCACTGGCCTCCACGGTACGGACGTCAATCAAAT
+3
+
+Sample Output:
+
+6 7 26 27
+See also:
+stepik: https://stepik.org/lesson/240221/step/4?unit=212567
+rosalind: http://rosalind.info/problems/ba1h/
+ */
+internal class S01c08p04ApproximatePatternMatchingTest {
 
     @BeforeEach
     fun setUp() {

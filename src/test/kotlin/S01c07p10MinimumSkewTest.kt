@@ -8,31 +8,27 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 
 /**
- *
 
-1.4 An Explosion of Hidden Messages
+1.7 Peculiar Statistics of the Forward and Reverse Half-Strands
+Exercise Break: Give all values of Skewi (GAGCCACCGCGATA) for i ranging from 0 to 14.
 
-Code Challenge: Solve the Clump Finding Problem (restated below).
+Minimum Skew Problem: Find a position in a genome where the skew diagram attains a minimum.
 
-Clump Finding Problem: Find patterns forming clumps in a string.
-
-Input: A string Genome, and integers k, L, and t.
-Output: All distinct k-mers forming (L, t)-clumps in Genome.
+Input: A DNA string Genome.
+Output: All integer(s) i minimizing Skewi (Genome) among all values of i (from 0 to |Genome|).
 
 Sample Input:
-
-CGGACTCGACAGATGTGAAGAACGACAATGTGAAGACTCGACACGACAGAGTGAAGAGAAGAGGAAACATTGTAA
-5 50 4    // k = kmer, L = window length, t = min occurences
+CATGGGCATCGGCCATACGCC
 
 Sample Output:
-
-CGACA GAAGA
+0 -1 -1 -1 0 1 2 1 1 1 0 1 2 1 0 0 0 0 -1 0 -1 -2
+0 -1 -1 -1 0 1 2 1 1 1 0 1 2 1 0 0 0 0 -1 0 -1 -2  // test checks.
 
 See also:
-stepik: https://stepik.org/lesson/240217/step/5?unit=212563
-rosalind: http://rosalind.info/problems/ba1e/
-
+stepik: https://stepik.org/lesson/240220/step/10?unit=212566
+rosalind: http://rosalind.info/problems/ba1f/
  */
+
 
 internal class S01c07p10Test {
 
