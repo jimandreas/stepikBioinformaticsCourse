@@ -3,8 +3,6 @@
 import util.motifEnumeration
 
 /**
- * @link: https://stepik.org/lesson/240238/step/8?unit=212584
- *
 
 2.2 Motif Finding Is More Difficult Than You Think
 7 out of 10 steps passed
@@ -23,22 +21,34 @@ if Pattern' appears in each string from Dna with at most d mismatches
 add Pattern' to Patterns
 remove duplicates from Patterns
 return Patterns
+
+ * See also:
+ * stepik: @link: https://stepik.org/lesson/240238/step/8?unit=212584
+ * rosalind: @link: http://rosalind.info/problems/ba2a/
  */
 
 fun main() {
-    val g = listOf(
-        "CGGCGGTAGGACGTTATCTAGTTGG",
-        "CGTCTTAGTCATTCTTATTTTCTCC",
-        "GTTAAACCTCACTGCACATTCGGCA",
-        "GTTTTTTCTCCTATCCAAAGCGTCG",
-        "GCAATTCCGTCGTCAGGCGGCTGGA",
-        "CTAGGATAAGCAGTGCGCCCCTTAG"
-    )
+    val sample = """
+TGCACAGGGCCCTCACTACACACTG
+TGCTGCTGCCAGGGACCTTTTCTTA
+ACCAGGTGATGTCCACTCCCAGGGG
+GGACGAGGGCGTGGCTAGGAGTCTT
+AATATAAGCTGTAGCAGAGGAGGGC
+GCATGACGATATTGAAGGGGTGATG
+TAAATGGATTGACCGTTATCAGGGG
+AGGGCAACCGGGACTTGCGACGTTG
+AGGGAGGAAGGGTGAGTGAACTGCT
+GCCCGAGGGATGGTCGACCGATCGA
+    """.trimIndent()
+
+    val reader = sample.reader()
+    val lines = reader.readLines()
+
     val k = 5 // kmer length
-    val d = 2 // hamming distance
+    val d = 1 // hamming distance
 
     val expectedResult = ""
-    val matchList = motifEnumeration(g, k, d).sorted()
+    val matchList = motifEnumeration(lines, k, d).sorted()
 
     var result = ""
     for (i in matchList) {

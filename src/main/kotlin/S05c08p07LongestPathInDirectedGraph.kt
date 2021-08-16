@@ -1,6 +1,5 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls")
 
-import org.junit.jupiter.api.Assertions
 import util.LongestPathInDirectedGraph
 
 /**

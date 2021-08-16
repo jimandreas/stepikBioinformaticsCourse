@@ -1,9 +1,7 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls")
 
 import org.jetbrains.kotlinx.multik.api.toNDArray
-import util.AlignmentLinearSpace
 import util.GreedySorting
-import util.MultipleLongestCommonSubsequence
 
 /**
  * Implement GreedySorting

@@ -20,7 +20,7 @@ for 1 ≤ i ≤ n (if such a string exists).
 
 
  */
-internal class S03c09p16testReadPairsStringSpelledByGappedPatterns {
+internal class S03c09p16ReadPairsStringSpelledByGappedPatternsTest {
 
 //    private val ep = EulerianPathStrings()
 

@@ -1,6 +1,5 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls")
 
-import util.AlignmentAffineGap
 import util.MiddleEdgeLinearSpace
 
 /**

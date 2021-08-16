@@ -9,7 +9,7 @@ import util.translateRnaCodonStringToAminoAcidString
 import java.util.*
 import kotlin.test.assertEquals
 
-internal class CodonTesting {
+internal class CodonTest {
 
     @BeforeEach
     fun setUp() {

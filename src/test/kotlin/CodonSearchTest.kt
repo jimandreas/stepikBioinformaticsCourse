@@ -8,7 +8,7 @@ import util.reverseComplement
 import util.scanDnaStringForPeptideEncoding
 import kotlin.test.assertEquals
 
-internal class CodonSearchTesting {
+internal class CodonSearchTest {
 
     @BeforeEach
     fun setUp() {

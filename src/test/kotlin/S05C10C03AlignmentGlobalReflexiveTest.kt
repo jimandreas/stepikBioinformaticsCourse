@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate")
+@file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "ReplaceManualRangeWithIndicesCalls")
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -237,7 +237,7 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
         val str = StringBuilder()
         val len = (1..99).random()
         for (l in 0 until len) {
-            str.append(aminos[(0..aminos.size - 1).random()])
+            str.append(aminos[(0 until aminos.size).random()])
         }
         return str.toString()
     }

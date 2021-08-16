@@ -9,7 +9,7 @@ import util.EulerianPathSymbolicMap
  *  testing the euler cycle code - converted to handle the nodes as hash key entries
  *  rather than array indexes.
  */
-internal class S03c08p06testEulerianCycleSYMBOLIC {
+internal class S03c08p06EulerianCycleSYMBOLICTest {
 
     private val ep = EulerianPathSymbolicMap()
 

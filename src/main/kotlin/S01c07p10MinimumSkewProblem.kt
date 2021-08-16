@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable")
+@file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable", "unused")
 
 /**
 1.7 Peculiar Statistics of the Forward and Reverse Half-Strands

@@ -93,7 +93,7 @@ class LongestPathInDirectedGraph {
      */
     fun outputDAG(list: MutableMap<Int, Edge>): Pair<Int, List<Int>> {
 
-        var weight = list[endNodeNum]!!.maxConn.second   // already calculated
+        val weight = list[endNodeNum]!!.maxConn.second   // already calculated
 
         var curNodeNum = endNodeNum
         val outList: MutableList<Int> = mutableListOf()

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 import util.EulerConnectionData
 import util.EulerianPathArrayBased
 
-internal class S03c08p02testEulerianCycleProblem {
+internal class S03c08p02EulerianCycleProblemTest {
 
     private val ep = EulerianPathArrayBased()
 

@@ -1,11 +1,5 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls")
 
-import org.jetbrains.kotlinx.multik.api.toNDArray
-import org.jetbrains.kotlinx.multik.ndarray.data.get
-import util.AlignmentLinearSpace
-import util.GreedySorting
-import util.MultipleLongestCommonSubsequence
-
 /**
  *
 

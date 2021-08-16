@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-internal class S03c04p06testDeBruijnGraph {
+internal class S03c04p06DeBruijnGraphTest {
 
     @BeforeEach
     fun setUp() {

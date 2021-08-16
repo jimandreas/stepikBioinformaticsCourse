@@ -2,9 +2,6 @@
 
 import org.jetbrains.kotlinx.multik.api.toNDArray
 import org.jetbrains.kotlinx.multik.ndarray.data.get
-import util.AlignmentLinearSpace
-import util.GreedySorting
-import util.MultipleLongestCommonSubsequence
 
 /**
  * Number of Breakpoints Problem: Find the number of breakpoints in a permutation.

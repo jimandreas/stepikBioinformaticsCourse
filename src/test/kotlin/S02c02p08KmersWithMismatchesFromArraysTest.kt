@@ -5,7 +5,32 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import util.motifEnumeration
 
-internal class S02c02p08testKmersWithMismatchesFromArrays {
+/**
+
+2.2 Motif Finding Is More Difficult Than You Think
+7 out of 10 steps passed
+0 out of 10 points  received
+
+Code Challenge: Implement MotifEnumeration (reproduced below).
+
+Input: Integers k and d, followed by a collection of strings Dna.
+Output: All (k, d)-motifs in Dna.
+
+MotifEnumeration(Dna, k, d)
+Patterns ← an empty set
+for each k-mer Pattern in Dna
+for each k-mer Pattern’ differing from Pattern by at most d mismatches
+if Pattern' appears in each string from Dna with at most d mismatches
+add Pattern' to Patterns
+remove duplicates from Patterns
+return Patterns
+
+ * See also:
+ * stepik: @link: https://stepik.org/lesson/240238/step/8?unit=212584
+ * rosalind: @link: http://rosalind.info/problems/ba2a/
+ */
+
+internal class S02c02p08KmersWithMismatchesFromArraysTest {
 
     @BeforeEach
     fun setUp() {

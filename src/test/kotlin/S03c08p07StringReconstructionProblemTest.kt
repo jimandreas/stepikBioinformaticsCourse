@@ -18,7 +18,7 @@ The String Spelled by a Genome Path Problem.
  1) the EulerPath program was duplicated and modified to work on strings rather than integers.
 
  */
-internal class S03c08p07testStringReconstructionProblem {
+internal class S03c08p07StringReconstructionProblemTest {
 
     private val ep = EulerianPathStrings()
 
