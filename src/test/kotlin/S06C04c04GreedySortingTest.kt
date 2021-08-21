@@ -128,7 +128,7 @@ internal class S06C04c04GreedySortingTest {
 
             val neg = gsN.outStr.toString().lines().size - 1
 
-            println("$i pos $pos neg $neg")
+    //       println("$i pos $pos neg $neg")
 
         }
     }

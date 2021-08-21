@@ -104,7 +104,7 @@ fun convolutionCyclopeptideSequencing(
 
     // override the amino masses used in the leaderboard analysis
     aminoUniqueMasses = topM(topElementsM, convolutionResult)
-    println(aminoUniqueMasses)
+    //println(aminoUniqueMasses)
 
     val results = l.leaderboardCyclopeptideSequencing(leaderBoardN, spectrum)
     return results

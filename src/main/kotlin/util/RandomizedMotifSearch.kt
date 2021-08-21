@@ -1,4 +1,6 @@
-@file:Suppress("MemberVisibilityCanBePrivate", "UnnecessaryVariable", "unused", "RemoveEmptyClassBody")
+@file:Suppress("MemberVisibilityCanBePrivate", "UnnecessaryVariable", "unused", "RemoveEmptyClassBody",
+    "UNUSED_PARAMETER"
+)
 
 package util
 

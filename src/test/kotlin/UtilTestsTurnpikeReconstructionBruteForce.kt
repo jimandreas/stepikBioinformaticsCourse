@@ -98,7 +98,7 @@ internal class UtilTestsTurnpikeReconstructionBruteForce {
         val sampleInput = listOf(-10, -8, -7, -6, -5, -4, -3, -3, -2, -2, 0, 0, 0, 0, 0, 2, 2, 3, 3, 4, 5, 6, 7, 8, 10)
         val output = tpbf.turnpikeReconstructionProblem(sampleInput)
 
-        println(output.joinToString(separator = " "))
+//       println(output.joinToString(separator = " "))
 
         // check the answer
 
@@ -121,22 +121,22 @@ internal class UtilTestsTurnpikeReconstructionBruteForce {
         // now have a list of integers from 0 to 100 with 0 and 100 wrapping the list
         val diffs = doDiffs(testListDistinct).sorted()
 
-        println(tpbf.turnpikeQualityControl(diffs))
+//       println(tpbf.turnpikeQualityControl(diffs))
 
         val output = tpbf.turnpikeReconstructionProblem(diffs)
-        println(output)
-        println("$testListDistinct  ORIGINAL")
+//       println(output)
+//       println("$testListDistinct  ORIGINAL")
 
-        if (output.containsAll(testListDistinct) && testListDistinct.containsAll(output)) {
-            println("Answer matches input set")
-        }
+//        if (output.containsAll(testListDistinct) && testListDistinct.containsAll(output)) {
+//           println("Answer matches input set")
+//        }
 
         val diffsOnOutput = doDiffs(output)
         val check = diffsOnOutput.containsAll(diffs) && diffs.containsAll(diffsOnOutput)
 
-        if (check) {
-            println("answer checks with diffs")
-        }
+//        if (check) {
+//           println("answer checks with diffs")
+//        }
 
         assertTrue(check)
     }
@@ -154,7 +154,7 @@ internal class UtilTestsTurnpikeReconstructionBruteForce {
         // link:
         val sampleInput = loader.getResourceAsList("S04c04p19TurnpikeReconstructionInput.txt")
         val output = tpbf.turnpikeReconstructionProblem(sampleInput)
-        println(output.joinToString(separator = " "))
+//       println(output.joinToString(separator = " "))
 
         // check the answer
 

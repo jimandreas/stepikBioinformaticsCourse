@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE")
+@file:Suppress("UNUSED_VARIABLE", "UNUSED_VALUE")
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -75,7 +75,7 @@ internal class UtilTestsCyclopeptideSequencing {
             resultStrings.add(l.joinToString(separator = "-"))
         }
         resultStrings = resultStrings.sorted().distinct().toMutableList()
-        println(resultStrings.joinToString(separator = " "))
+//       println(resultStrings.joinToString(separator = " "))
     }
 
 
@@ -86,11 +86,11 @@ internal class UtilTestsCyclopeptideSequencing {
             resultStrings.add(l.joinToString(separator = "-"))
         }
         resultStrings = resultStrings.sorted().distinct().toMutableList()
-        println(resultStrings.joinToString(separator = " "))
+//       println(resultStrings.joinToString(separator = " "))
 
         val expectedResult = expectedResultUnsorted.split(" ").sorted()
 
-        println("counts: result Strings ${resultStrings.size} expected ${expectedResult.size}")
+//       println("counts: result Strings ${resultStrings.size} expected ${expectedResult.size}")
 
         val iter = resultStrings.iterator().withIndex()
         var passing = true
@@ -99,7 +99,7 @@ internal class UtilTestsCyclopeptideSequencing {
             val res = resultStrings[i.index]
             val exp = expectedResult[i.index]
             if (res != exp) {
-                println("oops")
+        //       println("oops")
                 passing = false
             }
 

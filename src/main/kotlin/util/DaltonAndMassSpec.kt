@@ -1,6 +1,6 @@
 @file:Suppress(
     "ControlFlowWithEmptyBody", "UNUSED_VARIABLE", "unused", "ReplaceManualRangeWithIndicesCalls",
-    "LiftReturnOrAssignment", "UnnecessaryVariable"
+    "LiftReturnOrAssignment", "UnnecessaryVariable", "MemberVisibilityCanBePrivate"
 )
 
 package util
@@ -347,7 +347,7 @@ fun trimLeaderboardMasses(
     val outputPeptidesSorted = outputPeptides.sortedByDescending { it.first }
     val outputMasses = outputPeptidesSorted.map { it.second }
 
-    println("Cutoff = $cutoff levels size ${levels.size} $trimLevel size after trim ${outputMasses.size}")
+    //println("Cutoff = $cutoff levels size ${levels.size} $trimLevel size after trim ${outputMasses.size}")
 
     return outputMasses.toMutableList()
 }

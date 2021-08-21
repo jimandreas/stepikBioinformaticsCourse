@@ -34,7 +34,7 @@ internal class UtilTests2 {
 
         val kmer = "TCGTGGATTTCC"
         val prob = probForGivenKmer(kmer, matrix)
-        println(prob)
+//       println(prob)
     }
 
     /**
@@ -74,7 +74,7 @@ internal class UtilTests2 {
                 0.1f
             )
         val foo = parseProbabilityMatrix(5, matrixString)
-        println(foo)
+//       println(foo)
     }
 
     /**

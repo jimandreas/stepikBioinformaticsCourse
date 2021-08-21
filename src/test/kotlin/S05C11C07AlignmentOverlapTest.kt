@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate")
+@file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -225,10 +225,10 @@ internal class S05C11C07AlignmentOverlapTest {
         val sRowResult = result.second
         val tColResult = result.third
 
-        println("RowE: $sRowAlignedExpected")
-        println("RowR: $sRowResult")
-        println("ColE: $tColAlignedExpected")
-        println("ColR: $tColResult")
+//       println("RowE: $sRowAlignedExpected")
+//       println("RowR: $sRowResult")
+//       println("ColE: $tColAlignedExpected")
+//       println("ColR: $tColResult")
 
         val scoreExpected = lines[5].toInt()
         val scoreResult = result.first

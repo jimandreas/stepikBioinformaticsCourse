@@ -153,7 +153,7 @@ internal class S06C12GenomeToBreakpointGraphTest {
 
 
         val result = twoBreakFunctions.cycleToChromosome(cycle).joinToString(" ") { String.format("%+d", it) }
-        println("($result)")
+//       println("($result)")
     }
 
 
@@ -300,7 +300,7 @@ internal class S06C12GenomeToBreakpointGraphTest {
             str.append(l.joinToString(" ") { String.format("%+d", it) })
             str.append(")")
         }
-        println(str.toString())
+//       println(str.toString())
     }
 
     /**

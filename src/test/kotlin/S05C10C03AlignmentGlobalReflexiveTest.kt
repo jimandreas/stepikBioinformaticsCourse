@@ -84,10 +84,10 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
         val sRowResultR = resultR.second.reversed()
         val tColResultR = resultR.third.reversed()
 
-        println(sRowResult)
-        println(sRowResultR)
-        println(tColResult)
-        println(tColResultR)
+//       println(sRowResult)
+//       println(sRowResultR)
+//       println(tColResult)
+//       println(tColResultR)
 
     }
 
@@ -118,11 +118,11 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
         val sRowResultR = resultR.second.reversed()
         val tColResultR = resultR.third.reversed()
 
-        println("$sRowResult FORWARDS")
-        println(sRowResultR)
-        println("$tColResultR BACKARDS")
-        println(tColResultR)
-        println("Score: forwards: $scoreResult backwards: $scoreResultR")
+//       println("$sRowResult FORWARDS")
+//       println(sRowResultR)
+//       println("$tColResultR BACKARDS")
+//       println(tColResultR)
+//       println("Score: forwards: $scoreResult backwards: $scoreResultR")
 
     }
 
@@ -171,12 +171,12 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
              * Yes a global variable is a hack.
              */
 
-//            println(scoreResult)
-//            println(scoreResultR)
-//            println(sRowResult)
-//            println(sRowResultR)
-//            println(tColResult)
-//            println(tColResultR)
+//    //       println(scoreResult)
+//    //       println(scoreResultR)
+//    //       println(sRowResult)
+//    //       println(sRowResultR)
+//    //       println(tColResult)
+//    //       println(tColResultR)
 
             if (scoreResult == scoreResultR) {
                 scoreEquivalence++
@@ -193,9 +193,9 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
                 if (sRowResult == sRowResultRP) {
                     rowEquivalenceS++
 
-//                    println(sRowResult)
-//                    println(sRowResultR)
-//                    println("$sRowResultRP ROW MATCH PRIORITY HACKED")
+//            //       println(sRowResult)
+//            //       println(sRowResultR)
+//            //       println("$sRowResultRP ROW MATCH PRIORITY HACKED")
                 }
                 rowPriorityAttempts++
                 ga.downPriority = state
@@ -211,18 +211,18 @@ internal class S05C10C03AlignmentGlobalReflexiveTest {
                 if (tColResult == tColResultRPC) {
                     colEquivalenceS++
 
-//                    println(tColResult)
-//                    println(tColResultR)
-//                    println("$tColResultRPC COLUMN MATCH PRIORITY HACKED")
+//            //       println(tColResult)
+//            //       println(tColResultR)
+//            //       println("$tColResultRPC COLUMN MATCH PRIORITY HACKED")
                 }
                 colPriorityAttempts++
                 ga.downPriority = stateC
             }
         }
 
-        println("score $scoreEquivalence row $rowEquivalence col $colEquivalence equivalence in $tries tries")
-        println("after priority change the following matched:  ")
-        println("row $rowEquivalenceS of attempts $rowPriorityAttempts  col $colEquivalenceS of attempts $colPriorityAttempts")
+//       println("score $scoreEquivalence row $rowEquivalence col $colEquivalence equivalence in $tries tries")
+//       println("after priority change the following matched:  ")
+//       println("row $rowEquivalenceS of attempts $rowPriorityAttempts  col $colEquivalenceS of attempts $colPriorityAttempts")
     }
 
     /**

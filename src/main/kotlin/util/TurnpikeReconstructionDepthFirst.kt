@@ -200,7 +200,7 @@ class TurnpikeReconstructionDepthFirst {
                 // check for symmetry while deleting the negative values
                 if (values[i] < 0) {
                     if (-values[i] != values[size - i - 1]) {
-                        println("FAIL: ${newList[i]} != (minus) ${newList[size - i - 1]} at index $i")
+                        println("turnpikeQualityControl FAIL: ${newList[i]} != (minus) ${newList[size - i - 1]} at index $i")
                         return emptyList()
                     }
                     newList.removeAt(0)  // trim each negative number

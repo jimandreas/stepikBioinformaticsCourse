@@ -88,7 +88,7 @@ internal class CodonTest {
         lookupList.map {
             totalNum *= it
         }
-        println(totalNum)
+//       println(totalNum)
 
         assertEquals(6144, totalNum)  // correct per stepik!!
 
@@ -102,7 +102,7 @@ internal class CodonTest {
             it!!.code
         }
 
-        println(singleLetterString.joinToString(separator = ""))
+//       println(singleLetterString.joinToString(separator = ""))
     }
 
 

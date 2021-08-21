@@ -250,13 +250,13 @@ internal class S05C14c05MultipleAlignmentTest {
         val jResult = strings.second
         val kResult = strings.third
 
-        println("E $iExpected")
-        println("E $jExpected")
-        println("E $kExpected")
+//       println("E $iExpected")
+//       println("E $jExpected")
+//       println("E $kExpected")
 
-        println("R $iResult")
-        println("R $jResult")
-        println("R $kResult")
+//       println("R $iResult")
+//       println("R $jResult")
+//       println("R $kResult")
     }
 
 }

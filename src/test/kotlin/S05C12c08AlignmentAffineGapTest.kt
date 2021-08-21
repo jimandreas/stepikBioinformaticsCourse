@@ -348,12 +348,12 @@ YHEDV----AHE------DAIAQMVNTFGFVWQICLNQFPSMMMKIYWIAVLSAHVADRKTWSKHMSCRWLPI----ISA
         val scoreExpected = lines[5].toInt()
         val scoreResult = result.first
 
-//        println("RowE: $sRowExpected")
-//        println("RowR: $sRowResult")
-//        println("ColE: $tColExpected")
-//        println("ColR: $tColResult")
-//        println("ScoreE: $scoreExpected")
-//        println("ScoreR: $scoreResult")
+////       println("RowE: $sRowExpected")
+////       println("RowR: $sRowResult")
+////       println("ColE: $tColExpected")
+////       println("ColR: $tColResult")
+////       println("ScoreE: $scoreExpected")
+////       println("ScoreR: $scoreResult")
 
         assertEquals(sRowExpected, sRowResult)
         assertEquals(tColExpected, tColResult)

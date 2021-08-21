@@ -360,7 +360,7 @@ internal class S05C13c12FindMiddleEdgeTest {
         val pair1 = result.first.toList().joinToString(", ")
         val pair2 = result.second.toList().joinToString(", ")
         val resultString = "($pair1) ($pair2)"
-        println(resultString)
+//       println(resultString)
 
         assertEquals(pairsExpected, resultString)
 

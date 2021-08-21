@@ -41,7 +41,7 @@ internal class UtilTestsTurnpikeReconstructionDepthFirst {
         val testList = listOf(0, 1, 2, 2, 2, 3, 3, 3, 4, 5, 5, 5, 6, 7, 8, 10)
 
         val output = tpdf.turnpikeReconstructionDepthFirst(testList)
-        println(output)
+        //println(output)
 
         val expectedResult = listOf(0, 5, 6, 3, 8, 10)
         assertEquals(output.sorted(), expectedResult.sorted())
@@ -103,7 +103,7 @@ internal class UtilTestsTurnpikeReconstructionDepthFirst {
         val sampleInput = listOf(0, 1, 2, 2, 2, 3, 3, 3, 4, 5, 5, 5, 6, 7, 8, 10)
         val output = tpdf.turnpikeReconstructionDepthFirst(sampleInput)
 
-        println(output.joinToString(separator = " "))
+//       println(output.joinToString(separator = " "))
 
         val expectedResult = listOf(0, 3, 5, 6, 8, 10 )
         assertEquals(expectedResult, output.sorted())
@@ -124,22 +124,22 @@ internal class UtilTestsTurnpikeReconstructionDepthFirst {
         // now have a list of integers from 0 to 100 with 0 and 100 wrapping the list
         val diffs = doDiffs(testListDistinct).sorted()
 
-        println(tpdf.turnpikeQualityControl(diffs))
+//       println(tpdf.turnpikeQualityControl(diffs))
 
         val output = tpdf.turnpikeReconstructionDepthFirst(diffs)
-        println(output)
-        println("$testListDistinct  ORIGINAL")
+//       println(output)
+//       println("$testListDistinct  ORIGINAL")
 
-        if (output.containsAll(testListDistinct) && testListDistinct.containsAll(output)) {
-            println("Answer matches input set")
-        }
+    //    if (output.containsAll(testListDistinct) && testListDistinct.containsAll(output)) {
+    //       println("Answer matches input set")
+    //    }
 
         val diffsOnOutput = doDiffs(output)
         val check = diffsOnOutput.containsAll(diffs) && diffs.containsAll(diffsOnOutput)
 
-        if (check) {
-            println("answer checks with diffs")
-        }
+    //    if (check) {
+    //       println("answer checks with diffs")
+     //   }
 
         Assertions.assertTrue(check)
     }
@@ -157,7 +157,7 @@ internal class UtilTestsTurnpikeReconstructionDepthFirst {
         // link:
         val sampleInput = loader.getResourceAsList("S04c04p19TurnpikeReconstructionInput.txt")
         val output = tpdf.turnpikeReconstructionDepthFirst(sampleInput)
-        println(output.joinToString(separator = " "))
+//       println(output.joinToString(separator = " "))
 
         // check the answer
 

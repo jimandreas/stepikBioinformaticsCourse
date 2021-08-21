@@ -31,7 +31,7 @@ internal class UtilTestsTrimLeaderBoard {
 
         val result = trimLeaderboard(peptides, spectrum, n)
 
-        println(result)
+//       println(result)
     }
 
 /*    @Test
@@ -43,7 +43,7 @@ internal class UtilTestsTrimLeaderBoard {
 
         val result = trimLeaderboard(peptides, spectrum, n)
 
-        println(result)
+//       println(result)
 
         val expectedResult = "WASIGAIMRSAKDMYESLEFHKTHCTYFVYMVCKEARPGWTFFIEWV YYGYRQCSWCQRWTVRRMLCWIDVLHKALHWHVCLLFHQALYGFSHE WDTDTFFQKAMLKKDETADQIFNLRPYSLTCHNENILGNDNQEKQAG YDSPTTYLSTHCHRLTNRMVHENPVICPPQDFAKYLIQSGWEFPLVA MAPRDIRMYFDKYHETAALDSQWIIQQIYHLMNVRKLNRTNRFTSVG FEKYHQQQILIDAQRVRLVHTVARAGPGWVQTGGWQQTCPRYKPYAW".split(" ").sorted()
         assertEquals(expectedResult.sorted(), result.sorted())
@@ -59,7 +59,7 @@ internal class UtilTestsTrimLeaderBoard {
 
         val result = trimLeaderboard(peptides, spectrum, n)
 
-        println(result.joinToString(separator = " "))
+//       println(result.joinToString(separator = " "))
 
 //        val expectedResult = "WASIGAIMRSAKDMYESLEFHKTHCTYFVYMVCKEARPGWTFFIEWV YYGYRQCSWCQRWTVRRMLCWIDVLHKALHWHVCLLFHQALYGFSHE WDTDTFFQKAMLKKDETADQIFNLRPYSLTCHNENILGNDNQEKQAG YDSPTTYLSTHCHRLTNRMVHENPVICPPQDFAKYLIQSGWEFPLVA MAPRDIRMYFDKYHETAALDSQWIIQQIYHLMNVRKLNRTNRFTSVG FEKYHQQQILIDAQRVRLVHTVARAGPGWVQTGGWQQTCPRYKPYAW".split(" ").sorted()
 //        assertEquals(expectedResult, result.sorted())

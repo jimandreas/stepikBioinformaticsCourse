@@ -266,11 +266,11 @@ QVPFPTVDVIVCCTGIKCEPMNV-GYDQQMKDCFICTREYDIRRLHTIVCGSEW-ACRLWIEADWEDCEKSFRD-FDAPI
         val scoreExpected = lines[5].toInt()
         val scoreResult = result.first
 
-        println("RowE: $sRowAlignedExpected")
-        println("RowR: $sRowResult")
-        println("ColE: $tColAlignedExpected")
-        println("ColR: $tColResult")
-        println("ScoreE: $scoreExpected  ScoreR: $scoreResult")
+//       println("RowE: $sRowAlignedExpected")
+//       println("RowR: $sRowResult")
+//       println("ColE: $tColAlignedExpected")
+//       println("ColR: $tColResult")
+//       println("ScoreE: $scoreExpected  ScoreR: $scoreResult")
 
         assertEquals(sRowAlignedExpected, sRowResult)
         assertEquals(tColAlignedExpected, tColResult)

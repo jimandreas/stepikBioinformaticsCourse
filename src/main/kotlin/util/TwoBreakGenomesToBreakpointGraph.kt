@@ -1,4 +1,6 @@
-@file:Suppress("MemberVisibilityCanBePrivate", "UnnecessaryVariable", "LiftReturnOrAssignment")
+@file:Suppress("MemberVisibilityCanBePrivate", "UnnecessaryVariable", "LiftReturnOrAssignment",
+    "UNUSED_ANONYMOUS_PARAMETER", "VARIABLE_WITH_REDUNDANT_INITIALIZER"
+)
 
 package util
 

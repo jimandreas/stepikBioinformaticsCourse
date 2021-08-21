@@ -131,7 +131,7 @@ internal class S06C13SolvingTwoBreakSortingTest {
 
         val result = twoBreak.twoBreakOnGenomeGraph(genomeGraph, breakList)
         val outString = pairTheList(result).toString()
-        println(outString)
+//       println(outString)
 //        assertEquals(expectedResult, result)
     }
 
@@ -274,7 +274,7 @@ internal class S06C13SolvingTwoBreakSortingTest {
             str.append(l.joinToString(" ") { String.format("%+d", it) })
             str.append(")")
         }
-        println(str.toString())
+//       println(str.toString())
     }
 
     /**

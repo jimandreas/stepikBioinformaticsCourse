@@ -267,10 +267,10 @@ internal class S05C11C05AlignmentFittingTest {
         val sRowResult = result.second
         val tColResult = result.third
 
-        println(sRowAlignedExpected)
-        println(sRowResult)
-        println(tColAlignedExpected)
-        println(tColResult)
+//       println(sRowAlignedExpected)
+//       println(sRowResult)
+//       println(tColAlignedExpected)
+//       println(tColResult)
 
         assertEquals(sRowAlignedExpected, sRowResult)
         assertEquals(tColAlignedExpected, tColResult)

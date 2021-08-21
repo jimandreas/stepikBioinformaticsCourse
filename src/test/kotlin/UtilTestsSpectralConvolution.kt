@@ -30,7 +30,7 @@ internal class UtilTestsSpectralConvolution {
         val spectrum = listOf(0, 137, 186, 323)
 
         val result = spectralConvolution(spectrum)
-        println(result)
+//       println(result)
         
         val expectedResult = "49 323 137 137 186 186 "
 
@@ -50,9 +50,9 @@ internal class UtilTestsSpectralConvolution {
         val spectrum = listOf(465, 473, 998, 257, 0, 385, 664, 707, 147, 929, 87, 450, 748, 938, 998, 768, 234, 722, 851, 113, 700, 957, 265, 284, 250, 137, 317, 801, 128, 820, 321, 612, 956, 434, 534, 621, 651, 129, 421, 337, 216, 699, 347, 101, 464, 601, 87, 563, 738, 635, 386, 972, 620, 851, 948, 200, 156, 571, 551, 522, 828, 984, 514, 378, 363, 484, 855, 869, 835, 234, 1085, 764, 230, 885)
 
         val result = spectralConvolution(spectrum)
-        println(result)
+//       println(result)
 
-        println(formatMap(result))
+//       println(formatMap(result))
     }
 */
 
@@ -69,7 +69,7 @@ internal class UtilTestsSpectralConvolution {
         val result = spectralConvolution(spectrum)
         //println(result)
 
-        println(formatMap(result))
+//       println(formatMap(result))
     }*/
     
     private fun formatMap(map: Map<Int, Int>): String {
@@ -102,7 +102,7 @@ internal class UtilTestsSpectralConvolution {
 
         val l = LeaderboardCyclopeptideSequencing()
         val result = convolutionCyclopeptideSequencing(l, 20, 60, spectrum)
-        println(result)
+//       println(result)
     }
 
     @Test
@@ -113,7 +113,7 @@ internal class UtilTestsSpectralConvolution {
 
         val l = LeaderboardCyclopeptideSequencing()
         val result = convolutionCyclopeptideSequencing(l, 17, 366, spectrum)
-        println(result.joinToString("-"))
+//       println(result.joinToString("-"))
 
         // Note: result expected is:
         // 113-115-114-128-97-163-131-129-129-147-57-57-129
@@ -132,7 +132,7 @@ internal class UtilTestsSpectralConvolution {
         //val result = convolutionCyclopeptideSequencing(20, 373, spectrum) stepik
         val l = LeaderboardCyclopeptideSequencing()
         val result = convolutionCyclopeptideSequencing(l, 18, 325, spectrum)
-        println(result.joinToString("-"))
+//       println(result.joinToString("-"))
 
         // note: worked!!   passed both stepik and rosalind quizzes.
     }
@@ -190,10 +190,10 @@ internal class UtilTestsSpectralConvolution {
         // note that these values are from wired-in variables that capture the
         //  solutions in question.
         //  An efficient hack but a hack nonetheless.
-        println("max score is ${l.maxScore}")
-        println("Count of 82s is ${l.countOfEightyTwos}")
+//       println("max score is ${l.maxScore}")
+//       println("Count of 82s is ${l.countOfEightyTwos}")
 
-        println(l.matchingStrings)
+//       println(l.matchingStrings)
 
         // for curiosity try the spectrum provided.
         // I get 172 matches to the max score.
@@ -209,10 +209,10 @@ internal class UtilTestsSpectralConvolution {
         // note that these values are from wired-in variables that capture the
         //  solutions in question.
         //  An efficient hack but a hack nonetheless.
-        println("max score is ${l.maxScore}")
-        println("Count of 82s is ${l.countOfEightyTwos}")
+//       println("max score is ${l.maxScore}")
+//       println("Count of 82s is ${l.countOfEightyTwos}")
 
-        println(l.matchingStrings)
+//       println(l.matchingStrings)
     }
 
 

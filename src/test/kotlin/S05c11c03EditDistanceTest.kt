@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate")
+@file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -152,7 +152,7 @@ SAMPLE PROBLEM
         val ed = EditDistance(match, mismatch, gap, useBLOSUM62 = false)
 
         val resultEditDistance = ed.calcEditDistance(sRow, tCol)
-        println(resultEditDistance)
+//       println(resultEditDistance)
         assertEquals(expectedEditDistance, -resultEditDistance)
 
     }
