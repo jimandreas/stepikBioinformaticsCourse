@@ -3,14 +3,19 @@
 package util
 
 /**
+Code Challenge: Implement GreedyMotifSearch.
+
+Input: Integers k and t, followed by a space-separated collection of strings Dna.
+Output: A collection of strings BestMotifs resulting from applying
+GreedyMotifSearch(Dna, k, t). If at any step you find more than one
+Profile-most probable k-mer in a given string, use the one occurring first.
+
  *  reference:
  *  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-2
- */
 
-/**
- *  @link: https://stepik.org/lesson/240241/step/4?unit=212587
- *  for each kmer in the first dna in the list,
- *  scan all other kmers in the following list entries and score them
+ * See also:
+ * stepik: @link: https://stepik.org/lesson/240241/step/5?unit=212587
+ * rosalind: @link: http://rosalind.info/problems/ba2d/
  */
 fun greedyMotifSearch(dnaList: List<String>, kmerLength: Int, applyLaplace: Boolean = false): List<String> {
 
@@ -54,7 +59,8 @@ fun greedyMotifSearch(dnaList: List<String>, kmerLength: Int, applyLaplace: Bool
  *
  * Added: pseudoCounts -
  * @link: https://en.wikipedia.org/wiki/Additive_smoothing#Pseudocount
- * "In order to improve this unfair scoring, bioinformaticians often substitute zeroes with small numbers called pseudocounts."
+ * "In order to improve this unfair scoring, bioinformaticians often
+ * substitute zeroes with small numbers called pseudocounts."
  */
 fun createProfile(motifsList: List<String>, applyLaplace: Boolean = false): FloatArray {
     val kmerLength = motifsList[0].length

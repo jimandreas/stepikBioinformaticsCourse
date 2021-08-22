@@ -1,4 +1,5 @@
-@file:Suppress("MemberVisibilityCanBePrivate", "UnnecessaryVariable", "unused", "RemoveEmptyClassBody",
+@file:Suppress(
+    "MemberVisibilityCanBePrivate", "UnnecessaryVariable", "unused", "RemoveEmptyClassBody",
     "UNUSED_PARAMETER"
 )
 
@@ -24,7 +25,7 @@ RandomizedMotifSearch(Dna, k, t) 1,000 times. Remember to use pseudocounts!
 /**
  *  PseudoCode
  */
-val psuedoCodeRanomizedMotifSearch= """
+val psuedoCodeRanomizedMotifSearch = """
 RANDOMIZEDMOTIFSEARCH(Dna, k, t)
   randomly select k-mers Motifs = (Motif1, . . . , Motift) in each string from Dna
   BestMotifs Motifs
@@ -39,7 +40,39 @@ RANDOMIZEDMOTIFSEARCH(Dna, k, t)
 
 class RandomizedMotifSearch {
 
-    fun doSearch(dnaStrings: List<String>, kLen: Int): List<String> {
-        return emptyList()
+    fun doRandomSearchOnePass(dnaStrings: List<String>, kLen: Int): List<String> {
+
+        var bestMotifs = dnaStrings.map {
+            val start = (0 until it.length - kLen).random()
+            it.substring(start, start + kLen)
+        }.toList()
+
+        while (true) {
+            val score2 = createProfile(bestMotifs, applyLaplace = true).toList()
+            val newMotifs: MutableList<String> = mutableListOf()
+            for (s in dnaStrings) {
+                newMotifs.add(mostProbableKmerGivenProbList(s, kLen, score2))
+            }
+            if (scoreTheMotifs(newMotifs) < scoreTheMotifs(bestMotifs)) {
+                bestMotifs = newMotifs
+            } else {
+                return bestMotifs
+            }
+
+        }
+    }
+
+    fun doRandomSearchMultipleRuns(dnaStrings: List<String>, kLen: Int, iterations: Int): List<String> {
+        var bestMotifs = doRandomSearchOnePass(dnaStrings, kLen)
+        var bestScore = scoreTheMotifs(bestMotifs)
+        for (i in 0..iterations) {
+            val newMotifs = doRandomSearchOnePass(dnaStrings, kLen)
+            val newScore = scoreTheMotifs(newMotifs)
+            if (newScore < bestScore) {
+                bestScore = newScore
+                bestMotifs = newMotifs
+            }
+        }
+        return bestMotifs
     }
 }
