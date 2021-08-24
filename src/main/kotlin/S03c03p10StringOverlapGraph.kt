@@ -3,6 +3,7 @@
 /**
  * @link: https://stepik.org/lesson/240255/step/3?unit=212601
  *
+ *
 String Overlap Graph problem
 
 Code Challenge: Solve the Overlap Graph Problem (restated below).
@@ -15,15 +16,17 @@ Output: The overlap graph Overlap(Patterns), in the form of an adjacency list.
 
 fun main() {
 
-    val stringList = listOf(
-        "ATGCG",
-        "GCATG",
-        "CATGC",
-        "AGGCA",
-        "GGCAT",
-        "GGCAC"
+    val string = """
+ATGCG
+GCATG
+CATGC
+AGGCA
+GGCAT
+    """.trimIndent()
 
-        )
+
+    val reader = string.reader()
+    val stringList = reader.readLines()
     for (baseString in stringList) {
         val outList: MutableList<String> = mutableListOf()
         val strLen = baseString.length

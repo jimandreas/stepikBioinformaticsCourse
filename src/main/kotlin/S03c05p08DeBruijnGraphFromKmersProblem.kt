@@ -15,15 +15,17 @@ Output: DeBruijnk(Text), in the form of an adjacency list.
 
 fun main() {
 
-    val input = listOf(
-        "GAGG",
-        "CAGG",
-        "GGGG",
-        "GGGA",
-        "CAGG",
-        "AGGG",
-        "GGAG"
-        )
+    val string = """
+        GAGG
+        CAGG
+        GGGG
+        GGGA
+        CAGG
+        AGGG
+        GGAG
+    """.trimIndent()
+
+
     /*
 output:
 AGG -> GGG
@@ -33,7 +35,9 @@ GGA -> GAG
 GGG -> GGG,GGA
  */
 
-    val output = deBruijnGraphFromKmers(input)
+    val reader = string.reader()
+    val stringList = reader.readLines()
+    val output = deBruijnGraphFromKmers(stringList)
 
     val outputMessagesFilePath = "stringsDeBruijnGraph.txt"
 
