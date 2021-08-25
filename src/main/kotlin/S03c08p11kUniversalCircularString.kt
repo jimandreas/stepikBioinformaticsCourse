@@ -6,7 +6,9 @@ import util.deBruijnGraphFromKmers
 import util.pathToGenome
 
 /**
- * @link: https://stepik.org/lesson/240261/step/11?unit=212607
+ * @link:
+ * Stepik: https://stepik.org/lesson/240261/step/11?unit=212607
+ * Rosalind: http://rosalind.info/problems/ba3i/
  *
 Code Challenge: Solve the k-Universal Circular String Problem.
 
