@@ -1,4 +1,6 @@
-@file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ControlFlowWithEmptyBody", "unused")
+@file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ControlFlowWithEmptyBody", "unused",
+    "MemberVisibilityCanBePrivate"
+)
 
 package util
 
@@ -16,8 +18,8 @@ class EulerianPathSymbolicMap {
     private var graph: MutableMap<Int, MutableList<Int>> = mutableMapOf()
     private var n = 0
     private var edgeCount = 0
-    private lateinit var inEdgesMap: HashMap<Int, Int>
-    private lateinit var outEdgesMap: HashMap<Int, Int>
+    lateinit var inEdgesMap: HashMap<Int, Int>
+    lateinit var outEdgesMap: HashMap<Int, Int>
     private var path: MutableList<Int> = mutableListOf()
 
     /**
@@ -50,7 +52,7 @@ class EulerianPathSymbolicMap {
      *    Using hashes instead of array indexing as the input set of nodes
      *    is UNCONTROLLED.
      */
-    private fun initializeVariables() {
+    fun initializeVariables() {
 
         // make sure the in and out edges maps are zeroed
         // for the Euler Path there may be no in-edge
