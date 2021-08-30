@@ -3,6 +3,19 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import util.DeBruijnGraphFromString
+
+/**
+
+Code Challenge: Solve the De Bruijn Graph from a String Problem.
+
+Input: An integer k and a string Text.
+Output: DeBruijnk(Text), in the form of an adjacency list.
+
+ * @link:
+ * Stepik: https://stepik.org/lesson/240257/step/6?unit=212603
+ * Rosalind: http://rosalind.info/problems/ba3d/
+ */
 
 internal class S03c04p06DeBruijnGraphTest {
 
@@ -14,37 +27,38 @@ internal class S03c04p06DeBruijnGraphTest {
     fun tearDown() {
     }
 
+    private val dbgfs = DeBruijnGraphFromString()
+
     @Test
     @DisplayName("test DeBruijnGraph 01")
     fun testDeBruijnGraph01() {
 
         val dnaString = "GCTTCTTC"
         val expectedString = """
-            GCT -> CTT
             CTT -> TTC,TTC
-            TTC -> TCT
+            GCT -> CTT
             TCT -> CTT
+            TTC -> TCT
             
         """.trimIndent()
         val k = 4 // kmer length
 
+        val result = dbgfs.deBruijnGraph(dnaString, k)
+        val resultString = toOutString(result)
+        assertEquals(expectedString, resultString)
+    }
 
-        val baseKmerList: MutableList<String> = mutableListOf()
-        val foundArray: MutableList<MutableList<String>> = mutableListOf()
-
-        deBruijnGraph(dnaString, k, baseKmerList, foundArray)
-
-        // assemble out string
-        var outString = ""
-        val iter = baseKmerList.iterator().withIndex()
-        while (iter.hasNext()) {
-            val baseKmer = iter.next()
-            outString += "${baseKmer.value} -> "
-            val foundList = foundArray[baseKmer.index]
-            outString += foundList.joinToString(separator = ",")
-            outString += "\n"
+    private fun toOutString(m: Map<String, List<String>>): String {
+        val str = StringBuilder()
+        val foo = m.toSortedMap()
+        for (e in foo) {
+            str.append(e.key)
+            str.append(" -> ")
+            val l = m[e.key]!!.sorted()
+            str.append(l.joinToString(","))
+            str.append("\n")
         }
-        assertEquals(expectedString, outString)
+        return str.toString()
     }
 
     @Test
@@ -58,31 +72,17 @@ internal class S03c04p06DeBruijnGraphTest {
         """.trimIndent()
         val k = 5 // kmer length
 
-
-        val baseKmerList: MutableList<String> = mutableListOf()
-        val foundArray: MutableList<MutableList<String>> = mutableListOf()
-
-        deBruijnGraph(dnaString, k, baseKmerList, foundArray)
-
-        // assemble out string
-        var outString = ""
-        val iter = baseKmerList.iterator().withIndex()
-        while (iter.hasNext()) {
-            val baseKmer = iter.next()
-            outString += "${baseKmer.value} -> "
-            val foundList = foundArray[baseKmer.index]
-            outString += foundList.joinToString(separator = ",")
-            outString += "\n"
-        }
-        assertEquals(expectedString, outString)
-
+        val result = dbgfs.deBruijnGraph(dnaString, k)
+        val resultString = toOutString(result)
+        assertEquals(expectedString, resultString)
     }
+/*
+    @Test
+    @DisplayName("test DeBruijnGraph Extra 03")
+    fun testDeBruijnGraphExtra03() {
 
-  /*  @Test
-    @DisplayName("test DeBruijnGraph 03")
-    fun testDeBruijnGraph03() {
-
-        val dnaString = "CTGAAGACCTCTCCACATTACTACGATATAAATCATTTCAGCCTCTAGATACGCCTTGGTGGGTGGGGTTGGCAATTTACGATATGTCCGAATGATTTGACACCAAATACCTTAGCTAGCCCCAAGGAAAATTCTGGGCTTTACGTTGGCCGAGCCACATTACTACAGTAAGGTTAAGCAACCAGCCAGTCGCTCATAAGGACTCCACGCCTCCCGTTACTGACTTCCAACAACAATGTGACAGTAGACTGGAACCTGGGAGGACATTATTGATTCGCCGCGAATCTTCTAAGGTATTTTACCCCCACTGGTCACCTTAACCATTAAGACCTCGAAGTGACACCTAGCCTCTTAACACCCAACTCCACCGACAATACCTATTCGCTGACAAGCGGGACATCCGATCGCCCCTGACTCGAGGTGTCTACCGTCCATCGATTGCTAAACTTTGTTAGGAGTCTAAGCGAACCATGGGAAGGGGGCGGCAGTCAACGTGCTCCTTTAGTGAGGTACCATATTCTTACAGCATGTGGAGCGCAGCAAACTAGCGACCGGGAGTACTCCCACAACCCTGGGTACGTACTGCACTTTTTTCAAGAGCCAGGGTCATTTAAATAGCATCTTTGCTCTTTCTGATAAGGGGGCGACCATCTCCGAATTGAGCCAAACGCTGGTATAAGACTCGTCTCATGACTCCCTAGCCATTTGTATGTTGTCATTTCTGATTTTAGCAGGTAAAACGTAAGGCCTGCTAAAGAATCACGCGGGGAGGCCTTAAATTTCGTCATGGAGCAATCGTCCTAGATTGCTGTGAAGGTTCGTACCAGTAGAGTCTAATGTGCGTAAATGTTAACTGGCCGTATATTCTCTGGTGAGCTGAAACAGAAAGCTGGCAGAAAGCCACTCTTGCTGTTTCGTGTGTACGGACATCGGGATAGTACCAAAAAGCATGTTCTTCATCTGGCGATGCTTGATGTCTACCGTAGACACCTTCATACGT"
+        val dnaString =
+            "CTGAAGACCTCTCCACATTACTACGATATAAATCATTTCAGCCTCTAGATACGCCTTGGTGGGTGGGGTTGGCAATTTACGATATGTCCGAATGATTTGACACCAAATACCTTAGCTAGCCCCAAGGAAAATTCTGGGCTTTACGTTGGCCGAGCCACATTACTACAGTAAGGTTAAGCAACCAGCCAGTCGCTCATAAGGACTCCACGCCTCCCGTTACTGACTTCCAACAACAATGTGACAGTAGACTGGAACCTGGGAGGACATTATTGATTCGCCGCGAATCTTCTAAGGTATTTTACCCCCACTGGTCACCTTAACCATTAAGACCTCGAAGTGACACCTAGCCTCTTAACACCCAACTCCACCGACAATACCTATTCGCTGACAAGCGGGACATCCGATCGCCCCTGACTCGAGGTGTCTACCGTCCATCGATTGCTAAACTTTGTTAGGAGTCTAAGCGAACCATGGGAAGGGGGCGGCAGTCAACGTGCTCCTTTAGTGAGGTACCATATTCTTACAGCATGTGGAGCGCAGCAAACTAGCGACCGGGAGTACTCCCACAACCCTGGGTACGTACTGCACTTTTTTCAAGAGCCAGGGTCATTTAAATAGCATCTTTGCTCTTTCTGATAAGGGGGCGACCATCTCCGAATTGAGCCAAACGCTGGTATAAGACTCGTCTCATGACTCCCTAGCCATTTGTATGTTGTCATTTCTGATTTTAGCAGGTAAAACGTAAGGCCTGCTAAAGAATCACGCGGGGAGGCCTTAAATTTCGTCATGGAGCAATCGTCCTAGATTGCTGTGAAGGTTCGTACCAGTAGAGTCTAATGTGCGTAAATGTTAACTGGCCGTATATTCTCTGGTGAGCTGAAACAGAAAGCTGGCAGAAAGCCACTCTTGCTGTTTCGTGTGTACGGACATCGGGATAGTACCAAAAAGCATGTTCTTCATCTGGCGATGCTTGATGTCTACCGTAGACACCTTCATACGT"
 
         val expectedString = """
 AAAAAGCATGT -> AAAAGCATGTT
@@ -1072,26 +1072,13 @@ TTTTAGCAGGT -> TTTAGCAGGTA
 TTTTCAAGAGC -> TTTCAAGAGCC
 TTTTTCAAGAG -> TTTTCAAGAGC
 TTTTTTCAAGA -> TTTTTCAAGAG
-            
+
         """.trimIndent()
         val k = 12 // kmer length
 
-        val baseKmerList: MutableList<String> = mutableListOf()
-        val foundArray: MutableList<MutableList<String>> = mutableListOf()
-
-        deBruijnGraph(dnaString, k, baseKmerList, foundArray)
-
-        // assemble out string
-        var outString = ""
-        val iter = baseKmerList.iterator().withIndex()
-        while (iter.hasNext()) {
-            val baseKmer = iter.next()
-            outString += "${baseKmer.value} -> "
-            val foundList = foundArray.get(baseKmer.index)
-            outString += foundList.joinToString(separator = ",")
-            outString += "\n"
-        }
-        assertEquals(expectedString.toSortedSet(), outString.toSortedSet())
+        val result = dbgfs.deBruijnGraph(dnaString, k)
+        val resultString = toOutString(result)
+        assertEquals(expectedString, resultString)
 
     }*/
 
