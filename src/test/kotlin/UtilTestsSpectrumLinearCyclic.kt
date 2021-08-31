@@ -73,6 +73,10 @@ internal class UtilTestsSpectrumLinearCyclic {
 
     0 113 114 128 129 227 242 242 257 355 356 370 371 484
 
+     Links:
+     Stepik: https://stepik.org/lesson/240279/step/4?unit=212625
+     Rosalind: http://rosalind.info/problems/ba4j/
+
      */
     @Test
     @DisplayName("util: test Cyclic LEQN Spectrum function 03")
@@ -85,18 +89,16 @@ internal class UtilTestsSpectrumLinearCyclic {
     }
 
 
-/*
 
     @Test
     @DisplayName("util: test linearSpectrum function 04")
     fun testLinearSpectrumFunction04() {
-        val peptide = "MAMA"
-        val expectedResult = listOf(0, 71, 98, 99, 131, 202, 202, 202, 202, 202, 299, 333, 333, 333, 503)
+        val peptide = "MPYENCCCWMFNIRKGQPDFFRKGAVPYVVPMNCIRWS"
+
 
         val result = peptideMassSpectrum(peptide, isCyclicPeptide = true)
-        assertEquals(expectedResult, result)
+        println(result.joinToString(" "))
     }
-*/
 
 
     /**

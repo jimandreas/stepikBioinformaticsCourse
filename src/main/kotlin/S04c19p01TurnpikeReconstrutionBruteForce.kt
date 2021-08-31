@@ -7,7 +7,8 @@ import util.*
  * @link: https://stepik.org/lesson/240294/step/1?unit=212640
  * rosalind: @link: http://rosalind.info/problems/pdpl/
  *
-Turnpike Problem: Given all pairwise distances between points on a line segment, reconstruct the positions of those points.
+Turnpike Problem: Given all pairwise distances between points on a line segment,
+reconstruct the positions of those points.
 
 Input: A collection of integers L.
 Output: A set of integers A such that ∆A = L.
