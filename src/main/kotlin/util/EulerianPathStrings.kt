@@ -13,11 +13,11 @@ package util
 data class EulerConnectionStrings(val nodeString: String, val connections: MutableList<String>)
 
 class EulerianPathStrings {
-    private var graph: MutableMap<String, MutableList<String>> = mutableMapOf()
+    private var graph: Map<String, List<String>> = mutableMapOf()
     private var n = 0
     private var edgeCount = 0
-    private lateinit var inEdgesMap: HashMap<String, Int>
-    private lateinit var outEdgesMap: HashMap<String, Int>
+    lateinit var inEdgesMap: HashMap<String, Int>
+    lateinit var outEdgesMap: HashMap<String, Int>
     private var path: MutableList<String> = mutableListOf()
 
     /**
@@ -25,8 +25,8 @@ class EulerianPathStrings {
      *   assumes list is zero based and the index into the first
      *   list is the same as the node number
      */
-    fun setGraph(graph: MutableMap<String, MutableList<String>>) {
-        this.graph = graph
+    fun setGraph(graph: Map<String, List<String>>) {
+        this.graph = graph.toMutableMap()
         n = graph.size
         inEdgesMap = hashMapOf()
         outEdgesMap = hashMapOf()
@@ -50,7 +50,7 @@ class EulerianPathStrings {
      *    Using hashes instead of array indexing as the input set of nodes
      *    is UNCONTROLLED.
      */
-    private fun initializeVariables() {
+    fun initializeVariables() {
 
         // make sure the in and out edges maps are zeroed
         // for the Euler Path there may be no in-edge

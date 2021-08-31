@@ -12,7 +12,6 @@ package util
  * @link: https://github.com/williamfiset/Algorithms
  *        EulerianPathDirectedEdgesAdjacencyList.java
  */
-//data class EulerConnectionData(val nodeNum: Int, val connections: MutableList<Int>)
 
 class EulerianPathSymbolicMap {
     private var graph: MutableMap<Int, MutableList<Int>> = mutableMapOf()
