@@ -51,7 +51,6 @@ internal class S06C13SolvingTwoBreakSortingTest {
     Output: The colored edges of the genome graph resulting from
     applying the 2-break operation 2-BreakOnGenomeGraph(GenomeGraph, i1 , i2 , i3 , i4 ).
 
-
     Sample Input:
 
     (2, 4), (3, 8), (7, 5), (6, 1)
