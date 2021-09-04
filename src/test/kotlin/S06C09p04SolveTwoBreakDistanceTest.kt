@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 import util.TwoBreakDistance
 import util.TwoBreakGenomesToBreakpointGraph
 import util.TwoBreakOnGenomeGraph
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 /**

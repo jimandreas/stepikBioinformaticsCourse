@@ -85,12 +85,12 @@ class TwoBreakGenomesToBreakpointGraph {
             if (b < a) {
                 outList.add(-i - 1 - baseValue)
                 if (b != (i + baseValue) * 2 + 1) {
-                    println("oopsie")
+                    println("oopsie in CycleToChromosome")
                 }
             } else {
                 outList.add(i + 1 + baseValue)
                 if (a != (i + baseValue) * 2 + 1) {
-                    println("oopsie")
+                    println("oopsie second clause in CycleToChromosome")
                 }
             }
 
