@@ -182,7 +182,7 @@ internal class S06C13SolvingTwoBreakSortingTest {
             expectedListsOfLists.add(tempList)
         }
 
-        val result = twoBreak.twoBreakOnGenome(genomeGraph, breakList)
+        val result = twoBreak.twoBreakOnGenome(listOf(genomeGraph), breakList)
         assertContentEquals(expectedListsOfLists, result)
     }
 
@@ -215,7 +215,7 @@ internal class S06C13SolvingTwoBreakSortingTest {
             expectedListsOfLists.add(tempList)
         }
 
-        val result = twoBreak.twoBreakOnGenome(genomeGraph, breakList)
+        val result = twoBreak.twoBreakOnGenome(listOf(genomeGraph), breakList)
 
         assertEquals(expectedListsOfLists[0], result[0])
         assertEquals(expectedListsOfLists[1], result[1])
@@ -239,7 +239,7 @@ internal class S06C13SolvingTwoBreakSortingTest {
         val breakList = breakListString.split(", ").map { it.toInt()}
 
 
-        val result = twoBreak.twoBreakOnGenome(genomeGraph, breakList)
+        val result = twoBreak.twoBreakOnGenome(listOf(genomeGraph), breakList)
         printChromosomes(result)
         // (+36 +11 -59 +32 -60 +8 +56 -41 -46 -62 -10 -33 +51 +61 +38 +14 -5 -3 +58 -7 -22 -15 +47 -18 +24 +55 +64 -19 -63 -27 +12 -16 +42 +4 -39 +9 +35 +26 -2 -29 +53 +30 +25 -54 -20)(+1 -17 +40 +45 +13 -21 -57 +37 -50 -48 -23 +6 -43 -52 -34 -31 -49 +28 -44)
     }

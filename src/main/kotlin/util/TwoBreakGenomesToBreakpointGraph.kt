@@ -155,8 +155,6 @@ class TwoBreakGenomesToBreakpointGraph {
     Input: The colored edges ColoredEdges of a genome graph.
     Output: The genome P corresponding to this genome graph.
 
-    Extra Dataset
-
     Sample Input:
 
     (2, 4), (3, 6), (5, 1), (7, 9), (10, 12), (11, 8)

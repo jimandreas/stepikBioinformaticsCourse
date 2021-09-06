@@ -78,13 +78,9 @@ class TwoBreakOnGenomeGraph {
         return outList
     }
 
+    enum class DIR { FORWARD, REVERSE, NOTFOUND }
 
-
-
-
-    private enum class DIR { FORWARD, REVERSE, NOTFOUND }
-
-    private fun findPair(
+    fun findPair(
         p1: Int,
         p2: Int,
         graph: List<Int>,
@@ -109,7 +105,6 @@ class TwoBreakOnGenomeGraph {
             i += 2
         }
         return Triple(0, DIR.NOTFOUND, emptyList())
-
     }
 
     /**
@@ -132,9 +127,9 @@ class TwoBreakOnGenomeGraph {
 
      */
 
-    fun twoBreakOnGenome(genome: List<Int>, breakEdges: List<Int>): List<List<Int>> {
+    fun twoBreakOnGenome(genome: List<List<Int>>, breakEdges: List<Int>): List<List<Int>> {
         val twoBreakUtils = TwoBreakGenomesToBreakpointGraph()
-        val cycleList = twoBreakUtils.coloredEdges(listOf(genome))
+        val cycleList = twoBreakUtils.coloredEdges(genome)
         val l = cycleToArrayListOfPairs(cycleList)
 
         val result = twoBreakOnGenomeGraphReplaceNode(l, breakEdges)

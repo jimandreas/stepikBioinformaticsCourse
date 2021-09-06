@@ -80,6 +80,20 @@ internal class S06C09p05SolveTwoBreakShortestTransformationTest {
 
     }
 
+    @Test
+    @DisplayName("two break shortest transformation tiny Test 02")
+    fun twoBreakDistanceTinyTest02() {
+
+        val genomeP = "(+1 +2)"
+        val genomeQ = "(+1 -2)"
+
+        val result = twoBreakSorting.shortestRearrangementScenario(
+            doSetupGenomeList( genomeP), doSetupGenomeList( genomeQ))
+
+
+
+    }
+
 
     fun doSetupGenomeList(chromosomeGivenString: String): List<List<Int>>{
         val listOfLists: MutableList<List<Int>> = mutableListOf()

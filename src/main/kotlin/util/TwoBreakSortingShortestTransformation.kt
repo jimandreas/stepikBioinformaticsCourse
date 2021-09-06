@@ -67,30 +67,82 @@ class TwoBreakSortingShortestTransformation {
 
     fun shortestRearrangementScenario(p: List<List<Int>>, q: List<List<Int>>): List<List<List<Int>>> {
         var copyP = p
-        var redEdgesP = tbg.coloredEdges(p)
-        val blueEdgesP = tbg.coloredEdges(q)
-//        val blueEdgesQ = tbg.coloredEdges(q)
-//
-//        var allEdges = (redEdgesP + blueEdgesQ)
+        var redEdgesP = tbg.coloredEdges(p).toMutableList()
+        val blueEdgesQ = tbg.coloredEdges(q)
+        val blueEdgesCOPY = blueEdgesQ.toMutableList()
 
-        var twoBreakDistance = twoBrkDist.twoBreakDistanceFromEdges(redEdgesP, blueEdgesP)
-        var nonTrivialCycles = twoBrkDist.collectRedEdges.filter { it.size > 1 }
+        val thisStepA = tbg.graphToGenome(redEdgesP)
+        printChromosomes(thisStepA)
 
-        while (nonTrivialCycles.isNotEmpty()) {
-            val cyc = nonTrivialCycles[0]
-            val i1 = cyc[0]
-            val i2 = cyc[1]
-            val i3 = cyc[2]
-            val i4 = cyc[3]
+        while (twoBrkDist.twoBreakDistanceFromRedEdges(redEdgesP, blueEdgesQ) > 0) {
+            var i1 = 0
+            var i2 = 0
 
-            //redEdgesP = hackRedEdges(redEdgesP, i1, i2, i3, i4)
-            redEdgesP = tbogg.twoBreakOnGenomeGraph(redEdgesP, listOf(i1, i2, i3, i4))
+            // find a pair that is not in the set of red edges
+            var idx = 0
+            while (idx < blueEdgesCOPY.size) {
+                i1 = blueEdgesCOPY[idx]
+                i2 = blueEdgesCOPY[idx+1]
+                val result = tbogg.findPair(
+                    i1, i2, redEdgesP, doNotRemove = true)
+                if (result.second != TwoBreakOnGenomeGraph.DIR.NOTFOUND) {
+                    idx += 2
+                    continue
+                }
+                blueEdgesCOPY.removeAt(idx)
+                blueEdgesCOPY.removeAt(idx)
+                break
+            }
 
-            val thisStep = tbg.graphToGenome(redEdgesP)
+            idx = 0
+            var i3 = 0
+            var i4 = 0
+            while (idx < redEdgesP.size) {
+                val temp3 = redEdgesP[idx]
+                val temp4 = redEdgesP[idx+1]
+
+                if (i1 == temp3) {
+                    i3 = temp4
+                    redEdgesP.removeAt(idx)
+                    redEdgesP.removeAt(idx)
+                    break
+                } else if (i1 == temp4) {
+                    i3 = temp3
+                    redEdgesP.removeAt(idx)
+                    redEdgesP.removeAt(idx)
+                    break
+                }
+                idx += 2
+            }
+
+            idx = 0
+            while (idx < redEdgesP.size) {
+                val temp3 = redEdgesP[idx]
+                val temp4 = redEdgesP[idx+1]
+
+                if (i2 == temp3) {
+                    i4 = temp4
+                    redEdgesP.removeAt(idx)
+                    redEdgesP.removeAt(idx)
+                    break
+                } else if (i2 == temp4) {
+                    i4 = temp3
+                    redEdgesP.removeAt(idx)
+                    redEdgesP.removeAt(idx)
+                    break
+                }
+                idx += 2
+            }
+
+            redEdgesP.add(i1)
+            redEdgesP.add(i2)
+            redEdgesP.add(i4)
+            redEdgesP.add(i3)
+
+
+            val thisStep = tbg.graphToGenomeImproved(redEdgesP)
             printChromosomes(thisStep)
 
-            twoBreakDistance = twoBrkDist.twoBreakDistanceFromEdges(redEdgesP, blueEdgesP)
-            nonTrivialCycles = twoBrkDist.collectRedEdges.filter { it.size > 1 }
 
         }
 
@@ -107,35 +159,5 @@ class TwoBreakSortingShortestTransformation {
         }
         println(str.toString())
     }
-
-    fun hackRedEdges(red: List<Int>, i1: Int, i2: Int, i3: Int, i4: Int): List<Int> {
-        val newRed :MutableList<Int> = red.toMutableList()
-        val idx1 = red.indexOf(i1)
-        val idx2 = red.indexOf(i2)
-        if (idx2 != idx1 + 1) {
-            println("hackRedEdges: internal problem!! idx1 $idx1 idx2 $idx2")
-            return emptyList()
-        }
-        newRed.removeAt(idx1)
-        newRed.removeAt(idx1)
-
-        val idx3 = newRed.indexOf(i3)
-        val idx4 = newRed.indexOf(i4)
-        if (idx4 != idx3 + 1) {
-            println("hackRedEdges: internal problem!! idx1 $idx3 idx2 $idx4")
-            return emptyList()
-        }
-        newRed.removeAt(idx3)
-        newRed.removeAt(idx3)
-
-        newRed.add(i1)
-        newRed.add(i4)
-        newRed.add(i2)
-        newRed.add(i3)
-
-        return newRed
-
-    }
-
 
 }

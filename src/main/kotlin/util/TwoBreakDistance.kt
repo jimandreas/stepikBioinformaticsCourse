@@ -2,6 +2,9 @@
 
 package util
 
+import java.lang.Integer.min
+import java.lang.Math.max
+
 /**
  *
 
@@ -63,14 +66,6 @@ class TwoBreakDistance {
     val tbg = TwoBreakGenomesToBreakpointGraph()
 
     /**
-     * the collectRedEdges is an instrumented list of
-     *  red edges that are part of a non-trivial P/Q cycle
-     * this is used in the ShortestRearrangementScenario
-     */
-    var collectRedEdges : MutableList<List<Int>> = mutableListOf()
-    var copyEdgesP: MutableList<Int> = mutableListOf()
-    var copyEdgesQ: MutableList<Int> = mutableListOf()
-    /**
      * @param p - genome p represented by a list of lists of synteny Block numbers
      * @param q - same as p
      * @return The Two Break distance
@@ -78,12 +73,10 @@ class TwoBreakDistance {
     fun twoBreakDistance(p: List<List<Int>>, q: List<List<Int>>): Int {
         val edgesP = tbg.coloredEdges(p)
         val edgesQ = tbg.coloredEdges(q)
-        return twoBreakDistanceFromEdges(edgesP, edgesQ)
+        return twoBreakDistanceFromRedEdges(edgesP, edgesQ)
     }
-    fun twoBreakDistanceFromEdges(edgesP: List<Int>, edgesQ: List<Int>): Int {
-        collectRedEdges = mutableListOf()
-        copyEdgesP = edgesP.toMutableList()
-        copyEdgesQ = edgesQ.toMutableList()
+
+    fun twoBreakDistanceFromRedEdges(edgesP: List<Int>, edgesQ: List<Int>): Int {
 
         var allEdges = (edgesP + edgesQ)
 
@@ -106,59 +99,25 @@ class TwoBreakDistance {
 
     }
 
-    /**
-     *  takes a list of all colored edges, returns a list with one cycle removed
-     *   - Modified to accumulate removed edges per cycle from the P list
-     *    -- the edges are retained in the list of lists "collectRedEdges"
-     */
     fun deleteCycle(eIn: List<Int>): List<Int> {
         val e = eIn.toMutableList()
         val first = e[0]
         var second = e[1]
-
-        val edgesRemovedFromP: MutableList<Int> = mutableListOf()
-        if (copyEdgesP.size > 0) {
-            edgesRemovedFromP.add(first)
-            edgesRemovedFromP.add(second)
-            copyEdgesP.removeAt(0)
-            copyEdgesP.removeAt(0)
-        }
-
         e.removeAt(0)
         e.removeAt(0)
-
         do {
             val idx = e.indexOf(second)
 
             if (idx % 2 == 0) {
                 second = e[idx + 1]
-
-                if (idx < copyEdgesP.size) {
-                    edgesRemovedFromP.add(e[idx + 0])
-                    edgesRemovedFromP.add(e[idx + 1])
-                    copyEdgesP.removeAt(idx)
-                    copyEdgesP.removeAt(idx)
-                }
-
                 e.removeAt(idx)
                 e.removeAt(idx)  // removes idx+1
             } else {
                 second = e[idx - 1]
-
-                if (idx < copyEdgesP.size) {
-                    edgesRemovedFromP.add(e[idx - 1])
-                    edgesRemovedFromP.add(e[idx + 0])
-                    copyEdgesP.removeAt(idx-1)
-                    copyEdgesP.removeAt(idx-1)
-                }
-
                 e.removeAt(idx - 1)
                 e.removeAt(idx - 1) // removes idx
             }
         } while (first != second)
-
-        collectRedEdges.add(edgesRemovedFromP)  // note an entry of size one is a trivial cycle
-
         return e
     }
 
