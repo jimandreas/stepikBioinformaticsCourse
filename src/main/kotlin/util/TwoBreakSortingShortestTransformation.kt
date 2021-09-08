@@ -1,4 +1,6 @@
-@file:Suppress("MemberVisibilityCanBePrivate", "UnnecessaryVariable", "ReplaceJavaStaticMethodWithKotlinAnalog")
+@file:Suppress("MemberVisibilityCanBePrivate", "UnnecessaryVariable", "ReplaceJavaStaticMethodWithKotlinAnalog",
+    "unused"
+)
 
 package util
 
@@ -44,7 +46,7 @@ Sample Output
  */
 
 // see: https://stepik.org/lesson/240328/step/5?unit=212674
-val pseudoCode = """
+val pseudoCodeAsGiven = """
 ShortestRearrangementScenario(P, Q)
      output P
      RedEdges ← ColoredEdges(P)
@@ -59,6 +61,21 @@ ShortestRearrangementScenario(P, Q)
           output P
 """.trimIndent()
 
+val pseudoCodeAsImplemented = """
+ShortestRearrangementScenario(P, Q)
+     output P
+     RedEdges ← ColoredEdges(P)
+     BlueEdges ← ColoredEdges(Q)
+     BreakpointGraph ← the graph formed by RedEdges and BlueEdges
+     while BreakpointGraph has a non-trivial cycle Cycle  (Same as TwoBreakDistance!!)
+          (i1 , i2 ) ← pair in BLUE edges not present in RED edges
+          RedEdges ← RedEdges with edges (i1, i2) and CORRESPONDING (i3, i4) removed
+          RedEdges ← RedEdges with edges (i1, i4) and (i2, i3) added
+          BreakpointGraph ← the graph formed by RedEdges and BlueEdges
+          NOT NECESSARY as this operation is done above:  P ← 2-BreakOnGenome(P, i1 , i2 , i4 , i3 )
+          output P (as re-encoded from RedEdges)
+""".trimIndent()
+
 class TwoBreakSortingShortestTransformation {
 
     val tbg = TwoBreakGenomesToBreakpointGraph()
@@ -66,13 +83,13 @@ class TwoBreakSortingShortestTransformation {
     val twoBrkDist = TwoBreakDistance()
 
     fun shortestRearrangementScenario(p: List<List<Int>>, q: List<List<Int>>): List<List<List<Int>>> {
-        var copyP = p
-        var redEdgesP = tbg.coloredEdges(p).toMutableList()
+        val redEdgesP = tbg.coloredEdges(p).toMutableList()
         val blueEdgesQ = tbg.coloredEdges(q)
         val blueEdgesCOPY = blueEdgesQ.toMutableList()
 
-        val thisStepA = tbg.graphToGenome(redEdgesP)
-        printChromosomes(thisStepA)
+        val retList : MutableList<List<List<Int>>> = mutableListOf()
+        retList.add(p)
+
 
         while (twoBrkDist.twoBreakDistanceFromRedEdges(redEdgesP, blueEdgesQ) > 0) {
             var i1 = 0
@@ -139,14 +156,12 @@ class TwoBreakSortingShortestTransformation {
             redEdgesP.add(i4)
             redEdgesP.add(i3)
 
-
             val thisStep = tbg.graphToGenomeImproved(redEdgesP)
-            printChromosomes(thisStep)
-
-
+            //printChromosomes(thisStep)
+            retList.add(thisStep)
         }
 
-        return emptyList()
+        return retList
     }
     //
     fun printChromosomes(listC: List<List<Int>>) {

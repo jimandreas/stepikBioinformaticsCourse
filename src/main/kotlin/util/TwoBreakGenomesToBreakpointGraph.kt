@@ -84,14 +84,14 @@ class TwoBreakGenomesToBreakpointGraph {
             val b = cycle[i * 2 + 1]
             if (b < a) {
                 outList.add(-i - 1 - baseValue)
-                if (b != (i + baseValue) * 2 + 1) {
-                    println("oopsie in CycleToChromosome")
-                }
+//                if (b != (i + baseValue) * 2 + 1) {
+//                    println("oopsie in CycleToChromosome")
+//                }
             } else {
                 outList.add(i + 1 + baseValue)
-                if (a != (i + baseValue) * 2 + 1) {
-                    println("oopsie second clause in CycleToChromosome")
-                }
+//                if (a != (i + baseValue) * 2 + 1) {
+//                    println("oopsie second clause in CycleToChromosome")
+//                }
             }
 
         }
@@ -219,79 +219,76 @@ class TwoBreakGenomesToBreakpointGraph {
         val listOfChromosomes: MutableList<List<Int>> = mutableListOf()
         val currentCycle: MutableList<Int> = mutableListOf()
 
-        var startOfChromosome = true
-        var firstElement = 0
-        var bindingElement = 0
-
-        var i = 0
         while (g.size > 0) {
-            var first = 0
-            var second = 0
-            if (startOfChromosome) {
-                first = g[i]
-                second = g[i+1]
-                i = 0
-            } else {
-                // find the bindingElement
-                val index = g.indexOf(bindingElement)
-//                +-
-                if (index % 2 == 0) {
-                    first = g[index]
-                    second = g[index+1]
-                    i = index
-                } else {
-                    first = g[index-1]
-                    second = g[index]
-                    i = index-1
-                }
-            }
-            g.removeAt(i)
-            g.removeAt(i)
+            val first = g[0]
+            val second = g[1]
+            var idx = 0
+            currentCycle.add(first)
+            currentCycle.add(second)
+            g.removeAt(0)
+            g.removeAt(0)
 
-            if (startOfChromosome) {
-                startOfChromosome = false
-                firstElement = first
-                bindingElement = second + 1
-                if (second % 2 == 0) {
-                    bindingElement = second - 1
-                }
-                currentCycle.add(first)
-                currentCycle.add(second)
-
-            } else {
-
-                if (bindingElement == first) {
-                    currentCycle.add(first)
-                    currentCycle.add(second)
-                    bindingElement = second + 1
-                    if (second % 2 == 0) {
-                        bindingElement = second - 1
+            while (true) {
+                // if the second edge is even:
+                val lastElement = currentCycle[currentCycle.size-1]
+                if (lastElement % 2 == 0) {
+                    // scan for a matching pair to continue
+                    idx = 0
+                    while (idx < g.size) {
+                        if (lastElement - 1 == g[idx] || lastElement - 1 == g[idx + 1]) {
+                            if (lastElement - 1 == g[idx]) {
+                                currentCycle.add(g[idx])
+                                currentCycle.add(g[idx + 1])
+                            } else {
+                                currentCycle.add(g[idx + 1])
+                                currentCycle.add(g[idx])
+                            }
+                            g.removeAt(idx)
+                            g.removeAt(idx)
+                            break
+                        }
+                        idx += 2
                     }
                 } else {
-                    currentCycle.add(second)
-                    currentCycle.add(first)
-                    bindingElement = first + 1
-                    if (first % 2 == 0) {
-                        bindingElement = first - 1
+                    // scan for a matching pair to continue
+                    idx = 0
+                    while (idx < g.size) {
+                        if (lastElement + 1 == g[idx] || lastElement + 1 == g[idx + 1]) {
+                            if (lastElement + 1 == g[idx]) {
+                                currentCycle.add(g[idx])
+                                currentCycle.add(g[idx + 1])
+                            } else {
+                                currentCycle.add(g[idx + 1])
+                                currentCycle.add(g[idx])
+                            }
+                            g.removeAt(idx)
+                            g.removeAt(idx)
+                            break
+                        }
+                        idx += 2
                     }
                 }
-                //println(bindingElement)
-                if (bindingElement == firstElement) {
-                    // rotate the cycle one position
-                    val size = currentCycle.size
-                    val lastElement = currentCycle[size - 1]
-                    currentCycle.add(0, lastElement)
-                    currentCycle.removeAt(size)
 
-                    val chromosome = cycleToChromosomeDivideBy2(currentCycle)
-
-                    listOfChromosomes.add(chromosome)
-                    currentCycle.clear()
-
-                    startOfChromosome = true
+                if (first % 2 == 0) {
+                    if (currentCycle.contains(first - 1)) {
+                        break
+                    }
+                } else {
+                    if (currentCycle.contains(first + 1)) {
+                        break
+                    }
                 }
-
             }
+
+            // rotate the cycle one position
+            val firstElement = currentCycle[0]
+            currentCycle.removeFirst()
+            currentCycle.add(currentCycle.size, firstElement)
+
+            val chromosome = cycleToChromosomeDivideBy2(currentCycle)
+
+            listOfChromosomes.add(chromosome)
+            currentCycle.clear()
         }
 
         return listOfChromosomes
