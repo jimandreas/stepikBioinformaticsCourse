@@ -1,4 +1,4 @@
-@file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE")
+@file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "CanBeVal")
 
 import util.GibbsSampler
 

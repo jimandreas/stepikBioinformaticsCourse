@@ -39,30 +39,11 @@ Sample Output:
 
 class SharedKmers {
 
-    fun findSharedKmers(kLen: Int, s1: String, s2: String) : List<Pair<Int, Int>> {
-
-        val s1Kmers = kMers(kLen, s1)
-        val s1KmersR = kMersReverseComplements(kLen, s1)
-        val s2Kmers = kMers(kLen, s2)
-        val s2KmersR = kMersReverseComplements(kLen, s2)
-
-        val totalList : MutableList<Pair<Int, Int>> = mutableListOf()
-        s1Kmers.mapIndexed { index, item ->
-            val l = getMatchPairs(item, index, s2Kmers, s2KmersR)
-            totalList.addAll(l)
-        }
-
-        s1KmersR.mapIndexed { index, item ->
-            val l = getMatchPairs(item, index, s2Kmers, s2KmersR)
-            totalList.addAll(l)
-        }
-
-        val uniqueList = totalList.distinct().sortedBy {
-            it.first * 1000 + it.second
-        }
-        return uniqueList
-    }
-
+    /**
+     * take a kMer length and two DNA strings
+     *    Find all shared kMers and reverse complement Kmers
+     *    Return a list of pairs of their coordinates in the strings
+     */
     fun findSharedKmersHashed(kLen: Int, s1: String, s2: String) : List<Pair<Int, Int>> {
 
         val s1Kmers = kMers(kLen, s1)
@@ -138,7 +119,6 @@ class SharedKmers {
         return sKmers
     }
 
-
     private fun kMers(kLen: Int, s: String): List<String> {
         val sKmers : MutableList<String> = arrayListOf()
         for (i in 0 until s.length - kLen+1) {
@@ -158,5 +138,32 @@ class SharedKmers {
         }
         return sKmers
     }
+
+    /*
+ --> this version is no longer used - the linear search was not efficient enough
+
+    fun findSharedKmers(kLen: Int, s1: String, s2: String) : List<Pair<Int, Int>> {
+
+        val s1Kmers = kMers(kLen, s1)
+        val s1KmersR = kMersReverseComplements(kLen, s1)
+        val s2Kmers = kMers(kLen, s2)
+        val s2KmersR = kMersReverseComplements(kLen, s2)
+
+        val totalList : MutableList<Pair<Int, Int>> = mutableListOf()
+        s1Kmers.mapIndexed { index, item ->
+            val l = getMatchPairs(item, index, s2Kmers, s2KmersR)
+            totalList.addAll(l)
+        }
+
+        s1KmersR.mapIndexed { index, item ->
+            val l = getMatchPairs(item, index, s2Kmers, s2KmersR)
+            totalList.addAll(l)
+        }
+
+        val uniqueList = totalList.distinct().sortedBy {
+            it.first * 1000 + it.second
+        }
+        return uniqueList
+    }*/
 
 }

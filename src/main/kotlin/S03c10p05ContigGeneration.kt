@@ -1,7 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.Assertions
-import util.*
+import util.ContigGeneration
 
 
 /**

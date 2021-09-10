@@ -1,7 +1,6 @@
 @file:Suppress("SameParameterValue", "UnnecessaryVariable", "UNUSED_VARIABLE", "ControlFlowWithEmptyBody")
 
 import util.EulerianPathSymbolicMap
-import java.util.*
 
 /**
  * @link:

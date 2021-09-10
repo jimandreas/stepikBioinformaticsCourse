@@ -1,5 +1,5 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER", "unused",
-    "ReplaceManualRangeWithIndicesCalls"
+    "ReplaceManualRangeWithIndicesCalls", "UnnecessaryVariable"
 )
 
 import org.junit.jupiter.api.AfterEach
@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.*
-import kotlin.test.assertContentEquals
+import util.SharedKmers
 
 /**
  *
@@ -120,7 +119,7 @@ internal class S06C11p05SharedKmersTest {
         val s1 = testInput[1]
         val s2 = testInput[2]
 
-        val result = sk.findSharedKmers(kMerLen, s1, s2)
+        val result = sk.findSharedKmersHashed(kMerLen, s1, s2)
 
         println(result.size)
 
@@ -516,6 +515,14 @@ ATCCCCTAAGTACAATATAATTTCTCAGAGGTACTGTCAGGTACCATGGGATCGTCCTGAGCATCCGGACTCACGTCCGG
     }
 */
 
+    /**
+     * A very handy extension function for sorting a list of Pairs().
+     * Use by:
+     *   val sortedExpectedResult = expectedResult.sorted()
+     *
+     * User: Wasabi375
+     * https://discuss.kotlinlang.org/t/natural-order-for-pair-and-triple/16323/12
+     */
     fun <A: Comparable<A>, B: Comparable<B>> List<Pair<A, B>>.sorted() : List<Pair<A, B>> =
         sortedWith(
             Comparator<Pair<A, B>>{ a, b-> a.first.compareTo(b.first)}.thenBy{it.second}
