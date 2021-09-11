@@ -24,7 +24,7 @@ Output: A middle edge in the alignment graph in the form "(i, j) (k, l)", where 
  * youtube: @link: https://www.youtube.com/watch?v=3TfDm8GpWRU  Space-Efficient Sequence Alignment
  */
 
-internal class S05C13c12FindMiddleEdgeTest {
+internal class S05C13p12FindMiddleEdgeTest {
 
     @BeforeEach
     fun setUp() {

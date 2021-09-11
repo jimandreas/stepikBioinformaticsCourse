@@ -33,7 +33,7 @@ GreedySorting to P, ending with the identity permutation.
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-internal class S06C04c04GreedySortingTest {
+internal class S06C04p04GreedySortingTest {
 
     @BeforeEach
     fun setUp() {

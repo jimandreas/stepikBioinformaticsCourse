@@ -27,7 +27,7 @@ This routine calls into the GlobalAlignment function to do the string to string 
  * book (5.11):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */
 
-internal class S05c11c03EditDistanceTest {
+internal class S05c11p03EditDistanceTest {
 
     @BeforeEach
     fun setUp() {

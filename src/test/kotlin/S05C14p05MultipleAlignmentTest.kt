@@ -27,7 +27,7 @@ Output: The length of a longest common subsequence of these three strings, follo
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-internal class S05C14c05MultipleAlignmentTest {
+internal class S05C14p05MultipleAlignmentTest {
 
     @BeforeEach
     fun setUp() {

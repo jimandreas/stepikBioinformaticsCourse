@@ -9,6 +9,13 @@ package util
  * @link: https://www.youtube.com/watch?v=8MpoO2zA2l4
  * @link: https://github.com/williamfiset/Algorithms
  *        EulerianPathDirectedEdgesAdjacencyList.java
+ *
+Code Challenge: Solve the String Reconstruction from Read-Pairs Problem.
+
+Input: Integers k and d followed by a collection of paired k-mers PairedReads.
+
+Output: A string Text with (k, d)-mer composition equal to PairedReads.
+
  */
 
 class EulerianPathOverReadPairs {

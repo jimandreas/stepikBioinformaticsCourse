@@ -18,7 +18,7 @@ import kotlin.test.assertNotNull
  * book (5.6):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */
 
-internal class S05c08c07LongestPathInDirectedGraphTest {
+internal class S05c08p07LongestPathInDirectedGraphTest {
 
     @BeforeEach
     fun setUp() {

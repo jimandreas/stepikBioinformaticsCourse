@@ -18,7 +18,9 @@ Output: A string Text of length k + d + k + n - 1
 such that the i-th (k, d)-mer in Text is equal to (ai|bi)
 for 1 ≤ i ≤ n (if such a string exists).
 
-
+ * See also:
+ * stepik: https://stepik.org/lesson/240262/step/16?unit=212608
+ * rosalind: http://rosalind.info/problems/ba7a/
  */
 internal class S03c09p16ReadPairsStringSpelledByGappedPatternsTest {
 
