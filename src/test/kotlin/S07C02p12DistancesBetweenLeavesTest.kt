@@ -1,7 +1,10 @@
-@file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER", "unused",
+@file:Suppress(
+    "UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER", "unused",
     "ReplaceManualRangeWithIndicesCalls"
 )
 
+import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
+import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -34,7 +37,7 @@ The matrix you return should be space-separated.
  */
 internal class S07C02p12DistancesBetweenLeavesTest {
 
-    lateinit var dbl : DistancesBetweenLeaves
+    lateinit var dbl: DistancesBetweenLeaves
 
 
     @BeforeEach
@@ -71,14 +74,32 @@ internal class S07C02p12DistancesBetweenLeavesTest {
         """.trimIndent()
 
         val r = sampleInput.reader().readLines().toMutableList()
-        val matrixSize = r[0]
+        val matrixSize = r[0].toInt()
         r.removeAt(0)
         val edges = parseSampleInput(r)
-        println (edges)
+
+        // distancesBetweenLeaves(leafCount: Int, g: MutableMap<Int, MutableList<Pair<Int, Int>>>)
+        val result = dbl.distancesBetweenLeaves(matrixSize, edges)
+        printit(matrixSize, result)
     }
 
-    fun parseSampleInput(edges: List<String>): Map<Int, List<Pair<Int, Int>>> {
-        val edgeMap : MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
+    private fun printit(matrixSize: Int, gArr: D2Array<Int>) {
+        val outStr = StringBuilder()
+        for (i in 0 until matrixSize) {
+            for (j in 0 until matrixSize) {
+                val numVal = String.format("%5d", gArr[i, j])
+                outStr.append(numVal)
+                if (j < matrixSize - 1) {
+                    outStr.append(" ")
+                }
+            }
+            outStr.append("\n")
+        }
+        println(outStr.toString())
+    }
+
+    fun parseSampleInput(edges: List<String>): MutableMap<Int, MutableList<Pair<Int, Int>>> {
+        val edgeMap: MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
         for (e in edges) {
             val sourceDest = e.split("->")
             val nodeAndWeight = sourceDest[1].split(":")

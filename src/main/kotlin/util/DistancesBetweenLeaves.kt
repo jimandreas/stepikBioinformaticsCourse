@@ -4,6 +4,12 @@
 
 package util
 
+import org.jetbrains.kotlinx.multik.api.d2array
+import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
+import org.jetbrains.kotlinx.multik.ndarray.data.set
+
+
 /**
  *
 
@@ -30,5 +36,80 @@ The matrix you return should be space-separated.
 
 class DistancesBetweenLeaves {
 
+    /**
+     * @param leafCount - the row/column size of the distance matrix
+     * @param g - the mapping of nodes to a list of connected nodes with connected weights
+     *
+     * NOTES: the leafCount can be less than the node numbers - but the traversal is limited to
+     * the 0..(leafCount-1) node numbers.  Hence the returned 2D matrix has only
+     * representatives from nodes { 0..(leafCount-1) }
+     */
+    fun distancesBetweenLeaves(leafCount: Int, g: MutableMap<Int, MutableList<Pair<Int, Int>>>): D2Array<Int> {
+        val theMatrix = mk.d2array(leafCount, leafCount) {0}
 
+        for (i in 0 until leafCount) {
+            for (j in 0 until leafCount) {
+                if (i == j) {
+                    continue
+                }
+                val gCopy = makeCopy(g)
+                val weight = recursiveTraversal(j, i, i, leafCount, gCopy)
+                theMatrix[i, j] = weight
+            }
+        }
+
+        return theMatrix
+    }
+
+    private fun makeCopy(g: MutableMap<Int, MutableList<Pair<Int, Int>>>): MutableMap<Int, MutableList<Pair<Int, Int>>> {
+        val gCopy : MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
+        for (key in g.keys) {
+            val gListCopy : MutableList<Pair<Int, Int>> = mutableListOf()
+            for (l in g[key]!!) {
+                gListCopy.add(l)
+                gCopy[key] = gListCopy
+            }
+        }
+        return gCopy
+    }
+
+    private fun recursiveTraversal(
+        targetNode: Int,
+        fromNode: Int,
+        currentNode: Int,
+        leafCount: Int,
+        g: MutableMap<Int, MutableList<Pair<Int, Int>>>): Int {
+        val listOfNodesAndWeights = g[currentNode]
+        if (listOfNodesAndWeights == null) {
+            println("recursive Travel - this shouldn't happen - null on a key")
+            return 0
+        }
+        if (listOfNodesAndWeights.isEmpty()) {
+            return 0
+        }
+        var weight = 0
+        val tempList = listOfNodesAndWeights.toMutableList() // make a copy
+        for (p in tempList) {
+            if (p.first == targetNode) {
+                weight += p.second
+                if (listOfNodesAndWeights.isNotEmpty()) {
+                    listOfNodesAndWeights.removeFirst()
+                    g[fromNode] = listOfNodesAndWeights
+                }
+                return weight
+            }
+            if (listOfNodesAndWeights.isEmpty()) {
+                return 0
+            }
+            val nextNode = listOfNodesAndWeights[0].first
+            val thisWeight = listOfNodesAndWeights[0].second
+            listOfNodesAndWeights.removeFirst()
+            g[fromNode] = listOfNodesAndWeights
+            if (nextNode != fromNode) {
+                weight += thisWeight
+                weight += recursiveTraversal(targetNode, fromNode, nextNode, leafCount, g)
+            }
+        }
+        return weight
+    }
 }
