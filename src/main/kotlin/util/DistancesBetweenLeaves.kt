@@ -36,6 +36,8 @@ The matrix you return should be space-separated.
 
 class DistancesBetweenLeaves {
 
+    var traversed: MutableList<Int> = mutableListOf()
+
     /**
      * @param leafCount - the row/column size of the distance matrix
      * @param g - the mapping of nodes to a list of connected nodes with connected weights
@@ -44,7 +46,7 @@ class DistancesBetweenLeaves {
      * the 0..(leafCount-1) node numbers.  Hence the returned 2D matrix has only
      * representatives from nodes { 0..(leafCount-1) }
      */
-    fun distancesBetweenLeaves(leafCount: Int, g: MutableMap<Int, MutableList<Pair<Int, Int>>>): D2Array<Int> {
+    fun distancesBetweenLeaves(leafCount: Int, g: Map<Int, List<Pair<Int, Int>>>): D2Array<Int> {
         val theMatrix = mk.d2array(leafCount, leafCount) {0}
 
         for (i in 0 until leafCount) {
@@ -52,8 +54,8 @@ class DistancesBetweenLeaves {
                 if (i == j) {
                     continue
                 }
-                val gCopy = makeCopy(g)
-                val weight = recursiveTraversal(j, i, i, leafCount, gCopy)
+                traversed = mutableListOf()
+                val weight = recursiveTraversal(j, i, i, leafCount, g)
                 theMatrix[i, j] = weight
             }
         }
@@ -61,53 +63,33 @@ class DistancesBetweenLeaves {
         return theMatrix
     }
 
-    private fun makeCopy(g: MutableMap<Int, MutableList<Pair<Int, Int>>>): MutableMap<Int, MutableList<Pair<Int, Int>>> {
-        val gCopy : MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
-        for (key in g.keys) {
-            val gListCopy : MutableList<Pair<Int, Int>> = mutableListOf()
-            for (l in g[key]!!) {
-                gListCopy.add(l)
-                gCopy[key] = gListCopy
-            }
-        }
-        return gCopy
-    }
-
     private fun recursiveTraversal(
         targetNode: Int,
         fromNode: Int,
         currentNode: Int,
         leafCount: Int,
-        g: MutableMap<Int, MutableList<Pair<Int, Int>>>): Int {
+        g: Map<Int, List<Pair<Int, Int>>>): Int {
         val listOfNodesAndWeights = g[currentNode]
         if (listOfNodesAndWeights == null) {
             println("recursive Travel - this shouldn't happen - null on a key")
             return 0
         }
-        if (listOfNodesAndWeights.isEmpty()) {
-            return 0
-        }
         var weight = 0
-        val tempList = listOfNodesAndWeights.toMutableList() // make a copy
-        for (p in tempList) {
+
+        traversed.add(currentNode)
+        for (p in listOfNodesAndWeights) {
             if (p.first == targetNode) {
                 weight += p.second
-                if (listOfNodesAndWeights.isNotEmpty()) {
-                    listOfNodesAndWeights.removeFirst()
-                    g[fromNode] = listOfNodesAndWeights
-                }
                 return weight
             }
-            if (listOfNodesAndWeights.isEmpty()) {
-                return 0
+            if (p.first < leafCount) {
+                continue
             }
-            val nextNode = listOfNodesAndWeights[0].first
-            val thisWeight = listOfNodesAndWeights[0].second
-            listOfNodesAndWeights.removeFirst()
-            g[fromNode] = listOfNodesAndWeights
-            if (nextNode != fromNode) {
-                weight += thisWeight
-                weight += recursiveTraversal(targetNode, fromNode, nextNode, leafCount, g)
+            if (!traversed.contains(p.first)) {
+                val foundWeight = recursiveTraversal(targetNode, fromNode, p.first, leafCount, g)
+                if (foundWeight != 0) {
+                    return p.second + weight + foundWeight
+                }
             }
         }
         return weight
