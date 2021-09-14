@@ -65,9 +65,15 @@ Gradle can be used to build it
 `gradlew init build test`
 
 All exercises contain a corresponding "Jupiter" (junit) test module located 
-in the `src/test/kotlin` folder.
+in the `src/test/kotlin` folder.  
 
-test.
+The repo is organized under src into `algorithms` and `problems` folders.
+The `problems` folders only contain entries where the test solution
+required a very large amount of data.
+
+Most of the `algorithms` are exercised by test files located in the 
+test folder.  The tests names match the sequencing found in
+the stepik course.
 
 [Linear Space Alignment]: http://rosalind.info/problems/ba5l/
 [Global Alignment]: http://rosalind.info/problems/ba5e/
