@@ -25,7 +25,7 @@ to starting positions of these k-mers in the respective strings.
  * rosalind: http://rosalind.info/problems/ba6e/
  */
 
-internal class S06C11p05SharedKmersTest {
+internal class S06c11p05SharedKmersTest {
     lateinit var sk : SharedKmers
 
     @BeforeEach

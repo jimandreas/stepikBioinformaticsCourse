@@ -38,7 +38,7 @@ means that node a is connected to node b by an edge of weight c.
 The matrix you return should be space-separated.
 
  */
-internal class S07C02p12DistancesBetweenLeavesTest {
+internal class S07c02p12DistancesBetweenLeavesTest {
 
     lateinit var dbl: DistancesBetweenLeaves
 

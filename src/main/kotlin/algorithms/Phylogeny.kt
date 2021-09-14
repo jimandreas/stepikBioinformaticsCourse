@@ -21,9 +21,11 @@ over all pairs of leaves i and k.
  * See also:
  * stepik: https://stepik.org/lesson/240336/step/11?unit=212682
  * rosalind: http://rosalind.info/problems/ba7b/
+ *
+ * Additive:
+ * stepik: https://stepik.org/lesson/240337/step/6?unit=212683
+ * rosalind: http://rosalind.info/problems/ba7c/
  */
-
-
 
 class Phylogeny {
 

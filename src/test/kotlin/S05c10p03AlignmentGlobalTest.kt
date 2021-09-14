@@ -21,7 +21,7 @@ mismatches as well as the indel penalty σ = 5.
  * book (5.10):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */
 
-internal class S05C10p03AlignmentGlobalTest {
+internal class S05c10p03AlignmentGlobalTest {
 
     @BeforeEach
     fun setUp() {

@@ -19,7 +19,7 @@ the solution path.
 
  */
 
-internal class S05C10p03AlignmentGlobalReflexiveTest {
+internal class S05c10p03AlignmentGlobalReflexiveTest {
 
     @BeforeEach
     fun setUp() {

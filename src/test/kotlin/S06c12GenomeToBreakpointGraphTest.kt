@@ -28,7 +28,7 @@ Various functions that handle pieces of the breakpoint graph processing.
  *
  */
 
-internal class S06C12GenomeToBreakpointGraphTest {
+internal class S06c12GenomeToBreakpointGraphTest {
 
     lateinit var twoBreakFunctions: TwoBreakGenomesToBreakpointGraph
 

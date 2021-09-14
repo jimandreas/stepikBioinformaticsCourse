@@ -39,7 +39,7 @@ to row j of this distance matrix (use 0-based indexing).
 
  */
 
-internal class S07C03p11PhylogenyLimbLengthTest {
+internal class S07c03p11PhylogenyLimbLengthTest {
 
     lateinit var ll: Phylogeny
 

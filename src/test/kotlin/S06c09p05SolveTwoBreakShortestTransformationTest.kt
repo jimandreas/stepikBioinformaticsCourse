@@ -36,7 +36,7 @@ Also Known As:  Shortest Rearrangement Scenario (see Pseudocode below)
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-internal class S06C09p05SolveTwoBreakShortestTransformationTest {
+internal class S06c09p05SolveTwoBreakShortestTransformationTest {
 
     lateinit var twoBreakDistance: TwoBreakDistance
     lateinit var twoBreakUtils: TwoBreakGenomesToBreakpointGraph

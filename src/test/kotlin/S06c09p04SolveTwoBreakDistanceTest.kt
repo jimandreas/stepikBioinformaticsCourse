@@ -31,7 +31,7 @@ Output: The 2-break distance d(P, Q).
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-internal class S06C09p04SolveTwoBreakDistanceTest {
+internal class S06c09p04SolveTwoBreakDistanceTest {
 
     lateinit var twoBreakDistance: TwoBreakDistance
     lateinit var twoBreakUtils: TwoBreakGenomesToBreakpointGraph
