@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.*
+import algorithms.*
 
 /**
 Code Challenge: Implement StringSpelledByGappedPatterns.
@@ -24,7 +24,7 @@ for 1 ≤ i ≤ n (if such a string exists).
  */
 internal class S03c09p16ReadPairsStringSpelledByGappedPatternsTest {
 
-//    private val ep = EulerianPathStrings()
+//    private val problems.ep = EulerianPathStrings()
 
     @BeforeEach
     fun setUp() {

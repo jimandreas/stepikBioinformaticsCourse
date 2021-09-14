@@ -4,8 +4,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.reverseComplement
-import util.scanDnaStringForPeptideEncoding
+import algorithms.reverseComplement
+import algorithms.scanDnaStringForPeptideEncoding
 import kotlin.test.assertEquals
 
 internal class CodonSearchTest {

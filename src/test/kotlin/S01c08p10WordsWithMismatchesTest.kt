@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
-import util.frequentWordsWithMismatches
+import algorithms.frequentWordsWithMismatches
 
 /**
  * @link: https://stepik.org/lesson/240221/step/10?unit=212567

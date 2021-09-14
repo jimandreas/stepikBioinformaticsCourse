@@ -1,7 +1,7 @@
 @file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable")
 
 import org.junit.jupiter.api.*
-import util.TurnpikeReconstructionDepthFirst
+import algorithms.TurnpikeReconstructionDepthFirst
 import java.util.concurrent.TimeUnit
 import kotlin.test.Ignore
 import kotlin.test.assertContentEquals

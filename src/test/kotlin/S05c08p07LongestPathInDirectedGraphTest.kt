@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.LongestPathInDirectedGraph
+import algorithms.LongestPathInDirectedGraph
 import kotlin.test.assertContentEquals
 import kotlin.test.assertNotNull
 

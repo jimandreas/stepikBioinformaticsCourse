@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.PhylogenyLimbLength
+import algorithms.Phylogeny
 
 /**
  *
@@ -41,12 +41,12 @@ to row j of this distance matrix (use 0-based indexing).
 
 internal class S07C03p11PhylogenyLimbLengthTest {
 
-    lateinit var ll: PhylogenyLimbLength
+    lateinit var ll: Phylogeny
 
 
     @BeforeEach
     fun setUp() {
-        ll = PhylogenyLimbLength()
+        ll = Phylogeny()
     }
 
     @AfterEach

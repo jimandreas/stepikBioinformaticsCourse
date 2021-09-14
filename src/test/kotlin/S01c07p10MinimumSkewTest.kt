@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
+import problems.Foo
+import problems.scanForSkew
 
 /**
 
@@ -130,7 +132,7 @@ internal class S01c07p10Test {
     @DisplayName( "test with LARGE DNA strip supplied by class")
     fun testLargeGenomeForMinSkewValues() {
 
-        val loader = Foo()
+        val loader = FooS01c07()
         val testString = loader.getResourceAsText("S01c07p10testInput.txt")
 
         val outputList = listOf(89969, 89970, 89971, 90345, 90346)
@@ -141,7 +143,7 @@ internal class S01c07p10Test {
     }
 }
 
-class Foo {
+class FooS01c07 {
     fun getResourceAsText(path: String): String {
         val ress = this.javaClass.getResource(path)
         val retStr = ress!!.readText()

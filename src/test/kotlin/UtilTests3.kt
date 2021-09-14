@@ -2,7 +2,7 @@
 
 import org.junit.jupiter.api.*
 
-import util.*
+import algorithms.*
 import kotlin.test.assertEquals
 
 internal class UtilTests3 {

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.AlignmentLinearSpace
+import algorithms.AlignmentLinearSpace
 
 /**
  * Code Challenge: Solve the Middle Edge in Linear Space Problem (for protein strings).

@@ -1,7 +1,7 @@
 @file:Suppress("UNUSED_VARIABLE", "unused", "UnnecessaryVariable")
 
 import org.junit.jupiter.api.*
-import util.*
+import algorithms.*
 import java.lang.StringBuilder
 import kotlin.test.assertEquals
 

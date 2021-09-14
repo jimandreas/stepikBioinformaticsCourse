@@ -4,8 +4,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.aminoAcidsTable
-import util.translateRnaCodonStringToAminoAcidString
+import algorithms.aminoAcidsTable
+import algorithms.translateRnaCodonStringToAminoAcidString
 import java.util.*
 import kotlin.test.assertEquals
 

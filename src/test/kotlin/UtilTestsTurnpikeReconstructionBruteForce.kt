@@ -2,7 +2,7 @@
 
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertTrue
-import util.TurnpikeReconstructionBruteForce
+import algorithms.TurnpikeReconstructionBruteForce
 import java.util.concurrent.TimeUnit
 import kotlin.test.Ignore
 import kotlin.test.assertContentEquals

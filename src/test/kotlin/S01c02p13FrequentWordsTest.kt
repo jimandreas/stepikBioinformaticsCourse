@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
+import problems.scanForMatchesOfLength
 
 /**
  *  1.2 Hidden Messages in the Replication Origin

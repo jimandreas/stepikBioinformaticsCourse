@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
+import problems.printRepeatedTargetIndexesWithOverlap
 
 /**
  *  1.3 Some Hidden Messages are More Surprising than Others

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import problems.dpChange
 
 /**
  * stepik:   @link: https://stepik.org/lesson/240300/step/10?unit=212646

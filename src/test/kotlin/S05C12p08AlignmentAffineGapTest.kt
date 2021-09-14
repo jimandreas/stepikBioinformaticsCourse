@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.AlignmentAffineGap
+import algorithms.AlignmentAffineGap
 
 /**
  * Code Challenge: Solve the Alignment with Affine Gap Penalties Problem.

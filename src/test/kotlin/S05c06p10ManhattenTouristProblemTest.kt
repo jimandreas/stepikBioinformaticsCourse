@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.ManhattanTouristProblem
+import algorithms.ManhattanTouristProblem
 import kotlin.test.assertNotNull
 
 /**

@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.EulerianPathSymbolicMap
+import algorithms.EulerianPathSymbolicMap
 
 /**
  *  testing the euler cycle code - converted to handle the nodes as hash key entries

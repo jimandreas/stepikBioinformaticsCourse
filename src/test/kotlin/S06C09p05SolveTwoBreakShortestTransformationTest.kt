@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import util.TwoBreakDistance
-import util.TwoBreakGenomesToBreakpointGraph
-import util.TwoBreakOnGenomeGraph
-import util.TwoBreakSortingShortestTransformation
+import algorithms.TwoBreakDistance
+import algorithms.TwoBreakGenomesToBreakpointGraph
+import algorithms.TwoBreakOnGenomeGraph
+import algorithms.TwoBreakSortingShortestTransformation
 
 /**
  *
