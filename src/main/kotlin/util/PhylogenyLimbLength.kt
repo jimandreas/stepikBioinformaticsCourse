@@ -1,20 +1,20 @@
-@file:Suppress("MemberVisibilityCanBePrivate", "UnnecessaryVariable", "ReplaceJavaStaticMethodWithKotlinAnalog",
-    "unused", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls"
+@file:Suppress(
+    "MemberVisibilityCanBePrivate", "UnnecessaryVariable", "ReplaceJavaStaticMethodWithKotlinAnalog",
+    "unused", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls", "UNUSED_VALUE", "ReplaceWithOperatorAssignment"
 )
 
 package util
 
-import org.jetbrains.kotlinx.multik.api.d2array
-import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
-import org.jetbrains.kotlinx.multik.ndarray.data.set
+import org.jetbrains.kotlinx.multik.ndarray.data.get
+import java.lang.Math.min
 
 
 /**
  *
 
 For each j, we can compute LimbLength(j) by finding the minimum value of
-( Di,j + Dj,k − Di,k)/2 (D_{i,j} + D_{j,k} - D_{i,k} ) / 2
+( Di,j + Dj,k − Di,k ) / 2
 over all pairs of leaves i and k.
 
  * See also:
@@ -36,9 +36,33 @@ to row j of this distance matrix (use 0-based indexing).
 
 class PhylogenyLimbLength {
 
-    fun calculateLimbLength(matrixSize: Int, rowNumber: Int, m: D2Array<Int>): Int {
+    /**
+     * ( Di,j + Dj,k − Di,k ) / 2
+     */
+    fun calculateLimbLength(matrixSize: Int, rowNumberJ: Int, m: D2Array<Int>): Int {
 
-        return 0
+        var minValue = Int.MAX_VALUE
+
+        for (i in 0 until matrixSize) {
+            for (k in 0 until matrixSize) {
+
+                if (i != rowNumberJ && rowNumberJ != k) {
+
+                    val dij = m[i, rowNumberJ]
+                    val djk = m[rowNumberJ, k]
+                    val dik = m[i, k]
+                    var sum = dij + djk - dik
+                    sum = sum / 2
+
+                    minValue = min(minValue, sum)
+//                    if (sum == 2) {
+//                        println("$i $rowNumberJ $k  $dij $djk $dik")
+//                    }
+                }
+
+            }
+        }
+        return minValue
     }
 
 }
