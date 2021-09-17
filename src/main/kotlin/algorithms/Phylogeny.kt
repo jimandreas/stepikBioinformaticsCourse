@@ -1,7 +1,7 @@
 @file:Suppress(
     "MemberVisibilityCanBePrivate", "UnnecessaryVariable", "ReplaceJavaStaticMethodWithKotlinAnalog",
     "unused", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls", "UNUSED_VALUE", "ReplaceWithOperatorAssignment",
-    "UNUSED_PARAMETER"
+    "UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE"
 )
 
 package algorithms
@@ -11,7 +11,6 @@ import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
-import org.junit.jupiter.params.shadow.com.univocity.parsers.fixed.FixedWidthFieldLengths
 import java.lang.Math.min
 
 /**
@@ -54,12 +53,16 @@ class Phylogeny {
      *    An ending call to distancesBetweenLeaves() should produce a matrix
      *    identical to our starting matrix
      */
-    fun additivePhylogenyStart(matrixSize: Int, m: D2Array<Int>) {
+    val limbLengthMap: MutableMap<Int, Int> = mutableMapOf()
+    fun additivePhylogenyStart(matrixSize: Int, m: D2Array<Int>): Map<Int, List<Pair<Int, Int>>> {
+        // first - save each nodes limbLenght in a map for later
         for (i in 0 until matrixSize) {
             val t = calculateLimbLength(matrixSize, i, m)
             println("$i $t")
+            limbLengthMap[i] = t
         }
         val mapResult = additivePhylogenyIterative(matrixSize, m)
+        return mapResult
     }
 
     val pseudoCodeAdditivePhylogeny = """
@@ -126,23 +129,64 @@ class Phylogeny {
         /*
          * now reconstruct the connection tree
          */
-        val cTree: MutableMap<Int, List<Pair<Int, Int>>> = mutableMapOf()
-        // first node is just the distance between 0 and 1
-        val f = Pair(1, calculateLimbLength(matrixSize, 1, m))
-        cTree[0] = listOf(f)
+        val cTree: MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
 
         /*
+         * here is where this iterative algo deviates from the pseudoCode.
+         *    There are two cases - where only one additional node is needed,
+         * or where there needs to be two nodes
+         */
+        val distance = m[0, 1]  // straight from the matrix
+        val limb0 = limbLengthMap[0]!!
+        val limb1 = limbLengthMap[1]!!
+        var nextNode = matrixSize
+
+        if (distance - limb0 - limb1 == 0) {
+            // first edge from node 0 to internal node
+            cTree[0] = mutableListOf(Pair(nextNode, limb0))
+            // second edge from node 1 to internal node
+            cTree[1] = mutableListOf(Pair(nextNode, limb1))
+            // and the back pointers:
+            cTree[nextNode] = mutableListOf(
+                Pair(0, limb0),
+                Pair(1, limb1)
+            )
+            nextNode++
+        } else {
+            // we need two nodes at the start
+            // first edge from node 0 to node "matrixSize"
+            val internodeDistance = distance - limb0 - limb1
+            cTree[0] = mutableListOf(Pair(nextNode, limb0))
+            // first internal node - back pointer to node 0, forward node to next internal node
+            cTree[nextNode] = mutableListOf(
+                Pair(0, limb0),
+                Pair(nextNode+1, internodeDistance)
+            )
+            // second internal node - back pointer to above node, forward node to node 1
+            cTree[nextNode+1] = mutableListOf(
+                Pair(nextNode, internodeDistance),
+                Pair(1, limb1)
+            )
+
+            cTree[1] = mutableListOf(Pair(nextNode+1, limb1))
+            nextNode += 2
+        }
+
+
+        /*
+         * We have the first three nodes now - two leaf nodes and a connector node
+         *
          * now iterate through the nodeInfo List and adjust the connection tree
          * as necessary, making new internal nodes to get the distances right
          */
         while (nodeInfoStack.isNotEmpty()) {
 
-            val nS = nodeInfoStack.pop()
-            println(nS)
-            fixTree(cTree, nS!!)
+            val nodeInfoFromStack = nodeInfoStack.pop()
+            println(nodeInfoFromStack)
+            fixTree(matrixSize, cTree, nodeInfoFromStack!!)
         }
 
-        return emptyMap()
+        return cTree
     }
 
     /**
@@ -150,32 +194,67 @@ class Phylogeny {
      *  as necessary based on the info in NodeInfo.
      *  Then attach our new node with len to the tree
      */
-    fun fixTree(t: MutableMap<Int, List<Pair<Int, Int>>>, info: NodeInfo) {
-        val nodeNum = info.iterCount+1
+    fun fixTree(matrixSize: Int, t: MutableMap<Int, MutableList<Pair<Int, Int>>>, info: NodeInfo) {
+        val nodeNum = info.iterCount
         val len = info.limbLength
         val requireLen = info.distanceX
-        val requireLenFromNode = info.baseNodei
-        val internalNode = gotNode(t, requireLenFromNode, requireLen)
+        val baseNodeForLength = info.baseNodei
+        val internalNode = findNodeOrMakeOne(matrixSize, t, baseNodeForLength, requireLen)
+        println("internal node found is $internalNode")
+        t[internalNode]!!.add(Pair(nodeNum, len))
+        t[nodeNum] = mutableListOf(Pair(internalNode, len))
     }
 
     /**
      *  scan for an internal node where the accumulated distance
      *  matches the required distance from the initial node
-     *  (recursive)
+     *    If not found, make a node and return its key.
      */
-    fun gotNode(t: MutableMap<Int, List<Pair<Int, Int>>>, n: Int, len: Int): Int? {
-        if (!t.containsKey(n)) {
-            return null
+    fun findNodeOrMakeOne(matrixSize: Int,
+                          theCurrentConnectionTree: MutableMap<Int, MutableList<Pair<Int, Int>>>,
+                          baseNodeForLen: Int,
+                          requiredLenToNodeFromBaseNode: Int): Int {
+        // error checking, the tree MUST contain the base node number
+
+        var baseNode = baseNodeForLen
+        if (!theCurrentConnectionTree.containsKey(baseNode)) {
+            println("findNodeOrMakeOn: Error baseNode is not in the current Tree")
+            return 0
         }
-        for (pair in t[n]!!) {
-            val nextNode = pair.first
-            val newDistance = len - pair.second
-            val internalNode = gotNode(t, nextNode, nextNode)
-            if (internalNode != null) {
-                return internalNode
+        // for the base node, traverse the list of connections, searching for a match for our
+        // required length.  The match cannot be a leaf node, naturally - we must connect to
+        // an internal node
+
+        var notFound = true
+        var maxDistance = 0
+        var tempRequiredDistance = requiredLenToNodeFromBaseNode
+        var candidateNodeStack = Stack<Pair<Int, Int>>()
+        while (notFound) {
+            for (pair in theCurrentConnectionTree[baseNode]!!) {
+                val nextNodeNumber = pair.first   // pair is (NodeNum, Length)
+                val distanceToNextNode = pair.second
+
+                // if this is an internal node
+                if (nextNodeNumber >= matrixSize) {
+                    if (tempRequiredDistance == distanceToNextNode) {
+                        return nextNodeNumber  // found it!
+                    }
+                    if (tempRequiredDistance > distanceToNextNode) { // if a possibility, save it for later
+                        candidateNodeStack.push(Pair(nextNodeNumber, tempRequiredDistance - distanceToNextNode))
+                    }
+                }
+            }
+            if (candidateNodeStack.isNotEmpty()) {
+                val candidate = candidateNodeStack.pop()
+                baseNode = candidate!!.first
+                tempRequiredDistance = candidate!!.second
+            } else {
+                notFound = false
             }
         }
-        return null
+        // TODO: create a node someplace
+        println("ERROR node creation not yet implemented")
+        return 0
     }
 
     /**
