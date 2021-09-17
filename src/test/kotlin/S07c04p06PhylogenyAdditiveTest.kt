@@ -17,11 +17,6 @@ import algorithms.Phylogeny
 
 /**
  *
-
-For each j, we can compute LimbLength(j) by finding the minimum value of
-( Di,j + Dj,k − Di,k)/2 (D_{i,j} + D_{j,k} - D_{i,k} ) / 2
-over all pairs of leaves i and k.
-
  * See also:
  * stepik: https://stepik.org/lesson/240337/step/6?unit=212683
  * rosalind: http://rosalind.info/problems/ba7c/
@@ -60,24 +55,36 @@ internal class S07c04p06PhylogenyAdditiveTest {
     fun phylogenyLimbLengthSampleTest() {
         val sampleInput = """
             4
-            1
             0	13	21	22
             13	0	12	13
             21	12	0	13
             22	13	13	0
         """.trimIndent()
 
-        val expectedOutput = 2
+        val expectedOutputString = """
+            0->4:11
+            1->4:2
+            2->5:6
+            3->5:7
+            4->0:11
+            4->1:2
+            4->5:4
+            5->4:4
+            5->3:7
+            5->2:6
+        """.trimIndent()
+
         val input = sampleInput.reader().readLines().toMutableList()
         val matrixSize = input[0].trim().toInt()
-        val whichRow = input[1].trim().toInt()
-        input.removeFirst()
         input.removeFirst()
         val m = parseMatrixInput(matrixSize, input)
 
-        val result = ll.calculateLimbLength(matrixSize, whichRow, m)
+        val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
+        expectedResultStrings.removeFirst()
+        val expectedGraph = parseSampleInput(expectedResultStrings)
 
-        assertEquals(expectedOutput, result)
+        val result = ll.additivePhylogenyStart(matrixSize, m)
+
 
     }
 
@@ -102,6 +109,22 @@ internal class S07c04p06PhylogenyAdditiveTest {
             }
         }
         return theMatrix
+    }
+
+    fun parseSampleInput(edges: List<String>): MutableMap<Int, MutableList<Pair<Int, Int>>> {
+        val edgeMap: MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
+        for (e in edges) {
+            val sourceDest = e.split("->")
+            val nodeAndWeight = sourceDest[1].split(":")
+
+            val key = sourceDest[0].toInt()
+            if (edgeMap.containsKey(key)) {
+                edgeMap[sourceDest[0].toInt()]!!.add(Pair(nodeAndWeight[0].toInt(), nodeAndWeight[1].toInt()))
+            } else {
+                edgeMap[sourceDest[0].toInt()] = mutableListOf(Pair(nodeAndWeight[0].toInt(), nodeAndWeight[1].toInt()))
+            }
+        }
+        return edgeMap
     }
 
     /**
