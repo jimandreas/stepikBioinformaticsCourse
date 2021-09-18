@@ -61,9 +61,27 @@ class Phylogeny {
             println("$i $t")
             limbLengthMap[i] = t
         }
-        val mapResult = additivePhylogenyIterative(matrixSize, m)
-        return mapResult
+        val mapResult = additivePhylogenyIterative(matrixSize, m.clone())
+
+        return sortMapAndDistanceLists(mapResult)
+
     }
+
+    fun sortMapAndDistanceLists(unorderedList: Map<Int, List<Pair<Int, Int>>>): Map<Int, List<Pair<Int, Int>>> {
+        // now sort the keys, and then the distances in the lists
+        val mapSortedResult = unorderedList.toSortedMap()
+        val returnSortedList : MutableMap<Int, List<Pair<Int, Int>>> = mutableMapOf()
+        for (entry in mapSortedResult) {
+            val theList = entry.value
+            returnSortedList[entry.key] = theList.sorted()
+        }
+        return returnSortedList
+    }
+
+    private fun <A: Comparable<A>, B: Comparable<B>> List<Pair<A, B>>.sorted() : List<Pair<A, B>> =
+        sortedWith(
+            Comparator<Pair<A, B>>{ a, b-> a.first.compareTo(b.first)}.thenBy{it.second}
+        )
 
     val pseudoCodeAdditivePhylogeny = """
         NOTE: the indexing is ONE based here - but the implementation is ZERO-based.

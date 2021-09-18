@@ -14,6 +14,8 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 /**
  *
@@ -87,11 +89,12 @@ internal class S07c04p06PhylogenyAdditiveTest {
 
         val result = ll.additivePhylogenyStart(matrixSize, m)
 
+        checkEdgesAreEqual(expectedGraph, result)
 
     }
 
     @Test
-    @DisplayName("Distances Between Leaves sample test")
+    @DisplayName("Distances Between Leaves contrived test")
     fun phylogenyLimbLengthContrivedTest01() {
 
         // this is similar to the previous matrix,
@@ -114,22 +117,34 @@ internal class S07c04p06PhylogenyAdditiveTest {
         val r = contrivedSampleInput.reader().readLines().toMutableList()
         val matrixSize = r[0].toInt()
         r.removeAt(0)
-        val edges = parseSampleInput(r)
-
-        val theInputMatrix = dbl.distancesBetweenLeaves(matrixSize, edges)
+        val hackedEdges = parseSampleInput(r)
+        // now convert the edges to a distance matrix
+        val theInputMatrix = dbl.distancesBetweenLeaves(matrixSize, hackedEdges)
         printit(matrixSize, theInputMatrix)
 
+        // now hand the distance matrix to the additivePhylogeny algo
         val treeMapResult = ll.additivePhylogenyStart(matrixSize, theInputMatrix)
+
+        checkEdgesAreEqual(hackedEdges, treeMapResult)
 
         val theResultMatrix = dbl.distancesBetweenLeaves(matrixSize, treeMapResult)
         printit(matrixSize, theResultMatrix)
-//        val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
-//        expectedResultStrings.removeFirst()
-//        val expectedGraph = parseSampleInput(expectedResultStrings)
-//
-//        val result = ll.additivePhylogenyStart(matrixSize, m)
+        assertEquals(theInputMatrix, theResultMatrix)
+    }
 
-
+    /**
+     * compare two maps of structure:
+     *  MutableMap<Int, List<Pair<Int, Int>>> = mutableMapOf()
+     *
+     * sort both keys and list entries before comparing
+     */
+    private fun checkEdgesAreEqual(a: Map<Int, List<Pair<Int, Int>>>, b: Map<Int, List<Pair<Int, Int>>>) {
+        val a2 = ll.sortMapAndDistanceLists(a)
+        val b2 = ll.sortMapAndDistanceLists(b)
+        assertEquals(a2.size, b2.size)
+        for (entry in a2.keys) {
+            assertContentEquals(a2[entry], b2[entry] )
+        }
     }
 
 
