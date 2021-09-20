@@ -1,7 +1,7 @@
 @file:Suppress(
     "MemberVisibilityCanBePrivate", "UnnecessaryVariable", "ReplaceJavaStaticMethodWithKotlinAnalog",
     "unused", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls", "UNUSED_VALUE", "ReplaceWithOperatorAssignment",
-    "UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "CanBeVal"
+    "UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "CanBeVal", "SimplifyBooleanWithConstants"
 )
 
 package algorithms
@@ -290,17 +290,16 @@ class Phylogeny {
      */
     fun addIntermediateNode(
         matrixSize: Int,
-        baseNodeForLen: Int,
-        requiredLenToNodeFromBaseNode: Int
+        searchThisNodesConnections: Int,
+        requiredLenToNodeFromThisNode: Int
     ): Boolean {
-        val baseNodeConnList = theCurrentConnectionTree[baseNodeForLen]
-        val innerNodeNum = baseNodeConnList!![0].first
-        val conns = theCurrentConnectionTree[innerNodeNum]
+        val thisNodesConnectionList = theCurrentConnectionTree[searchThisNodesConnections]
 
-        val possibleConns = conns!!.filter {
+        // search - the distance must be longer than that required and the node must not be a leaf node
+        val possibleConns = thisNodesConnectionList!!.filter {
             val nodeNum = it.first
             val connDistance = it.second
-            connDistance >= matrixSize
+            connDistance > requiredLenToNodeFromThisNode && nodeNum >= matrixSize
         }
         if (possibleConns.size > 1) {
             println("WARNING - multiple connection candidates to break.  Picking the first one")
@@ -309,19 +308,37 @@ class Phylogeny {
             return false
         }
 
-        val endNode = possibleConns[0].first
+        val fromNode = searchThisNodesConnections
+        val toNode = possibleConns[0].first
         val distanceToEndNode = possibleConns[0].second
 
-        val firstDistance = distanceToEndNode - requiredLenToNodeFromBaseNode
-        val secondDistance = requiredLenToNodeFromBaseNode - firstDistance
+        val firstDistance = requiredLenToNodeFromThisNode
+        val secondDistance = distanceToEndNode -  firstDistance
 
         // update tree - add new node and add forward and backward links
         theCurrentConnectionTree[nextNode] = mutableListOf(
-            Pair(innerNodeNum, firstDistance),
-            Pair(endNode, secondDistance)
+            Pair(fromNode, firstDistance),
+            Pair(toNode, secondDistance)
+        )
+        // fix the from node connection list
+        fixConnList(
+            fromNode = fromNode,
+            toNode = toNode,
+            newToNode = nextNode,
+            oldDistance = distanceToEndNode,
+            newDistance = requiredLenToNodeFromThisNode
         )
 
+        // fix the toNode back link
+        fixConnList(
+            fromNode = toNode,
+            toNode = fromNode,
+            newToNode = nextNode,
+            oldDistance = distanceToEndNode,
+            newDistance = secondDistance
+        )
 
+        nextNode += 1
         return true
     }
 
@@ -332,16 +349,26 @@ class Phylogeny {
     fun fixConnList(
         fromNode: Int,
         toNode: Int,
+        newToNode: Int,
+        oldDistance: Int,
         newDistance: Int
     ) {
         val connList = theCurrentConnectionTree[fromNode]!!
-        val newConnList : MutableList<Pair<Int, Int>> = mutableListOf()
+        val newConnList: MutableList<Pair<Int, Int>> = mutableListOf()
+        var foundToNode = false
         for (conn in connList) {
             if (conn.first == toNode) {
-                newConnList.add(Pair(toNode, newDistance))
+                newConnList.add(Pair(newToNode, newDistance))
+                foundToNode = true
+                if (conn.second != oldDistance) {
+                    println("fixConnList: Error check: old distance did not match: was: ${conn.second} should be $oldDistance")
+                }
             } else {
                 newConnList.add(conn)
             }
+        }
+        if (foundToNode == false) {
+            println("fixConnList: did not find toNode $toNode in the connections for node $fromNode")
         }
         theCurrentConnectionTree[fromNode] = newConnList
     }

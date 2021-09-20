@@ -103,12 +103,74 @@ internal class S07c04p06PhylogenyAdditiveInternalsTest {
         val expectedGraph = parseSampleInput(expectedResultStrings)
 
         ll.theCurrentConnectionTree = testTreeMap
-        ll.fixConnList(4, 5, 99)
+        ll.fixConnList(
+            fromNode = 4,
+            toNode = 5,
+            newToNode = 5,
+            oldDistance = 400,
+            newDistance = 99)
 
         checkEdgesAreEqual(expectedGraph, ll.theCurrentConnectionTree)
 
     }
 
+
+    /**
+     * test of:
+     *   add an intermediate node betwwen nodes 4 and 5 with
+     *      a required distance from 4 of 100
+     */
+    @Test
+    @DisplayName("phylogeny INTERNAL addIntermediateNode test")
+    fun phylogenyINTERNALaddIntermediateNodeTest() {
+
+        val testTree = """
+            0->4:11
+            1->4:2
+            2->5:6
+            3->5:7
+            4->0:11
+            4->1:2
+            4->5:400
+            5->4:400
+            5->3:7
+            5->2:6
+        """.trimIndent()
+
+        val expectedOutputString = """
+            0->4:11
+            1->4:2
+            2->5:6
+            3->5:7
+            4->0:11
+            4->1:2
+            4->6:100
+            5->6:300
+            5->3:7
+            5->2:6
+            6->4:100
+            6->5:300
+        """.trimIndent()
+
+        val testTreeMapStrings = testTree.reader().readLines().toMutableList()
+        val testTreeMap = parseSampleInput(testTreeMapStrings)
+
+        val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
+        val expectedGraph = parseSampleInput(expectedResultStrings)
+
+        ll.theCurrentConnectionTree = testTreeMap
+        ll.nextNode = 6
+        val foundBoolean = ll.addIntermediateNode(
+            matrixSize = 4,
+            searchThisNodesConnections = 4,
+            requiredLenToNodeFromThisNode = 100
+        )
+
+        assertEquals(true, foundBoolean)
+
+        checkEdgesAreEqual(expectedGraph, ll.theCurrentConnectionTree)
+
+    }
 
     /**
      * compare two maps of structure:
@@ -124,8 +186,6 @@ internal class S07c04p06PhylogenyAdditiveInternalsTest {
             assertContentEquals(a2[entry], b2[entry] )
         }
     }
-
-
 
     /**
      * convert a string of the form (with tab or space separated numbers)
@@ -150,7 +210,7 @@ internal class S07c04p06PhylogenyAdditiveInternalsTest {
         return theMatrix
     }
 
-    fun parseSampleInput(edges: List<String>): MutableMap<Int, MutableList<Pair<Int, Int>>> {
+    private fun parseSampleInput(edges: List<String>): MutableMap<Int, MutableList<Pair<Int, Int>>> {
         val edgeMap: MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
         for (e in edges) {
             val sourceDest = e.split("->")
@@ -183,7 +243,5 @@ internal class S07c04p06PhylogenyAdditiveInternalsTest {
         }
         println(outStr.toString())
     }
-
-
 
 }
