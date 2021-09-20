@@ -17,6 +17,11 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
+/**************************************************************************
+ * tests for INTERNALS - that is to say - helper functions that
+ * modify the connection tree
+ ***************************************************************************/
+
 /**
  *
  * See also:
@@ -38,7 +43,7 @@ may be labeled in any order but must start from n and increase consecutively.
 
  */
 
-internal class S07c04p06PhylogenyAdditiveTest {
+internal class S07c04p06PhylogenyAdditiveInternalsTest {
 
     lateinit var ll: Phylogeny
     lateinit var dbl: DistancesBetweenLeaves
@@ -54,15 +59,28 @@ internal class S07c04p06PhylogenyAdditiveTest {
     fun tearDown() {
     }
 
+
+    /**
+     * test of:
+     * walk the connection list for fromNode looking for the toNode.
+     * Set the distance for toNode to newDistance.
+     *   test setup - change the 4 to 5 node distance from 400 to 99
+     */
     @Test
-    @DisplayName("Distances Between Leaves sample test")
-    fun phylogenyLimbLengthSampleTest() {
-        val sampleInput = """
-            4
-            0	13	21	22
-            13	0	12	13
-            21	12	0	13
-            22	13	13	0
+    @DisplayName("phylogeny INTERNAL fixConnList test")
+    fun phylogenyINTERNALfixConnListTest() {
+
+        val testTree = """
+            0->4:11
+            1->4:2
+            2->5:6
+            3->5:7
+            4->0:11
+            4->1:2
+            4->5:400
+            5->4:4
+            5->3:7
+            5->2:6
         """.trimIndent()
 
         val expectedOutputString = """
@@ -72,107 +90,25 @@ internal class S07c04p06PhylogenyAdditiveTest {
             3->5:7
             4->0:11
             4->1:2
-            4->5:4
+            4->5:99
             5->4:4
             5->3:7
             5->2:6
         """.trimIndent()
 
-        val input = sampleInput.reader().readLines().toMutableList()
-        val matrixSize = input[0].trim().toInt()
-        input.removeFirst()
-        val m = parseMatrixInput(matrixSize, input)
+        val testTreeMapStrings = testTree.reader().readLines().toMutableList()
+        val testTreeMap = parseSampleInput(testTreeMapStrings)
 
         val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
         val expectedGraph = parseSampleInput(expectedResultStrings)
 
-        val result = ll.additivePhylogenyStart(matrixSize, m)
+        ll.theCurrentConnectionTree = testTreeMap
+        ll.fixConnList(4, 5, 99)
 
-        checkEdgesAreEqual(expectedGraph, result)
-
-    }
-
-    @Test
-    @DisplayName("Distances Between Leaves hexadecimal test 01")
-    fun phylogenyLimbLengthHexTest01() {
-        val sampleInput = """
-            6
-            00 f0 c8 84 e2 c1
-            f0 00 38 74 12 31
-            c8 38 00 4c 2a 09
-            84 74 4c 00 66 45
-            e2 12 2a 66 00 23
-            c1 31 09 45 23 00
-        """.trimIndent()
-
-        // update when finished debugging
-        val expectedOutputString = """
-            0->4:11
-            1->4:2
-            2->5:6
-            3->5:7
-            4->0:11
-            4->1:2
-            4->5:4
-            5->4:4
-            5->3:7
-            5->2:6
-        """.trimIndent()
-
-        val input = sampleInput.reader().readLines().toMutableList()
-        val matrixSize = input[0].trim().toInt()
-        input.removeFirst()
-        val m = parseMatrixInput(matrixSize, input, radixIn = 16)
-
-        val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
-        val expectedGraph = parseSampleInput(expectedResultStrings)
-
-        val result = ll.additivePhylogenyStart(matrixSize, m)
-        println(result)
-
-        //checkEdgesAreEqual(expectedGraph, result)
+        checkEdgesAreEqual(expectedGraph, ll.theCurrentConnectionTree)
 
     }
 
-
-    @Test
-    @DisplayName("Distances Between Leaves contrived test")
-    fun phylogenyLimbLengthContrivedTest01() {
-
-        // this is similar to the previous matrix,
-        //    but nodes 1 and 2 (2 and 3 in the diagrams)
-        //    have been swapped
-        val contrivedSampleInput = """
-            4
-            0->4:11
-            1->5:6
-            2->4:2
-            3->5:7
-            4->0:11
-            4->2:2
-            4->5:4
-            5->4:4
-            5->3:7
-            5->1:6
-        """.trimIndent()
-
-        val r = contrivedSampleInput.reader().readLines().toMutableList()
-        val matrixSize = r[0].toInt()
-        r.removeAt(0)
-        val hackedEdges = parseSampleInput(r)
-        // now convert the edges to a distance matrix
-        val theInputMatrix = dbl.distancesBetweenLeaves(matrixSize, hackedEdges)
-        printit(matrixSize, theInputMatrix)
-
-        // now hand the distance matrix to the additivePhylogeny algo
-        val treeMapResult = ll.additivePhylogenyStart(matrixSize, theInputMatrix)
-
-        checkEdgesAreEqual(hackedEdges, treeMapResult)
-
-        val theResultMatrix = dbl.distancesBetweenLeaves(matrixSize, treeMapResult)
-        printit(matrixSize, theResultMatrix)
-        assertEquals(theInputMatrix, theResultMatrix)
-    }
 
     /**
      * compare two maps of structure:
