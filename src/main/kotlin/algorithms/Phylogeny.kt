@@ -35,6 +35,7 @@ class Phylogeny {
 
     var nextNode = 0 // tracker for the next internal node number to create
     var theCurrentConnectionTree: MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
+    val limbLengthMap: MutableMap<Int, Int> = mutableMapOf()
 
     /**
 
@@ -56,7 +57,7 @@ class Phylogeny {
      *    An ending call to distancesBetweenLeaves() should produce a matrix
      *    identical to our starting matrix
      */
-    val limbLengthMap: MutableMap<Int, Int> = mutableMapOf()
+
     fun additivePhylogenyStart(matrixSize: Int, m: D2Array<Int>): Map<Int, List<Pair<Int, Int>>> {
         // first - save each nodes limbLenght in a map for later
         for (i in 0 until matrixSize) {
@@ -124,7 +125,7 @@ class Phylogeny {
         val nodeInfoStack = Stack<NodeInfo>()
         var dMatrix = m
         for (countDownIdx in (matrixSize - 1) downTo 2) {
-            val limbLength = calculateLimbLength(matrixSize, countDownIdx, m)
+            val limbLength = calculateLimbLength(/*matrixSize*/ countDownIdx, countDownIdx, m)
 
             // now subtract the limbLength from the matrixSize-1 entries
             val dBald = dMatrix
@@ -137,7 +138,7 @@ class Phylogeny {
             val x = dBald[leafPair.first, countDownIdx]  // save distance
 
             // remove row countDownIdx and col countDownIdx
-            dMatrix = dropLastRowAndColumn(countDownIdx, dMatrix)
+            //dMatrix = dropLastRowAndColumn(countDownIdx, dMatrix)
 
             val nInfo = NodeInfo(
                 iterCount = countDownIdx,
@@ -220,13 +221,13 @@ class Phylogeny {
      */
     fun fixTree(matrixSize: Int, info: NodeInfo) {
         val nodeNum = info.iterCount
-        val len = info.limbLength
-        val requireLen = info.distanceX
+        val limbLength = info.limbLength
+        val requireLen = info.distanceX + limbLength - limbLengthMap[nodeNum]!!
         val baseNodeForLength = info.baseNodei
         val internalNode = findNodeOrMakeOne(matrixSize, baseNodeForLength, requireLen)
         println("internal node found is $internalNode")
-        theCurrentConnectionTree[internalNode]!!.add(Pair(nodeNum, len))
-        theCurrentConnectionTree[nodeNum] = mutableListOf(Pair(internalNode, len))
+        theCurrentConnectionTree[internalNode]!!.add(Pair(nodeNum, limbLength))
+        theCurrentConnectionTree[nodeNum] = mutableListOf(Pair(internalNode, limbLength))
     }
 
     /**
@@ -236,21 +237,22 @@ class Phylogeny {
      */
     fun findNodeOrMakeOne(
         matrixSize: Int,
-        baseNodeForLen: Int,
+        searchThisNodesConnections: Int,
         requiredLenToNodeFromBaseNode: Int
     ): Int {
         // error checking, the tree MUST contain the base node number
 
-        var baseNode = baseNodeForLen
+        var baseNode = searchThisNodesConnections
         if (!theCurrentConnectionTree.containsKey(baseNode)) {
             println("findNodeOrMakeOn: Error baseNode is not in the current Tree")
             return 0
         }
         // for the base node, traverse the list of connections, searching for a match for our
-        // required length.  The match cannot be a leaf node, naturally - we must connect to
+        // required length.  The match cannot be a leaf node, naturally - the new leaf must connect to
         // an internal node
 
         var notFound = true
+        var createIntermediateNode = false // modal flag
         var maxDistance = 0
         var tempRequiredDistance = requiredLenToNodeFromBaseNode
         var candidateNodeStack = Stack<Pair<Int, Int>>()
@@ -264,35 +266,105 @@ class Phylogeny {
                     if (tempRequiredDistance == distanceToNextNode) {
                         return nextNodeNumber  // found it!
                     }
-                    if (tempRequiredDistance > distanceToNextNode) { // if a possibility, save it for later
-                        candidateNodeStack.push(Pair(nextNodeNumber, tempRequiredDistance - distanceToNextNode))
+                    /*
+                     * two modes -
+                     *   "createIntermediateNode == false" -
+                     *         search for an exact match for the length/distance.
+                     *         this means looping while traversing the list of connections
+                     *
+                     *    ""createIntermediateNode == true""
+                     *          second mode is to create an intermediate node
+                     */
+                    if (createIntermediateNode == false) {
+                        if (tempRequiredDistance > distanceToNextNode) { // if a possibility, save it for later
+                            candidateNodeStack.push(Pair(nextNodeNumber, tempRequiredDistance - distanceToNextNode))
+                        }
+                    } else {
+                        if (tempRequiredDistance < distanceToNextNode) {
+                            // try to create an intermediate node
+                            val newNodeKey = addIntermediateNode(
+                                matrixSize = matrixSize,
+                                searchThisNodesConnections = baseNode,
+                                requiredLenToNodeFromThisNode = tempRequiredDistance
+                            )
+                            if (newNodeKey != -1) {
+                                return newNodeKey
+                            }
+                            // terminate both loops
+                            notFound = false
+                            break
+                        }
                     }
+
                 }
             }
             if (candidateNodeStack.isNotEmpty()) {
                 val candidate = candidateNodeStack.pop()
                 baseNode = candidate!!.first
                 tempRequiredDistance = candidate.second
+                continue
+            }
+
+            /*
+             * the search for an exact match failed.   Loop through the connections again and
+             * create an intermediate node if possible (i.e. there is a long enough
+             * distance between two internal nodes to fit in a new intermediate node)
+             */
+            if (createIntermediateNode == false) {
+                createIntermediateNode = true
+                baseNode = searchThisNodesConnections
+                tempRequiredDistance = requiredLenToNodeFromBaseNode
             } else {
-                notFound = false
+                break // give up on searching
             }
         }
-        // TODO: create a node someplace
-        println("ERROR node creation not yet implemented")
-        return 0
+
+        /*
+         * the search for an exact match failed, and there wasn't a connection between
+         * two internal nodes that exceeded our required distance.   So simply create a new
+         * internal node that hangs of the current internal node.
+         */
+
+        val currentInternalNode = theCurrentConnectionTree[searchThisNodesConnections]!![0].first
+        val requiredOffsetFromOrigin =
+            requiredLenToNodeFromBaseNode - theCurrentConnectionTree[searchThisNodesConnections]!![0].second
+        return newInternalNode(
+            matrixSize = matrixSize,
+            addToThisNodesConnections = currentInternalNode,
+            requiredLenToNodeFromThisNode = requiredOffsetFromOrigin
+        )
+    }
+
+    /**
+     * create a new internal node (at `maxNode`),
+     * connect it to [addToThisNodesConnections]
+     * and @return the new node's key
+     */
+    fun newInternalNode(
+        matrixSize: Int,
+        addToThisNodesConnections: Int,
+        requiredLenToNodeFromThisNode: Int
+    ): Int {
+        val newConnList: MutableList<Pair<Int, Int>> = theCurrentConnectionTree[addToThisNodesConnections]!!
+
+        newConnList.add(Pair(nextNode, requiredLenToNodeFromThisNode))
+        theCurrentConnectionTree[nextNode] =
+            mutableListOf(Pair(addToThisNodesConnections, requiredLenToNodeFromThisNode))
+        theCurrentConnectionTree[addToThisNodesConnections] = newConnList
+        return nextNode++
     }
 
     /**
      * try to see if there is an edge that can be split into one that provides
      * the required distance
      *
-     * @return  true if successful, false if not
+     * @return  the new node's key, or -1 if no node was created
      */
     fun addIntermediateNode(
         matrixSize: Int,
         searchThisNodesConnections: Int,
         requiredLenToNodeFromThisNode: Int
-    ): Boolean {
+    ): Int {
         val thisNodesConnectionList = theCurrentConnectionTree[searchThisNodesConnections]
 
         // search - the distance must be longer than that required and the node must not be a leaf node
@@ -305,7 +377,7 @@ class Phylogeny {
             println("WARNING - multiple connection candidates to break.  Picking the first one")
         }
         if (possibleConns.isEmpty()) {
-            return false
+            return -1
         }
 
         val fromNode = searchThisNodesConnections
@@ -313,7 +385,7 @@ class Phylogeny {
         val distanceToEndNode = possibleConns[0].second
 
         val firstDistance = requiredLenToNodeFromThisNode
-        val secondDistance = distanceToEndNode -  firstDistance
+        val secondDistance = distanceToEndNode - firstDistance
 
         // update tree - add new node and add forward and backward links
         theCurrentConnectionTree[nextNode] = mutableListOf(
@@ -338,8 +410,7 @@ class Phylogeny {
             newDistance = secondDistance
         )
 
-        nextNode += 1
-        return true
+        return nextNode++
     }
 
     /**

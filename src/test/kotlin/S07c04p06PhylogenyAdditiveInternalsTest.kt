@@ -160,17 +160,167 @@ internal class S07c04p06PhylogenyAdditiveInternalsTest {
 
         ll.theCurrentConnectionTree = testTreeMap
         ll.nextNode = 6
-        val foundBoolean = ll.addIntermediateNode(
+        val newNodeNumber = ll.addIntermediateNode(
             matrixSize = 4,
             searchThisNodesConnections = 4,
             requiredLenToNodeFromThisNode = 100
         )
 
-        assertEquals(true, foundBoolean)
+        assertEquals(6, newNodeNumber)
 
         checkEdgesAreEqual(expectedGraph, ll.theCurrentConnectionTree)
 
     }
+
+    /**
+     * test of:
+     * add new internal node
+     *   simply add a new node to an existing internal node.
+     */
+    @Test
+    @DisplayName("phylogeny INTERNAL newInternalNode test")
+    fun phylogenyINTERNALnewInternalNodeTest() {
+
+        val testTree = """
+            0->4:11
+            1->4:2
+            2->5:6
+            3->5:7
+            4->0:11
+            4->1:2
+            4->5:400
+            5->4:4
+            5->3:7
+            5->2:6
+        """.trimIndent()
+
+        val expectedOutputString = """
+            0->4:11
+            1->4:2
+            2->5:6
+            3->5:7
+            4->0:11
+            4->1:2
+            4->5:400
+            4->6:42
+            5->4:4
+            5->3:7
+            5->2:6
+            6->4:42
+        """.trimIndent()
+
+        val testTreeMapStrings = testTree.reader().readLines().toMutableList()
+        val testTreeMap = parseSampleInput(testTreeMapStrings)
+
+        val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
+        val expectedGraph = parseSampleInput(expectedResultStrings)
+
+        ll.theCurrentConnectionTree = testTreeMap
+        ll.nextNode = 6
+        ll.newInternalNode(
+            matrixSize = 4,
+            addToThisNodesConnections = 4,
+            requiredLenToNodeFromThisNode = 42
+        )
+
+        checkEdgesAreEqual(expectedGraph, ll.theCurrentConnectionTree)
+
+    }
+
+
+    /**
+     * test findNodeOrMakeOne() function.
+     * Three cases:
+     * 1)  tree consists of one internal node and two leaf nodes.
+     *     Add an internal node with distance 4
+     */
+    @Test
+    @DisplayName("phylogeny INTERNAL findNodeOrMakeOne test")
+    fun phylogenyINTERNALfindNodeOrMakeOneTest() {
+
+        val testTree01 = """
+            0->6:1
+            3->6:1
+            6->0:1
+            6->3:1
+        """.trimIndent()
+
+        val expected01 = """
+            0->6:1
+            3->6:1
+            6->0:1
+            6->3:1
+            6->7:4
+            7->6:4
+        """.trimIndent()
+
+        val testTreeMapStrings01 = testTree01.reader().readLines().toMutableList()
+        val testTreeMap01 = parseSampleInput(testTreeMapStrings01)
+
+        val expectedResultStrings01 = expected01.reader().readLines().toMutableList()
+        val expectedGraph01 = parseSampleInput(expectedResultStrings01)
+
+        ll.theCurrentConnectionTree = testTreeMap01
+        ll.nextNode = 7
+        val newNodeNumber01 = ll.findNodeOrMakeOne(
+            matrixSize = 4,
+            searchThisNodesConnections = 6,
+            requiredLenToNodeFromBaseNode = 4
+        )
+        assertEquals(7, newNodeNumber01)
+        assertEquals(8, ll.nextNode)
+        checkEdgesAreEqual(expectedGraph01, ll.theCurrentConnectionTree)
+
+
+    }
+
+    @Test
+    @DisplayName("phylogeny INTERNAL findNodeOrMakeOne test02")
+    fun phylogenyINTERNALfindNodeOrMakeOneTest02() {
+        /**
+         * 2)  tree consists of two internal nodes and two leaf nodes.
+         * Add an internal node with distance 2 within the internal node connection,
+         * breaking the connection of 5 into a 2 distance and a 3 distance
+         */
+        val testTree02 = """
+            0->6:1
+            3->6:1
+            6->0:1
+            6->3:1
+            6->7:5
+            7->6:5
+        """.trimIndent()
+
+        val expected02 = """
+            0->6:1
+            3->6:1
+            6->0:1
+            6->3:1
+            6->8:2
+            7->8:3
+            8->6:2
+            8->7:3
+        """.trimIndent()
+
+        val testTreeMapStrings02 = testTree02.reader().readLines().toMutableList()
+        val testTreeMap02 = parseSampleInput(testTreeMapStrings02)
+
+        val expectedResultStrings02 = expected02.reader().readLines().toMutableList()
+        val expectedGraph02 = parseSampleInput(expectedResultStrings02)
+
+        ll.theCurrentConnectionTree = testTreeMap02
+        ll.nextNode = 8
+        val newNodeNumber02 = ll.findNodeOrMakeOne(
+            matrixSize = 4,
+            searchThisNodesConnections = 6,
+            requiredLenToNodeFromBaseNode = 2
+        )
+        assertEquals(8, newNodeNumber02)
+        assertEquals(9, ll.nextNode)
+        checkEdgesAreEqual(expectedGraph02, ll.theCurrentConnectionTree)
+
+    }
+
 
     /**
      * compare two maps of structure:

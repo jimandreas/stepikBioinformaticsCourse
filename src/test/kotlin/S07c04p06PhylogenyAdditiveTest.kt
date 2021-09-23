@@ -88,8 +88,22 @@ internal class S07c04p06PhylogenyAdditiveTest {
 
         val result = ll.additivePhylogenyStart(matrixSize, m)
 
+        printGraph(result)
+
         checkEdgesAreEqual(expectedGraph, result)
 
+    }
+
+    private fun printGraph(g: Map<Int, List<Pair<Int, Int>>>) {
+        for (e in g) {
+            val key = e.key
+            val connList = e.value
+
+            for (c in connList) {
+                print("$key->")
+                println("${c.first}:${c.second}")
+            }
+        }
     }
 
     @Test
@@ -123,6 +137,7 @@ internal class S07c04p06PhylogenyAdditiveTest {
         val matrixSize = input[0].trim().toInt()
         input.removeFirst()
         val m = parseMatrixInput(matrixSize, input, radixIn = 16)
+        printit(6, m)
 
         val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
         val expectedGraph = parseSampleInput(expectedResultStrings)
@@ -130,7 +145,8 @@ internal class S07c04p06PhylogenyAdditiveTest {
         val result = ll.additivePhylogenyStart(matrixSize, m)
         println(result)
 
-        //checkEdgesAreEqual(expectedGraph, result)
+        assertEquals(9, ll.nextNode)
+        checkEdgesAreEqual(expectedGraph, result)
 
     }
 
