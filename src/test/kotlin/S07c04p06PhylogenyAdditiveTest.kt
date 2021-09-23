@@ -121,16 +121,22 @@ internal class S07c04p06PhylogenyAdditiveTest {
 
         // update when finished debugging
         val expectedOutputString = """
-            0->4:11
-            1->4:2
-            2->5:6
-            3->5:7
-            4->0:11
-            4->1:2
-            4->5:4
-            5->4:4
-            5->3:7
-            5->2:6
+            0->6:128
+            1->7:16
+            2->8:8
+            3->6:4
+            4->7:2
+            5->8:1
+            6->0:128
+            6->3:4
+            6->8:64
+            7->1:16
+            7->4:2
+            7->8:32
+            8->2:8
+            8->5:1
+            8->6:64
+            8->7:32
         """.trimIndent()
 
         val input = sampleInput.reader().readLines().toMutableList()
@@ -143,7 +149,8 @@ internal class S07c04p06PhylogenyAdditiveTest {
         val expectedGraph = parseSampleInput(expectedResultStrings)
 
         val result = ll.additivePhylogenyStart(matrixSize, m)
-        println(result)
+
+        printGraph(result)
 
         assertEquals(9, ll.nextNode)
         checkEdgesAreEqual(expectedGraph, result)

@@ -36,6 +36,7 @@ class Phylogeny {
     var nextNode = 0 // tracker for the next internal node number to create
     var theCurrentConnectionTree: MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
     val limbLengthMap: MutableMap<Int, Int> = mutableMapOf()
+    var verbose = true
 
     /**
 
@@ -225,9 +226,9 @@ class Phylogeny {
         val requireLen = info.distanceX + limbLength - limbLengthMap[nodeNum]!!
         val baseNodeForLength = info.baseNodei
         val internalNode = findNodeOrMakeOne(matrixSize, baseNodeForLength, requireLen)
-        println("internal node found is $internalNode")
-        theCurrentConnectionTree[internalNode]!!.add(Pair(nodeNum, limbLength))
-        theCurrentConnectionTree[nodeNum] = mutableListOf(Pair(internalNode, limbLength))
+        println("   connecting $nodeNum to $internalNode")
+        theCurrentConnectionTree[internalNode]!!.add(Pair(nodeNum, limbLengthMap[nodeNum]!!))
+        theCurrentConnectionTree[nodeNum] = mutableListOf(Pair(internalNode, limbLengthMap[nodeNum]!!))
     }
 
     /**
@@ -240,12 +241,16 @@ class Phylogeny {
         searchThisNodesConnections: Int,
         requiredLenToNodeFromBaseNode: Int
     ): Int {
-        // error checking, the tree MUST contain the base node number
 
+        // error checking, the tree MUST contain the base node number
         var baseNode = searchThisNodesConnections
         if (!theCurrentConnectionTree.containsKey(baseNode)) {
             println("findNodeOrMakeOn: Error baseNode is not in the current Tree")
             return 0
+        }
+
+        if (verbose) {
+            println("  findNodeOrMakeOne: searching node $searchThisNodesConnections for a len of $requiredLenToNodeFromBaseNode")
         }
         // for the base node, traverse the list of connections, searching for a match for our
         // required length.  The match cannot be a leaf node, naturally - the new leaf must connect to
@@ -264,6 +269,9 @@ class Phylogeny {
                 // if this is an internal node
                 if (nextNodeNumber >= matrixSize) {
                     if (tempRequiredDistance == distanceToNextNode) {
+                        if (verbose) {
+                            println("   ** findNode... found $nextNodeNumber at distance $requiredLenToNodeFromBaseNode from $searchThisNodesConnections")
+                        }
                         return nextNodeNumber  // found it!
                     }
                     /*
@@ -288,6 +296,9 @@ class Phylogeny {
                                 requiredLenToNodeFromThisNode = tempRequiredDistance
                             )
                             if (newNodeKey != -1) {
+                                if (verbose) {
+                                    println("   ** findNode... adding intermediate node $newNodeKey at distance $requiredLenToNodeFromBaseNode from $searchThisNodesConnections")
+                                }
                                 return newNodeKey
                             }
                             // terminate both loops
@@ -312,8 +323,11 @@ class Phylogeny {
              */
             if (createIntermediateNode == false) {
                 createIntermediateNode = true
-                baseNode = searchThisNodesConnections
-                tempRequiredDistance = requiredLenToNodeFromBaseNode
+                baseNode = theCurrentConnectionTree[searchThisNodesConnections]!![0].first
+                tempRequiredDistance = requiredLenToNodeFromBaseNode - theCurrentConnectionTree[searchThisNodesConnections]!![0].second
+                if (verbose) {
+                    println("   ** findNode... looping to test for itermediate node from $baseNode at distance $tempRequiredDistance")
+                }
             } else {
                 break // give up on searching
             }
@@ -328,11 +342,17 @@ class Phylogeny {
         val currentInternalNode = theCurrentConnectionTree[searchThisNodesConnections]!![0].first
         val requiredOffsetFromOrigin =
             requiredLenToNodeFromBaseNode - theCurrentConnectionTree[searchThisNodesConnections]!![0].second
-        return newInternalNode(
+
+
+        val newNodeNum =  newInternalNode(
             matrixSize = matrixSize,
             addToThisNodesConnections = currentInternalNode,
             requiredLenToNodeFromThisNode = requiredOffsetFromOrigin
         )
+        if (verbose) {
+            println("   ** findNode... adding standalone internal node $newNodeNum at distance $requiredLenToNodeFromBaseNode from $currentInternalNode")
+        }
+        return newNodeNum
     }
 
     /**
