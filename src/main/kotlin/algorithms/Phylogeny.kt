@@ -63,7 +63,7 @@ class Phylogeny {
         // first - save each nodes limbLenght in a map for later
         for (i in 0 until matrixSize) {
             val t = calculateLimbLength(matrixSize, i, m)
-            println("$i $t")
+            //println("$i $t")
             limbLengthMap[i] = t
         }
         val mapResult = additivePhylogenyIterative(matrixSize, m.clone())
@@ -206,9 +206,7 @@ class Phylogeny {
          * as necessary, making new internal nodes to get the distances right
          */
         while (nodeInfoStack.isNotEmpty()) {
-
             val nodeInfoFromStack = nodeInfoStack.pop()
-            println(nodeInfoFromStack)
             fixTree(matrixSize, nodeInfoFromStack!!)
         }
 
@@ -226,7 +224,8 @@ class Phylogeny {
         val requireLen = info.distanceX + limbLength - limbLengthMap[nodeNum]!!
         val baseNodeForLength = info.baseNodei
         val internalNode = findNodeOrMakeOne(matrixSize, baseNodeForLength, requireLen)
-        println("   connecting $nodeNum to $internalNode")
+        println("FIXTREE: node to add = $nodeNum limb $limbLength from baseNode $baseNodeForLength len from first internal node $requireLen")
+        println(theCurrentConnectionTree)
         theCurrentConnectionTree[internalNode]!!.add(Pair(nodeNum, limbLengthMap[nodeNum]!!))
         theCurrentConnectionTree[nodeNum] = mutableListOf(Pair(internalNode, limbLengthMap[nodeNum]!!))
     }
