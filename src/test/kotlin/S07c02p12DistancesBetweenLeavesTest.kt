@@ -131,17 +131,17 @@ internal class S07c02p12DistancesBetweenLeavesTest {
         println(outStr.toString())
     }
 
-    fun parseSampleInput(edges: List<String>): MutableMap<Int, MutableList<Pair<Int, Int>>> {
-        val edgeMap: MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
+    fun parseSampleInput(edges: List<String>): MutableMap<Int, MutableMap<Int, Int>> {
+        val edgeMap: MutableMap<Int, MutableMap<Int, Int>> = mutableMapOf()
         for (e in edges) {
             val sourceDest = e.split("->")
             val nodeAndWeight = sourceDest[1].split(":")
 
             val key = sourceDest[0].toInt()
             if (edgeMap.containsKey(key)) {
-                edgeMap[sourceDest[0].toInt()]!!.add(Pair(nodeAndWeight[0].toInt(), nodeAndWeight[1].toInt()))
+                edgeMap[sourceDest[0].toInt()]!![nodeAndWeight[0].toInt()] = nodeAndWeight[1].toInt()
             } else {
-                edgeMap[sourceDest[0].toInt()] = mutableListOf(Pair(nodeAndWeight[0].toInt(), nodeAndWeight[1].toInt()))
+                edgeMap[sourceDest[0].toInt()] = mutableMapOf(Pair(nodeAndWeight[0].toInt(), nodeAndWeight[1].toInt()))
             }
         }
         return edgeMap

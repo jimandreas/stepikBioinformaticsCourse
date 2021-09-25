@@ -34,7 +34,7 @@ import java.lang.Math.min
 class Phylogeny {
 
     var nextNode = 0 // tracker for the next internal node number to create
-    var theCurrentConnectionTree: MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
+    var theCurrentConnectionTree: MutableMap<Int, MutableMap<Int, Int>> = mutableMapOf()
     val limbLengthMap: MutableMap<Int, Int> = mutableMapOf()
     var verbose = true
 
@@ -59,7 +59,7 @@ class Phylogeny {
      *    identical to our starting matrix
      */
 
-    fun additivePhylogenyStart(matrixSize: Int, m: D2Array<Int>): Map<Int, List<Pair<Int, Int>>> {
+    fun additivePhylogenyStart(matrixSize: Int, m: D2Array<Int>): Map<Int, Map<Int, Int>> {
         // first - save each nodes limbLenght in a map for later
         for (i in 0 until matrixSize) {
             val t = calculateLimbLength(matrixSize, i, m)
@@ -72,13 +72,13 @@ class Phylogeny {
 
     }
 
-    fun sortMapAndDistanceLists(unorderedList: Map<Int, List<Pair<Int, Int>>>): Map<Int, List<Pair<Int, Int>>> {
+    fun sortMapAndDistanceLists(unorderedMap: Map<Int, Map<Int, Int>>): Map<Int, Map<Int, Int>> {
         // now sort the keys, and then the distances in the lists
-        val mapSortedResult = unorderedList.toSortedMap()
-        val returnSortedList: MutableMap<Int, List<Pair<Int, Int>>> = mutableMapOf()
-        for (entry in mapSortedResult) {
-            val theList = entry.value
-            returnSortedList[entry.key] = theList.sorted()
+        val mapSortedResult = unorderedMap.toSortedMap()
+        val returnSortedList: MutableMap<Int, Map<Int, Int>> = mutableMapOf()
+        for (keyNode in mapSortedResult) {
+            val theList = keyNode.value.toSortedMap()
+            returnSortedList[keyNode.key] = theList
         }
         return returnSortedList
     }
@@ -121,7 +121,7 @@ class Phylogeny {
      * @param m - the distance matrix
      * @return - the mapping of nodes to other nodes with weights
      */
-    fun additivePhylogenyIterative(matrixSize: Int, m: D2Array<Int>): Map<Int, List<Pair<Int, Int>>> {
+    fun additivePhylogenyIterative(matrixSize: Int, m: D2Array<Int>): Map<Int, Map<Int, Int>> {
 
         val nodeInfoStack = Stack<NodeInfo>()
         var dMatrix = m
@@ -168,11 +168,11 @@ class Phylogeny {
 
         if (distance - limb0 - limb1 == 0) {
             // first edge from node 0 to internal node
-            theCurrentConnectionTree[0] = mutableListOf(Pair(nextNode, limb0))
+            theCurrentConnectionTree[0] = mutableMapOf(Pair(nextNode, limb0))
             // second edge from node 1 to internal node
-            theCurrentConnectionTree[1] = mutableListOf(Pair(nextNode, limb1))
+            theCurrentConnectionTree[1] = mutableMapOf(Pair(nextNode, limb1))
             // and the back pointers:
-            theCurrentConnectionTree[nextNode] = mutableListOf(
+            theCurrentConnectionTree[nextNode] = mutableMapOf(
                 Pair(0, limb0),
                 Pair(1, limb1)
             )
@@ -181,19 +181,19 @@ class Phylogeny {
             // we need two nodes at the start
             // first edge from node 0 to node "matrixSize"
             val internodeDistance = distance - limb0 - limb1
-            theCurrentConnectionTree[0] = mutableListOf(Pair(nextNode, limb0))
+            theCurrentConnectionTree[0] = mutableMapOf(Pair(nextNode, limb0))
             // first internal node - back pointer to node 0, forward node to next internal node
-            theCurrentConnectionTree[nextNode] = mutableListOf(
+            theCurrentConnectionTree[nextNode] = mutableMapOf(
                 Pair(0, limb0),
                 Pair(nextNode + 1, internodeDistance)
             )
             // second internal node - back pointer to above node, forward node to node 1
-            theCurrentConnectionTree[nextNode + 1] = mutableListOf(
+            theCurrentConnectionTree[nextNode + 1] = mutableMapOf(
                 Pair(nextNode, internodeDistance),
                 Pair(1, limb1)
             )
 
-            theCurrentConnectionTree[1] = mutableListOf(Pair(nextNode + 1, limb1))
+            theCurrentConnectionTree[1] = mutableMapOf(Pair(nextNode + 1, limb1))
             nextNode += 2
         }
 
@@ -226,8 +226,8 @@ class Phylogeny {
         val internalNode = findNodeOrMakeOne(matrixSize, baseNodeForLength, requireLen)
         println("FIXTREE: node to add = $nodeNum limb $limbLength from baseNode $baseNodeForLength len from first internal node $requireLen")
         println(theCurrentConnectionTree)
-        theCurrentConnectionTree[internalNode]!!.add(Pair(nodeNum, limbLengthMap[nodeNum]!!))
-        theCurrentConnectionTree[nodeNum] = mutableListOf(Pair(internalNode, limbLengthMap[nodeNum]!!))
+        theCurrentConnectionTree[internalNode] = mutableMapOf(Pair(nodeNum, limbLengthMap[nodeNum]!!))
+        theCurrentConnectionTree[nodeNum] = mutableMapOf(Pair(internalNode, limbLengthMap[nodeNum]!!))
     }
 
     /**
@@ -262,8 +262,8 @@ class Phylogeny {
         var candidateNodeStack = Stack<Pair<Int, Int>>()
         while (notFound) {
             for (pair in theCurrentConnectionTree[baseNode]!!) {
-                val nextNodeNumber = pair.first   // pair is (NodeNum, Length)
-                val distanceToNextNode = pair.second
+                val nextNodeNumber = pair.key   // pair is (NodeNum, Length)
+                val distanceToNextNode = pair.value
 
                 // if this is an internal node
                 if (nextNodeNumber >= matrixSize) {
@@ -322,8 +322,10 @@ class Phylogeny {
              */
             if (createIntermediateNode == false) {
                 createIntermediateNode = true
-                baseNode = theCurrentConnectionTree[searchThisNodesConnections]!![0].first
-                tempRequiredDistance = requiredLenToNodeFromBaseNode - theCurrentConnectionTree[searchThisNodesConnections]!![0].second
+                val revertToNode = theCurrentConnectionTree[searchThisNodesConnections]
+                baseNode = revertToNode!!.keys.first()
+                val baseNodeDistance = revertToNode[baseNode]
+                tempRequiredDistance = requiredLenToNodeFromBaseNode - baseNodeDistance!!
                 if (verbose) {
                     println("   ** findNode... looping to test for itermediate node from $baseNode at distance $tempRequiredDistance")
                 }
@@ -338,9 +340,9 @@ class Phylogeny {
          * internal node that hangs of the current internal node.
          */
 
-        val currentInternalNode = theCurrentConnectionTree[searchThisNodesConnections]!![0].first
+        val currentInternalNode = theCurrentConnectionTree[searchThisNodesConnections]!!.keys.first()
         val requiredOffsetFromOrigin =
-            requiredLenToNodeFromBaseNode - theCurrentConnectionTree[searchThisNodesConnections]!![0].second
+            requiredLenToNodeFromBaseNode - theCurrentConnectionTree[searchThisNodesConnections]!![currentInternalNode]!!
 
 
         val newNodeNum =  newInternalNode(
@@ -364,11 +366,11 @@ class Phylogeny {
         addToThisNodesConnections: Int,
         requiredLenToNodeFromThisNode: Int
     ): Int {
-        val newConnList: MutableList<Pair<Int, Int>> = theCurrentConnectionTree[addToThisNodesConnections]!!
+        val newConnList: MutableMap<Int, Int> = theCurrentConnectionTree[addToThisNodesConnections]!!
 
-        newConnList.add(Pair(nextNode, requiredLenToNodeFromThisNode))
+        newConnList[nextNode] = requiredLenToNodeFromThisNode
         theCurrentConnectionTree[nextNode] =
-            mutableListOf(Pair(addToThisNodesConnections, requiredLenToNodeFromThisNode))
+            mutableMapOf(Pair(addToThisNodesConnections, requiredLenToNodeFromThisNode))
         theCurrentConnectionTree[addToThisNodesConnections] = newConnList
         return nextNode++
     }
@@ -384,12 +386,12 @@ class Phylogeny {
         searchThisNodesConnections: Int,
         requiredLenToNodeFromThisNode: Int
     ): Int {
-        val thisNodesConnectionList = theCurrentConnectionTree[searchThisNodesConnections]
+        val thisNodesConnectionMap = theCurrentConnectionTree[searchThisNodesConnections]
 
         // search - the distance must be longer than that required and the node must not be a leaf node
-        val possibleConns = thisNodesConnectionList!!.filter {
-            val nodeNum = it.first
-            val connDistance = it.second
+        val possibleConns = thisNodesConnectionMap!!.filter {
+            val nodeNum = it.key
+            val connDistance = it.value
             connDistance > requiredLenToNodeFromThisNode && nodeNum >= matrixSize
         }
         if (possibleConns.size > 1) {
@@ -400,14 +402,14 @@ class Phylogeny {
         }
 
         val fromNode = searchThisNodesConnections
-        val toNode = possibleConns[0].first
-        val distanceToEndNode = possibleConns[0].second
+        val toNode = possibleConns.keys.first()
+        val distanceToEndNode = possibleConns[toNode]!!
 
         val firstDistance = requiredLenToNodeFromThisNode
         val secondDistance = distanceToEndNode - firstDistance
 
         // update tree - add new node and add forward and backward links
-        theCurrentConnectionTree[nextNode] = mutableListOf(
+        theCurrentConnectionTree[nextNode] = mutableMapOf(
             Pair(fromNode, firstDistance),
             Pair(toNode, secondDistance)
         )
@@ -443,24 +445,9 @@ class Phylogeny {
         oldDistance: Int,
         newDistance: Int
     ) {
-        val connList = theCurrentConnectionTree[fromNode]!!
-        val newConnList: MutableList<Pair<Int, Int>> = mutableListOf()
-        var foundToNode = false
-        for (conn in connList) {
-            if (conn.first == toNode) {
-                newConnList.add(Pair(newToNode, newDistance))
-                foundToNode = true
-                if (conn.second != oldDistance) {
-                    println("fixConnList: Error check: old distance did not match: was: ${conn.second} should be $oldDistance")
-                }
-            } else {
-                newConnList.add(conn)
-            }
-        }
-        if (foundToNode == false) {
-            println("fixConnList: did not find toNode $toNode in the connections for node $fromNode")
-        }
-        theCurrentConnectionTree[fromNode] = newConnList
+        val connMap = theCurrentConnectionTree[fromNode]!!
+        connMap.remove(toNode)
+        connMap[newToNode] = newDistance
     }
 
     /**

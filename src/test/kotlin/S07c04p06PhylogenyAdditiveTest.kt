@@ -11,10 +11,10 @@ import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 /**
@@ -99,14 +99,14 @@ internal class S07c04p06PhylogenyAdditiveTest {
 
     }
 
-    private fun printGraph(g: Map<Int, List<Pair<Int, Int>>>) {
+    private fun printGraph(g: Map<Int, Map<Int, Int>>) {
         for (e in g) {
             val key = e.key
-            val connList = e.value
+            val theMap = e.value
 
-            for (c in connList) {
+            for (c in theMap) {
                 print("$key->")
-                println("${c.first}:${c.second}")
+                println("${c.key}:${c.value}")
             }
         }
     }
@@ -209,16 +209,18 @@ internal class S07c04p06PhylogenyAdditiveTest {
 
     /**
      * compare two maps of structure:
-     *  MutableMap<Int, List<Pair<Int, Int>>> = mutableMapOf()
-     *
-     * sort both keys and list entries before comparing
+     *  MutableMap<Int, Map<Int, Int>> = mutableMapOf()
      */
-    private fun checkEdgesAreEqual(a: Map<Int, List<Pair<Int, Int>>>, b: Map<Int, List<Pair<Int, Int>>>) {
-        val a2 = ll.sortMapAndDistanceLists(a)
-        val b2 = ll.sortMapAndDistanceLists(b)
-        assertEquals(a2.size, b2.size)
-        for (entry in a2.keys) {
-            assertContentEquals(a2[entry], b2[entry])
+    private fun checkEdgesAreEqual(a: Map<Int, Map<Int, Int>>, b: Map<Int, Map<Int, Int>>) {
+
+        for (baseNodeMapA in a) {
+            kotlin.test.assertTrue(b.containsKey(baseNodeMapA.key))
+            val baseNodeMapB = b[baseNodeMapA.key]
+
+            for (connectionMapItem in baseNodeMapA.value) {
+                kotlin.test.assertTrue(baseNodeMapB!!.containsKey(connectionMapItem.key))
+                assertEquals(connectionMapItem.value, baseNodeMapB[connectionMapItem.key])
+            }
         }
     }
 
@@ -246,18 +248,13 @@ internal class S07c04p06PhylogenyAdditiveTest {
         return theMatrix
     }
 
-    fun parseSampleInput(edges: List<String>): MutableMap<Int, MutableList<Pair<Int, Int>>> {
-        val edgeMap: MutableMap<Int, MutableList<Pair<Int, Int>>> = mutableMapOf()
-        for (e in edges) {
+    private fun parseSampleInput(nodeToNodePlusDistance: List<String>): MutableMap<Int, MutableMap<Int, Int>> {
+        val edgeMap: MutableMap<Int, MutableMap<Int, Int>> = mutableMapOf()
+        for (e in nodeToNodePlusDistance) {
             val sourceDest = e.split("->")
-            val nodeAndWeight = sourceDest[1].split(":")
-
-            val key = sourceDest[0].toInt()
-            if (edgeMap.containsKey(key)) {
-                edgeMap[sourceDest[0].toInt()]!!.add(Pair(nodeAndWeight[0].toInt(), nodeAndWeight[1].toInt()))
-            } else {
-                edgeMap[sourceDest[0].toInt()] = mutableListOf(Pair(nodeAndWeight[0].toInt(), nodeAndWeight[1].toInt()))
-            }
+            val destNodeAndWeightPair = sourceDest[1].split(":")
+            val sourceNodeNumber = sourceDest[0].toInt()
+            edgeMap[sourceNodeNumber] = mutableMapOf(Pair(destNodeAndWeightPair[0].toInt(), destNodeAndWeightPair[1].toInt()))
         }
         return edgeMap
     }
