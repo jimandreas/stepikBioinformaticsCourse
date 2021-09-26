@@ -267,7 +267,8 @@ internal class S07c04p06PhylogenyAdditiveInternalsTest {
         ll.nextNode = 7
         val newNodeNumber01 = ll.findNodeOrMakeOne(
             matrixSize = 4,
-            searchThisNodesConnections = 6,
+            searchThisNodesConnections = 0,
+            endNodeForPath = 3,
             requiredLenToNodeFromBaseNode = 4
         )
         assertEquals(7, newNodeNumber01)

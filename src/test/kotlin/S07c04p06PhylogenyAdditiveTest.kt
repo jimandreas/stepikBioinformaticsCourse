@@ -11,7 +11,6 @@ import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -208,18 +207,87 @@ internal class S07c04p06PhylogenyAdditiveTest {
     }
 
     /**
+     * A contrived test where there is a new node to the "left of" and to the "right of"
+     * the first internal node (4)
+     */
+    @Test
+    @DisplayName("Distances Between Leaves contrived test02")
+    fun phylogenyLimbLengthContrivedTest02() {
+
+        // this is similar to the previous matrix,
+        //    but nodes 1 and 2 (2 and 3 in the diagrams)
+        //    have been swapped
+        val contrivedSampleInput = """
+            5
+            0->5:1
+            5->0:1
+            1->7:2
+            7->1:2
+            2->6:3
+            6->2:3
+            3->6:4
+            6->3:4
+            4->7:7
+            7->4:7
+            5->6:6
+            6->5:6
+            5->7:5
+            7->5:5
+        """.trimIndent()
+
+        val r = contrivedSampleInput.reader().readLines().toMutableList()
+        val matrixSize = r[0].toInt()
+        r.removeAt(0)
+        val hackedEdges = parseSampleInput(r)
+        // now convert the edges to a distance matrix
+        val theInputMatrix = dbl.distancesBetweenLeaves(matrixSize, hackedEdges)
+        printit(matrixSize, theInputMatrix)
+
+        // now hand the distance matrix to the additivePhylogeny algo
+        val treeMapResult = ll.additivePhylogenyStart(matrixSize, theInputMatrix)
+
+        checkEdgesAreEqual(hackedEdges, treeMapResult)
+
+        val theResultMatrix = dbl.distancesBetweenLeaves(matrixSize, treeMapResult)
+        printit(matrixSize, theResultMatrix)
+        assertEquals(theInputMatrix, theResultMatrix)
+    }
+
+
+    /**
      * compare two maps of structure:
      *  MutableMap<Int, Map<Int, Int>> = mutableMapOf()
      */
     private fun checkEdgesAreEqual(a: Map<Int, Map<Int, Int>>, b: Map<Int, Map<Int, Int>>) {
 
-        for (baseNodeMapA in a) {
-            kotlin.test.assertTrue(b.containsKey(baseNodeMapA.key))
-            val baseNodeMapB = b[baseNodeMapA.key]
+        // test 1 - number of keys match
+        val aSorted = a.toSortedMap()
+        val bSorted = b.toSortedMap()
 
-            for (connectionMapItem in baseNodeMapA.value) {
-                kotlin.test.assertTrue(baseNodeMapB!!.containsKey(connectionMapItem.key))
-                assertEquals(connectionMapItem.value, baseNodeMapB[connectionMapItem.key])
+        assertEquals(aSorted.keys.size, bSorted.keys.size)
+
+        // test 2 - the keys belong to equivalent sets
+        for (baseNodeMapA in aSorted) {
+            kotlin.test.assertTrue(bSorted.containsKey(baseNodeMapA.key), "Failed base Node equivalence $baseNodeMapA.key")
+        }
+
+        // test 3 - for each key, the maps are equivalent sets
+        for (ele in aSorted) {
+            // test 1A - number of keys match
+            val mapA = aSorted[ele.key]
+            val mapB = bSorted[ele.key]
+            assertEquals(mapA!!.keys.size, mapB!!.keys.size, "Failed equal key size")
+
+            // test 2A - the keys belong to equivalent sets
+            for (ele2 in mapA) {
+                kotlin.test.assertTrue(mapB.containsKey(ele2.key), "Failed key set equivalence for next node")
+            }
+
+            // test 3A - for each key, the maps are equivalent sets
+            for (ele2 in mapA) {
+                val distanceA = mapA[ele2.key]
+                val distanceB = mapB[ele2.key]
+                assertEquals(distanceA, distanceB, "Failed distance equivalence")
             }
         }
     }
@@ -254,7 +322,11 @@ internal class S07c04p06PhylogenyAdditiveTest {
             val sourceDest = e.split("->")
             val destNodeAndWeightPair = sourceDest[1].split(":")
             val sourceNodeNumber = sourceDest[0].toInt()
-            edgeMap[sourceNodeNumber] = mutableMapOf(Pair(destNodeAndWeightPair[0].toInt(), destNodeAndWeightPair[1].toInt()))
+            if (edgeMap.containsKey(sourceNodeNumber)) {
+                edgeMap[sourceNodeNumber]!![destNodeAndWeightPair[0].toInt()] = destNodeAndWeightPair[1].toInt()
+            } else {
+                edgeMap[sourceNodeNumber] = mutableMapOf(Pair(destNodeAndWeightPair[0].toInt(), destNodeAndWeightPair[1].toInt()))
+            }
         }
         return edgeMap
     }
