@@ -511,7 +511,7 @@ internal class S07c04p06PhylogenyAdditiveTest {
 
         val result = ll.additivePhylogenyStart(matrixSize, m)
 
-        //printGraph(result)
+        printGraph(result)
 
         //checkEdgesAreEqual(expectedGraph, result)
 

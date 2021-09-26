@@ -176,14 +176,14 @@ class Phylogeny {
     fun fixTree(matrixSize: Int, info: NodeInfo) {
         val nodeNum = info.iterCount
         val limbLength = info.limbLength
-        val requireLen = info.distanceX + limbLength - limbLengthMap[nodeNum]!!
+        val requireLen = info.distanceX
         val baseNodeForLength = info.baseNodei
         val endNodeForPath = info.pathEndNode
         val internalNode = findNodeOrMakeOne(matrixSize, baseNodeForLength, endNodeForPath, requireLen)
         println("FIXTREE: node to add = $nodeNum limb $limbLength from baseNode $baseNodeForLength len from first internal node $requireLen")
 
-        theCurrentConnectionTree[internalNode]!![nodeNum] = limbLengthMap[nodeNum]!!
-        theCurrentConnectionTree[nodeNum] = mutableMapOf(Pair(internalNode, limbLengthMap[nodeNum]!!))
+        theCurrentConnectionTree[internalNode]!![nodeNum] = limbLength
+        theCurrentConnectionTree[nodeNum] = mutableMapOf(Pair(internalNode, limbLength))
 
         println(theCurrentConnectionTree)
     }
@@ -232,19 +232,32 @@ class Phylogeny {
                 break
             }
             val internalNodeList = connections.filter { it >= matrixSize }.toList()
+            var newNodeFound = false
             for (n in internalNodeList) {
                 if (!nodesVisitedList.contains(n)) {
                     nodesVisitedList.add(n)
-                    pathStack.push(curNode)
+                    pathStack.push(n)
                     curNode = n
-                    continue
+                    newNodeFound = true
+                    break
                 }
             }
             // didn't find the target node- path stack always has baseNode and first connecting node
-            if (pathStack.count() == 2) {
-                break // end the search
+            if (!newNodeFound) {
+                if (pathStack.count() == 2) {
+                    // check if all nodes have been examined
+                    curNode = pathStack.peek()!!
+                    if (nodesVisitedList.containsAll(theCurrentConnectionTree[curNode]!!.keys.filter { it >= matrixSize }
+                            .toList())) {
+                        println("Did NOT find the target node $endNodeForPath")
+                        break;
+                    } else {
+                        continue // keep searching the second node
+                    }
+                } else {
+                    curNode = pathStack.pop()!!  // continue search on a previous node in the graph
+                }
             }
-            curNode = pathStack.pop()!!
         }
 
         // convert path stack to list of node numbers
@@ -263,7 +276,7 @@ class Phylogeny {
          * or create an internal node if necessary
          */
         var len = requiredLenToNodeFromBaseNode
-        for (i in 0 until pathList.size) {
+        for (i in 0 until pathList.size - 1) {
             val nextLenMap = theCurrentConnectionTree[pathList[i]]!!
             val nextLen = nextLenMap[pathList[i + 1]]!!
             len = len - nextLen
@@ -275,7 +288,7 @@ class Phylogeny {
                 len = len + nextLen
                 val newNodeNum = max(matrixSize, theCurrentConnectionTree.keys.maxOf { it } + 1)
                 val fromNodeNum = pathList[i]
-                val toNodeNum = pathList[i+1]
+                val toNodeNum = pathList[i + 1]
                 val currentLen = theCurrentConnectionTree[fromNodeNum]!![toNodeNum]!!
 
                 theCurrentConnectionTree[fromNodeNum]!!.remove(toNodeNum)
@@ -398,6 +411,7 @@ class Phylogeny {
     fun getLeaves(matrixSize: Int, m: D2Array<Int>): Pair<Int, Int> {
         var minDistance = Int.MAX_VALUE
         var minPair: Pair<Int, Int> = Pair(0, 0)
+        outerLoop@
         for (i in 0 until matrixSize) {
             for (k in 1 until matrixSize) {
                 if (i != k) {
@@ -405,10 +419,11 @@ class Phylogeny {
                     val din = m[i, matrixSize]
                     val dnk = m[matrixSize, k]
                     if (dij == din + dnk) {
-                        if (dij < minDistance) {
-                            minPair = Pair(i, k)
-                            minDistance = dij
-                        }
+                        //if (dij < minDistance) {
+                        minPair = Pair(i, k)
+                        minDistance = dij
+                        //}
+                        break@outerLoop
                     }
                 }
             }
