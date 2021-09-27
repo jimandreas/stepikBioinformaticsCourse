@@ -6,8 +6,6 @@
 
 package algorithms
 
-import org.jetbrains.kotlinx.multik.api.d2array
-import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
@@ -34,7 +32,6 @@ import java.lang.Math.min
 
 class Phylogeny {
 
-    var nextNode = 0 // tracker for the next internal node number to create
     var theCurrentConnectionTree: MutableMap<Int, MutableMap<Int, Int>> = mutableMapOf()
     val limbLengthMap: MutableMap<Int, Int> = mutableMapOf()
     var verbose = false
@@ -109,7 +106,7 @@ class Phylogeny {
         val iterCount: Int,
         val limbLength: Int,
         val baseNodei: Int,
-        val pathEndNode: Int,
+        val pathEndNodek: Int,
         val distanceX: Int
     )
 
@@ -142,19 +139,23 @@ class Phylogeny {
                 iterCount = countDownIdx,
                 limbLength = limbLength,
                 baseNodei = leafPair.first,
-                pathEndNode = leafPair.second,
+                pathEndNodek = leafPair.second,
                 distanceX = x
             )
 
             nodeInfoStack.push(nInfo)
         }
 
-        // create a connection of length "distance" between leaves 0 and 1
+        /**
+         *  Initial connection:
+         *  create a connection of length "distance" between leaves 0 and 1
+         */
+
         val distance = m[0, 1]  // straight from the matrix
         theCurrentConnectionTree[0] = mutableMapOf(Pair(1, distance))
         theCurrentConnectionTree[1] = mutableMapOf(Pair(0, distance))
 
-        /*
+        /**
          * We have the first two leaves now.
          *
          * now iterate through the nodeInfo List and adjust the connection tree
@@ -178,7 +179,7 @@ class Phylogeny {
         val limbLength = info.limbLength
         val requireLen = info.distanceX
         val baseNodeForLength = info.baseNodei
-        val endNodeForPath = info.pathEndNode
+        val endNodeForPath = info.pathEndNodek
         val internalNode = findNodeOrMakeOne(matrixSize, baseNodeForLength, endNodeForPath, requireLen)
         if (verbose) {
             println("FIXTREE: node to add = $nodeNum limb $limbLength from baseNode $baseNodeForLength len from first internal node $requireLen")
@@ -257,7 +258,7 @@ class Phylogeny {
                         if (verbose) {
                             println("Did NOT find the target node $endNodeForPath")
                         }
-                        break;
+                        break
                     } else {
                         continue // keep searching the second node
                     }
@@ -316,100 +317,6 @@ class Phylogeny {
     }
 
     /**
-     * create a new internal node (at `maxNode`),
-     * connect it to [addToThisNodesConnections]
-     * and @return the new node's key
-     */
-    fun newInternalNode(
-        matrixSize: Int,
-        addToThisNodesConnections: Int,
-        requiredLenToNodeFromThisNode: Int
-    ): Int {
-        val newConnList: MutableMap<Int, Int> = theCurrentConnectionTree[addToThisNodesConnections]!!
-
-        newConnList[nextNode] = requiredLenToNodeFromThisNode
-        theCurrentConnectionTree[nextNode] =
-            mutableMapOf(Pair(addToThisNodesConnections, requiredLenToNodeFromThisNode))
-        theCurrentConnectionTree[addToThisNodesConnections] = newConnList
-        return nextNode++
-    }
-
-    /**
-     * try to see if there is an edge that can be split into one that provides
-     * the required distance
-     *
-     * @return  the new node's key, or -1 if no node was created
-     */
-    fun addIntermediateNode(
-        matrixSize: Int,
-        searchThisNodesConnections: Int,
-        requiredLenToNodeFromThisNode: Int
-    ): Int {
-        val thisNodesConnectionMap = theCurrentConnectionTree[searchThisNodesConnections]
-
-        // search - the distance must be longer than that required and the node must not be a leaf node
-        val possibleConns = thisNodesConnectionMap!!.filter {
-            val nodeNum = it.key
-            val connDistance = it.value
-            connDistance > requiredLenToNodeFromThisNode && nodeNum >= matrixSize
-        }
-        if (possibleConns.size > 1) {
-            println("WARNING - multiple connection candidates to break.  Picking the first one")
-        }
-        if (possibleConns.isEmpty()) {
-            return -1
-        }
-
-        val fromNode = searchThisNodesConnections
-        val toNode = possibleConns.keys.first()
-        val distanceToEndNode = possibleConns[toNode]!!
-
-        val firstDistance = requiredLenToNodeFromThisNode
-        val secondDistance = distanceToEndNode - firstDistance
-
-        // update tree - add new node and add forward and backward links
-        theCurrentConnectionTree[nextNode] = mutableMapOf(
-            Pair(fromNode, firstDistance),
-            Pair(toNode, secondDistance)
-        )
-        // fix the from node connection list
-        fixConnList(
-            fromNode = fromNode,
-            toNode = toNode,
-            newToNode = nextNode,
-            oldDistance = distanceToEndNode,
-            newDistance = requiredLenToNodeFromThisNode
-        )
-
-        // fix the toNode back link
-        fixConnList(
-            fromNode = toNode,
-            toNode = fromNode,
-            newToNode = nextNode,
-            oldDistance = distanceToEndNode,
-            newDistance = secondDistance
-        )
-
-        return nextNode++
-    }
-
-    /**
-     * walk the connection list for fromNode looking for the toNode.
-     * Set the distance for toNode to newDistance.
-     */
-    fun fixConnList(
-        fromNode: Int,
-        toNode: Int,
-        newToNode: Int,
-        oldDistance: Int,
-        newDistance: Int
-    ) {
-        val connMap = theCurrentConnectionTree[fromNode]!!
-        connMap.remove(toNode)
-        connMap[newToNode] = newDistance
-    }
-
-    /**
      * find (i, k) which are two leaves such that Di,k = Di,n + Dn,k
      * Assumes that n = the last row / col of m (e.g. m[0, matrixSize])
      */
@@ -439,18 +346,6 @@ class Phylogeny {
         return minPair
     }
 
-    /**
-     * copy the matrixSize number of rows and columns form m into a new matrix and return it
-     */
-    fun dropLastRowAndColumn(matrixSize: Int, m: D2Array<Int>): D2Array<Int> {
-        val mySmaller2D = mk.d2array(matrixSize, matrixSize) { 0 }
-        for (i in 0 until matrixSize) {
-            for (j in 0 until matrixSize) {
-                mySmaller2D[i, j] = m[i, j]
-            }
-        }
-        return mySmaller2D
-    }
 
     /**
 
