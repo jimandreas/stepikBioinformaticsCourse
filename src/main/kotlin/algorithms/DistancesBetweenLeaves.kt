@@ -39,23 +39,23 @@ class DistancesBetweenLeaves {
     var traversed: MutableList<Int> = mutableListOf()
 
     /**
-     * @param leafCount - the row/column size of the distance matrix
+     * @param matrixSize - the row/column size of the distance matrix
      * @param g - the mapping of nodes to a list of connected nodes with connected weights
      *
      * NOTES: the leafCount can be less than the node numbers - but the traversal is limited to
      * the 0..(leafCount-1) node numbers.  Hence the returned 2D matrix has only
      * representatives from nodes { 0..(leafCount-1) }
      */
-    fun distancesBetweenLeaves(leafCount: Int, g: Map<Int, List<Pair<Int, Int>>>): D2Array<Int> {
-        val theMatrix = mk.d2array(leafCount, leafCount) {0}
+    fun distancesBetweenLeaves(matrixSize: Int, g: Map<Int, Map<Int, Int>>): D2Array<Int> {
+        val theMatrix = mk.d2array(matrixSize, matrixSize) {0}
 
-        for (i in 0 until leafCount) {
-            for (j in 0 until leafCount) {
+        for (i in 0 until matrixSize) {
+            for (j in 0 until matrixSize) {
                 if (i == j) {
                     continue
                 }
                 traversed = mutableListOf()
-                val weight = recursiveTraversal(j, i, i, leafCount, g)
+                val weight = recursiveTraversal(matrixSize, j, i, i,  g)
                 theMatrix[i, j] = weight
             }
         }
@@ -63,35 +63,42 @@ class DistancesBetweenLeaves {
         return theMatrix
     }
 
+    /**
+     * recursively descend into the [g] matrix searching for the [targetNode]
+     *   accumulate the total distance across the recursions until the [targetNode]
+     *   is found in the true.
+     *   @return  the accumulated distance
+     */
     private fun recursiveTraversal(
+        matrixSize: Int,
         targetNode: Int,
         fromNode: Int,
         currentNode: Int,
-        leafCount: Int,
-        g: Map<Int, List<Pair<Int, Int>>>): Int {
-        val listOfNodesAndWeights = g[currentNode]
-        if (listOfNodesAndWeights == null) {
+        g: Map<Int, Map<Int, Int>>): Int {
+        val mapOfConnectionsAndDistances = g[currentNode]
+        if (mapOfConnectionsAndDistances == null) {
             println("recursive Travel - this shouldn't happen - null on a key")
             return 0
         }
-        var weight = 0
+        var distance = 0
 
         traversed.add(currentNode)
-        for (p in listOfNodesAndWeights) {
-            if (p.first == targetNode) {
-                weight += p.second
-                return weight
+
+        for (p in mapOfConnectionsAndDistances) {
+            if (p.key == targetNode) {
+                distance += p.value
+                return distance
             }
-            if (p.first < leafCount) {
+            if (p.key < matrixSize) {
                 continue
             }
-            if (!traversed.contains(p.first)) {
-                val foundWeight = recursiveTraversal(targetNode, fromNode, p.first, leafCount, g)
+            if (!traversed.contains(p.key)) {
+                val foundWeight = recursiveTraversal(matrixSize, targetNode, fromNode, p.key, g)
                 if (foundWeight != 0) {
-                    return p.second + weight + foundWeight
+                    return p.value + distance + foundWeight
                 }
             }
         }
-        return weight
+        return distance
     }
 }
