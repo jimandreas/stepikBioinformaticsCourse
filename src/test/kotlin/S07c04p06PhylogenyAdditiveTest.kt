@@ -87,7 +87,7 @@ internal class S07c04p06PhylogenyAdditiveTest {
 
         val result = ll.additivePhylogenyStart(matrixSize, m)
 
-        printGraph(result)
+        //printGraph(result)
 
         checkEdgesAreEqual(expectedGraph, result)
 
@@ -125,38 +125,37 @@ internal class S07c04p06PhylogenyAdditiveTest {
 
         // update when finished debugging
         val expectedOutputString = """
-            0->6:128
-            1->7:16
-            2->8:8
-            3->6:4
-            4->7:2
-            5->8:1
-            6->0:128
-            6->3:4
-            6->8:64
-            7->1:16
-            7->4:2
-            7->8:32
-            8->2:8
-            8->5:1
-            8->6:64
-            8->7:32
+            0->7:128
+            1->8:16
+            2->6:8
+            3->7:4
+            4->8:2
+            5->6:1
+            6->2:8
+            6->5:1
+            6->7:64
+            6->8:32
+            7->0:128
+            7->3:4
+            7->6:64
+            8->1:16
+            8->4:2
+            8->6:32
         """.trimIndent()
 
         val input = sampleInput.reader().readLines().toMutableList()
         val matrixSize = input[0].trim().toInt()
         input.removeFirst()
         val m = parseMatrixInput(matrixSize, input, radixIn = 16)
-        printit(6, m)
+        //printMatrix(6, m)
 
         val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
         val expectedGraph = parseSampleInput(expectedResultStrings)
 
         val result = ll.additivePhylogenyStart(matrixSize, m)
 
-        printGraph(result)
+        //printGraph(result)
 
-        assertEquals(9, ll.nextNode)
         checkEdgesAreEqual(expectedGraph, result)
 
         // CLOSE THE LOOP: convert the edge list back to a distance matrix - i.e.
@@ -194,7 +193,7 @@ internal class S07c04p06PhylogenyAdditiveTest {
         val hackedEdges = parseSampleInput(r)
         // now convert the edges to a distance matrix
         val theInputMatrix = dbl.distancesBetweenLeaves(matrixSize, hackedEdges)
-        printit(matrixSize, theInputMatrix)
+        //printMatrix(matrixSize, theInputMatrix)
 
         // now hand the distance matrix to the additivePhylogeny algo
         val treeMapResult = ll.additivePhylogenyStart(matrixSize, theInputMatrix)
@@ -202,7 +201,7 @@ internal class S07c04p06PhylogenyAdditiveTest {
         checkEdgesAreEqual(hackedEdges, treeMapResult)
 
         val theResultMatrix = dbl.distancesBetweenLeaves(matrixSize, treeMapResult)
-        printit(matrixSize, theResultMatrix)
+        //printMatrix(matrixSize, theResultMatrix)
         assertEquals(theInputMatrix, theResultMatrix)
     }
 
@@ -241,7 +240,7 @@ internal class S07c04p06PhylogenyAdditiveTest {
         val hackedEdges = parseSampleInput(r)
         // now convert the edges to a distance matrix
         val theInputMatrix = dbl.distancesBetweenLeaves(matrixSize, hackedEdges)
-        printit(matrixSize, theInputMatrix)
+        //printMatrix(matrixSize, theInputMatrix)
 
         // now hand the distance matrix to the additivePhylogeny algo
         val treeMapResult = ll.additivePhylogenyStart(matrixSize, theInputMatrix)
@@ -249,7 +248,7 @@ internal class S07c04p06PhylogenyAdditiveTest {
         checkEdgesAreEqual(hackedEdges, treeMapResult)
 
         val theResultMatrix = dbl.distancesBetweenLeaves(matrixSize, treeMapResult)
-        printit(matrixSize, theResultMatrix)
+        //printMatrix(matrixSize, theResultMatrix)
         assertEquals(theInputMatrix, theResultMatrix)
     }
 
@@ -334,7 +333,7 @@ internal class S07c04p06PhylogenyAdditiveTest {
     /**
      * pretty print a 2D matrix
      */
-    private fun printit(matrixSize: Int, gArr: D2Array<Int>) {
+    private fun printMatrix(matrixSize: Int, gArr: D2Array<Int>) {
         val outStr = StringBuilder()
         for (i in 0 until matrixSize) {
             for (j in 0 until matrixSize) {
@@ -511,7 +510,7 @@ internal class S07c04p06PhylogenyAdditiveTest {
 
         val result = ll.additivePhylogenyStart(matrixSize, m)
 
-        printGraph(result)
+        //printGraph(result)
 
         //checkEdgesAreEqual(expectedGraph, result)
 
@@ -521,6 +520,160 @@ internal class S07c04p06PhylogenyAdditiveTest {
         assertEquals(m, resultMatrix)
 
     }
+
+
+    @Test
+    @DisplayName("Distances Between Leaves quiz dataset")
+    fun phylogenyLimbLengthQuizDataset() {
+        val sampleInput = """
+25
+0 1004 5374 3780 3739 6717 1607 5077 7957 3253 5959 2951 4244 3438 5355 2823 5932 2256 7239 7749 2015 5521 6327 2142 6779
+1004 0 4542 4242 4201 7179 2069 5539 7125 2421 5127 3413 3412 2606 5817 3285 5100 1424 6407 6917 2477 4689 6789 1310 7241
+5374 4542 0 8612 8571 11549 6439 9909 4193 3941 2195 7783 2148 2754 10187 7655 2168 4166 3475 3985 6847 1757 11159 3924 11611
+3780 4242 8612 0 1959 3065 2861 1425 11195 6491 9197 2325 7482 6676 1703 2393 9170 5494 10477 10987 2747 8759 2675 5380 3127
+3739 4201 8571 1959 0 4896 2820 3256 11154 6450 9156 2284 7441 6635 3534 2352 9129 5453 10436 10946 2706 8718 4506 5339 4958
+6717 7179 11549 3065 4896 0 5798 3100 14132 9428 12134 5262 10419 9613 2218 5330 12107 8431 13414 13924 5684 11696 1968 8317 1842
+1607 2069 6439 2861 2820 5798 0 4158 9022 4318 7024 2032 5309 4503 4436 1904 6997 3321 8304 8814 1096 6586 5408 3207 5860
+5077 5539 9909 1425 3256 3100 4158 0 12492 7788 10494 3622 8779 7973 1738 3690 10467 6791 11774 12284 4044 10056 2710 6677 3162
+7957 7125 4193 11195 11154 14132 9022 12492 0 6524 2168 10366 4731 5337 12770 10238 2555 6749 2272 1376 9430 3078 13742 6507 14194
+3253 2421 3941 6491 6450 9428 4318 7788 6524 0 4526 5662 2811 2005 8066 5534 4499 2045 5806 6316 4726 4088 9038 1803 9490
+5959 5127 2195 9197 9156 12134 7024 10494 2168 4526 0 8368 2733 3339 10772 8240 557 4751 1450 1960 7432 1080 11744 4509 12196
+2951 3413 7783 2325 2284 5262 2032 3622 10366 5662 8368 0 6653 5847 3900 1564 8341 4665 9648 10158 1918 7930 4872 4551 5324
+4244 3412 2148 7482 7441 10419 5309 8779 4731 2811 2733 6653 0 1624 9057 6525 2706 3036 4013 4523 5717 2295 10029 2794 10481
+3438 2606 2754 6676 6635 9613 4503 7973 5337 2005 3339 5847 1624 0 8251 5719 3312 2230 4619 5129 4911 2901 9223 1988 9675
+5355 5817 10187 1703 3534 2218 4436 1738 12770 8066 10772 3900 9057 8251 0 3968 10745 7069 12052 12562 4322 10334 1828 6955 2280
+2823 3285 7655 2393 2352 5330 1904 3690 10238 5534 8240 1564 6525 5719 3968 0 8213 4537 9520 10030 1790 7802 4940 4423 5392
+5932 5100 2168 9170 9129 12107 6997 10467 2555 4499 557 8341 2706 3312 10745 8213 0 4724 1837 2347 7405 1053 11717 4482 12169
+2256 1424 4166 5494 5453 8431 3321 6791 6749 2045 4751 4665 3036 2230 7069 4537 4724 0 6031 6541 3729 4313 8041 934 8493
+7239 6407 3475 10477 10436 13414 8304 11774 2272 5806 1450 9648 4013 4619 12052 9520 1837 6031 0 2064 8712 2360 13024 5789 13476
+7749 6917 3985 10987 10946 13924 8814 12284 1376 6316 1960 10158 4523 5129 12562 10030 2347 6541 2064 0 9222 2870 13534 6299 13986
+2015 2477 6847 2747 2706 5684 1096 4044 9430 4726 7432 1918 5717 4911 4322 1790 7405 3729 8712 9222 0 6994 5294 3615 5746
+5521 4689 1757 8759 8718 11696 6586 10056 3078 4088 1080 7930 2295 2901 10334 7802 1053 4313 2360 2870 6994 0 11306 4071 11758
+6327 6789 11159 2675 4506 1968 5408 2710 13742 9038 11744 4872 10029 9223 1828 4940 11717 8041 13024 13534 5294 11306 0 7927 2030
+2142 1310 3924 5380 5339 8317 3207 6677 6507 1803 4509 4551 2794 1988 6955 4423 4482 934 5789 6299 3615 4071 7927 0 8379
+6779 7241 11611 3127 4958 1842 5860 3162 14194 9490 12196 5324 10481 9675 2280 5392 12169 8493 13476 13986 5746 11758 2030 8379 0
+        """.trimIndent()
+
+        // update when finished debugging
+        val expectedOutputString = """
+0->26:271
+1->25:86
+2->31:805
+3->28:64
+4->27:959
+5->47:890
+6->29:344
+7->30:730
+8->42:792
+9->32:910
+10->33:85
+11->34:748
+12->35:509
+13->36:409
+14->37:428
+15->38:718
+16->39:265
+17->40:524
+18->41:777
+19->42:584
+20->43:491
+21->44:321
+22->45:789
+23->46:346
+24->47:952
+25->1:86
+25->26:647
+25->40:814
+26->0:271
+26->25:647
+26->29:992
+27->4:959
+27->28:936
+27->34:577
+28->3:64
+28->27:936
+28->30:631
+29->6:344
+29->26:992
+29->43:261
+30->7:730
+30->28:631
+30->37:580
+31->2:805
+31->35:834
+31->44:631
+32->9:910
+32->36:686
+32->46:547
+33->10:85
+33->39:207
+33->41:588
+34->11:748
+34->27:577
+34->38:98
+35->12:509
+35->31:834
+35->36:706
+36->13:409
+36->32:686
+36->35:706
+37->14:428
+37->30:580
+37->45:611
+38->15:718
+38->34:98
+38->43:581
+39->16:265
+39->33:207
+39->44:467
+40->17:524
+40->25:814
+40->46:64
+41->18:777
+41->33:588
+41->42:703
+42->8:792
+42->19:584
+42->41:703
+43->20:491
+43->29:261
+43->38:581
+44->21:321
+44->31:631
+44->39:467
+45->22:789
+45->37:611
+45->47:289
+46->23:346
+46->32:547
+46->40:64
+47->5:890
+47->24:952
+47->45:289
+        """.trimIndent()
+
+        val input = sampleInput.reader().readLines().toMutableList()
+        val matrixSize = input[0].trim().toInt()
+        input.removeFirst()
+        val m = parseMatrixInput(matrixSize, input)
+        //printMatrix(matrixSize, m)
+
+        val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
+        val expectedGraph = parseSampleInput(expectedResultStrings)
+
+        val result = ll.additivePhylogenyStart(matrixSize, m)
+
+        //printGraph(result)
+
+        checkEdgesAreEqual(expectedGraph, result)
+
+        // CLOSE THE LOOP: convert the edge list back to a distance matrix - i.e.
+        //   the original test input
+        val resultMatrix = dbl.distancesBetweenLeaves(matrixSize, result)
+        assertEquals(m, resultMatrix)
+
+    }
+
 
 
 

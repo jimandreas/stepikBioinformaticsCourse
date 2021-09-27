@@ -37,7 +37,7 @@ class Phylogeny {
     var nextNode = 0 // tracker for the next internal node number to create
     var theCurrentConnectionTree: MutableMap<Int, MutableMap<Int, Int>> = mutableMapOf()
     val limbLengthMap: MutableMap<Int, Int> = mutableMapOf()
-    var verbose = true
+    var verbose = false
 
     /**
 
@@ -180,12 +180,16 @@ class Phylogeny {
         val baseNodeForLength = info.baseNodei
         val endNodeForPath = info.pathEndNode
         val internalNode = findNodeOrMakeOne(matrixSize, baseNodeForLength, endNodeForPath, requireLen)
-        println("FIXTREE: node to add = $nodeNum limb $limbLength from baseNode $baseNodeForLength len from first internal node $requireLen")
+        if (verbose) {
+            println("FIXTREE: node to add = $nodeNum limb $limbLength from baseNode $baseNodeForLength len from first internal node $requireLen")
+        }
 
         theCurrentConnectionTree[internalNode]!![nodeNum] = limbLength
         theCurrentConnectionTree[nodeNum] = mutableMapOf(Pair(internalNode, limbLength))
 
-        println(theCurrentConnectionTree)
+        if (verbose) {
+            println(theCurrentConnectionTree)
+        }
     }
 
     /**
@@ -247,9 +251,12 @@ class Phylogeny {
                 if (pathStack.count() == 2) {
                     // check if all nodes have been examined
                     curNode = pathStack.peek()!!
+                    // fancy way of doing intersection of nodes visited and intermediate nodes in current node connections:
                     if (nodesVisitedList.containsAll(theCurrentConnectionTree[curNode]!!.keys.filter { it >= matrixSize }
                             .toList())) {
-                        println("Did NOT find the target node $endNodeForPath")
+                        if (verbose) {
+                            println("Did NOT find the target node $endNodeForPath")
+                        }
                         break;
                     } else {
                         continue // keep searching the second node
@@ -405,8 +412,6 @@ class Phylogeny {
     /**
      * find (i, k) which are two leaves such that Di,k = Di,n + Dn,k
      * Assumes that n = the last row / col of m (e.g. m[0, matrixSize])
-     *
-     * MODIFIED: return the MINIMUM distance
      */
     fun getLeaves(matrixSize: Int, m: D2Array<Int>): Pair<Int, Int> {
         var minDistance = Int.MAX_VALUE
