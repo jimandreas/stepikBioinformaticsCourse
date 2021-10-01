@@ -6,10 +6,21 @@
 
 package algorithms
 
+import org.jetbrains.kotlinx.multik.api.d2array
+import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
+import org.jetbrains.kotlinx.multik.ndarray.data.get
+import org.jetbrains.kotlinx.multik.ndarray.data.rangeTo
+import org.jetbrains.kotlinx.multik.ndarray.data.set
+
 /**
  *
  * See also:  Ultrametric Trees - Unweighted Pair Group Method with Arithmetic Mean  UPGMA
  * Youtube: https://www.youtube.com/watch?v=27aOeJ2hSwA
+ *
+ * and:
+ * C100 Week 5 Discussion (for example matrix solution)
+ * Youtube: https://www.youtube.com/watch?v=8-8eZdeqUsw
  *
  * Limb Length:
  * stepik: https://stepik.org/lesson/240339/step/8?unit=212685
@@ -73,6 +84,150 @@ class UPGMA /* Unweighted Pair Group Method with Arithmetic Mean */{
      *
      */
 
+    // next internal node number
+    var nextNode = 0
 
+    fun upgmaStart(matrixSize: Int, m: D2Array<Float>): Map<Int, Map<Int, Float>> {
+
+        nextNode = matrixSize
+        // binary tree with distances
+        val theMap : MutableMap<Int, MutableMap<Int, Float>> = mutableMapOf()
+        // cluster list - lists members in a cluster
+        val clusters: MutableMap<Int, MutableList<Int>> = mutableMapOf()
+        // cluster total distance
+        val clusterDistance : MutableMap<Int, Float> = mutableMapOf()
+
+        // init clusters - leaf nodes naturally don't have members
+        for (i in 0 until matrixSize) {
+            clusters[i] = mutableListOf()
+        }
+
+        // and now the working loop
+        while (clusters.size >= 2) {
+
+            val mDoubled = doubleSized(matrixSize, m)
+            updateDistances(clusters, clusterDistance, theMap, matrixSize, mDoubled)
+
+            val minPair = minCoordinates(matrixSize * 2, mDoubled)
+            println(minPair)
+            addClusterAndRemoveOldClusters(minPair, clusters, clusterDistance, theMap, matrixSize, mDoubled)
+        }
+
+        // add the root node
+        // TODO: add root node
+        return sortMapAndDistanceLists(theMap)
+
+    }
+
+    fun updateDistances(
+        clusters: MutableMap<Int, MutableList<Int>>,
+        clusterDistance: MutableMap<Int, Float>,
+        theMap: MutableMap<Int, MutableMap<Int, Float>>,
+        matrixSize: Int,
+        doubledMatrix: D2Array<Float>
+    ) {
+
+        // first add in cluster scores
+        val workList = clusters.filter { it.key >= matrixSize }.toList()
+        for (w in workList) {
+            val clusterIndex = w.first
+            val leaves = w.second // a list of Ints
+            var distance = 0f
+
+            // now walk each row / column and add in the cross values for the cluster
+            for (i in 0 until matrixSize) {
+                if (leaves.contains(i)) {
+                    continue
+                }
+                for (l in leaves) {
+                    distance += doubledMatrix[i, l]
+                }
+                distance /= leaves.size
+                doubledMatrix[i, clusterIndex] = distance
+                doubledMatrix[clusterIndex, i] = distance
+                distance = 0f
+            }
+        }
+
+
+        // second zero any leaves that are no longer a cluster key (i.e. are part of a cluster)
+        for (i in 0 until matrixSize) {
+            if (!clusters.containsKey(i)) {
+                for (z in 0 until matrixSize) {
+                    doubledMatrix[i, z] = 0f
+                    doubledMatrix[z, i] = 0f
+                }
+            }
+        }
+    }
+
+    fun addClusterAndRemoveOldClusters(
+        coord: Pair<Int, Int>,
+        clusters: MutableMap<Int, MutableList<Int>>,
+        clusterDistance: MutableMap<Int, Float>,
+        theMap: MutableMap<Int, MutableMap<Int, Float>>,
+        matrixSize: Int,
+        doubledMatrix: D2Array<Float>
+    ) {
+        val first = coord.first
+        val second = coord.second
+        val distance = doubledMatrix[first, second].toFloat() / 2.0f
+        when {
+            // easy case: just a cluster of two leaf nodes
+            first < matrixSize && second < matrixSize -> {
+                clusters[nextNode] = mutableListOf(
+                    first, second
+                )
+                clusterDistance[nextNode] = distance
+                theMap[nextNode] = mutableMapOf(Pair(first, distance))
+                theMap[nextNode]!![second] =  distance
+                theMap[first] = mutableMapOf(Pair(nextNode, distance))
+                theMap[second] = mutableMapOf(Pair(nextNode, distance))
+            }
+        }
+        clusters.remove(first)
+        clusters.remove(second)
+        nextNode++
+    }
+
+    fun minCoordinates(matrixSize: Int, m: D2Array<Float>): Pair<Int, Int> {
+        var minValue = Float.MAX_VALUE
+        var iMin = 0
+        var jMin = 0
+        for (i in 0 until matrixSize) {
+            for (j in 0 until matrixSize) {
+                val testVal = m[i, j]
+                if (testVal == 0f) {  // zero values are excluded from min
+                    continue
+                }
+                if (m[i, j] < minValue) {
+                    minValue = m[i, j]
+                    iMin = i
+                    jMin = j
+                }
+            }
+        }
+        return Pair(iMin, jMin)
+    }
+    fun doubleSized(matrixSize: Int, m: D2Array<Float>): D2Array<Float> {
+        val mdoubled: D2Array<Float> = mk.d2array(matrixSize * 2, matrixSize * 2) { 0f }
+        for (i in 0 until matrixSize) {
+            for (j in 0 until matrixSize) {
+                mdoubled[i, j] = m[i, j]
+            }
+        }
+        return mdoubled
+    }
+
+    fun sortMapAndDistanceLists(unorderedMap: Map<Int, Map<Int, Float>>): Map<Int, Map<Int, Float>> {
+        // now sort the keys, and then the distances in the lists
+        val mapSortedResult = unorderedMap.toSortedMap()
+        val returnSortedList: MutableMap<Int, Map<Int, Float>> = mutableMapOf()
+        for (keyNode in mapSortedResult) {
+            val theList = keyNode.value.toSortedMap()
+            returnSortedList[keyNode.key] = theList
+        }
+        return returnSortedList
+    }
 
 }
