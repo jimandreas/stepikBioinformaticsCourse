@@ -58,7 +58,7 @@ class Phylogeny {
      */
 
     fun additivePhylogenyStart(matrixSize: Int, m: D2Array<Int>): Map<Int, Map<Int, Int>> {
-        // first - save each nodes limbLenght in a map for later
+        // first - save each nodes limbLength in a map for later
         for (i in 0 until matrixSize) {
             val t = calculateLimbLength(matrixSize, i, m)
             //println("$i $t")
