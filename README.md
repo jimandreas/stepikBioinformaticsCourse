@@ -75,6 +75,13 @@ Most of the `algorithms` are exercised by test files located in the
 test folder.  The tests names match the sequencing found in
 the stepik course.
 
+## Branches
+
+Switched branch to "main"
+
+    October 1, 2020
+    All new Git repositories on GitHub will be named "main" instead of "master" starting October 1, 2020.
+
 [Linear Space Alignment]: http://rosalind.info/problems/ba5l/
 [Global Alignment]: http://rosalind.info/problems/ba5e/
 [Rosalind]: http://rosalind.info/faq/
