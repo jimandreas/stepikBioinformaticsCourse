@@ -1,7 +1,8 @@
 @file:Suppress(
     "MemberVisibilityCanBePrivate", "UnnecessaryVariable", "ReplaceJavaStaticMethodWithKotlinAnalog",
     "unused", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls", "UNUSED_VALUE", "ReplaceWithOperatorAssignment",
-    "UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "CanBeVal", "SimplifyBooleanWithConstants"
+    "UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "CanBeVal", "SimplifyBooleanWithConstants",
+    "ConvertTwoComparisonsToRangeCheck", "ReplaceSizeCheckWithIsNotEmpty"
 )
 
 package algorithms
@@ -10,7 +11,6 @@ import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import org.jetbrains.kotlinx.multik.ndarray.data.get
-import org.jetbrains.kotlinx.multik.ndarray.data.rangeTo
 import org.jetbrains.kotlinx.multik.ndarray.data.set
 
 /**
@@ -103,18 +103,16 @@ class UPGMA /* Unweighted Pair Group Method with Arithmetic Mean */{
         }
 
         // and now the working loop
-        while (clusters.size >= 2) {
+        while (clusters.size != 1) {
 
             val mDoubled = doubleSized(matrixSize, m)
             updateDistances(clusters, clusterDistance, theMap, matrixSize, mDoubled)
 
             val minPair = minCoordinates(matrixSize * 2, mDoubled)
-            println(minPair)
+            //println(minPair)
             addClusterAndRemoveOldClusters(minPair, clusters, clusterDistance, theMap, matrixSize, mDoubled)
         }
 
-        // add the root node
-        // TODO: add root node
         return sortMapAndDistanceLists(theMap)
 
     }
@@ -128,15 +126,18 @@ class UPGMA /* Unweighted Pair Group Method with Arithmetic Mean */{
     ) {
 
         // first add in cluster scores
-        val workList = clusters.filter { it.key >= matrixSize }.toList()
-        for (w in workList) {
-            val clusterIndex = w.first
-            val leaves = w.second // a list of Ints
+        val clustersToScore = clusters.filter { it.key >= matrixSize }.toList()
+        for (cluster in clustersToScore) {
+            val clusterIndex = cluster.first
+            val leaves = cluster.second // a list of Ints
             var distance = 0f
 
             // now walk each row / column and add in the cross values for the cluster
             for (i in 0 until matrixSize) {
-                if (leaves.contains(i)) {
+//                if (leaves.contains(i)) {      //
+//                    continue
+//                }
+                if (!clusters.containsKey(i)) { // exclude leaves that are part of a cluster
                     continue
                 }
                 for (l in leaves) {
@@ -146,6 +147,32 @@ class UPGMA /* Unweighted Pair Group Method with Arithmetic Mean */{
                 doubledMatrix[i, clusterIndex] = distance
                 doubledMatrix[clusterIndex, i] = distance
                 distance = 0f
+            }
+        }
+
+        // now score clusters against each other
+        for (c1 in clustersToScore) {
+
+            val cluster1Index = c1.first
+            val leaves1 = c1.second // a list of Ints
+
+            for (c2 in clustersToScore) {
+                if (c1 == c2) {
+                    continue
+                }
+
+                val cluster2Index = c2.first
+                val leaves2 = c2.second // a list of Ints
+                var distance = 0f
+
+                for (l1 in leaves1) {
+                    for (l2 in leaves2) {
+                        distance += doubledMatrix[l1, l2]
+                    }
+                }
+                distance /= leaves1.size * leaves2.size
+                doubledMatrix[cluster1Index, cluster2Index] = distance
+                doubledMatrix[cluster2Index, cluster1Index] = distance
             }
         }
 
@@ -172,22 +199,96 @@ class UPGMA /* Unweighted Pair Group Method with Arithmetic Mean */{
         val first = coord.first
         val second = coord.second
         val distance = doubledMatrix[first, second].toFloat() / 2.0f
+
         when {
             // easy case: just a cluster of two leaf nodes
             first < matrixSize && second < matrixSize -> {
+
                 clusters[nextNode] = mutableListOf(
                     first, second
                 )
                 clusterDistance[nextNode] = distance
+
                 theMap[nextNode] = mutableMapOf(Pair(first, distance))
                 theMap[nextNode]!![second] =  distance
                 theMap[first] = mutableMapOf(Pair(nextNode, distance))
                 theMap[second] = mutableMapOf(Pair(nextNode, distance))
+                clusters.remove(first)
+                clusters.remove(second)
+                nextNode++
+                return
+            }
+            // the first cluster is an internal node and the second is an leaf
+            first >= matrixSize && second < matrixSize -> {
+                val previousLeaves = clusters[first]
+                previousLeaves!!.add(second)
+                clusters[nextNode] = previousLeaves
+
+                clusterDistance[nextNode] = distance
+
+                // calculate distance for internal node
+                val internalNodeDistance = distance - clusterDistance[first]!!
+                theMap[nextNode] = mutableMapOf(Pair(first, internalNodeDistance))
+                // now add the leaf node with basic distance
+                theMap[nextNode]!![second] =  distance
+
+                // now make the reverse pointers
+                theMap[first]!![nextNode] = internalNodeDistance
+                theMap[second] = mutableMapOf(Pair(nextNode, distance))
+                clusters.remove(first)
+                clusters.remove(second)
+                nextNode++
+                return
+            }
+
+            // the first cluster is leaf and the second is an internal node
+            first < matrixSize && second >= matrixSize -> {
+
+                val previousLeaves = clusters[second]
+                previousLeaves!!.add(first)
+                clusters[nextNode] = previousLeaves
+                clusterDistance[nextNode] = distance
+
+                // calculate distance for internal node
+                val internalNodeDistance = distance - clusterDistance[second]!!
+                theMap[nextNode] = mutableMapOf(Pair(second, internalNodeDistance))
+                // now add the leaf node with basic distance
+                theMap[nextNode]!![first] = distance
+
+                // now make the reverse pointers
+                theMap[second]!![nextNode] = internalNodeDistance
+                theMap[first] = mutableMapOf(Pair(nextNode, distance))
+                clusters.remove(first)
+                clusters.remove(second)
+                nextNode++
+                return
+            }
+
+            // both clusters are internal nodes
+            first >= matrixSize && second >= matrixSize -> {
+
+                // combine both sets of leaves
+                val previousLeaves = clusters[first]
+                previousLeaves!!.addAll(clusters[second]!!)
+                clusters[nextNode] = previousLeaves
+                clusterDistance[nextNode] = distance
+
+                val internalNodeDistanceFirst = distance - clusterDistance[first]!!
+                theMap[nextNode] = mutableMapOf(Pair(first, internalNodeDistanceFirst))
+
+                val internalNodeDistanceSecond = distance - clusterDistance[second]!!
+                theMap[nextNode]!![second] = internalNodeDistanceSecond
+
+                theMap[first]!![nextNode] = internalNodeDistanceFirst
+                theMap[second]!![nextNode] = internalNodeDistanceSecond
+
+                clusters.remove(first)
+                clusters.remove(second)
+                nextNode++
+                return
             }
         }
-        clusters.remove(first)
-        clusters.remove(second)
-        nextNode++
+        println("ERROR should not reach this point")
     }
 
     fun minCoordinates(matrixSize: Int, m: D2Array<Float>): Pair<Int, Int> {
