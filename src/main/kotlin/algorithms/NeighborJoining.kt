@@ -7,8 +7,10 @@
 
 package algorithms
 
+import org.jetbrains.kotlinx.multik.api.d1array
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.ndarray.data.D1Array
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
@@ -48,7 +50,8 @@ class NeighborJoining {
     from n and increase consecutively.
      */
 
-
+    // the actual implementation is ITERATIVE, not RECURSIVE.
+    // psuedo code (for reference) from : http://rosalind.info/problems/ba7e/
     val psuedoCode = """
     NeighborJoining(D)
     n ← number of rows in D
@@ -90,7 +93,7 @@ class NeighborJoining {
     // next internal node number
     var nextNode = 0
 
-    fun upgmaStart(matrixSize: Int, m: D2Array<Float>): Map<Int, Map<Int, Float>> {
+    fun neighborJoiningStart(matrixSize: Int, m: D2Array<Float>): Map<Int, Map<Int, Float>> {
 
         nextNode = matrixSize
         // binary tree with distances
@@ -100,6 +103,9 @@ class NeighborJoining {
         // cluster total distance
         val clusterDistance : MutableMap<Int, Float> = mutableMapOf()
 
+        // NEW for NeighborJoining: Total Distance
+        val totalDistance: D1Array<Float> = mk.d1array(matrixSize){0f}
+
         // init clusters - leaf nodes naturally don't have members
         for (i in 0 until matrixSize) {
             clusters[i] = mutableListOf()
@@ -108,25 +114,81 @@ class NeighborJoining {
         // and now the working loop
         while (clusters.size != 1) {
 
-            val mDoubled = doubleSized(matrixSize, m)
-            updateDistances(clusters, clusterDistance, theMap, matrixSize, mDoubled)
+            val originalMatrixDoubled = doubleSized(matrixSize, m)
+            val qMatrix = mk.d2array(matrixSize * 2, matrixSize * 2) { 0f }
 
-            val minPair = minCoordinates(matrixSize * 2, mDoubled)
+            updateDistances(
+                clusters =  clusters,
+                clusterDistance =  clusterDistance,
+                theMap =  theMap,
+                matrixSize =  matrixSize,
+                distanceMatrix = originalMatrixDoubled,
+                qMatrix = qMatrix,
+                totalDistance = totalDistance
+            )
+
+            val minPair = minCoordinates(matrixSize * 2, qMatrix)
             //println(minPair)
-            addClusterAndRemoveOldClusters(minPair, clusters, clusterDistance, theMap, matrixSize, mDoubled)
+
+            addClusterAndRemoveOldClusters(
+                coord =  minPair,
+                clusters =  clusters,
+                clusterDistance =  clusterDistance,
+                theMap =  theMap,
+                matrixSize =  matrixSize,
+                distanceMatrix = originalMatrixDoubled,
+                qMatrix = qMatrix,
+                totalDistance = totalDistance
+            )
         }
 
         return sortMapAndDistanceLists(theMap)
 
     }
 
+    /*
+     * this is updated following guideance shown here:
+     * https://www.youtube.com/watch?v=Dj24mCLQYUE
+     */
     fun updateDistances(
         clusters: MutableMap<Int, MutableList<Int>>,
         clusterDistance: MutableMap<Int, Float>,
         theMap: MutableMap<Int, MutableMap<Int, Float>>,
         matrixSize: Int,
-        doubledMatrix: D2Array<Float>
+        distanceMatrix: D2Array<Float>,
+        qMatrix: D2Array<Float>,
+        totalDistance: D1Array<Float>
     ) {
+
+        // operating matrix size is the number of clusters
+        val nSize = clusters.size
+
+        // calculate total distances
+        for (i in 0 until matrixSize) {
+            var sum = 0f
+            for (j in 0 until matrixSize) {
+                if (i == j) {
+                    continue
+                }
+                sum += distanceMatrix[i, j]
+            }
+            totalDistance[i] = sum
+        }
+
+        // recalculate for Dstar:
+        // D*(i,j) = (n - 2) · D(i,j) - TotalDistanceD(i) - TotalDistanceD(j).
+
+        for (i in 0 until matrixSize) {
+            for (j in 0 until matrixSize) {
+                if (i == j) {
+                    continue
+                }
+                val dijScaled = distanceMatrix[i, j]* (nSize-2)
+                val ui = totalDistance[i]
+                val uj = totalDistance[j]
+                qMatrix[i, j] =  dijScaled - ui - uj
+            }
+        }
 
         // first add in cluster scores
         val clustersToScore = clusters.filter { it.key >= matrixSize }.toList()
@@ -144,11 +206,11 @@ class NeighborJoining {
                     continue
                 }
                 for (l in leaves) {
-                    distance += doubledMatrix[i, l]
+                    distance += qMatrix[i, l]
                 }
                 distance /= leaves.size
-                doubledMatrix[i, clusterIndex] = distance
-                doubledMatrix[clusterIndex, i] = distance
+                qMatrix[i, clusterIndex] = distance
+                qMatrix[clusterIndex, i] = distance
                 distance = 0f
             }
         }
@@ -170,12 +232,12 @@ class NeighborJoining {
 
                 for (l1 in leaves1) {
                     for (l2 in leaves2) {
-                        distance += doubledMatrix[l1, l2]
+                        distance += qMatrix[l1, l2]
                     }
                 }
                 distance /= leaves1.size * leaves2.size
-                doubledMatrix[cluster1Index, cluster2Index] = distance
-                doubledMatrix[cluster2Index, cluster1Index] = distance
+                qMatrix[cluster1Index, cluster2Index] = distance
+                qMatrix[cluster2Index, cluster1Index] = distance
             }
         }
 
@@ -184,8 +246,8 @@ class NeighborJoining {
         for (i in 0 until matrixSize) {
             if (!clusters.containsKey(i)) {
                 for (z in 0 until matrixSize) {
-                    doubledMatrix[i, z] = 0f
-                    doubledMatrix[z, i] = 0f
+                    qMatrix[i, z] = 0f
+                    qMatrix[z, i] = 0f
                 }
             }
         }
@@ -197,11 +259,16 @@ class NeighborJoining {
         clusterDistance: MutableMap<Int, Float>,
         theMap: MutableMap<Int, MutableMap<Int, Float>>,
         matrixSize: Int,
-        doubledMatrix: D2Array<Float>
+        distanceMatrix: D2Array<Float>,
+        qMatrix: D2Array<Float>,
+        totalDistance: D1Array<Float>
     ) {
         val first = coord.first
         val second = coord.second
-        val distance = doubledMatrix[first, second].toFloat() / 2.0f
+        val distance = distanceMatrix[first, second].toFloat()
+
+        // using the formulas described here:
+        // https://youtu.be/Dj24mCLQYUE?t=278
 
         when {
             // easy case: just a cluster of two leaf nodes
@@ -212,10 +279,13 @@ class NeighborJoining {
                 )
                 clusterDistance[nextNode] = distance
 
-                theMap[nextNode] = mutableMapOf(Pair(first, distance))
-                theMap[nextNode]!![second] =  distance
-                theMap[first] = mutableMapOf(Pair(nextNode, distance))
-                theMap[second] = mutableMapOf(Pair(nextNode, distance))
+                val distFirst = 0.5f * distance + 0.5f * (totalDistance[first] - totalDistance[second])
+                val distSecond = 0.5f * distance + 0.5f * (totalDistance[second] - totalDistance[first])
+
+                theMap[nextNode] = mutableMapOf(Pair(first, distFirst))
+                theMap[nextNode]!![second] =  distSecond
+                theMap[first] = mutableMapOf(Pair(nextNode, distFirst))
+                theMap[second] = mutableMapOf(Pair(nextNode, distSecond))
                 clusters.remove(first)
                 clusters.remove(second)
                 nextNode++

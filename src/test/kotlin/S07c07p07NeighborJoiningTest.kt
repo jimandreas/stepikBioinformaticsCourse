@@ -37,17 +37,15 @@ import kotlin.test.assertEquals
 
 internal class S07c07p07NeighborJoiningTest {
 
-    lateinit var ll: Phylogeny
-    lateinit var dbl: DistancesBetweenLeaves
-    lateinit var upgma: UPGMA
+//
     lateinit var nj : NeighborJoining
 
 
     @BeforeEach
     fun setUp() {
-        ll = Phylogeny()
-        dbl = DistancesBetweenLeaves()
-        upgma = UPGMA()
+//        ll = Phylogeny()
+//        dbl = DistancesBetweenLeaves()
+//        upgma = UPGMA()
         nj = NeighborJoining()
     }
 
@@ -55,9 +53,11 @@ internal class S07c07p07NeighborJoiningTest {
     fun tearDown() {
     }
 
-    // example from:
-    // https://www.youtube.com/watch?v=Dj24mCLQYUE
-    // Neighbour Joining  Anders Gorm Pedersen
+    /**
+    example from:
+    https://www.youtube.com/watch?v=Dj24mCLQYUE
+    Neighbour Joining  Anders Gorm Pedersen
+    */
 
     @Test
     @DisplayName("Neighbor Joining sample from youtube test")
@@ -81,7 +81,45 @@ internal class S07c07p07NeighborJoiningTest {
         val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
         val expectedGraph = parseSampleInput(expectedResultStrings)
 
-        val result = upgma.upgmaStart(matrixSize, m)
+        val result = nj.neighborJoiningStart(matrixSize, m)
+
+        printGraph(result)
+
+        //checkEdgesAreEqual(expectedGraph, result)
+
+
+    }
+
+    /**
+    example from:
+    https://www.youtube.com/watch?v=Dj24mCLQYUE
+    Neighbour Joining  Anders Gorm Pedersen
+     */
+
+    @Test
+    @DisplayName("Neighbor Joining sample from wikipedia test")
+    fun neighborJoiningSampleFromWikipediaTest() {
+        val sampleInput = """
+5
+0	5	9	9	8
+5	0	10	10	9
+9	10	0	8	7
+9	10	8	0	3
+8	9	7	3	0
+        """.trimIndent()
+
+        val expectedOutputString = """
+        """.trimIndent()
+
+        val input = sampleInput.reader().readLines().toMutableList()
+        val matrixSize = input[0].trim().toInt()
+        input.removeFirst()
+        val m = parseMatrixInput(matrixSize, input)
+
+        val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
+        val expectedGraph = parseSampleInput(expectedResultStrings)
+
+        val result = nj.neighborJoiningStart(matrixSize, m)
 
         printGraph(result)
 
@@ -125,7 +163,7 @@ internal class S07c07p07NeighborJoiningTest {
         val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
         val expectedGraph = parseSampleInput(expectedResultStrings)
 
-        val result = upgma.upgmaStart(matrixSize, m)
+        val result = nj.neighborJoiningStart(matrixSize, m)
 
         //printGraph(result)
 
@@ -212,7 +250,21 @@ internal class S07c07p07NeighborJoiningTest {
                 theMatrix[i, j] = l[j].toFloat()
             }
         }
+        verifyMatrix(matrixSize, theMatrix)
         return theMatrix
+    }
+
+    /**
+     * verify that the matrix is symmetric  - all rows are equal to columns for the same index
+     */
+    private fun verifyMatrix(matrixSize: Int, m: D2Array<Float>) {
+        for (i in 0 until matrixSize) {
+            for (j in 0 until matrixSize) {
+                val a = m[i, j]
+                val b = m[j, i]
+                assertEquals(a, b)
+            }
+        }
     }
 
     private fun parseSampleInput(nodeToNodePlusDistance: List<String>): MutableMap<Int, MutableMap<Int, Float>> {

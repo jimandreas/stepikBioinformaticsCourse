@@ -312,7 +312,21 @@ internal class S07c04p06PhylogenyAdditiveTest {
                 theMatrix[i, j] = l[j].toInt(radix = radixIn)
             }
         }
+        verifyMatrix(matrixSize, theMatrix)
         return theMatrix
+    }
+
+    /**
+     * verify that the matrix is symmetric  - all rows are equal to columns for the same index
+     */
+    private fun verifyMatrix(matrixSize: Int, m: D2Array<Int>) {
+        for (i in 0 until matrixSize) {
+            for (j in 0 until matrixSize) {
+                val a = m[i, j]
+                val b = m[j, i]
+                assertEquals(a, b)
+            }
+        }
     }
 
     private fun parseSampleInput(nodeToNodePlusDistance: List<String>): MutableMap<Int, MutableMap<Int, Int>> {
