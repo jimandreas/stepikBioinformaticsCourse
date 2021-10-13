@@ -101,41 +101,32 @@ class NeighborJoining {
 
         nextNode = matrixSize
         // binary tree with distances
-        val theMap : MutableMap<Int, MutableMap<Int, Float>> = mutableMapOf()
+        val theMap: MutableMap<Int, MutableMap<Int, Float>> = mutableMapOf()
         // joined pair list - identifies which matrix entries are pairs
         val joinedPairMap: MutableMap<Int, MutableList<Int>> = mutableMapOf()
         // cluster total distance
-        val clusterDistance : MutableMap<Int, Float> = mutableMapOf()
+        val clusterDistance: MutableMap<Int, Float> = mutableMapOf()
 
         // NEW for NeighborJoining: Total Distance
-        val totalDistance: D1Array<Float> = mk.d1array(matrixSize * 2){0f}
+        val totalDistance: D1Array<Float> = mk.d1array(matrixSize * 2) { 0f }
 
         // init pairs - leaf nodes naturally don't have members
         for (i in 0 until matrixSize) {
             joinedPairMap[i] = mutableListOf()
         }
 
+        val originalMatrixDoubled = doubleSized(matrixSize, m)
+
         // and now the working loop
         while (joinedPairMap.size != 1) {
 
-            val originalMatrixDoubled = doubleSized(matrixSize, m)
             val qMatrix = mk.d2array(matrixSize * 2, matrixSize * 2) { 0f }
 
             updateDistances(
-                joinedPairMap =  joinedPairMap,
-                clusterDistance =  clusterDistance,
-                theMap =  theMap,
-                matrixSize =  matrixSize,
-                distanceMatrix = originalMatrixDoubled,
-                qMatrix = qMatrix,
-                totalDistance = totalDistance
-            )
-
-            prettyPrintDistanceAndQMatrices(
-                joinedPairMap =  joinedPairMap,
-                clusterDistance =  clusterDistance,
-                theMap =  theMap,
-                matrixSize =  matrixSize,
+                joinedPairMap = joinedPairMap,
+                clusterDistance = clusterDistance,
+                theMap = theMap,
+                matrixSize = matrixSize,
                 distanceMatrix = originalMatrixDoubled,
                 qMatrix = qMatrix,
                 totalDistance = totalDistance
@@ -145,11 +136,11 @@ class NeighborJoining {
             //println(minPair)
 
             addClusterAndRemoveOldClusters(
-                coord =  minPair,
-                joinedPairMap =  joinedPairMap,
-                clusterDistance =  clusterDistance,
-                theMap =  theMap,
-                matrixSize =  matrixSize,
+                coord = minPair,
+                joinedPairMap = joinedPairMap,
+                clusterDistance = clusterDistance,
+                theMap = theMap,
+                matrixSize = matrixSize,
                 distanceMatrix = originalMatrixDoubled,
                 qMatrix = qMatrix,
                 totalDistance = totalDistance
@@ -206,9 +197,9 @@ class NeighborJoining {
 
         // now zero out any distances that are allocated to pairs
 
-        for (i in 0 until matrixSize) {
+        for (i in 0..nextNode) {
             if (!joinedPairMap.containsKey(i)) {
-                for (z in 0 until matrixSize) {
+                for (z in 0..nextNode) {
                     distanceMatrix[i, z] = 0f
                     distanceMatrix[z, i] = 0f
                 }
@@ -216,9 +207,9 @@ class NeighborJoining {
         }
 
         // calculate total distances
-        for (i in 0 until matrixSize + joinedPairsToUpdate.size) {
+        for (i in 0 until nextNode) {
             var sum = 0f
-            for (j in 0 until matrixSize + joinedPairsToUpdate.size) {
+            for (j in 0 until nextNode) {
                 if (i == j) {
                     continue
                 }
@@ -231,9 +222,9 @@ class NeighborJoining {
         // D*(i,j) = (n - 2) · D(i,j) - TotalDistanceD(i) - TotalDistanceD(j).
         // note that D*(i,j) is called Q*(a,b) in wikipedia
 
-        for (i in 0 until matrixSize + joinedPairsToUpdate.size) {
+        for (i in 0 until nextNode) {
 
-            for (j in 0 until matrixSize + joinedPairsToUpdate.size) {
+            for (j in 0 until nextNode) {
                 if (i == j) {
                     continue
                 }
@@ -242,12 +233,22 @@ class NeighborJoining {
                     continue
                 }
 
-                val dijScaled = distanceMatrix[i, j]* (nSize-2)
+                val dijScaled = distanceMatrix[i, j] * (nSize - 2)
                 val ui = totalDistance[i]
                 val uj = totalDistance[j]
-                qMatrix[i, j] =  dijScaled - ui - uj
+                qMatrix[i, j] = dijScaled - ui - uj
             }
         }
+
+        prettyPrintDistanceAndQMatrices(
+            joinedPairMap = joinedPairMap,
+            clusterDistance = clusterDistance,
+            theMap = theMap,
+            matrixSize = matrixSize,
+            distanceMatrix = distanceMatrix,
+            qMatrix = qMatrix,
+            totalDistance = totalDistance
+        )
 
     }
 
@@ -286,7 +287,7 @@ class NeighborJoining {
                         continue
                     }
                     str.append(String.format("%2d", j))
-                    str.append(" ")
+                    str.append("  ")
                 }
                 str.append("\n")
                 printHeader = false
@@ -298,17 +299,21 @@ class NeighborJoining {
                 if (!joinedPairMap.containsKey(j)) {
                     continue
                 }
-                val f = fmt.format(distanceMatrix[i, j])
+                val valToPrint = distanceMatrix[i, j]
+                val f = fmt.format(valToPrint)
                 str.append(f)
                 //str.append(String.format("%2d",distanceMatrix[i, j].toInt() ))
                 str.append(" ")
+
             }
             str.append("\n")
         }
 
         str.append("\n")
-        
-        // now print the q matrix
+
+        /*****************************
+         * now print the q matrix
+         */
         str.append("Q matrix:\n")
         printHeader = true
         for (i in 0 until matrixSize + joinedPairMap.size) {
@@ -317,13 +322,13 @@ class NeighborJoining {
             }
             // header
             if (printHeader) {
-                str.append("    ")
+                str.append("      ")
                 for (j in 0 until matrixSize + joinedPairMap.size) {
                     if (!joinedPairMap.containsKey(j)) {
                         continue
                     }
                     str.append(String.format("%3d", j))
-                    str.append(" ")
+                    str.append("   ")
                 }
                 str.append("\n")
                 printHeader = false
@@ -335,10 +340,17 @@ class NeighborJoining {
                 if (!joinedPairMap.containsKey(j)) {
                     continue
                 }
-                val f = fmt.format(qMatrix[i, j])
+                val valToPrint = qMatrix[i, j]
+                if (valToPrint == 0.0f) {
+                    str.append("  ")
+                }
+                val f = fmt.format(valToPrint)
                 str.append(f)
                 //str.append(String.format("%3d",qMatrix[i, j].toInt() ))
                 str.append(" ")
+                if (valToPrint > 0f) { // add another space to fill in for "-" values
+                    str.append(" ")
+                }
             }
             str.append("\n")
         }
@@ -382,7 +394,7 @@ class NeighborJoining {
                 val distSecond = distanceMatrix[first, second] - distFirst
 
                 theMap[nextNode] = mutableMapOf(Pair(first, distFirst))
-                theMap[nextNode]!![second] =  distSecond
+                theMap[nextNode]!![second] = distSecond
                 theMap[first] = mutableMapOf(Pair(nextNode, distFirst))
                 theMap[second] = mutableMapOf(Pair(nextNode, distSecond))
                 joinedPairMap.remove(first)
@@ -405,7 +417,7 @@ class NeighborJoining {
                 // calculate distance for internal node
                 val internalNodeDistance = distance - clusterDistance[first]!!
                 theMap[nextNode] = mutableMapOf(Pair(first, distFirst))
-                theMap[nextNode]!![second] =  distSecond
+                theMap[nextNode]!![second] = distSecond
 
                 // now make the reverse pointers
                 theMap[first]!![nextNode] = distFirst
@@ -486,6 +498,7 @@ class NeighborJoining {
         }
         return Pair(iMin, jMin)
     }
+
     fun doubleSized(matrixSize: Int, m: D2Array<Float>): D2Array<Float> {
         val mdoubled: D2Array<Float> = mk.d2array(matrixSize * 2, matrixSize * 2) { 0f }
         for (i in 0 until matrixSize) {
