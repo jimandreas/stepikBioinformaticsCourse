@@ -101,4 +101,68 @@ class DistancesBetweenLeaves {
         }
         return distance
     }
+
+    /**
+     * @param matrixSize - the row/column size of the distance matrix
+     * @param g - the mapping of nodes to a list of connected nodes with connected weights
+     *
+     * NOTES: the leafCount can be less than the node numbers - but the traversal is limited to
+     * the 0..(leafCount-1) node numbers.  Hence the returned 2D matrix has only
+     * representatives from nodes { 0..(leafCount-1) }
+     */
+    fun distancesBetweenLeavesFloat(matrixSize: Int, g: Map<Int, Map<Int, Float>>): D2Array<Float> {
+        val theMatrix = mk.d2array(matrixSize, matrixSize) {0f}
+
+        for (i in 0 until matrixSize) {
+            for (j in 0 until matrixSize) {
+                if (i == j) {
+                    continue
+                }
+                traversed = mutableListOf()
+                val weight = recursiveTraversalFloat(matrixSize, j, i, i,  g)
+                theMatrix[i, j] = weight
+            }
+        }
+
+        return theMatrix
+    }
+
+    /**
+     * recursively descend into the [g] matrix searching for the [targetNode]
+     *   accumulate the total distance across the recursions until the [targetNode]
+     *   is found in the true.
+     *   @return  the accumulated distance
+     */
+    private fun recursiveTraversalFloat(
+        matrixSize: Int,
+        targetNode: Int,
+        fromNode: Int,
+        currentNode: Int,
+        g: Map<Int, Map<Int, Float>>): Float {
+        val mapOfConnectionsAndDistances = g[currentNode]
+        if (mapOfConnectionsAndDistances == null) {
+            println("recursive Travel - this shouldn't happen - null on a key")
+            return 0f
+        }
+        var distance = 0f
+
+        traversed.add(currentNode)
+
+        for (p in mapOfConnectionsAndDistances) {
+            if (p.key == targetNode) {
+                distance += p.value
+                return distance
+            }
+            if (p.key < matrixSize) {
+                continue
+            }
+            if (!traversed.contains(p.key)) {
+                val foundWeight = recursiveTraversalFloat(matrixSize, targetNode, fromNode, p.key, g)
+                if (foundWeight != 0f) {
+                    return p.value + distance + foundWeight
+                }
+            }
+        }
+        return distance
+    }
 }

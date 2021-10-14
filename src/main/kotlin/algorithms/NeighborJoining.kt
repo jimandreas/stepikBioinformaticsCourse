@@ -118,7 +118,7 @@ class NeighborJoining {
         val originalMatrixDoubled = doubleSized(matrixSize, m)
 
         // and now the working loop
-        while (joinedPairMap.size != 1) {
+        while (joinedPairMap.size > 1) {
 
             val qMatrix = mk.d2array(matrixSize * 2, matrixSize * 2) { 0f }
 
@@ -188,6 +188,9 @@ class NeighborJoining {
                 val d1 = distanceMatrix[n1, i]
                 val d2 = distanceMatrix[n2, i]
                 val d3 = distanceMatrix[n1, n2]
+                if (d1 == 0f || d2 == 0f || d3 == 0f) {
+                    continue
+                }
                 val distance = 0.5f * (d1 + d2 - d3)
 
                 distanceMatrix[i, clusterIndex] = distance
@@ -455,25 +458,36 @@ class NeighborJoining {
             }
 
             // both clusters are internal nodes
+            //   just connect them with each other using the distance matrix
             first >= matrixSize && second >= matrixSize -> {
+                // special case the end condition
+                if (joinedPairMap.size == 2) {
+                    theMap[first]!![second] = distance
+                    theMap[second]!![first] = distance
+                    //joinedPairMap.remove(first)
+                    joinedPairMap.remove(second)
+                    return
+                }
 
                 joinedPairMap[nextNode] = mutableListOf(
                     first, second
                 )
 
-                val internalNodeDistanceFirst = distance - clusterDistance[first]!!
-                theMap[nextNode] = mutableMapOf(Pair(first, internalNodeDistanceFirst))
+                val f = totalDistance[first]  // Sum(d(u,k)) per wikipedia
+                val s = totalDistance[second]  // Sum(d(c,k)) per wikipedia
 
-                val internalNodeDistanceSecond = distance - clusterDistance[second]!!
-                theMap[nextNode]!![second] = internalNodeDistanceSecond
+                val distFirst = 0.5f * distance + 0.5f * 1f / (nSize - 2) * (f - s)
+                val distSecond = distanceMatrix[first, second] - distFirst
 
-                theMap[first]!![nextNode] = internalNodeDistanceFirst
-                theMap[second]!![nextNode] = internalNodeDistanceSecond
+                theMap[first]!![nextNode] = distFirst
+                theMap[second]!![nextNode] = distSecond
 
-                //joinedPairMap.remove(first)
-                //joinedPairMap.remove(second)
+                theMap[nextNode] = mutableMapOf(Pair(first, distFirst))
+                theMap[nextNode]!![second] = distSecond
+
+                joinedPairMap.remove(first)
+                joinedPairMap.remove(second)
                 nextNode++
-                return
             }
         }
         println("ERROR should not reach this point")
