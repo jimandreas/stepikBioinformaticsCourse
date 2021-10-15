@@ -5,8 +5,6 @@
 
 import algorithms.DistancesBetweenLeaves
 import algorithms.NeighborJoining
-import algorithms.Phylogeny
-import algorithms.UPGMA
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
@@ -93,7 +91,7 @@ internal class S07c07p07NeighborJoiningTest {
 
         val result = nj.neighborJoiningStart(matrixSize, m)
 
-        printGraph(result)
+        //printGraph(result)
 
         checkEdgesAreEqual(expectedGraph, result)
 
@@ -139,7 +137,7 @@ internal class S07c07p07NeighborJoiningTest {
 
         val result = nj.neighborJoiningStart(matrixSize, m)
 
-        printGraph(result)
+        //printGraph(result)
 
         //checkEdgesAreEqual(expectedGraph, result)
 
@@ -191,7 +189,7 @@ internal class S07c07p07NeighborJoiningTest {
 
         val result = nj.neighborJoiningStart(matrixSize, m)
 
-        printGraph(result)
+        //printGraph(result)
 
         checkEdgesAreEqual(expectedGraph, result)
 
@@ -202,8 +200,12 @@ internal class S07c07p07NeighborJoiningTest {
         //assertEquals(m, theResultMatrix)
     }
 
+    /**
+     * Exercise Break: Before implementing the neighbor-joining algorithm,
+     * try applying it to the additive and non-additive distance matrices shown below.
+     */
     // example from:
-    // https://stepik.org/lesson/240340/step/7?unit=212686
+    // https://stepik.org/lesson/240340/step/6?unit=212686
 
     @Test
     @DisplayName("Neighbor Joining additive example test")
@@ -239,14 +241,14 @@ internal class S07c07p07NeighborJoiningTest {
 
         val result = nj.neighborJoiningStart(matrixSize, m)
 
-        printGraph(result)
+//        printGraph(result)
 
         checkEdgesAreEqual(expectedGraph, result)
 
         val theResultMatrix = dbl.distancesBetweenLeavesFloat(matrixSize, result)
         //printMatrix(matrixSize, theResultMatrix)
 
-        // This is a NON-ADDITIVE matrix - so this test will fail.
+        // This is an ADDITIVE matrix - so this should work
         assertEquals(m, theResultMatrix)
     }
 
@@ -418,16 +420,128 @@ internal class S07c07p07NeighborJoiningTest {
         """.trimIndent()
 
         val expectedOutputString = """
-0->4:8.000
-1->5:13.500
-2->5:16.500
-3->4:12.000
-4->5:2.000
-4->0:8.000
-4->3:12.000
-5->1:13.500
-5->2:16.500
-5->4:2.000
+0->37:535.180
+1->33:583.052
+2->34:483.348
+3->39:559.810
+4->46:643.500
+5->35:565.065
+6->46:511.500
+7->52:657.127
+8->49:685.382
+9->36:570.721
+10->41:524.655
+11->32:555.917
+12->32:601.083
+13->41:523.345
+14->44:456.521
+15->39:469.190
+16->42:500.387
+17->43:546.559
+18->38:534.995
+19->40:593.574
+20->43:512.441
+21->42:565.612
+22->40:540.426
+23->35:553.935
+24->36:523.279
+25->53:590.083
+26->37:506.820
+27->33:520.948
+28->53:563.917
+29->44:578.479
+30->34:543.652
+31->45:593.445
+32->12:601.083
+32->38:66.505
+32->11:555.917
+33->27:520.948
+33->50:147.482
+33->1:583.052
+34->51:165.321
+34->2:483.348
+34->30:543.652
+35->5:565.065
+35->45:84.555
+35->23:553.935
+36->9:570.721
+36->60:185.876
+36->24:523.279
+37->0:535.180
+37->48:90.196
+37->26:506.820
+38->32:66.505
+38->48:95.054
+38->18:534.995
+39->49:116.118
+39->3:559.810
+39->15:469.190
+40->47:99.233
+40->19:593.574
+40->22:540.426
+41->47:68.267
+41->13:523.345
+41->10:524.655
+42->21:565.612
+42->54:137.676
+42->16:500.387
+43->20:512.441
+43->50:97.018
+43->17:546.559
+44->29:578.479
+44->51:58.429
+44->14:456.521
+45->59:156.655
+45->35:84.555
+45->31:593.445
+46->4:643.500
+46->57:153.393
+46->6:511.500
+47->40:99.233
+47->41:68.267
+47->56:132.253
+48->37:90.196
+48->38:95.054
+48->55:131.146
+49->52:49.123
+49->8:685.382
+49->39:116.118
+50->43:97.018
+50->33:147.482
+50->61:118.300
+51->59:85.720
+51->44:58.429
+51->34:165.321
+52->49:49.123
+52->55:40.401
+52->7:657.127
+53->25:590.083
+53->54:26.324
+53->28:563.917
+54->57:56.982
+54->53:26.324
+54->42:137.676
+55->48:131.146
+55->52:40.401
+55->56:26.677
+56->47:132.253
+56->55:26.677
+56->58:41.110
+57->54:56.982
+57->46:153.393
+57->58:28.948
+58->57:28.948
+58->56:41.110
+58->61:38.608
+59->51:85.720
+59->60:25.812
+59->45:156.655
+60->59:25.812
+60->36:185.876
+60->61:14.060
+61->60:14.060
+61->50:118.300
+61->58:38.608
         """.trimIndent()
 
         val input = sampleInput.reader().readLines().toMutableList()
@@ -440,9 +554,11 @@ internal class S07c07p07NeighborJoiningTest {
 
         val result = nj.neighborJoiningStart(matrixSize, m)
 
-        printGraph(result)
+//        printGraph(result)
 
-        //checkEdgesAreEqual(expectedGraph, result)
+        // the algorithm produces a tree that actually matches the
+        //  extra dataset graph given!!
+        checkEdgesAreEqual(expectedGraph, result)
 
         val theResultMatrix = dbl.distancesBetweenLeavesFloat(matrixSize, result)
         //printMatrix(matrixSize, theResultMatrix)
@@ -627,7 +743,7 @@ internal class S07c07p07NeighborJoiningTest {
 
         val result = nj.neighborJoiningStart(matrixSize, m)
 
-        printGraph(result)
+//        printGraph(result)
 
         checkEdgesAreEqual(expectedGraph, result)
 

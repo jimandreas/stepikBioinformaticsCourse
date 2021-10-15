@@ -35,6 +35,7 @@ import java.util.*
  */
 
 class NeighborJoining {
+    var verbose = false // for debug printout
 
     /**
 
@@ -243,15 +244,17 @@ class NeighborJoining {
             }
         }
 
-        prettyPrintDistanceAndQMatrices(
-            joinedPairMap = joinedPairMap,
-            clusterDistance = clusterDistance,
-            theMap = theMap,
-            matrixSize = matrixSize,
-            distanceMatrix = distanceMatrix,
-            qMatrix = qMatrix,
-            totalDistance = totalDistance
-        )
+        if (verbose) {
+            prettyPrintDistanceAndQMatrices(
+                joinedPairMap = joinedPairMap,
+                clusterDistance = clusterDistance,
+                theMap = theMap,
+                matrixSize = matrixSize,
+                distanceMatrix = distanceMatrix,
+                qMatrix = qMatrix,
+                totalDistance = totalDistance
+            )
+        }
 
     }
 
@@ -488,6 +491,7 @@ class NeighborJoining {
                 joinedPairMap.remove(first)
                 joinedPairMap.remove(second)
                 nextNode++
+                return
             }
         }
         println("ERROR should not reach this point")
