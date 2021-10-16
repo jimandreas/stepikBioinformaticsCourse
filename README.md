@@ -1,34 +1,14 @@
 # Bioinformatics Algorithms: An Active Learning Approach
+
 https://stepik.org/course/55789/syllabus
 
-Later I found the [Rosalind] resource.  In reading 
-through the FAQ it asserts: 
-
-> Can I post my solutions somewhere?
-
-> No. The goal of Rosalind is to facilitate learning through problem solving. We encourage you to search the Internet or communicate with each other to find the best algorithms to solve our problem. However, there is a difference between looking for inspiration and copy-pasting someone else's code; we strongly advise you not to use others' source code. Once you have solved a problem, then we encourage you to post your code to the problem's comments section (which can be seen only by users who have also solved the problem). However, please do not publish your code outside of the Rosalind website.
-
-My answer: I appear to be the first person to 
-attempt solutions to the Bioinformatics (Stepik)
-course in Kotlin.  I find that the question formulation
-is in some cases *questionable*.   In addition, the
-level of discussion about the *questionability*
-of the questions themselves was, shall we say, 
-minimal.  This drives one to examine the solutions
-posted to Github for an unblocking hint.
-
-This reached a crescendo for me at least with the
-[Middle Edge in Linear Space Problem].  The solutions
-were greatly varied and the problem description in 
-chapter 5.13 of the [Bioinformatics Algorithms] 
-made me think - does this really work?
-
-So sorry, but I am posting my work to GitHub.  I encourage 
-you to not "copy/paste" my Kotlin code (LOL) but 
-instead to do your best work on your own and
-seek guidance only when stuck.  Best wishes, Jim Andreas.
+http://rosalind.info/problems/list-view/?location=bioinformatics-textbook-track
 
 ## Notes
+
+Notes are available at:
+
+https://jimandreas.github.io/stepikBioinformaticsCourse/
 
 ### Reflexivity
 
@@ -62,7 +42,7 @@ Note: the problems in this repo were solved using the Kotlin language.
 The repo is configured for the Intellij IDEA system and Gradle.
 Gradle can be used to build it
 
-`gradlew init build test`
+`./gradlew init build test`
 
 All exercises contain a corresponding "Jupiter" (junit) test module located 
 in the `src/test/kotlin` folder.  
@@ -77,10 +57,15 @@ the stepik course.
 
 ## Branches
 
-Switched branch to "main"
+* Switched branch to "main"
 
     October 1, 2020
     All new Git repositories on GitHub will be named "main" instead of "master" starting October 1, 2020.
+
+* gh-pages
+
+This branch contains the compiled documentation in the `docs` folder.  It is compiled using 
+the `mkdocs` and `mkdocs-material` facilities.
 
 [Linear Space Alignment]: http://rosalind.info/problems/ba5l/
 [Global Alignment]: http://rosalind.info/problems/ba5e/

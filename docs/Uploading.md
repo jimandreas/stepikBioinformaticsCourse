@@ -29,4 +29,6 @@ With bash in the docs directory, run the `build_and_upload_docs.sh` script.
 This clones the repo from github and compiles the docs.   It then uploads the 
 docs to the `gh-deploy` utility and initiates the build of the docs there.
 
-Once successfully finished the docs will be available at:  https://jimandreas.github.io/stepikBioInformaticsCourse/
+Once successfully finished the docs will be available at:  
+https://jimandreas.github.io/stepikBioInformaticsCourse/
+
