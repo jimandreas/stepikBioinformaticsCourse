@@ -144,5 +144,5 @@ markdown_extensions:
 # Page tree
 nav:
   - Home: index.md
-  - Minimum Parsimony: MinimumParsimony.md
+  - Notes: Notes.md
   - Uploading: Uploading.md

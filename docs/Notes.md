@@ -1,5 +1,9 @@
-Minimum Parsimony
-========
+# Notes on various problems
+
+Some topics in the cirriculum presented challenges in understanding and 
+in algorithm development.   My notes on these topics are below. 
+
+## Minimum Parsimony
 
 This is a fully worked out solution of 
 [The Small Parsimony Problem][SMP] as given in the stepik.org 
