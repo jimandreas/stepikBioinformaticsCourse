@@ -7,9 +7,6 @@
 
 package algorithms
 
-import java.util.*
-import kotlin.collections.HashMap
-
 /**
  *
  * Breadth First Search
@@ -20,7 +17,7 @@ import kotlin.collections.HashMap
  * RosieBreadthFirstSearchTest.kt
  */
 
-class RosieBreadthFirstSearch {
+class RosalindSearch {
 
     /**
     The task is to use breadth-first search to compute
@@ -45,19 +42,7 @@ class RosieBreadthFirstSearch {
      *   Node numbering is one based.
      */
     fun doSearches(numNodes: Int, g: HashMap<Int, MutableList<Int>>): List<Int> {
-        val resultList : MutableList<Int> = mutableListOf()
-
-//        resultList.add(0)
-
-//        for (i in 2..numNodes) {
-//            visited = mutableListOf() // reset list
-//            val pathLength = depthFirstSearch(1, i, g)
-//            if (pathLength == Int.MAX_VALUE) {
-//                resultList.add(-1)
-//            } else {
-//                resultList.add(pathLength)
-//            }
-//        }
+        val resultList: MutableList<Int> = mutableListOf()
 
         val distances = distancesHashTable(numNodes, g)
 
@@ -82,7 +67,7 @@ class RosieBreadthFirstSearch {
         var distance = 1
         var newList: MutableList<Int> = g[1]!!
         while (true) {
-            val tempList: MutableList<Int>  = mutableListOf()
+            val tempList: MutableList<Int> = mutableListOf()
             for (n in newList) {
                 if (!foundList.contains(n)) {
                     foundList.add(n)
@@ -119,12 +104,12 @@ class RosieBreadthFirstSearch {
         visited.add(currentNodeNum)
 
         if (g[currentNodeNum]!!.contains(targetNodeNum)) {
-            if (targetNodeNum == 2)println("Found node 2 in node $currentNodeNum")
+            if (targetNodeNum == 2) println("Found node 2 in node $currentNodeNum")
             return 1
         }
         for (n in g[currentNodeNum]!!) {
 
-            if (currentNodeNum==1 && targetNodeNum == 2) {
+            if (currentNodeNum == 1 && targetNodeNum == 2) {
                 println("current node $n in nodes to search ${g[currentNodeNum]!!}")
             }
 
@@ -137,18 +122,69 @@ class RosieBreadthFirstSearch {
             //if (targetNodeNum == 2)println("searching $n for node 2")
             var len = depthFirstSearch(n, targetNodeNum, g)
 
-            if (currentNodeNum==1 && targetNodeNum == 2) {
+            if (currentNodeNum == 1 && targetNodeNum == 2) {
                 println("len for node1 target 2 is $len")
             }
             if (len == Int.MAX_VALUE) {
                 continue
             }
 
-            if (len+1 < minPath) {
-                minPath = len+1
+            if (len + 1 < minPath) {
+                minPath = len + 1
             }
         }
         return minPath
     }
 
+
+    /**
+     * determine number of groupings in a set of nodes -
+     *    graphs are undirected
+     */
+    val visitedConnected: MutableMap<Int, Boolean> = mutableMapOf()
+
+    fun numberOfConnectedComponents(numNodes: Int, g: HashMap<Int, MutableList<Int>>): Int {
+
+        // first mark all nodes as unvisited
+        for (i in 1..numNodes) {
+            visitedConnected[i] = false
+        }
+        visitedConnected[0] = true // graph is one based
+
+        var count = 0
+        while (visitedConnected.containsValue(false)) {
+            // find an unvisited node
+            for (i in 1..numNodes) {
+                if (visitedConnected[i] == false) {
+                    count++
+                    depthFirstGrouping(i, g)
+                }
+            }
+        }
+        return count
+    }
+
+    /**
+     * loop visiting the node n, and all of its connections
+     */
+    fun depthFirstGrouping(n: Int, g: HashMap<Int, MutableList<Int>>) {
+        val workingList: MutableList<Int> = mutableListOf()
+        workingList.add(n)
+        visitedConnected[n] = true
+
+        while (workingList.isNotEmpty()) {
+            val nextNode = workingList.removeFirst()
+
+            if (g.containsKey(nextNode)) {
+                val nextList = g[nextNode]!!
+                for (conn in nextList) {
+                    if (visitedConnected[conn] == false) {
+                        visitedConnected[conn] = true
+                        workingList.add(conn)
+                    }
+                }
+            }
+        }
+    }
 }
+
