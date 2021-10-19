@@ -7,6 +7,13 @@
 
 package algorithms
 
+import org.jetbrains.kotlinx.multik.api.d1array
+import org.jetbrains.kotlinx.multik.api.mk
+import org.jetbrains.kotlinx.multik.ndarray.data.D1Array
+import org.jetbrains.kotlinx.multik.ndarray.data.get
+import org.jetbrains.kotlinx.multik.ndarray.data.set
+import org.jetbrains.kotlinx.multik.ndarray.operations.contains
+
 /**
  *
  * Breadth First Search
@@ -185,6 +192,41 @@ class RosalindSearch {
                 }
             }
         }
+    }
+
+    /**
+     * @return 1 if the graph is acyclic, and -1 if it contains a cycle
+     */
+    fun isGraphAcyclic(numNodes: Int, g: HashMap<Int, MutableList<Int>>): Int {
+
+        // visit all nodes looking for a cycle
+        for (i in 1..numNodes) {
+            if (g.containsKey(i)) {
+                val s = Stack<Int>()
+                if (lookForCycle(i, g, s)) {
+                    return -1
+                }
+            }
+        }
+
+        return 1 // no cycle
+    }
+
+    fun lookForCycle(node: Int, g: HashMap<Int, MutableList<Int>>, s: Stack<Int>): Boolean {
+
+        if (s.elements.contains(node)) {
+            return true
+        }
+        s.push(node)
+
+        for (e in g[node]!!) {
+            if (lookForCycle(e, g, s)) {
+                return true
+            }
+        }
+        s.pop()
+
+        return false
     }
 }
 
