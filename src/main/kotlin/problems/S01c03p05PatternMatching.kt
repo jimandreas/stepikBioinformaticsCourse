@@ -32,7 +32,7 @@ fun main() {
     println(printRepeatedTargetIndexesWithOverlap(g, t))
 }
 
-fun printRepeatedTargetIndexesWithOverlap(genome: String, target: String): String {
+fun printRepeatedTargetIndexesWithOverlap(genome: String, target: String, startAtOne : Boolean = false): String {
     var foundIndex = ""
     for (i in 0..genome.length-target.length) {
         if (i > target.length + genome.length) {
@@ -42,7 +42,11 @@ fun printRepeatedTargetIndexesWithOverlap(genome: String, target: String): Strin
             if (foundIndex.isNotEmpty()) {
                 foundIndex += " "
             }
-            foundIndex += "$i"
+            var index = i
+            if (startAtOne) {
+                index++
+            }
+            foundIndex += "$index"
         }
     }
     return foundIndex
