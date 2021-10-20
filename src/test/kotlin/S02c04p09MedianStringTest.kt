@@ -8,8 +8,6 @@ import algorithms.medianString
 /**
 
 2.4 From Motif Finding to Finding a Median String
-8 out of 11 steps passed
-0 out of 5 points  received
 
 Code Challenge: Implement MedianString.
 
