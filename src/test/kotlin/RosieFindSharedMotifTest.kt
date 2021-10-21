@@ -39,10 +39,12 @@ Return: A longest common substring of the collection. (If multiple solutions exi
 internal class RosieFindSharedMotifTest {
 
     lateinit var fsm: FindSharedMotif
+    lateinit var u: Utility
 
     @BeforeEach
     fun setUp() {
         fsm = FindSharedMotif()
+        u = Utility()
     }
 
     @AfterEach
@@ -61,7 +63,7 @@ TAGACCA
 ATACA
         """.trimIndent().lines()
 
-        val dnaList = utilityParseFASTA(sampleInput)
+        val dnaList = u.utilityParseFASTA(sampleInput)
 
 
         val consensusString = fsm.findMostLikelyCommonAncestor(dnaList)
@@ -83,7 +85,7 @@ ACGT
 ACGT
         """.trimIndent().lines()
 
-        val dnaList = utilityParseFASTA(sampleInput)
+        val dnaList = u.utilityParseFASTA(sampleInput)
 
 
         val consensusString = fsm.findMostLikelyCommonAncestor(dnaList)
@@ -104,7 +106,7 @@ GCGT
 CGTA
         """.trimIndent().lines()
 
-        val dnaList = utilityParseFASTA(sampleInput)
+        val dnaList = u.utilityParseFASTA(sampleInput)
 
 
         val consensusString = fsm.findMostLikelyCommonAncestor(dnaList)
@@ -1919,17 +1921,17 @@ TCCAGATTCTCTGATTGCAGGGTCTTCTCAACAGGAGTCCGAACGAGACGGTACTCGTAT
 AACCTTCAACCTATGCTTTGTCAGCGTAACCTGTCTATTA
         """.trimIndent().lines()
 
-        val dnaList = utilityParseFASTA(sampleInput)
+        val dnaList = u.utilityParseFASTA(sampleInput)
 
 
         val consensusString = fsm.findMostLikelyCommonAncestor(dnaList)
 
         //println(consensusString)
 
-        val expectedResult = "GTACAATAAACTATGCCATCGGTTGACCGCACAAAGGTGAAGCCATTCGTTTGACGCTCGGTGCTTCGCTAGGCAGAGAGTGTGTCGGGTATCCGAATGTCATAATTGCCGTAATCTATACACTATAGTGACATACAACGATGGTAAGAGGCGGAAGGGTGGACATACATAAAGTCTTCTTTACCG"
+        val expectedResult =
+            "GTACAATAAACTATGCCATCGGTTGACCGCACAAAGGTGAAGCCATTCGTTTGACGCTCGGTGCTTCGCTAGGCAGAGAGTGTGTCGGGTATCCGAATGTCATAATTGCCGTAATCTATACACTATAGTGACATACAACGATGGTAAGAGGCGGAAGGGTGGACATACATAAAGTCTTCTTTACCG"
         assertEquals(expectedResult, consensusString)
     }
-
 
 
 }

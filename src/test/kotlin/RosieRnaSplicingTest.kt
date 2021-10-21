@@ -32,10 +32,12 @@ Return: A protein string resulting from transcribing and translating the exons o
 internal class RosieRnaSplicingTest {
 
     lateinit var rs: RnaSplicing
+    lateinit var u: Utility
 
     @BeforeEach
     fun setUp() {
         rs = RnaSplicing()
+        u = Utility()
     }
 
     @AfterEach
@@ -54,7 +56,7 @@ ATCGGTCGAA
 ATCGGTCGAGCGTGT
         """.trimIndent().lines()
 
-        val dnaList = utilityParseFASTA(sampleInput).toMutableList()
+        val dnaList = u.utilityParseFASTA(sampleInput).toMutableList()
 
         val dnaString = dnaList[0]
         dnaList.removeFirst()
@@ -120,7 +122,7 @@ GGTCCTTTGTACA
 GAATGTGGGACTCTTCTGTTAATGCGCTCTCAGCGACGCCAGTTACAGCA
         """.trimIndent().lines()
 
-        val dnaList = utilityParseFASTA(sampleInput).toMutableList()
+        val dnaList = u.utilityParseFASTA(sampleInput).toMutableList()
 
         val dnaString = dnaList[0]
         dnaList.removeFirst()
