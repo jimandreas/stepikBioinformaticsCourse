@@ -3,8 +3,8 @@ class Utility {
 
     /**
      * parse FASTA format text
-     *   SIDE EFFECT - save the names of the FAST files in an associated global
-     *   list
+     *   SIDE EFFECT - save the names of the FASTA files in an associated
+     *   map of string to FASTA name for later lookup if needed
      */
 
     val stringToNameMap: HashMap<String, String> = hashMapOf()
@@ -16,6 +16,9 @@ class Utility {
         var currentName = sampleInput[0].removePrefix(">")
 
         for (i in 1 until sampleInput.size) {
+            if (sampleInput[i].isEmpty()) {
+                break
+            }
             if (sampleInput[i][0] == '>') {
                 dnaList.add(str.toString())
                 // add the dna String to FASTA name hash

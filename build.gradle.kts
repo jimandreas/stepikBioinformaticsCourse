@@ -14,6 +14,8 @@ dependencies {
     implementation( "org.jetbrains.kotlinx:multik-api:0.0.1")
     implementation( "org.jetbrains.kotlinx:multik-default:0.0.1")
 
+    implementation("com.squareup.okhttp3:okhttp:4.9.2")
+
     testImplementation(kotlin("test"))
     testImplementation(platform("org.junit:junit-bom:5.7.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
