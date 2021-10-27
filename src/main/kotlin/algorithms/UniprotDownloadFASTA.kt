@@ -7,7 +7,7 @@ import okhttp3.Request
 import java.io.IOException
 
 class UniprotDownloadFASTA {
-    val client = OkHttpClient()
+    private val client = OkHttpClient()
 
 
     fun downloadFASTAfromUniprot(uniprotId: String): String {

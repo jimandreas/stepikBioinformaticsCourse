@@ -18,7 +18,7 @@ class FindProteinMotif {
 
 
     /**
-     * for a given [uniprotId] return a
+     * for a given [fastaString] return a
      * list of index where the motif (see above) is found
      *
      * There is probably a way cooler way to do this with RegEx in Kotlin - but
