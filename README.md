@@ -67,6 +67,12 @@ the stepik course.
 This branch contains the compiled documentation in the `docs` folder.  It is compiled using 
 the `mkdocs` and `mkdocs-material` facilities.
 
+## Other notes
+
+TODO: The following problems need work:
+
+* ShortestSuperstring, aka Introduction to Genome Sequencing (http://rosalind.info/problems/long/)
+
 [Linear Space Alignment]: http://rosalind.info/problems/ba5l/
 [Global Alignment]: http://rosalind.info/problems/ba5e/
 [Rosalind]: http://rosalind.info/faq/

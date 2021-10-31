@@ -6,9 +6,15 @@ import org.junit.jupiter.api.Test
 import algorithms.*
 
 /**
-You now have a method to assemble a genome, since the String Reconstruction Problem reduces to finding an Eulerian path in the de Bruijn graph generated from reads.
+ * see also:
+ * From Euler's Theorem to an Algorithm for Finding Eulerian Cycles
+ * https://stepik.org/lesson/240261/step/7?unit=212607
+ *
+You now have a method to assemble a genome, since the String Reconstruction Problem
+reduces to finding an Eulerian path in the de Bruijn graph generated from reads.
 
-We can therefore summarize this solution using the following pseudocode, which relies on three problems that we have already solved:
+We can therefore summarize this solution using the following pseudocode,
+which relies on three problems that we have already solved:
 
 The de Bruijn Graph Construction Problem;
 The Eulerian Path Problem;

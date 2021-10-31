@@ -15,16 +15,16 @@ String Reconstruction practice problem
 fun main() {
 
 
-    val string = """
+    val stringList = """
         ACCGA
         CCGAA
         CGAAG
         GAAGC
         AAGCT
-    """.trimIndent()
+    """.trimIndent().lines()
 
-    val reader = string.reader()
-    val stringList = reader.readLines()
+//    val reader = string.reader()
+//    val stringList = reader.readLines()
 
     val outList: MutableList<String> = mutableListOf()
 

@@ -54,18 +54,18 @@ class EulerianPathStrings {
 
         // make sure the in and out edges maps are zeroed
         // for the Euler Path there may be no in-edge
-        for (nodeNum in graph) {
-            clear(outEdgesMap, nodeNum.key)
-            clear(inEdgesMap, nodeNum.key)
+        for (nodeString in graph) {
+            clear(outEdgesMap, nodeString.key)
+            clear(inEdgesMap, nodeString.key)
         }
 
-        for (nodeNumFrom in graph) {
-            for (edgeTo in nodeNumFrom.value) {
+        for (nodeStringFrom in graph) {
+            for (edgeTo in nodeStringFrom.value) {
                 edgeCount++
-                increment(outEdgesMap, nodeNumFrom.key)
+                increment(outEdgesMap, nodeStringFrom.key)
                 increment(inEdgesMap, edgeTo)
                 // make sure all edges have a basis, or the graph will fail error check
-                clear(inEdgesMap, nodeNumFrom.key)
+                clear(inEdgesMap, nodeStringFrom.key)
                 clear(outEdgesMap, edgeTo)
             }
         }
@@ -144,17 +144,17 @@ class EulerianPathStrings {
         return candidateNode
     }
 
-    private fun depthFirstSearch(nodeNum: String) {
-        while (outEdgesMap[nodeNum] != 0) {
-            val thisNode = graph[nodeNum]
+    private fun depthFirstSearch(nodeString: String) {
+        while (outEdgesMap[nodeString] != 0) {
+            val thisNode = graph[nodeString]
 
-            decrement(outEdgesMap, nodeNum)
-            val outEdge = outEdgesMap[nodeNum]!!
+            decrement(outEdgesMap, nodeString)
+            val outEdge = outEdgesMap[nodeString]!!
 
             val nextNode = thisNode!![outEdge]
             depthFirstSearch(nextNode)
         }
-        path.add(0, nodeNum) // prepend the current node to solution list
+        path.add(0, nodeString) // prepend the current node to solution list
     }
 
 
