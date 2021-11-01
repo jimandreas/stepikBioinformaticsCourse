@@ -19,6 +19,9 @@ import kotlin.test.assertEquals
  *
  * See also:
  * https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
+ *
+ * Graph Data Structure 4. Dijkstra’s Shortest Path Algorithm
+ * https://www.youtube.com/watch?v=pVfj6mxhdMw
  */
 
 internal class DijkstraAlgorithmTest {
