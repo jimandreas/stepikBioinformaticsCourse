@@ -41,6 +41,16 @@ fun Int.numberToSymbol(): Char {
     }
 }
 
+fun Char.dnaToRna(): Char {
+    return when (this) {
+        'A' -> 'A'
+        'C' -> 'C'
+        'G' -> 'G'
+        'T' -> 'U'
+        else -> ' '
+    }
+}
+
 /**
  * PatternToNumber
  *    Basically a hash function forms the result by shifting the nucleotide string by

@@ -1,4 +1,4 @@
-@file:Suppress("unused", "UnnecessaryVariable", "ReplaceManualRangeWithIndicesCalls")
+@file:Suppress("unused", "UnnecessaryVariable", "ReplaceManualRangeWithIndicesCalls", "UNUSED_VALUE")
 
 package algorithms
 
@@ -212,7 +212,6 @@ val aminoAcidsTable = listOf(
 )
 
 
-
 val baseValue = aminoAcidToDaltonHashMap['G']
 
 
@@ -240,7 +239,7 @@ fun translateRnaCodonStringToAminoAcidString(codonString: String): String {
 
 }
 
-fun translateDnaCodonStringToAminoAcidString(codonString: String): String {
+fun translateDnaCodonStringToAminoAcidString(codonString: String, stopAtStopCodon: Boolean = false): String {
 
     if (codonString.length % 3 != 0) {
         println("FAIL: codonString length is not multiple of 3 ($codonString.length: $codonString")
@@ -251,7 +250,16 @@ fun translateDnaCodonStringToAminoAcidString(codonString: String): String {
 
     val chunkedString = codonString.chunked(3)
 
+    var foundStopCodon = false
     for (item in chunkedString) {
+        if (stopAtStopCodon) {
+            when (item) {
+                "TAA", "TAG", "TGA" -> {
+                    foundStopCodon = true
+                    break
+                }
+            }
+        }
         val amino = dnaCodonToAminoHashMap[item]
         if (amino == null) {
             println("no amino for $item!!")
@@ -262,4 +270,23 @@ fun translateDnaCodonStringToAminoAcidString(codonString: String): String {
     val retVal = alist.joinToString(separator = "")
     return retVal
 
+}
+
+fun indexSearchDnaStringAndPeptide(dnaString: String, peptide: String): Int {
+
+    var idx = -1
+    for (i in 0 until peptide.length) {
+
+        val testString = dnaString.substring(i * 3, dnaString.length)
+        val emittedProtein = translateDnaCodonStringToAminoAcidString(testString, stopAtStopCodon = true)
+        if (emittedProtein.contains(peptide)) {
+            idx = i
+            break
+        }
+    }
+    if (idx != -1) {
+        println("success at $idx")
+    }
+
+    return idx+1
 }

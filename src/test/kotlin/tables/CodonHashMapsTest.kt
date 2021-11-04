@@ -1,20 +1,22 @@
 @file:Suppress("UNUSED_VARIABLE")
 
+package tables
+
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import algorithms.aminoAcidsTable
 import algorithms.indexSearchDnaStringAndPeptide
-import algorithms.translateDnaCodonStringToAminoAcidString
 import algorithms.translateRnaCodonStringToAminoAcidString
 import java.util.*
 import kotlin.test.assertEquals
 
-internal class CodonTest {
-
+internal class CodonHashMapsTest {
+    lateinit var chm : CodonHashMaps
     @BeforeEach
     fun setUp() {
+        chm = CodonHashMaps()
     }
 
     @AfterEach
@@ -25,10 +27,10 @@ internal class CodonTest {
      * test codonToAminoAcid
      */
     @Test
-    @DisplayName("util: test Rna Codon to Amino Acid translation")
-    fun testRnaCodonToAminoAcid() {
+    @DisplayName("tables: test Rna Codon to Amino Acid translation")
+    fun rnaCodonToAminoAcidTest() {
         val str = "AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA"
-        val result = translateRnaCodonStringToAminoAcidString(str)
+        val result = codonUtilsTranslate(0, str, isDnaString = false)
         val expectedResult = "MAMAPRTEINSTRING"
         assertEquals(expectedResult, result)
     }
