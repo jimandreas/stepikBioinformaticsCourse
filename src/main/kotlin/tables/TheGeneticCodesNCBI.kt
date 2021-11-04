@@ -3,12 +3,11 @@
 package tables
 
 import algorithms.dnaToRna
-import okio.utf8Size
 import org.jetbrains.kotlinx.multik.api.d3array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
-import problems.printRepeatedTargetIndexesWithOverlap
+import java.io.BufferedWriter
 import java.io.File
 import java.lang.StringBuilder
 
@@ -60,13 +59,38 @@ class TheGeneticCodesNCBI {
             "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
             "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
         ),
-        listOf( /* 2, "The Vertebrate Mitochondrial Code" */
+        listOf(
+            /* 2, "The Vertebrate Mitochondrial Code" */
             "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSS**VVVVAAAADDEEGGGG",
             "----------**--------------------MMMM----------**---M------------",
             "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
             "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
             "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG",
-            )
+        )
+    )
+
+    val aminoToNameHash: HashMap<Char, String> = hashMapOf(
+        Pair('A', "alanine"),
+        Pair('B', "asparagine"),
+        Pair('C', "cystine"),
+        Pair('D', "aspartate"),
+        Pair('E', "glutamate  "),
+        Pair('F', "phenylalanine"),
+        Pair('G', "glycine"),
+        Pair('H', "histidine"),
+        Pair('I', "isoleucine"),
+        Pair('K', "lysine"),
+        Pair('L', "leucine"),
+        Pair('M', "methionine"),
+        Pair('N', "asparagine "),
+        Pair('P', "proline"),
+        Pair('Q', "glutamine"),
+        Pair('R', "arginine"),
+        Pair('S', "serine"),
+        Pair('T', "threonine"),
+        Pair('V', "valine"),
+        Pair('W', "tryptophan"),
+        Pair('Y', "tyrosine")
     )
 }
 
@@ -81,13 +105,34 @@ fun main() {
  * See:
  * @link https://web.archive.org/web/20200529000711/http://sites.science.oregonstate.edu/genbio/otherresources/aminoacidtranslation.htm
  *
+ * Note: special controls print out the Amino code to Amino name inset at the right side at the start.
  */
+
+fun rightSideInset(lineNumber: Int, w: Writer) {
+    w.wrt("   Line $lineNumber\n")
+}
+
 private fun writeCodonMatrix() {
+    val w = Writer()
     val tgc = TheGeneticCodesNCBI()
     val outputMessagesFilePath = "codonMatrix.txt"
-    val outFile = File(outputMessagesFilePath)
-    val writer = outFile.bufferedWriter()
-    writer.append("/** Generated file from TheGeneticCodeNCBI.kt:\n")
+    w.setFile(outputMessagesFilePath)
+
+    // when the inset is in play, add on a amino acid char and name string to the table
+    w.listener = {
+
+        val keys = tgc.aminoToNameHash.keys.toList()
+        if (it == keys.size-1) {
+            w.setTableEnd()
+        }
+        val aminoChar = keys[it]
+        val aminoName = tgc.aminoToNameHash[aminoChar]
+        val str = StringBuilder()
+        str.append("  $aminoChar: $aminoName").toString()
+    }
+
+
+    w.wrt("/** Generated file from TheGeneticCodeNCBI.kt:\n")
 
     /*
      * fill out a 3D array with the First, Second, and Third letter of the
@@ -97,61 +142,65 @@ private fun writeCodonMatrix() {
     var keyIndex = 0
 
 
+    w.setTableStart()
+
     for (l in tgc.rawCodesFromNCBI) {
 
         var theMatrix = mk.d3array(4, 4, 4) { -1 }
 
-        writer.append("Table ${keys[keyIndex]} ${tgc.tableTableNumberToTableName[keys[keyIndex++]]}\n")
+        w.wrt("Table ${keys[keyIndex]} ${tgc.tableTableNumberToTableName[keys[keyIndex++]]}\n")
 
         val codon = "ATCG"
         for (i in 0 until l[0].length) {
             theMatrix[
-                codon.indexOf(l[2][i]),
-                codon.indexOf(l[3][i]),
-                codon.indexOf(l[4][i])]= l[0][i].code
+                    codon.indexOf(l[2][i]),
+                    codon.indexOf(l[3][i]),
+                    codon.indexOf(l[4][i])] = l[0][i].code
 
         }
-        writer.append("  second letter is:\n")
-        writer.append("  -A-     -U-     -C-     -G-\n")
+        w.wrt("  second letter is:                \n")
+        w.wrt("  -A-     -U-     -C-     -G-      \n")
         for (leftSide in 0..3) {
             for (rightSide in 0..3) {
 
                 for (top in 0..3) {
                     // left side prefix
                     if (top == 0 && rightSide == 0) {
-                        writer.append("${codon[leftSide].dnaToRna()} ")
+                        w.wrt("${codon[leftSide].dnaToRna()} ")
                     } else {
-                        writer.append("  ")
+                        w.wrt("  ")
                     }
                     val l1 = codon[leftSide].dnaToRna()
                     val l2 = codon[top].dnaToRna()
                     val l3 = codon[rightSide].dnaToRna()
 
-                    writer.append(
+                    w.wrt(
                         "$l1$l2$l3:${theMatrix[leftSide, top, rightSide].toChar()} "
                     )
                 }
-                writer.append("(${codon[rightSide].dnaToRna()})\n")
+                w.wrt("(${codon[rightSide].dnaToRna()})\n")
             }
         }
     }
-    writer.close()
+    w.close()
 }
 
 private fun writeHashTables() {
+    val w = Writer()
     val tgc = TheGeneticCodesNCBI()
     val outputMessagesFilePath = "codonTables.txt"
-    val outFile = File(outputMessagesFilePath)
-    val writer = outFile.bufferedWriter()
-    writer.append("Generated file from TheGeneticCodeNCBI.kt:\n")
+    w.setFile(outputMessagesFilePath)
+//    val outFile = File(outputMessagesFilePath)
+//    val writer = outFile.bufferedWriter()
+    w.wrt("Generated file from TheGeneticCodeNCBI.kt:\n")
 
-    writer.append("val codonTables: MutableList<HashMap<String, Char>> = mutableListOf(\n")
+    w.wrt("val codonTables: MutableList<HashMap<String, Char>> = mutableListOf(\n")
 
     val keys = tgc.tableTableNumberToTableName.keys.toList()
     var keyIndex = 0
 
     for (l in tgc.rawCodesFromNCBI) {
-        writer.append("hashMapOf(  /* Table ${keys[keyIndex]} ${tgc.tableTableNumberToTableName[keys[keyIndex++]]} */\n")
+        w.wrt("hashMapOf(  /* Table ${keys[keyIndex]} ${tgc.tableTableNumberToTableName[keys[keyIndex++]]} */\n")
         var doComma = ","
         for (i in 0 until l[0].length) {
             val str = StringBuilder()
@@ -160,9 +209,58 @@ private fun writeHashTables() {
             if (i == l[0].length - 1) {
                 doComma = ""
             }
-            writer.append("Pair(\"$codon\", \'$aminoAcid\')$doComma\n")
+            w.wrt("Pair(\"$codon\", \'$aminoAcid\')$doComma\n")
         }
-        writer.append("),\n")
+        w.wrt("),\n")
     }
-    writer.close()
+    //writer.close()
+    w.close()
+}
+
+class Writer {
+    private lateinit var outFile: File
+    lateinit var wrt: BufferedWriter
+    fun setFile(fn: String) {
+        outFile = File(fn)
+        wrt = outFile.bufferedWriter()
+    }
+
+
+    fun close() {
+        wrt.close()
+    }
+
+    private var printTable = false
+    var tableIndex = 0
+    fun setTableStart() {
+        printTable = true
+        tableIndex = 0
+    }
+    fun setTableEnd() {
+        printTable = false
+    }
+
+    /**
+     * includes code to do call back to a listener to
+     * include a right inset in the printout
+     */
+    fun wrt(s: String) {
+        val str = StringBuilder()
+
+        if (printTable && s.contains("\n")) {
+            val allButEndline = s.substring(0, s.length - 1)
+            val rightInsetString = listener?.invoke(tableIndex++)
+            str.append(allButEndline)
+            str.append(rightInsetString)
+            str.append("\n")
+        } else {
+            str.append(s)
+        }
+        wrt.append(str.toString())
+    }
+
+
+    var listener: ((Int)->String)? = null
+
+
 }
