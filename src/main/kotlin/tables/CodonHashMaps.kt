@@ -1,8 +1,16 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "UnnecessaryVariable")
 
 package tables
 
 class CodonHashMaps {
+
+    /*
+     * note that this is a zero-based list.
+     * To cross reference back to the
+     * canonical table number use the TheGeneticCodesNCBI/hashMapTableNumberToName
+     */
+
+
 
     /* Generated content from TheGeneticCodeNCBI.kt */
 

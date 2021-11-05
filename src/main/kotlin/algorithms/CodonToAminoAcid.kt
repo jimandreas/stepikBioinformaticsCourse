@@ -2,7 +2,6 @@
 
 package algorithms
 
-
 val rnaCodonToAminoHashMap: HashMap<String, String> = hashMapOf(
     Pair("AAA", "K"),
     Pair("AAC", "N"),

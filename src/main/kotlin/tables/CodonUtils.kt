@@ -6,7 +6,7 @@ fun codonUtilsTranslate(
     codonString: String,
     isDnaString: Boolean = true,
     noStopCodons: Boolean = true,
-    table: Int = 1
+    table: Int = 0 // corresponds to canonical table 1
 ): String {
 
     val chm = CodonHashMaps()
