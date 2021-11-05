@@ -2,13 +2,12 @@
 
 package tables
 
-import java.lang.StringBuilder as StringBuilder1
-
 fun codonUtilsTranslate(
-    table: Int,
     codonString: String,
     isDnaString: Boolean = true,
-    noStopCodons: Boolean = true): String {
+    noStopCodons: Boolean = true,
+    table: Int = 1
+): String {
 
     val chm = CodonHashMaps()
     val t = chm.codonTables[table]

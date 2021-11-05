@@ -1,4 +1,4 @@
-@file:Suppress("unused", "UseWithIndex")
+@file:Suppress("unused", "UseWithIndex", "SameParameterValue")
 
 package tables
 
@@ -65,9 +65,171 @@ class TheGeneticCodesNCBI {
             "----------**--------------------MMMM----------**---M------------",
             "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
             "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
-            "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG",
-        )
+            "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+        ),
+
+listOf( /* 3, "The Yeast Mitochondrial Code" */
+    "FFLLSSSSYY**CCWWTTTTPPPPHHQQRRRRIIMMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "----------**----------------------MM---------------M------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 4, "The Mold, Protozoan, and Coelenterate Mitochondrial Code and the Mycoplasma/Spiroplasma Code" */
+    "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "--MM------**-------M------------MMMM---------------M------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+            listOf( /* 5, "The Invertebrate Mitochondrial Code" */
+                "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSSSSVVVVAAAADDEEGGGG",
+                "---M------**--------------------MMMM---------------M------------",
+                "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+                "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+                "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+            ),
+listOf( /* 6, "The Ciliate, Dasycladacean and Hexamita Nuclear Code" */
+                    "FFLLSSSSYYQQCC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+        "--------------*--------------------M----------------------------",
+        "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+        "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+        "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+    ),
+listOf( /* 9, "The Echinoderm and Flatworm Mitochondrial Code" */
+    "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNNKSSSSVVVVAAAADDEEGGGG",
+    "----------**-----------------------M---------------M------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 10, "The Euplotid Nuclear Code" */
+    "FFLLSSSSYY**CCCWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "----------**-----------------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 11, "The Bacterial, Archaeal and Plant Plastid Code" */
+    "FFLLSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "---M------**--*----M------------MMMM---------------M------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 12, "The Alternative Yeast Nuclear Code" */
+    "FFLLSSSSYY**CC*WLLLSPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "----------**--*----M---------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 13, "The Ascidian Mitochondrial Code" */
+    "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNKKSSGGVVVVAAAADDEEGGGG",
+    "---M------**----------------------MM---------------M------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 14, "The Alternative Flatworm Mitochondrial Code" */
+    "FFLLSSSSYYY*CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNNKSSSSVVVVAAAADDEEGGGG",
+    "-----------*-----------------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 16, "Chlorophycean Mitochondrial Code" */
+    "FFLLSSSSYY*LCC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "----------*---*--------------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 21, "Trematode Mitochondrial Code" */
+    "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIMMTTTTNNNKSSSSVVVVAAAADDEEGGGG",
+    "----------**-----------------------M---------------M------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 22, "Scenedesmus obliquus Mitochondrial Code" */
+    "FFLLSS*SYY*LCC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "------*---*---*--------------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 23, "Thraustochytrium Mitochondrial Code" */
+    "FF*LSSSSYY**CC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "--*-------**--*-----------------M--M---------------M------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 24, "Rhabdopleuridae Mitochondrial Code" */
+    "FFLLSSSSYY**CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSSKVVVVAAAADDEEGGGG",
+    "---M------**-------M---------------M---------------M------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 25, "Candidate Division SR1 and Gracilibacteria Code" */
+    "FFLLSSSSYY**CCGWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "---M------**-----------------------M---------------M------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 26, "Pachysolen tannophilus Nuclear Code" */
+    "FFLLSSSSYY**CC*WLLLAPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "----------**--*----M---------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 27, "Karyorelict Nuclear Code" */
+    "FFLLSSSSYYQQCCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "--------------*--------------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 28, "Condylostoma Nuclear Code" */
+    "FFLLSSSSYYQQCCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "----------**--*--------------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 29, "Mesodinium Nuclear Code" */
+    "FFLLSSSSYYYYCC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "--------------*--------------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 30, "Peritrich Nuclear Code" */
+    "FFLLSSSSYYEECC*WLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "--------------*--------------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 31, "Blastocrithidia Nuclear Code" */
+    "FFLLSSSSYYEECCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSRRVVVVAAAADDEEGGGG",
+    "----------**-----------------------M----------------------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
+),
+listOf( /* 33, "Cephalodiscidae Mitochondrial UAA-Tyr Code" */
+    "FFLLSSSSYYY*CCWWLLLLPPPPHHQQRRRRIIIMTTTTNNKKSSSKVVVVAAAADDEEGGGG",
+    "---M-------*-------M---------------M---------------M------------",
+    "TTTTTTTTTTTTTTTTCCCCCCCCCCCCCCCCAAAAAAAAAAAAAAAAGGGGGGGGGGGGGGGG",
+    "TTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGGTTTTCCCCAAAAGGGG",
+    "TCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAGTCAG"
     )
+)
 
     val aminoToNameHash: HashMap<Char, String> = hashMapOf(
         Pair('A', "alanine"),
@@ -108,10 +270,6 @@ fun main() {
  * Note: special controls print out the Amino code to Amino name inset at the right side at the start.
  */
 
-fun rightSideInset(lineNumber: Int, w: Writer) {
-    w.wrt("   Line $lineNumber\n")
-}
-
 private fun writeCodonMatrix() {
     val w = Writer()
     val tgc = TheGeneticCodesNCBI()
@@ -141,13 +299,17 @@ private fun writeCodonMatrix() {
     val keys = tgc.tableTableNumberToTableName.keys.toList()
     var keyIndex = 0
 
-
-    w.setTableStart()
+    var tableStarted = false
 
     for (l in tgc.rawCodesFromNCBI) {
 
-        var theMatrix = mk.d3array(4, 4, 4) { -1 }
+        val theMatrix = mk.d3array(4, 4, 4) { -1 }
 
+        w.wrt("\n")
+        if (!tableStarted) {
+            w.setTableStart()
+            tableStarted = true
+        }
         w.wrt("Table ${keys[keyIndex]} ${tgc.tableTableNumberToTableName[keys[keyIndex++]]}\n")
 
         val codon = "ATCG"
@@ -200,7 +362,7 @@ private fun writeHashTables() {
     var keyIndex = 0
 
     for (l in tgc.rawCodesFromNCBI) {
-        w.wrt("hashMapOf(  /* Table ${keys[keyIndex]} ${tgc.tableTableNumberToTableName[keys[keyIndex++]]} */\n")
+        w.wrt("\nhashMapOf(/* Table ${keys[keyIndex]} ${tgc.tableTableNumberToTableName[keys[keyIndex++]]} */\n")
         var doComma = ","
         for (i in 0 until l[0].length) {
             val str = StringBuilder()
@@ -218,8 +380,9 @@ private fun writeHashTables() {
 }
 
 class Writer {
+    private var currentColumn = 0
     private lateinit var outFile: File
-    lateinit var wrt: BufferedWriter
+    private lateinit var wrt: BufferedWriter
     fun setFile(fn: String) {
         outFile = File(fn)
         wrt = outFile.bufferedWriter()
@@ -231,7 +394,7 @@ class Writer {
     }
 
     private var printTable = false
-    var tableIndex = 0
+    private var tableIndex = 0
     fun setTableStart() {
         printTable = true
         tableIndex = 0
@@ -249,16 +412,30 @@ class Writer {
 
         if (printTable && s.contains("\n")) {
             val allButEndline = s.substring(0, s.length - 1)
+            currentColumn += allButEndline.length
             val rightInsetString = listener?.invoke(tableIndex++)
             str.append(allButEndline)
+            indentTo(50, str)  // place inset at column 50
             str.append(rightInsetString)
             str.append("\n")
         } else {
             str.append(s)
         }
-        wrt.append(str.toString())
+        val toWrite = str.toString()
+        if (!toWrite.contains("\n")) {
+            currentColumn += toWrite.length
+        } else {
+            currentColumn = 0
+        }
+        wrt.append(toWrite)
     }
 
+    private fun indentTo(desiredIndent: Int, str: StringBuilder) {
+        while (currentColumn < desiredIndent) {
+            str.append(" ")
+            currentColumn++
+        }
+    }
 
     var listener: ((Int)->String)? = null
 

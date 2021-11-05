@@ -30,7 +30,7 @@ internal class CodonHashMapsTest {
     @DisplayName("tables: test Rna Codon to Amino Acid translation")
     fun rnaCodonToAminoAcidTest() {
         val str = "AUGGCCAUGGCGCCCAGAACUGAGAUCAAUAGUACCCGUAUUAACGGGUGA"
-        val result = codonUtilsTranslate(0, str, isDnaString = false)
+        val result = codonUtilsTranslate(str, isDnaString = false, table = 0)
         val expectedResult = "MAMAPRTEINSTRING"
         assertEquals(expectedResult, result)
     }

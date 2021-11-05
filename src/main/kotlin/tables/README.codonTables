@@ -1,0 +1,508 @@
+# The Genetic Codes (Codon tables)
+
+Data kindly provided by:
+https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
+
+## NOTE: this is a generated file from tables/TheGeneticCodeNCBI.kt:
+## NOTE: this is for reference only.  The programming data is located in tables/CodonHashMaps.kt
+
+
+Table 1 The Standard Code                           A: alanine
+  second letter is:                                 B: asparagine
+  -A-     -U-     -C-     -G-                       C: cystine
+A AAA:K   AUA:I   ACA:T   AGA:R (A)                 D: aspartate
+  AAU:N   AUU:I   ACU:T   AGU:S (U)                 E: glutamate
+  AAC:N   AUC:I   ACC:T   AGC:S (C)                 F: phenylalanine
+  AAG:K   AUG:M   ACG:T   AGG:R (G)                 G: glycine
+U UAA:*   UUA:L   UCA:S   UGA:* (A)                 H: histidine
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)                 I: isoleucine
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)                 K: lysine
+  UAG:*   UUG:L   UCG:S   UGG:W (G)                 L: leucine
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)                 M: methionine
+  CAU:H   CUU:L   CCU:P   CGU:R (U)                 N: asparagine
+  CAC:H   CUC:L   CCC:P   CGC:R (C)                 P: proline
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)                 Q: glutamine
+G GAA:E   GUA:V   GCA:A   GGA:G (A)                 R: arginine
+  GAU:D   GUU:V   GCU:A   GGU:G (U)                 S: serine
+  GAC:D   GUC:V   GCC:A   GGC:G (C)                 T: threonine
+  GAG:E   GUG:V   GCG:A   GGG:G (G)                 V: valine
+                                                    W: tryptophan
+Table 2 The Vertebrate Mitochondrial Code           Y: tyrosine
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:M   ACA:T   AGA:* (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:* (G)
+U UAA:*   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 3 The Yeast Mitochondrial Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:M   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:*   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:T   CCA:P   CGA:R (A)
+  CAU:H   CUU:T   CCU:P   CGU:R (U)
+  CAC:H   CUC:T   CCC:P   CGC:R (C)
+  CAG:Q   CUG:T   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 4 The Mold, Protozoan, and Coelenterate Mitochondrial Code and the Mycoplasma/Spiroplasma Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:*   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 5 The Invertebrate Mitochondrial Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:M   ACA:T   AGA:S (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:S (G)
+U UAA:*   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 6 The Ciliate, Dasycladacean and Hexamita Nuclear Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:Q   UUA:L   UCA:S   UGA:* (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:Q   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 9 The Echinoderm and Flatworm Mitochondrial Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:N   AUA:I   ACA:T   AGA:S (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:S (G)
+U UAA:*   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 10 The Euplotid Nuclear Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:*   UUA:L   UCA:S   UGA:C (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 11 The Bacterial, Archaeal and Plant Plastid Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:*   UUA:L   UCA:S   UGA:* (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 12 The Alternative Yeast Nuclear Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:*   UUA:L   UCA:S   UGA:* (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:S   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 13 The Ascidian Mitochondrial Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:M   ACA:T   AGA:G (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:G (G)
+U UAA:*   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 14 The Alternative Flatworm Mitochondrial Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:N   AUA:I   ACA:T   AGA:S (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:S (G)
+U UAA:Y   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 16 Chlorophycean Mitochondrial Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:*   UUA:L   UCA:S   UGA:* (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:L   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 21 Trematode Mitochondrial Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:N   AUA:M   ACA:T   AGA:S (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:S (G)
+U UAA:*   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 22 Scenedesmus obliquus Mitochondrial Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:*   UUA:L   UCA:*   UGA:* (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:L   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 23 Thraustochytrium Mitochondrial Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:*   UUA:*   UCA:S   UGA:* (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 24 Rhabdopleuridae Mitochondrial Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:S (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:K (G)
+U UAA:*   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 25 Candidate Division SR1 and Gracilibacteria Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:*   UUA:L   UCA:S   UGA:G (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 26 Pachysolen tannophilus Nuclear Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:*   UUA:L   UCA:S   UGA:* (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:A   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 27 Karyorelict Nuclear Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:Q   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:Q   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 28 Condylostoma Nuclear Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:Q   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:Q   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 29 Mesodinium Nuclear Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:Y   UUA:L   UCA:S   UGA:* (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:Y   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 30 Peritrich Nuclear Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:E   UUA:L   UCA:S   UGA:* (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:E   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 31 Blastocrithidia Nuclear Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:R (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:R (G)
+U UAA:E   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:E   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
+
+Table 33 Cephalodiscidae Mitochondrial UAA-Tyr Code
+  second letter is:
+  -A-     -U-     -C-     -G-
+A AAA:K   AUA:I   ACA:T   AGA:S (A)
+  AAU:N   AUU:I   ACU:T   AGU:S (U)
+  AAC:N   AUC:I   ACC:T   AGC:S (C)
+  AAG:K   AUG:M   ACG:T   AGG:K (G)
+U UAA:Y   UUA:L   UCA:S   UGA:W (A)
+  UAU:Y   UUU:F   UCU:S   UGU:C (U)
+  UAC:Y   UUC:F   UCC:S   UGC:C (C)
+  UAG:*   UUG:L   UCG:S   UGG:W (G)
+C CAA:Q   CUA:L   CCA:P   CGA:R (A)
+  CAU:H   CUU:L   CCU:P   CGU:R (U)
+  CAC:H   CUC:L   CCC:P   CGC:R (C)
+  CAG:Q   CUG:L   CCG:P   CGG:R (G)
+G GAA:E   GUA:V   GCA:A   GGA:G (A)
+  GAU:D   GUU:V   GCU:A   GGU:G (U)
+  GAC:D   GUC:V   GCC:A   GGC:G (C)
+  GAG:E   GUG:V   GCG:A   GGG:G (G)
