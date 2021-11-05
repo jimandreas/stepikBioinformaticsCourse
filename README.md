@@ -73,6 +73,15 @@ TODO: The following problems need work:
 
 * ShortestSuperstring, aka Introduction to Genome Sequencing (http://rosalind.info/problems/long/)
 
+## Acknowledgements
+
+* The Genetic Codes
+
+The genetic code data was sourced from the NCBI at the following link:
+
+https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
+
+
 [Linear Space Alignment]: http://rosalind.info/problems/ba5l/
 [Global Alignment]: http://rosalind.info/problems/ba5e/
 [Rosalind]: http://rosalind.info/faq/
