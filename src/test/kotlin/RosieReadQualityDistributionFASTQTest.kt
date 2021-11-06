@@ -3,14 +3,11 @@
     "ReplaceManualRangeWithIndicesCalls"
 )
 
-import algorithms.FastQ
-import algorithms.OverlapGraphsOofN
-import algorithms.RosalindReverseComplement
+import algorithms.FASTQutilities
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 /**
@@ -25,14 +22,14 @@ Given: A quality threshold, along with FASTQ entries for multiple reads.
 Return: The number of reads whose average quality is below the threshold.
  */
 
-internal class RosieReadQualityDistributionFASTQ {
+internal class RosieReadQualityDistributionFASTQTest {
 
-    lateinit var faq: FastQ
+    lateinit var faq: FASTQutilities
     lateinit var u: Utility
 
     @BeforeEach
     fun setUp() {
-        faq = FastQ()
+        faq = FASTQutilities()
         u = Utility()
     }
 
