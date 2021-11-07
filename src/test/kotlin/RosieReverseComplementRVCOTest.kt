@@ -31,7 +31,7 @@ Given: A collection of n (n≤10) DNA strings.
 Return: The number of given strings that match their reverse complements.
  */
 
-internal class RosieReverseComplementRVCO {
+internal class RosieReverseComplementRVCOTest {
 
     lateinit var rcSum: RosalindReverseComplement
     lateinit var u: Utility
