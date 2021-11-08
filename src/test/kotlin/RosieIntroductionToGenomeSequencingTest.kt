@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import kotlin.test.Ignore
 import kotlin.test.assertEquals
 import kotlin.test.junit5.JUnit5Asserter.assertEquals
 
@@ -160,6 +161,7 @@ gctaagttcatgcatc
     }
 
     @Test
+    @Ignore
     @DisplayName("Rosalind Genome Sequencing quiz test")
     fun rosalindOverlapGraphQuizTest() {
         val sampleInput = """

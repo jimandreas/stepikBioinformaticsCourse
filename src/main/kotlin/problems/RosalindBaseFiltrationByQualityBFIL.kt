@@ -3,10 +3,6 @@
 package problems
 
 import algorithms.FASTQtrimLeadingTrailing
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
-import tables.TheGeneticCodesNCBI
-import tables.codonUtilsTranslate
 import java.io.File
 
 
