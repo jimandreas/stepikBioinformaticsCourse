@@ -5,6 +5,8 @@
 
 import algorithms.SmallParsimony
 import algorithms.SmallParsimony.*
+import org.jetbrains.kotlinx.multik.api.d2array
+import org.jetbrains.kotlinx.multik.api.mk
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -18,6 +20,7 @@ import kotlin.collections.set
 import kotlin.collections.toMutableList
 import kotlin.collections.toSortedMap
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 /**
  *
@@ -130,13 +133,47 @@ CAAATCCC->ATAGCCAC:5
         printMap()
     }
 
+    /**
+     * Test basic scoring of left and right {ACGT}
+     * see
+     * https://stepik.org/lesson/240342/step/7?unit=212688
+     */
+    @Test
+    @DisplayName("Small Parsimony scoring1 test")
+    fun smallParsimonyScoring1Test() {
+        val left = listOf(2, 2, 0, 2)
+        val right = listOf(2, 1, 2, 1)
+        val expectedResult1 = listOf(3, 2, 2, 2)
+        val left1Arr = mk.d2array(4, 1) { left[it] }
+        val right1Arr = mk.d2array(4, 1) { right[it] }
+        val expected1Arr = mk.d2array(4, 1) { expectedResult1[it] }
+        sp.dnaLen = 1 // global variable
+        val result = sp.scoreArrays(left1Arr, right1Arr)
+        //println(result)
+        assertEquals(expected1Arr, result)
+
+        val left2 = listOf(2, 1, 3, 3)
+        val right2 = listOf(3, 2, 2, 2)
+        val expectedResult2 = listOf(5, 3, 4, 4)
+        val left2Arr = mk.d2array(4, 1) { left2[it] }
+        val right2Arr = mk.d2array(4, 1) { right2[it] }
+        val expected2Arr = mk.d2array(4, 1) { expectedResult2[it] }
+        sp.dnaLen = 1 // global variable
+        val result2 = sp.scoreArrays(left2Arr, right2Arr)
+        //println(result)
+        assertEquals(expected2Arr, result2)
+    }
+
     /*
      * scoring a tree as compared to:
      * https://stepik.org/lesson/240342/step/8?unit=212688
+     *
+     * this test parses and scores the full tree
+     *   (dna strings are all one letter long)
      */
     @Test
-    @DisplayName("Small Parsimony scoring test")
-    fun smallParsimonyScoringTest() {
+    @DisplayName("Small Parsimony scoring2 test")
+    fun smallParsimonyScoring2Test() {
         val sampleInput = """
 8
 1->C
@@ -155,16 +192,35 @@ CAAATCCC->ATAGCCAC:5
 7->6
         """.trimIndent()
 
-        val expectedOutputString = """
-
-        """.trimIndent()
+        val expectedResults = """
+1-2 0 2 2
+2-1 1 2 2
+3-2 2 0 2
+4-2 1 2 1
+5-2 1 3 3
+6-3 2 2 2
+7-5 3 4 4
+        """.trimIndent().lines()
 
         val input = sampleInput.reader().readLines().toMutableList()
 
         sp.parseInputStrings(input)
-        printMap()
+        sp.dnaLen = 1 // global variable
+        sp.iterateNodes()
 
-//        println(sp.nodeMap.toList().joinToString("\n"))
+        /*
+         * now compare the results with the expected matrices
+         */
+        for (i in 1..expectedResults.size) {
+            val e = expectedResults[i-1].split("-") // index of nodes start at one
+            val node = e[0].toInt()
+            val expectedArrayValues = e[1].split(" ").map { it.toInt()}
+            val expectedArray = mk.d2array(4, 1) { expectedArrayValues[it]}
+
+            assertNotNull(sp.nodeMap[i])
+            val resultArray = sp.nodeMap[i]!!.scoringArray
+            assertEquals(expectedArray, resultArray)
+        }
     }
 
     fun printMap() {

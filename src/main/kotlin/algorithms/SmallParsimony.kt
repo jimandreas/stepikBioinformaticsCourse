@@ -10,7 +10,9 @@ package algorithms
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
+import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
+import org.jetbrains.kotlinx.multik.ndarray.operations.min
 import kotlin.collections.HashMap
 import kotlin.collections.List
 import kotlin.collections.MutableList
@@ -81,11 +83,11 @@ class SmallParsimony {
     data class Node(
         var nodeType: NodeType = NodeType.NODE,
         val id: Int,
-        val ripe: Boolean = false,
+        var ripe: Boolean = false,
         var dnaString: String? = null,
         var left: Node? = null,
         var right: Node? = null,
-        val scoringArray: D2Array<Int>? = null
+        var scoringArray: D2Array<Int>? = null
     ) {
         override fun toString(): String {
             return "Node num $id type: $nodeType d:$dnaString l:${left?.id} r:${right?.id}"
@@ -94,7 +96,7 @@ class SmallParsimony {
 
     var numLeaves = 0
     val nodeMap: HashMap<Int, Node> = hashMapOf()
-    var dnaLen = 0
+    var dnaLen = -1
 
     fun smallParsimonyStart(inputStrings: List<String>): MutableMap<String, MutableMap<String, Int>> {
 
@@ -172,16 +174,82 @@ class SmallParsimony {
 //        return outputList
     }
 
+    /**
+     * loop through the nodes until there are no ripe pairs left,
+     * and all scoring matrices have been calculated
+     */
+    fun iterateNodes() {
+
+        if (dnaLen == -1) {
+            println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
+            return
+        }
+
+        do {
+            var foundRipePair = false
+            for (n in nodeMap) {
+                val node = n.value
+                if (node.scoringArray != null) {
+                    continue
+                }
+                if (node.left != null && node.right != null) {
+                    val left = node.left
+                    val right = node.right
+                    if (left!!.ripe && right!!.ripe) {
+                        foundRipePair = true
+                        val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
+                        node.scoringArray = scoredArray
+                        node.ripe = true
+                    }
+                }
+            }
+        } while (foundRipePair == true)
+    }
+
+    /**
+     * algorithm in English, rather than mathematics:
+     * for each of the left and right {ACGT} columns
+     *   find the min value
+     * then for each of the {ACGT} value - if it equal
+     * to the minimum copy it.
+     * Otherwise bump it by one for the one letter change penalty.
+     *
+     * Then add the two intermediate arrays to get the result for the
+     * next upper node.
+     */
     fun scoreArrays(larr1: D2Array<Int>, rarr2: D2Array<Int>): D2Array<Int> {
+
         val resultArr = mk.d2array(4, dnaLen) { 0 }
+        val resultLeft = mk.d2array(4, dnaLen) { 0 }
+        val resultRight = mk.d2array(4, dnaLen) { 0 }
+
+        if (dnaLen == -1) {
+            println("scoreArrays: global variable dnaLen is not initialized.  Giving up.")
+            return resultArr
+        }
+
         for (i in 0 until dnaLen) {
-            val minLeft = winner(larr1, i)
+            val minValLeft = larr1[0..4, i].min()
+            val minValRight = rarr2[0..4, i].min()
+            for (j in 0..3) {
+                resultLeft[j, i] = larr1[j, i]
+                if (larr1[j, i] != minValLeft) {
+                    resultLeft[j, i] = minValLeft!! + 1
+                }
+            }
+            for (j in 0..3) {
+                resultRight[j, i] = rarr2[j, i]
+                if (rarr2[j, i] != minValRight) {
+                    resultRight[j, i] = minValRight!! + 1
+                }
+            }
+            for (j in 0..3) {
+                resultArr[j, i] = resultLeft[j, i] + resultRight[j, i]
+            }
         }
         return resultArr
     }
-    private fun winner(arr: D2Array<Int>, idx: Int): Char {
-        return 'C'
-    }
+
 
     fun mkArrayWithScores(dnaString: String): D2Array<Int> {
         val len = dnaString.length
