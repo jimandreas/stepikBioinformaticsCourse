@@ -4,6 +4,7 @@
 )
 
 import algorithms.SmallParsimony
+import algorithms.SmallParsimony.*
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -125,9 +126,69 @@ CAAATCCC->ATAGCCAC:5
 
         val input = sampleInput.reader().readLines().toMutableList()
 
-        val outputList = sp.parseInputStrings(input)
+        sp.parseInputStrings(input)
+        printMap()
+    }
 
-        println(outputList.joinToString("\n"))
+    /*
+     * scoring a tree as compared to:
+     * https://stepik.org/lesson/240342/step/8?unit=212688
+     */
+    @Test
+    @DisplayName("Small Parsimony scoring test")
+    fun smallParsimonyScoringTest() {
+        val sampleInput = """
+8
+1->C
+1->C
+2->A
+2->C
+3->G
+3->G
+4->T
+4->C
+5->1
+5->2
+6->3
+6->4
+7->5
+7->6
+        """.trimIndent()
+
+        val expectedOutputString = """
+
+        """.trimIndent()
+
+        val input = sampleInput.reader().readLines().toMutableList()
+
+        sp.parseInputStrings(input)
+        printMap()
+
+//        println(sp.nodeMap.toList().joinToString("\n"))
+    }
+
+    fun printMap() {
+        val m = sp.nodeMap
+        for (e in m.keys) {
+            val n = m[e]!!
+            print("${n.id}: ")
+            if (n.left != null) {
+                val l = n.left!!
+                val r = n.right!!
+                if (l.nodeType == NodeType.LEAF) {
+                    print(l.dnaString)
+                } else {
+                    print(l.id)
+                }
+                print(" ")
+                if (r.nodeType == NodeType.LEAF) {
+                    print(r.dnaString)
+                } else {
+                    print(r.id)
+                }
+            }
+            print("\n")
+        }
     }
 
 

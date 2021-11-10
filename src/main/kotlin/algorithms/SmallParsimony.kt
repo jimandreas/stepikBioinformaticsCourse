@@ -7,15 +7,19 @@
 
 package algorithms
 
-import org.jetbrains.kotlinx.multik.api.d1array
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
-import org.jetbrains.kotlinx.multik.ndarray.data.D1Array
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
-import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
-import java.text.NumberFormat
-import java.util.*
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.MutableList
+import kotlin.collections.MutableMap
+import kotlin.collections.hashMapOf
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.removeFirst
+import kotlin.collections.set
 
 /**
  *
@@ -77,10 +81,11 @@ class SmallParsimony {
     data class Node(
         var nodeType: NodeType = NodeType.NODE,
         val id: Int,
+        val ripe: Boolean = false,
         var dnaString: String? = null,
         var left: Node? = null,
         var right: Node? = null,
-        val scoringArray: D2Array<Int>
+        val scoringArray: D2Array<Int>? = null
     ) {
         override fun toString(): String {
             return "Node num $id type: $nodeType d:$dnaString l:${left?.id} r:${right?.id}"
@@ -89,6 +94,7 @@ class SmallParsimony {
 
     var numLeaves = 0
     val nodeMap: HashMap<Int, Node> = hashMapOf()
+    var dnaLen = 0
 
     fun smallParsimonyStart(inputStrings: List<String>): MutableMap<String, MutableMap<String, Int>> {
 
@@ -108,8 +114,8 @@ class SmallParsimony {
     6->4
     6->5
      */
-    fun parseInputStrings(inputStrings: MutableList<String>): List<Node> {
-        val outputList: MutableList<Node> = mutableListOf()
+    fun parseInputStrings(inputStrings: MutableList<String>) {
+//        val outputList: MutableList<Node> = mutableListOf()
 
         numLeaves = inputStrings[0].toInt()
 
@@ -121,9 +127,9 @@ class SmallParsimony {
             if (nodeMap.containsKey(nodeNum)) {
                 nodeStruct = nodeMap[nodeNum]!!
             } else {
-                nodeStruct = Node(id = nodeNum, scoringArray = mkArray())
+                nodeStruct = Node(id = nodeNum)
                 nodeMap[nodeNum] = nodeStruct
-                outputList.add(nodeStruct)
+//                outputList.add(nodeStruct)
             }
             val codon = "ACGT".indexOf(line[1][0])
             // see if this a node to node connection, or a DNA string definition
@@ -132,9 +138,9 @@ class SmallParsimony {
                 val edgeTo = line[1].toInt()
                 var edgeToNode: Node
                 if (!nodeMap.containsKey(edgeTo)) {
-                    val newNode = Node(id = edgeTo, scoringArray = mkArray())
+                    val newNode = Node(id = edgeTo)
                     nodeMap[edgeTo] = newNode
-                    outputList.add(newNode)
+//                    outputList.add(newNode)
                     edgeToNode = newNode
                 } else {
                     edgeToNode = nodeMap[edgeTo]!!
@@ -146,12 +152,15 @@ class SmallParsimony {
                 }
             } else {
                 // this is a dnaString
+                dnaLen = line[1].length
                 val leafNode = Node(
                     nodeType = NodeType.LEAF,
                     id = 0,
+                    ripe = true,
                     dnaString = line[1],
-                    scoringArray = mkArray())
-                outputList.add(leafNode)
+                    scoringArray = mkArrayWithScores(line[1])
+                )
+//                outputList.add(leafNode)
                 if (nodeStruct.left == null) {
                     nodeStruct.left = leafNode
                 } else {
@@ -160,7 +169,32 @@ class SmallParsimony {
             }
             inputStrings.removeFirst()
         }
-        return outputList
+//        return outputList
+    }
+
+    fun scoreArrays(larr1: D2Array<Int>, rarr2: D2Array<Int>): D2Array<Int> {
+        val resultArr = mk.d2array(4, dnaLen) { 0 }
+        for (i in 0 until dnaLen) {
+            val minLeft = winner(larr1, i)
+        }
+        return resultArr
+    }
+    private fun winner(arr: D2Array<Int>, idx: Int): Char {
+        return 'C'
+    }
+
+    fun mkArrayWithScores(dnaString: String): D2Array<Int> {
+        val len = dnaString.length
+        val arr = mk.d2array(4, len) { Int.MAX_VALUE }
+        for (i in 0 until len) {
+            when (dnaString[i]) {
+                'A' -> arr[0, i] = 0
+                'C' -> arr[1, i] = 0
+                'G' -> arr[2, i] = 0
+                'T' -> arr[3, i] = 0
+            }
+        }
+        return arr
     }
 
     fun mkArray(): D2Array<Int> {
@@ -168,4 +202,4 @@ class SmallParsimony {
     }
 
 
-    }
+}

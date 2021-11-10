@@ -64,7 +64,7 @@ class Phylogeny {
             //println("$i $t")
             limbLengthMap[i] = t
         }
-        val mapResult = additivePhylogenyIterative(matrixSize, m.clone())
+        val mapResult = additivePhylogenyIterative(matrixSize, m.copy())
 
         return sortMapAndDistanceLists(mapResult)
 

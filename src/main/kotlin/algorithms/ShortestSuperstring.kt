@@ -137,7 +137,7 @@ class ShortestSuperstring {
                 }
 
                 // motif located at end of string s2 and start of s1
-                s2.substring(s2.length - mlen, s2.length) == motif && s1!!.substring(0, mlen) == motif -> {
+                s2.substring(s2.length - mlen, s2.length) == motif && s1.substring(0, mlen) == motif -> {
                     val idx = s1.indexOf(motif)
                     str.append(s2)
                     str.append(s1.substring(idx + motif.length, s1.length))
@@ -160,7 +160,6 @@ class ShortestSuperstring {
             hashStringList[i] = result
             hashStringList[j] = ""
             merged++
-            maxLen = Int.MIN_VALUE
         }
 
         return result
