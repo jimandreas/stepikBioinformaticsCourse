@@ -12,14 +12,12 @@ import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
-import org.jetbrains.kotlinx.multik.ndarray.operations.min
+import org.jetbrains.kotlinx.multik.ndarray.operations.*
+import java.lang.StringBuilder
 import kotlin.collections.HashMap
 import kotlin.collections.List
 import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
 import kotlin.collections.hashMapOf
-import kotlin.collections.mutableListOf
-import kotlin.collections.mutableMapOf
 import kotlin.collections.removeFirst
 import kotlin.collections.set
 
@@ -94,14 +92,21 @@ class SmallParsimony {
         }
     }
 
+    data class DnaTransform(
+        val str1: String,
+        val str2: String,
+        val hammingDistance: Int
+    ) {
+        override fun toString(): String {
+            return "$str1->$str2:$hammingDistance"
+        }
+    }
+
     var numLeaves = 0
     val nodeMap: HashMap<Int, Node> = hashMapOf()
     var dnaLen = -1
-
-    fun smallParsimonyStart(inputStrings: List<String>): MutableMap<String, MutableMap<String, Int>> {
-
-        return mutableMapOf()
-    }
+    var totalHammingDistance = 0
+    var lastNode: Node? = null
 
     /**
      * parse the test input:
@@ -177,8 +182,11 @@ class SmallParsimony {
     /**
      * loop through the nodes until there are no ripe pairs left,
      * and all scoring matrices have been calculated
+     *
+     * Note: also sets lastNode - this will be the root of
+     * the binary tree at the end
      */
-    fun iterateNodes() {
+    fun doScoring() {
 
         if (dnaLen == -1) {
             println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
@@ -197,13 +205,157 @@ class SmallParsimony {
                     val right = node.right
                     if (left!!.ripe && right!!.ripe) {
                         foundRipePair = true
+                        lastNode = node
                         val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
                         node.scoringArray = scoredArray
+//                        val bestString = parsimoniousString(scoredArray)
+//                        node.dnaString = bestString
                         node.ripe = true
                     }
                 }
             }
         } while (foundRipePair == true)
+    }
+
+    /**
+     * loop again through the nodes
+     *   starting with lastNode.
+     *
+     * find the dna letters that result in the
+     * minimum change in the children nodes.
+     */
+    fun buildChangeList(): List<DnaTransform> {
+        val changeList: MutableList<DnaTransform> = mutableListOf()
+        if (dnaLen == -1 || lastNode == null) {
+            println("iterateNodes: global variable dnaLen or lastNode is not initialized.  Giving up.")
+            return changeList
+        }
+
+        // work from the root down, setting the dna strings on the way
+
+        val workList: MutableList<Node> = mutableListOf(lastNode!!)
+        lastNode!!.dnaString = parsimoniousString(lastNode!!.scoringArray!!)
+
+        while (workList.isNotEmpty()) {
+            val node = workList.removeFirst()
+
+            if (node.left != null && node.right != null) {
+                val left = node.left
+                val right = node.right
+
+                if (left!!.nodeType != NodeType.LEAF) {
+                    // compose the dna strings for the children
+                    left.dnaString = parsimoniusCompareString(node, left)
+                    right!!.dnaString = parsimoniusCompareString(node, right)
+                }
+
+                // calculate the hamming distance from root to children
+                val hammingLeft = hammingDistance(left.dnaString!!, node.dnaString!!)
+                val hammingRight = hammingDistance(right!!.dnaString!!, node.dnaString!!)
+                totalHammingDistance += hammingLeft + hammingRight
+
+                val c1 = DnaTransform(node.dnaString!!, left.dnaString!!, hammingLeft)
+                val c2 = DnaTransform(left.dnaString!!, node.dnaString!!, hammingLeft)
+                val c3 = DnaTransform(node.dnaString!!, right.dnaString!!, hammingRight)
+                val c4 = DnaTransform(right.dnaString!!, node.dnaString!!, hammingRight)
+                changeList.add(c1)
+                changeList.add(c2)
+                changeList.add(c3)
+                changeList.add(c4)
+
+                workList.add(left)
+                workList.add(right)
+
+            }
+        }
+        return changeList
+    }
+
+    /**
+     *
+     */
+    fun parsimoniusCompareString(p: Node, c: Node): String {
+
+        val parent = p.scoringArray!!
+        val child = c.scoringArray!!
+
+        val str = StringBuilder()
+        for (i in 0 until dnaLen) {
+
+            val mP = parent[0..4, i].min()
+            val mC = child[0..4, i].min()
+
+            val parentCodon = p.dnaString!![i]
+            val pidx = "ACGT".indexOf(parentCodon)
+
+            // if the parent codon letter is equal to a minimum score in the child,
+            // then pass this codon to the child.
+            if (child[pidx, i] == mC) {
+                str.append(parentCodon)
+                continue
+            }
+
+            val nP = parent[0..4, i].count { it == mP }
+            val nC = child[0..4, i].count { it == mC }
+
+            when {
+                /*
+                 * if there is one min value in the child,
+                 * then choose that letter for the child.
+                 */
+                nC == 1 -> {
+                    val letterNum = child[0..4, i].indexOf(mC!!)
+                    val letter = "ACGT"[letterNum]
+                    str.append(letter)
+                }
+
+                /*
+                 * if there is one min value in the parent and the child,
+                 * then choose the first letter where both are a min
+                 */
+                nP > 1 && nC > 1 -> {
+                    var foundMatch = false
+                    var letter = 'A'
+                    for (j in 0..3) {
+                        if (parent[j, i] == mP && child[j, i] == mC) {
+                            letter = "ACGT"[j]
+                            foundMatch = true
+                            break
+                        }
+                    }
+                    if (foundMatch == false) { // set to the first min value
+                        val minIndex = child[0..4,i].indexOf(mC!!)
+                        letter = "ACGT"[minIndex]
+                    }
+                    str.append(letter)
+                }
+                /*
+                 * choose the character at the child's first scoring min value
+                 */
+                else -> {
+                    val minIndex = child[0..4,i].indexOf(mC!!)
+                    val letter = "ACGT"[minIndex]
+                    str.append(letter)
+                }
+            }
+        }
+        return str.toString()
+    }
+
+    /**
+     * for the parsimonious result array,
+     *   build the DnaString that corresponds
+     *   to the minimum array values.
+     */
+    fun parsimoniousString(arr: D2Array<Int>): String {
+        val str = StringBuilder()
+        for (i in 0 until dnaLen) {
+            val minValLeft = arr[0..4, i].min()
+            val letterNum = arr[0..4, i].indexOf(minValLeft as Int)
+            val letter = "ACGT"[letterNum]
+            str.append(letter)
+        }
+        return str.toString()
     }
 
     /**
@@ -231,6 +383,7 @@ class SmallParsimony {
         for (i in 0 until dnaLen) {
             val minValLeft = larr1[0..4, i].min()
             val minValRight = rarr2[0..4, i].min()
+
             for (j in 0..3) {
                 resultLeft[j, i] = larr1[j, i]
                 if (larr1[j, i] != minValLeft) {
@@ -267,6 +420,21 @@ class SmallParsimony {
 
     fun mkArray(): D2Array<Int> {
         return mk.d2array(numLeaves, 4) { 0 }
+    }
+
+    fun hammingDistance(str1: String, str2: String): Int {
+
+        var hammingCount = 0
+        if (str1.length != str2.length) {
+            println("ERROR hamming distance - strings do not match lengths str1 ${str1.length} str2 ${str2.length}")
+            return 0
+        }
+        for (i in 0 until str1.length) {
+            if (str1[i] != str2[i]) {
+                hammingCount++
+            }
+        }
+        return hammingCount
     }
 
 

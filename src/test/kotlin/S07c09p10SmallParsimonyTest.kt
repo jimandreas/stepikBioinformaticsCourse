@@ -4,21 +4,14 @@
 )
 
 import algorithms.SmallParsimony
-import algorithms.SmallParsimony.*
+import algorithms.SmallParsimony.NodeType
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
-import kotlin.collections.iterator
-import kotlin.collections.mutableMapOf
-import kotlin.collections.set
-import kotlin.collections.toMutableList
-import kotlin.collections.toSortedMap
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -45,6 +38,51 @@ internal class S07c09p10SmallParsimonyTest {
 
     @AfterEach
     fun tearDown() {
+    }
+
+
+    @Test
+    @DisplayName("Small Parsimony looper test")
+    fun smallParsimonyLooperTest() {
+
+        val sampleInput = """
+4
+1->A
+1->A
+2->T
+2->T
+3->1
+3->2
+        """.trimIndent()
+
+//        val sampleInput = """
+//4
+//1->A
+//1->A
+//2->A
+//2->A
+//3->A
+//3->A
+//4->A
+//4->A
+//5->1
+//5->2
+//6->3
+//6->4
+//7->5
+//7->6
+//        """.trimIndent()
+
+        val input = sampleInput.reader().readLines().toMutableList()
+
+        sp.parseInputStrings(input)
+        sp.doScoring()
+        printMap()
+
+        val changeList = sp.buildChangeList()
+        println(sp.totalHammingDistance)
+        println(changeList.joinToString("\n"))
+
     }
 
 
@@ -77,25 +115,16 @@ ATAGCCAC->ATAGACAA:2
 CAAATCCC->ATAGCCAC:5
         """.trimIndent()
 
-//        val input = sampleInput.reader().readLines().toMutableList()
-//        val numLeaves = input[0].trim().toInt()
-//        input.removeFirst()
-//        val m = parseMatrixInput(numLeaves, input)
-//
-//        val expectedResultStrings = expectedOutputString.reader().readLines().toMutableList()
-//        val expectedGraph = parseSampleInput(expectedResultStrings)
-//
-//        val result = nj.neighborJoiningStart(numLeaves, m)
-//
-//        //printGraph(result)
-//
-//        checkEdgesAreEqual(expectedGraph, result)
-//
-//        val theResultMatrix = sp.distancesBetweenLeavesFloat(numLeaves, result)
-//        //printMatrix(matrixSize, theResultMatrix)
-//
-//        // This is a NON-ADDITIVE matrix - so this test will fail.
-//        //assertEquals(m, theResultMatrix)
+        val input = sampleInput.reader().readLines().toMutableList()
+
+        sp.parseInputStrings(input)
+        sp.doScoring()
+        printMap()
+
+        val changeList = sp.buildChangeList()
+        println(sp.totalHammingDistance)
+        println(changeList.joinToString("\n"))
+
     }
 
     @Test
@@ -135,7 +164,7 @@ CAAATCCC->ATAGCCAC:5
 
     /**
      * Test basic scoring of left and right {ACGT}
-     * see
+     * from example graph, see:
      * https://stepik.org/lesson/240342/step/7?unit=212688
      */
     @Test
@@ -176,37 +205,123 @@ CAAATCCC->ATAGCCAC:5
     fun smallParsimonyScoring2Test() {
         val sampleInput = """
 8
-1->C
-1->C
-2->A
-2->C
-3->G
-3->G
-4->T
-4->C
-5->1
-5->2
-6->3
-6->4
-7->5
-7->6
+8->CC
+8->CC
+9->AA
+9->CC
+10->GG
+10->GG
+11->TT
+11->CC
+12->8
+12->9
+13->10
+13->11
+14->12
+14->13
         """.trimIndent()
 
-        val expectedResults = """
-1-2 0 2 2
-2-1 1 2 2
-3-2 2 0 2
-4-2 1 2 1
-5-2 1 3 3
-6-3 2 2 2
-7-5 3 4 4
-        """.trimIndent().lines()
+        // string output expected results
+        val expectedStrings = """
+6
+CC->CC:0
+CC->CC:0
+CC->CC:0
+CC->CC:0
+CC->CC:0
+CC->CC:0
+CC->CC:0
+CC->CC:0
+CC->CC:0
+CC->CC:0
+CC->CC:0
+CC->CC:0
+CC->AA:2
+AA->CC:2
+CC->CC:0
+CC->CC:0
+CC->GG:2
+GG->CC:2
+CC->CC:0
+CC->CC:0
+GG->GG:0
+GG->GG:0
+GG->GG:0
+GG->GG:0
+CC->TT:2
+TT->CC:2
+CC->CC:0
+CC->CC:0
+        """.trimIndent().lines().toMutableList()
 
         val input = sampleInput.reader().readLines().toMutableList()
 
         sp.parseInputStrings(input)
-        sp.dnaLen = 1 // global variable
-        sp.iterateNodes()
+        sp.doScoring()
+
+        val changeList = sp.buildChangeList()
+        println(sp.totalHammingDistance)
+        //println(changeList.joinToString("\n"))
+
+        // check the total distance for the tree
+        val expectedHammingDistance = expectedStrings[0].toInt()
+        assertEquals(expectedHammingDistance, sp.totalHammingDistance)
+        expectedStrings.removeFirst()
+
+        // now check the edges
+        val changeListStrings = changeList.joinToString("\n").lines().sorted()
+        val expectedStringsSorted = expectedStrings.sorted()
+        println(changeListStrings.sorted().joinToString("\n"))
+        assertContentEquals(expectedStringsSorted, changeListStrings)
+    }
+
+
+    /**
+     * this test is to tune the
+     * priority for tie-breaking to
+     * conform to the sample results.
+     */
+    @Test
+    @DisplayName("Small Parsimony tuning test")
+    fun smallParsimonyTuningTest() {
+        val sampleInput = """
+4
+4->A
+4->T
+5->T
+5->T
+6->4
+6->5
+        """.trimIndent()
+
+        // scoring map expected results
+        val expectedResults = """
+4-1 2 2 1
+5-2 2 2 0
+6-2 3 3 1
+        """.trimIndent().lines()
+
+        // string output expected results
+        val expectedStrings = """
+1
+T->T:0
+T->T:0
+T->T:0
+T->T:0
+T->A:1
+A->T:1
+T->T:0
+T->T:0
+T->T:0
+T->T:0
+T->T:0
+T->T:0
+        """.trimIndent().lines().toMutableList()
+
+        val input = sampleInput.reader().readLines().toMutableList()
+
+        sp.parseInputStrings(input)
+        sp.doScoring()
 
         /*
          * now compare the results with the expected matrices
@@ -217,12 +332,33 @@ CAAATCCC->ATAGCCAC:5
             val expectedArrayValues = e[1].split(" ").map { it.toInt()}
             val expectedArray = mk.d2array(4, 1) { expectedArrayValues[it]}
 
-            assertNotNull(sp.nodeMap[i])
-            val resultArray = sp.nodeMap[i]!!.scoringArray
+            assertNotNull(sp.nodeMap[node])
+            val resultArray = sp.nodeMap[node]!!.scoringArray
             assertEquals(expectedArray, resultArray)
         }
+
+        val changeList = sp.buildChangeList()
+//        println(sp.totalHammingDistance)
+//        println(changeList.joinToString("\n"))
+
+        // check the total distance for the tree
+        val expectedHammingDistance = expectedStrings[0].toInt()
+        assertEquals(expectedHammingDistance, sp.totalHammingDistance)
+        expectedStrings.removeFirst()
+
+        // now check the edges
+        val changeListStrings = changeList.joinToString("\n").lines().sorted()
+        val expectedStringsSorted = expectedStrings.sorted()
+        //println(changeListStrings)
+        assertContentEquals(expectedStringsSorted, changeListStrings)
+
     }
 
+    /**
+     * walk the node map and print the node connections
+     * or the node to dna string
+     *   this is valid for the initial map.
+     */
     fun printMap() {
         val m = sp.nodeMap
         for (e in m.keys) {
@@ -248,62 +384,6 @@ CAAATCCC->ATAGCCAC:5
     }
 
 
-    /**
-     * compare two maps of structure:
-     *  MutableMap<String, Map<String, Int>> = mutableMapOf()
-     */
-    private fun checkEdgesAreEqual(a: Map<String, Map<String, Int>>, b: Map<String, Map<String, Int>>) {
 
-        // test 1 - number of keys match
-        val aSorted = a.toSortedMap()
-        val bSorted = b.toSortedMap()
-
-        assertEquals(aSorted.keys.size, bSorted.keys.size)
-
-        // test 2 - the keys belong to equivalent sets
-        for (baseNodeMapA in aSorted) {
-            kotlin.test.assertTrue(
-                bSorted.containsKey(baseNodeMapA.key),
-                "Failed base Node equivalence $baseNodeMapA.key"
-            )
-        }
-
-        // test 3 - for each key, the maps are equivalent sets
-        for (ele in aSorted) {
-            // test 1A - number of keys match
-            val mapA = aSorted[ele.key]
-            val mapB = bSorted[ele.key]
-            assertEquals(mapA!!.keys.size, mapB!!.keys.size, "Failed equal key size")
-
-            // test 2A - the keys belong to equivalent sets
-            for (ele2 in mapA) {
-                kotlin.test.assertTrue(mapB.containsKey(ele2.key), "Failed key set equivalence for next node")
-            }
-
-            // test 3A - for each key, the maps are equivalent sets
-            for (ele2 in mapA) {
-                val distanceA = mapA[ele2.key]
-                val distanceB = mapB[ele2.key]
-                assertEquals(distanceA!!.toDouble(), distanceB!!.toDouble(), 0.01)
-            }
-        }
-    }
-
-
-    private fun parseSampleInput(nodeToNodePlusDistance: List<String>): MutableMap<Int, MutableMap<Int, Float>> {
-        val edgeMap: MutableMap<Int, MutableMap<Int, Float>> = mutableMapOf()
-        for (e in nodeToNodePlusDistance) {
-            val sourceDest = e.split("->")
-            val destNodeAndWeightPair = sourceDest[1].split(":")
-            val sourceNodeNumber = sourceDest[0].toInt()
-            if (edgeMap.containsKey(sourceNodeNumber)) {
-                edgeMap[sourceNodeNumber]!![destNodeAndWeightPair[0].toInt()] = destNodeAndWeightPair[1].toFloat()
-            } else {
-                edgeMap[sourceNodeNumber] =
-                    mutableMapOf(Pair(destNodeAndWeightPair[0].toInt(), destNodeAndWeightPair[1].toFloat()))
-            }
-        }
-        return edgeMap
-    }
 
 }
