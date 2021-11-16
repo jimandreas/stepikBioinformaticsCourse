@@ -99,41 +99,6 @@ CAAATCCC->ATAGCCAC:5
 
     }
 
-    @Test
-    @DisplayName("Small Parsimony parsing test")
-    fun smallParsimonyParsingTest() {
-        val sampleInput = """
-4
-4->CAAATCCC
-4->ATTGCGAC
-5->CTGCGCTG
-5->ATGGACGA
-6->4
-6->5
-        """.trimIndent()
-
-        val expectedOutputString = """
-16
-ATTGCGAC->ATAGCCAC:2
-ATAGACAA->ATAGCCAC:2
-ATAGACAA->ATGGACTA:2
-ATGGACGA->ATGGACTA:1
-CTGCGCTG->ATGGACTA:4
-ATGGACTA->CTGCGCTG:4
-ATGGACTA->ATGGACGA:1
-ATGGACTA->ATAGACAA:2
-ATAGCCAC->CAAATCCC:5
-ATAGCCAC->ATTGCGAC:2
-ATAGCCAC->ATAGACAA:2
-CAAATCCC->ATAGCCAC:5
-        """.trimIndent()
-
-        val input = sampleInput.reader().readLines().toMutableList()
-
-        sp.parseInputStrings(input)
-        //printMap()
-    }
-
     /**
      * Test basic scoring of left and right {ACGT}
      * from example graph, see:

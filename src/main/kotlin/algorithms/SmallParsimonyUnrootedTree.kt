@@ -24,53 +24,29 @@ import kotlin.collections.set
 /**
  *
  * See also:
- * Stepik: https://stepik.org/lesson/240342/step/10?unit=212688
- * Rosalind: http://rosalind.info/problems/ba7f/
- * Youtube: https://www.youtube.com/watch?v=h515dSZWEyM
+ * Stepik: https://stepik.org/lesson/240342/step/12?unit=212688
+ * Rosalind: http://rosalind.info/problems/ba7g/
+ * Youtube: https://www.youtube.com/watch?v=Rfa-2SvxslE
  *
  * Uses the Kotlin Multik multidimensional array library
  * @link: https://github.com/Kotlin/multik
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-class SmallParsimony {
+class SmallParsimonyUnrootedTree {
     var verbose = false // for debug printout
 
     /**
+    Code Challenge: Solve the Small Parsimony in an Unrooted Tree Problem.
 
-    Code Challenge: Implement SmallParsimony to solve the Small Parsimony Problem.
+    Input: An integer n followed by an adjacency list for an
+    unrooted binary tree with n leaves labeled by DNA strings.
 
-    Input: An integer n followed by an adjacency list for a rooted binary
-    tree with n leaves labeled by DNA strings.
-
-    Output: The minimum parsimony score of this tree,
-    followed by the adjacency list of a tree corresponding to
-    labeling internal nodes by DNA strings in order to minimize
-    the parsimony score of the tree.  You may break ties however you like.
-
-    Note: Remember to run SmallParsimony on each individual index
-    of the strings at the leaves of the tree.
+    Output: The minimum parsimony score of this tree, followed
+    by the adjacency list of the tree corresponding to labeling
+    internal nodes by DNA strings in order to minimize the parsimony
+    score of the tree.
      */
-
-    private val pseudoCode = """
-    SmallParsimony(T, Character)
-    for each node v in tree T
-        Tag(v) ← 0
-        if v is a leaf
-            Tag(v) ← 1
-            for each symbol k in the alphabet
-                if Character(v) = k
-                    sk(v) ← 0
-                else
-                    sk(v) ← ∞
-    while there exist ripe nodes in T
-        v ← a ripe node in T
-        Tag(v) ← 1
-        for each symbol k in the alphabet
-            sk(v) ← minimumall symbols i {si(Daughter(v))+αi,k} + minimumall symbols j {sj(Son(v))+αj,k}
-    return minimum over all symbols k {sk(v)}
-    """.trimIndent()
-
     /**
      * Nodes are either a internal NODE, or a LEAF
      *   Internal NODEs have an id number, and have a Left and Right component defined.
@@ -81,7 +57,7 @@ class SmallParsimony {
     data class Node(
         var nodeType: NodeType = NodeType.NODE,
         val id: Int,
-        var ripe: Boolean = false,
+        var isScored: Boolean = false,
         var dnaString: String? = null,
         var left: Node? = null,
         var right: Node? = null,
@@ -94,6 +70,8 @@ class SmallParsimony {
         }
     }
 
+
+
     data class DnaTransform(
         val str1: String,
         val str2: String,
@@ -105,71 +83,89 @@ class SmallParsimony {
     }
 
     var numLeaves = 0
-    val nodeMap: HashMap<Int, Node> = hashMapOf()
+
+    // this is the map set up after parsing the input
+    val nodeMapParsed: HashMap<Int, Node> = hashMapOf()
+    // this is the temp map that includes the test root
+    var nodeMapScoring: HashMap<Int, Node> = hashMapOf()
+
+    // this is the map form the input that has Int->Int records
+    val edgeMap: HashMap<Int, MutableList<Int>> = hashMapOf()
+
     var dnaLen = -1
     var totalHammingDistance = 0
-    var lastNode: Node? = null
 
     /**
      * parse the test input:
-     * Input: An integer n followed by an adjacency list for a
-     * rooted binary tree with n leaves labeled by DNA strings.
+     * Input: An integer n followed by an adjacency list for an
+     * *UNrooted* binary tree with n leaves labeled by DNA strings.
      * example:
     4
-    4->CAAATCCC
-    4->ATTGCGAC
-    5->CTGCGCTG
-    5->ATGGACGA
-    6->4
-    6->5
+    TCGGCCAA->4
+    4->TCGGCCAA
+    CCTGGCTG->4
+    4->CCTGGCTG
+    CACAGGAT->5
+    5->CACAGGAT
+    TGAGTACC->5
+    5->TGAGTACC
+    4->5
+    5->4
+
+     Note: the parser simply ignores lines beginning with a codon
      */
     fun parseInputStrings(inputStrings: MutableList<String>) {
-//        val outputList: MutableList<Node> = mutableListOf()
 
         numLeaves = inputStrings[0].toInt()
-
         inputStrings.removeFirst()
+
         while (inputStrings.size > 0) {
             val line = inputStrings[0].split("->")
+
+            // skip lines beginning with a codon:
+            val testcodon = "ACGT".indexOf(line[0][0])
+            if (testcodon != -1) {
+                inputStrings.removeFirst()
+                continue
+            }
+            // OK have a line beginning with a number:
             val nodeNum = line[0].toInt()
             var nodeStruct: Node
-            if (nodeMap.containsKey(nodeNum)) {
-                nodeStruct = nodeMap[nodeNum]!!
+            if (nodeMapParsed.containsKey(nodeNum)) {
+                nodeStruct = nodeMapParsed[nodeNum]!!
             } else {
                 nodeStruct = Node(id = nodeNum)
-                nodeMap[nodeNum] = nodeStruct
-//                outputList.add(nodeStruct)
+                nodeMapParsed[nodeNum] = nodeStruct
+
             }
             val codon = "ACGT".indexOf(line[1][0])
             // see if this a node to node connection, or a DNA string definition
             if (codon == -1) {
-                // this is a node to internal node line
+
+                // this is a node -> node line, add to edge list
+                //   assumes dataset provides reverse edges
+
                 val edgeTo = line[1].toInt()
-                var edgeToNode: Node
-                if (!nodeMap.containsKey(edgeTo)) {
-                    val newNode = Node(id = edgeTo)
-                    nodeMap[edgeTo] = newNode
-//                    outputList.add(newNode)
-                    edgeToNode = newNode
+
+                if (edgeMap.containsKey(nodeNum)) {
+                    edgeMap[nodeNum]!!.add(edgeTo)
                 } else {
-                    edgeToNode = nodeMap[edgeTo]!!
+                    edgeMap[nodeNum] = mutableListOf(edgeTo)
                 }
-                if (nodeStruct.left == null) {
-                    nodeStruct.left = edgeToNode
-                } else {
-                    nodeStruct.right = edgeToNode
-                }
+
             } else {
-                // this is a dnaString
+
+                // this is a node num -> dnaString
+
                 dnaLen = line[1].length
                 val leafNode = Node(
                     nodeType = NodeType.LEAF,
                     id = 0,
-                    ripe = true,
+                    isScored = true,
                     dnaString = line[1],
                     scoringArray = mkArrayWithScores(line[1])
                 )
-//                outputList.add(leafNode)
+
                 if (nodeStruct.left == null) {
                     nodeStruct.left = leafNode
                 } else {
@@ -178,45 +174,72 @@ class SmallParsimony {
             }
             inputStrings.removeFirst()
         }
-//        return outputList
     }
 
     /**
-     * loop through the nodes until there are no ripe pairs left,
-     * and all scoring matrices have been calculated
-     *
-     * Note: also sets lastNode - this will be the root of
-     * the binary tree at the end
+     * findMinTree
+     *    go along all the edges, making each the root of the tree.
+     *    Then calculate the minimum Parsimony result
      */
-    fun doScoring() {
+
+    fun findMinTree() {
+        val minHD = Int.MAX_VALUE
+
+        for (e in edgeMap.keys) {
+            val hammingDistanceFound = doTreeWalk(e)
+        }
+    }
+
+    /**
+     *  find the hamming distance for a tree rooted at [rootEdge]
+     *
+     *  Method: build a list of scored nodes.   Score all nodes
+     *  until all nodes have been scored.   Then score the root.
+     */
+    fun doTreeWalk(rootEdge: Int): Int {
+        val scoredNodes : MutableList<Int> = mutableListOf(rootEdge)
+
+        for (n in edgeMap.keys) {
+            nodeMapScoring = nodeMapParsed.clone() as HashMap<Int, Node>
+            val leafNode = Node(
+                nodeType = NodeType.NODE,
+                id = -1,
+                isScored = false,
+                dnaString = null,
+                scoringArray = null)
+            )
+        }
+
+    }
+
+
+    /**
+     * score all the nodes with two leaves - the scores doesn't change
+     * as the tree is manipulated
+     */
+    fun scoreLeaves() {
 
         if (dnaLen == -1) {
             println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
             return
         }
 
-        do {
-            var foundRipePair = false
-            for (n in nodeMap) {
-                val node = n.value
-                if (node.scoringArray != null) {
-                    continue
-                }
-                if (node.left != null && node.right != null) {
-                    val left = node.left
-                    val right = node.right
-                    if (left!!.ripe && right!!.ripe) {
-                        foundRipePair = true
-                        lastNode = node
-                        val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
-                        node.scoringArray = scoredArray
-//                        val bestString = parsimoniousString(scoredArray)
-//                        node.dnaString = bestString
-                        node.ripe = true
-                    }
+        for (n in nodeMapParsed) {
+            val node = n.value
+            if (node.scoringArray != null) {
+                println("scoreLeaves: Hmm that is wierd - this node ${node.id} has already been scored!!")
+                continue
+            }
+            if (node.left != null && node.right != null) {
+                val left = node.left
+                val right = node.right
+                if (left!!.isScored && right!!.isScored) {
+                    val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
+                    node.scoringArray = scoredArray
+                    node.isScored = true
                 }
             }
-        } while (foundRipePair == true)
+        }
     }
 
     /**
@@ -226,17 +249,17 @@ class SmallParsimony {
      * find the dna letters that result in the
      * minimum change in the children nodes.
      */
-    fun buildChangeList(): List<DnaTransform> {
+    fun buildChangeList(rootNode: Node): List<DnaTransform> {
         val changeList: MutableList<DnaTransform> = mutableListOf()
-        if (dnaLen == -1 || lastNode == null) {
+        if (dnaLen == -1) {
             println("iterateNodes: global variable dnaLen or lastNode is not initialized.  Giving up.")
             return changeList
         }
 
         // work from the root down, setting the dna strings on the way
 
-        val workList: MutableList<Node> = mutableListOf(lastNode!!)
-        lastNode!!.dnaString = parsimoniousString(lastNode!!.scoringArray!!)
+        val workList: MutableList<Node> = mutableListOf(rootNode)
+        rootNode.dnaString = parsimoniousString(rootNode.scoringArray!!)
 
         while (workList.isNotEmpty()) {
             val node = workList.removeFirst()
