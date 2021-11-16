@@ -17,7 +17,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.2")
 
     testImplementation(kotlin("test"))
-    testImplementation(platform("org.junit:junit-bom:5.7.2"))
+    testImplementation(platform("org.junit:junit-bom:5.8.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 

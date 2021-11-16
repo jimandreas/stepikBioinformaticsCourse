@@ -249,12 +249,10 @@ fun translateDnaCodonStringToAminoAcidString(codonString: String, stopAtStopCodo
 
     val chunkedString = codonString.chunked(3)
 
-    var foundStopCodon = false
     for (item in chunkedString) {
         if (stopAtStopCodon) {
             when (item) {
                 "TAA", "TAG", "TGA" -> {
-                    foundStopCodon = true
                     break
                 }
             }

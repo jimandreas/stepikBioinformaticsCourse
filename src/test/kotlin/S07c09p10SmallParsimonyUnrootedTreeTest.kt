@@ -25,11 +25,11 @@ import kotlin.test.assertEquals
 
 internal class S07c09p10SmallParsimonyUnrootedTreeTest {
 
-    lateinit var sput: SmallParsimonyUnrootedTree
+    lateinit var spurt: SmallParsimonyUnrootedTree
 
     @BeforeEach
     fun setUp() {
-        sput = SmallParsimonyUnrootedTree()
+        spurt = SmallParsimonyUnrootedTree()
     }
 
     @AfterEach
@@ -59,14 +59,15 @@ TGAGTACC->5
 
         val expectedHammingDistance = 17
 
-        sput.parseInputStrings(sampleInput.lines().toMutableList())
-        sput.scoreLeaves()
+        spurt.parseInputStrings(sampleInput.lines().toMutableList())
+
         //printMap()
 
-        val changeList = sput.buildChangeList()
+        spurt.findMinTree()
+
         val resultsList: MutableList<String> = mutableListOf()
 
-        assertEquals(expectedHammingDistance, sput.totalHammingDistance)
+        assertEquals(expectedHammingDistance, spurt.totalHammingDistance)
 
     }
 
@@ -76,7 +77,7 @@ TGAGTACC->5
      *   this is valid for the initial map.
      */
     fun printMap() {
-        val m = sput.nodeMapParsed
+        val m = spurt.nodeMapParsed
         for (e in m.keys) {
             val n = m[e]!!
             print("${n.id}: ")

@@ -61,15 +61,14 @@ class SmallParsimonyUnrootedTree {
         var dnaString: String? = null,
         var left: Node? = null,
         var right: Node? = null,
-        var hdLeft : Int = 0,
-        var hdRight : Int = 0,
+        var hdLeft: Int = 0,
+        var hdRight: Int = 0,
         var scoringArray: D2Array<Int>? = null
     ) {
         override fun toString(): String {
             return "Node num $id type: $nodeType d:$dnaString l:${left?.id} r:${right?.id}"
         }
     }
-
 
 
     data class DnaTransform(
@@ -86,6 +85,7 @@ class SmallParsimonyUnrootedTree {
 
     // this is the map set up after parsing the input
     val nodeMapParsed: HashMap<Int, Node> = hashMapOf()
+
     // this is the temp map that includes the test root
     var nodeMapScoring: HashMap<Int, Node> = hashMapOf()
 
@@ -112,7 +112,7 @@ class SmallParsimonyUnrootedTree {
     4->5
     5->4
 
-     Note: the parser simply ignores lines beginning with a codon
+    Note: the parser simply ignores lines beginning with a codon
      */
     fun parseInputStrings(inputStrings: MutableList<String>) {
 
@@ -174,6 +174,9 @@ class SmallParsimonyUnrootedTree {
             }
             inputStrings.removeFirst()
         }
+
+        // now score all the nodes with leaves
+        scoreLeaves()
     }
 
     /**
@@ -183,33 +186,70 @@ class SmallParsimonyUnrootedTree {
      */
 
     fun findMinTree() {
-        val minHD = Int.MAX_VALUE
+        var minHD = Int.MAX_VALUE
+        var minEdgeNumber = 0
 
         for (e in edgeMap.keys) {
-            val hammingDistanceFound = doTreeWalk(e)
+
+            val connList = edgeMap[e]
+            if (connList!!.size > 1) {
+                println("HMMM findMinTree more than one connection for node $e, using first one only")
+            }
+
+            val leftNode = nodeMapParsed[e]
+            val rightNode = nodeMapParsed[connList[0]]
+
+            nodeMapScoring = nodeMapParsed.clone() as HashMap<Int, Node>
+            val tempRootNode = Node(
+                nodeType = NodeType.NODE,
+                id = -1,  // fake id for temp root
+                isScored = false,
+                left = leftNode,
+                right = rightNode,
+                dnaString = null,
+                scoringArray = null
+            )
+            scoreEdges()
+            val scoredArray = scoreArrays(leftNode!!.scoringArray!!, rightNode!!.scoringArray!!)
+            tempRootNode.scoringArray = scoredArray
+            tempRootNode.isScored = true
+            buildChangeList(tempRootNode)
+
+            // see if we have a new winner for the min hamming distance
+            if (totalHammingDistance < minHD) {
+                minHD = totalHammingDistance
+                minEdgeNumber = e
+            }
         }
+        println("min Edge Number is $minEdgeNumber with HD of $minHD")
     }
 
-    /**
-     *  find the hamming distance for a tree rooted at [rootEdge]
-     *
-     *  Method: build a list of scored nodes.   Score all nodes
-     *  until all nodes have been scored.   Then score the root.
-     */
-    fun doTreeWalk(rootEdge: Int): Int {
-        val scoredNodes : MutableList<Int> = mutableListOf(rootEdge)
 
-        for (n in edgeMap.keys) {
-            nodeMapScoring = nodeMapParsed.clone() as HashMap<Int, Node>
-            val leafNode = Node(
-                nodeType = NodeType.NODE,
-                id = -1,
-                isScored = false,
-                dnaString = null,
-                scoringArray = null)
-            )
+    /**
+     * score all the edges
+     */
+    fun scoreEdges() {
+        if (dnaLen == -1) {
+            println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
+            return
         }
 
+        for (n in edgeMap.keys) {
+            if (!nodeMapScoring.containsKey(n)) {
+                println("OOPSIE : scoreEdges: no node for number $n")
+                continue
+            }
+            val node = nodeMapScoring[n]
+            if (node!!.left != null && node.right != null) {
+                val left = node.left
+                val right = node.right
+                if (left!!.isScored && right!!.isScored) {
+                    val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
+                    node.scoringArray = scoredArray
+                    node.isScored = true
+                }
+            }
+        }
     }
 
 
@@ -218,7 +258,6 @@ class SmallParsimonyUnrootedTree {
      * as the tree is manipulated
      */
     fun scoreLeaves() {
-
         if (dnaLen == -1) {
             println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
             return
@@ -242,12 +281,9 @@ class SmallParsimonyUnrootedTree {
         }
     }
 
+
     /**
-     * loop again through the nodes
-     *   starting with lastNode.
-     *
-     * find the dna letters that result in the
-     * minimum change in the children nodes.
+
      */
     fun buildChangeList(rootNode: Node): List<DnaTransform> {
         val changeList: MutableList<DnaTransform> = mutableListOf()
@@ -351,7 +387,7 @@ class SmallParsimonyUnrootedTree {
                         }
                     }
                     if (foundMatch == false) { // set to the first min value
-                        val minIndex = child[0..4,i].indexOf(mC!!)
+                        val minIndex = child[0..4, i].indexOf(mC!!)
                         letter = "ACGT"[minIndex]
                     }
                     str.append(letter)
@@ -360,7 +396,7 @@ class SmallParsimonyUnrootedTree {
                  * choose the character at the child's first scoring min value
                  */
                 else -> {
-                    val minIndex = child[0..4,i].indexOf(mC!!)
+                    val minIndex = child[0..4, i].indexOf(mC!!)
                     val letter = "ACGT"[minIndex]
                     str.append(letter)
                 }
