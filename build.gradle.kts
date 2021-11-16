@@ -10,15 +10,14 @@ repositories {
 }
 
 dependencies {
-    //implementation("org.junit.jupiter:junit-jupiter:5.7.2")
     implementation( "org.jetbrains.kotlinx:multik-api:0.1.1")
     implementation( "org.jetbrains.kotlinx:multik-default:0.1.1")
 
     implementation("com.squareup.okhttp3:okhttp:4.9.2")
 
-    testImplementation(kotlin("test"))
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.5.31")
     testImplementation(platform("org.junit:junit-bom:5.8.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }
 
 tasks.test {
