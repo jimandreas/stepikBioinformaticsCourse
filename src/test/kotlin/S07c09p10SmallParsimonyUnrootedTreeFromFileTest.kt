@@ -43,7 +43,7 @@ internal class S07c09p10SmallParsimonyUnrootedTreeFromFileTest {
 
         val loader = Foo()
         val sampleInput = loader.getResourceAsStrings("SmallParsimonyUnrootedTreeExtraDataset.txt")
-        val expectedOutput = loader.getResourceAsStrings("SmallParsimonyExtraDatasetSolution.txt")
+        val expectedOutput = loader.getResourceAsStrings("SmallParsimonyUnrootedTreeExtraDatasetSolution.txt")
 
         val expectedList = expectedOutput.toMutableList()
         val expectedHammingDistance = expectedList[0].toInt()
@@ -55,7 +55,60 @@ internal class S07c09p10SmallParsimonyUnrootedTreeFromFileTest {
         val numEdges = spurt.edgeMap.keys.size
         println("num Nodes = $numNodes num Edges = $numEdges")
 
-        spurt.findMinTree()
+        val result = spurt.buildChangeList()
+        println(spurt.totalHammingDistance)
+        println(result.joinToString("\n"))
+
+    }
+
+    @Test
+    @DisplayName("Small Parsimony Unrooted Tree Rosalind Quiz Dataset test")
+    fun smallParsimonyUnrootedTreeRosalindQuizDatasetTest() {
+
+        val loader = Foo()
+        val sampleInput = loader.getResourceAsStrings("SmallParsimonyUnrootedTreeRosalindQuizDataset.txt")
+        val expectedOutput = loader.getResourceAsStrings("SmallParsimonyUnrootedTreeExtraDatasetSolution.txt")
+
+        val expectedList = expectedOutput.toMutableList()
+        val expectedHammingDistance = expectedList[0].toInt()
+        expectedList.removeFirst()
+
+        spurt.parseInputStrings(sampleInput.toMutableList())
+
+        val numNodes = spurt.nodeMapParsed.keys.size
+        val numEdges = spurt.edgeMap.keys.size
+        println("num Nodes = $numNodes num Edges = $numEdges")
+
+        val result = spurt.buildChangeList()
+        println(spurt.totalHammingDistance)
+        println(result.joinToString("\n"))
+
+    }
+
+
+    private fun parseExpectedResult(e: MutableList<String>) {
+
+        val nodeNumList : MutableList<Int> = mutableListOf()
+
+        // https://stackoverflow.com/a/45380326
+        // val reversed = map.entries.associateBy({ it.value }) { it.key }
+
+        // build map of String to Int dna to node num
+        val m : HashMap<String, Int> = hashMapOf()
+        for (k in spurt.nodeMapParsed.keys) {
+            val dnaL = spurt.nodeMapParsed[k]!!.left!!.dnaString!!
+            val dnaR = spurt.nodeMapParsed[k]!!.right!!.dnaString!!
+            m[dnaL] = spurt.nodeMapParsed[k]!!.id
+            m[dnaR] = spurt.nodeMapParsed[k]!!.id
+        }
+
+        for (i in 0 until e.size) {
+            val d = e[i].split("->")[0]
+
+//            if (m[d] != null) {
+//                println("String $d maps to node ${m[d]}")
+//            }
+        }
 
     }
 

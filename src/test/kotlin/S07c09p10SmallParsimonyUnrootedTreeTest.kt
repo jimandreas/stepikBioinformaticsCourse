@@ -61,14 +61,51 @@ TGAGTACC->5
 
         spurt.parseInputStrings(sampleInput.lines().toMutableList())
 
-        //printMap()
+        val result = spurt.buildChangeList()
+        println(spurt.totalHammingDistance)
+        println(result.joinToString("\n"))
 
-        spurt.findMinTree()
+    }
 
-        val resultsList: MutableList<String> = mutableListOf()
+    @Test
+    @DisplayName("Small Parsimony Unrooted Tree debug test")
+    fun smallParsimonyUnrootedTreeDebugTest() {
+        val sampleInput = """
+8
+AA->8
+8->AA
+AC->8
+8->AC
+AG->9
+9->AG
+AT->9
+9->AT
+CA->10
+10->CA
+CC->10
+10->CC
+TT->11
+11->TT
+GG->11
+11->GG
+8->9
+9->8
+9->10
+10->9
+10->11
+11->10
+        """.trimIndent()
 
-        assertEquals(expectedHammingDistance, spurt.totalHammingDistance)
 
+        val input = sampleInput.reader().readLines().toMutableList()
+
+        val expectedHammingDistance = 17
+
+        spurt.parseInputStrings(sampleInput.lines().toMutableList())
+
+        val result = spurt.buildChangeList()
+        println(spurt.totalHammingDistance)
+        println(result.joinToString("\n"))
     }
 
     /**

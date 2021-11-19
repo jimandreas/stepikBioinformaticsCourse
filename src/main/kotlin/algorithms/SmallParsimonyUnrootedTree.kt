@@ -58,6 +58,7 @@ class SmallParsimonyUnrootedTree {
         var nodeType: NodeType = NodeType.NODE,
         val id: Int,
         var isScored: Boolean = false,
+        var isOutput: Boolean = false,
         var dnaString: String? = null,
         var left: Node? = null,
         var right: Node? = null,
@@ -69,7 +70,6 @@ class SmallParsimonyUnrootedTree {
             return "Node num $id type: $nodeType d:$dnaString l:${left?.id} r:${right?.id}"
         }
     }
-
 
     data class DnaTransform(
         val str1: String,
@@ -83,17 +83,17 @@ class SmallParsimonyUnrootedTree {
 
     var numLeaves = 0
 
-    // this is the map set up after parsing the input
+    // this is the map set up after parsing the input - node number to Node structure
     val nodeMapParsed: HashMap<Int, Node> = hashMapOf()
 
-    // this is the temp map that includes the test root
-    var nodeMapScoring: HashMap<Int, Node> = hashMapOf()
-
     // this is the map form the input that has Int->Int records
+    // note that there will (hopefully) be two nodes that have only one connection in the list.
+    //   These are the two end nodes.
     val edgeMap: HashMap<Int, MutableList<Int>> = hashMapOf()
 
     var dnaLen = -1
     var totalHammingDistance = 0
+    lateinit var lastNode: Node
 
     /**
      * parse the test input:
@@ -130,15 +130,8 @@ class SmallParsimonyUnrootedTree {
             }
             // OK have a line beginning with a number:
             val nodeNum = line[0].toInt()
-            var nodeStruct: Node
-            if (nodeMapParsed.containsKey(nodeNum)) {
-                nodeStruct = nodeMapParsed[nodeNum]!!
-            } else {
-                nodeStruct = Node(id = nodeNum)
-                nodeMapParsed[nodeNum] = nodeStruct
-
-            }
             val codon = "ACGT".indexOf(line[1][0])
+
             // see if this a node to node connection, or a DNA string definition
             if (codon == -1) {
 
@@ -157,11 +150,20 @@ class SmallParsimonyUnrootedTree {
 
                 // this is a node num -> dnaString
 
+                var nodeStruct: Node
+                if (nodeMapParsed.containsKey(nodeNum)) {
+                    nodeStruct = nodeMapParsed[nodeNum]!!
+                } else {
+                    nodeStruct = Node(id = nodeNum)
+                    nodeMapParsed[nodeNum] = nodeStruct
+                }
+
                 dnaLen = line[1].length
                 val leafNode = Node(
                     nodeType = NodeType.LEAF,
                     id = 0,
                     isScored = true,
+                    isOutput = true,
                     dnaString = line[1],
                     scoringArray = mkArrayWithScores(line[1])
                 )
@@ -175,117 +177,115 @@ class SmallParsimonyUnrootedTree {
             inputStrings.removeFirst()
         }
 
-        // now score all the nodes with leaves
-        scoreLeaves()
-    }
+        // complete the nodes in the edge list
 
-    /**
-     * findMinTree
-     *    go along all the edges, making each the root of the tree.
-     *    Then calculate the minimum Parsimony result
-     */
+        for (key in edgeMap.keys) {
+            if (!nodeMapParsed.containsKey(key)) {
+                val connList = edgeMap[key]
 
-    fun findMinTree() {
-        var minHD = Int.MAX_VALUE
-        var minEdgeNumber = 0
+                if (connList == null || connList.size == 0) {
+                    println("OOPSie1")
+                    continue
+                }
+                val conns: List<Int> =
+                    connList.filter {
+                        nodeMapParsed.containsKey(it)
+                    }
 
-        for (e in edgeMap.keys) {
+                if (conns.isEmpty()) {
+                    println("oopsie")
+                    continue
+                }
+                var right: Node? = null
+                if (conns.size > 1) {
+                    right = nodeMapParsed[conns[1]]
+                }
+                val newNode = Node(
+                    nodeType = NodeType.NODE,
+                    id = key,
+                    left = nodeMapParsed[conns[0]],
+                    right = right
+                )
+                nodeMapParsed[key] = newNode
 
-            val connList = edgeMap[e]
-            if (connList!!.size > 1) {
-                println("HMMM findMinTree more than one connection for node $e, using first one only")
-            }
-
-            val leftNode = nodeMapParsed[e]
-            val rightNode = nodeMapParsed[connList[0]]
-
-            nodeMapScoring = nodeMapParsed.clone() as HashMap<Int, Node>
-            val tempRootNode = Node(
-                nodeType = NodeType.NODE,
-                id = -1,  // fake id for temp root
-                isScored = false,
-                left = leftNode,
-                right = rightNode,
-                dnaString = null,
-                scoringArray = null
-            )
-            scoreEdges()
-            val scoredArray = scoreArrays(leftNode!!.scoringArray!!, rightNode!!.scoringArray!!)
-            tempRootNode.scoringArray = scoredArray
-            tempRootNode.isScored = true
-            buildChangeList(tempRootNode)
-
-            // see if we have a new winner for the min hamming distance
-            if (totalHammingDistance < minHD) {
-                minHD = totalHammingDistance
-                minEdgeNumber = e
             }
         }
-        println("min Edge Number is $minEdgeNumber with HD of $minHD")
+
+        // now score all the nodes
+        doScoring()
+
+        // find end nodes
+
+//        val ends: MutableList<Int> = mutableListOf()
+//        for (key in edgeMap.keys) {
+//            if (edgeMap[key]!!.size == 1) {
+//                ends.add(key)
+//            }
+//        }
+
+        // are any nodes not scored?
+
+        for (n in nodeMapParsed.keys) {
+            if (nodeMapParsed[n]!!.scoringArray == null) {
+                println("not scored: node ${nodeMapParsed[n]!!.id}")
+            } else {
+                lastNode = nodeMapParsed[n]!!
+            }
+        }
     }
 
 
     /**
-     * score all the edges
+     * loop through the nodes until there are no unscored nodes
+     * and all scoring matrices have been calculated.
+     *
+     * This is different from the SmallParsimony algo
+     *   in that the nodes don't necessarily have a left and right child
+     *
      */
-    fun scoreEdges() {
+    fun doScoring() {
+
         if (dnaLen == -1) {
             println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
             return
         }
 
-        for (n in edgeMap.keys) {
-            if (!nodeMapScoring.containsKey(n)) {
-                println("OOPSIE : scoreEdges: no node for number $n")
-                continue
-            }
-            val node = nodeMapScoring[n]
-            if (node!!.left != null && node.right != null) {
+        do {
+            var foundUnscoredNode = false
+            for (n in nodeMapParsed) {
+                val node = n.value
+                if (node.isScored) {
+                    continue
+                }
+                // if this node doesn't have a pair of sub-nodes,
+                //   then skip it
+                if (node.right == null) {
+                    println("node ${node.id} - no right side, skipping")
+                    continue
+                }
+                if (node.left == null) {
+                    println("node ${node.id} - no LEFT side, skipping")
+                    continue
+                }
+
                 val left = node.left
                 val right = node.right
                 if (left!!.isScored && right!!.isScored) {
+                    foundUnscoredNode = true
+
                     val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
                     node.scoringArray = scoredArray
                     node.isScored = true
                 }
+
             }
-        }
+        } while (foundUnscoredNode == true)
     }
 
-
     /**
-     * score all the nodes with two leaves - the scores doesn't change
-     * as the tree is manipulated
+     *
      */
-    fun scoreLeaves() {
-        if (dnaLen == -1) {
-            println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
-            return
-        }
-
-        for (n in nodeMapParsed) {
-            val node = n.value
-            if (node.scoringArray != null) {
-                println("scoreLeaves: Hmm that is wierd - this node ${node.id} has already been scored!!")
-                continue
-            }
-            if (node.left != null && node.right != null) {
-                val left = node.left
-                val right = node.right
-                if (left!!.isScored && right!!.isScored) {
-                    val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
-                    node.scoringArray = scoredArray
-                    node.isScored = true
-                }
-            }
-        }
-    }
-
-
-    /**
-
-     */
-    fun buildChangeList(rootNode: Node): List<DnaTransform> {
+    fun buildChangeList(): List<DnaTransform> {
         val changeList: MutableList<DnaTransform> = mutableListOf()
         if (dnaLen == -1) {
             println("iterateNodes: global variable dnaLen or lastNode is not initialized.  Giving up.")
@@ -294,11 +294,27 @@ class SmallParsimonyUnrootedTree {
 
         // work from the root down, setting the dna strings on the way
 
-        val workList: MutableList<Node> = mutableListOf(rootNode)
-        rootNode.dnaString = parsimoniousString(rootNode.scoringArray!!)
+        val workList: MutableList<Node> = mutableListOf(lastNode)
+        lastNode.dnaString = parsimoniousString(lastNode.scoringArray!!)
 
         while (workList.isNotEmpty()) {
             val node = workList.removeFirst()
+
+            // if no more work, then scan the edge list for the next node that
+            //  hasn't been scored
+            if (workList.isEmpty()) {
+                val conn = edgeMap[lastNode.id]
+                if (conn != null) {
+                    for (n in conn) {
+                        val nextNode = nodeMapParsed[n]!!
+                        if (!nextNode.isOutput) {
+                            workList.add(nextNode)
+                            // TODO: calculate cross-DNA string here!!
+                            nextNode.dnaString = parsimoniusCompareString(lastNode, nextNode)
+                        }
+                    }
+                }
+            }
 
             if (node.left != null && node.right != null) {
                 val left = node.left
@@ -309,6 +325,7 @@ class SmallParsimonyUnrootedTree {
                     left.dnaString = parsimoniusCompareString(node, left)
                     right!!.dnaString = parsimoniusCompareString(node, right)
                 }
+                lastNode = node
 
                 // calculate the hamming distance from root to children
                 val hammingLeft = hammingDistance(left.dnaString!!, node.dnaString!!)
@@ -326,11 +343,29 @@ class SmallParsimonyUnrootedTree {
                 changeList.add(c3)
                 changeList.add(c4)
 
-                workList.add(left)
-                workList.add(right)
+                if (!left.isOutput) {
+                    workList.add(left)
+
+                }
+                if (!right.isOutput) {
+                    workList.add(right)
+
+                }
+
+                node.isOutput = true
 
             }
         }
+
+
+        // are any nodes not printed?
+
+        for (n in nodeMapParsed.keys) {
+            if (!nodeMapParsed[n]!!.isOutput) {
+                println("not printed: node ${nodeMapParsed[n]!!.id}")
+            }
+        }
+
         return changeList
     }
 
