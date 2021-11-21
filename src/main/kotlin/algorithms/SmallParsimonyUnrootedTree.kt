@@ -269,8 +269,9 @@ class SmallParsimonyUnrootedTree {
         do {
             var foundUnscoredNode = false
             val workList: MutableList<Node> = mutableListOf()
-            workList.add(root.right!!)
-            workList.add(root.left!!)
+            workList.add(root)
+//            workList.add(root.right!!)
+//            workList.add(root.left!!)
 
             do {
                 val node = workList.removeFirst()
@@ -283,6 +284,9 @@ class SmallParsimonyUnrootedTree {
 
                 if (left.isScored && right.isScored) {
                     foundUnscoredNode = true
+                    if (node == root) {
+                        println("working on root")
+                    }
                     val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
                     node.scoringArray = scoredArray
                     node.isScored = true
@@ -344,18 +348,20 @@ class SmallParsimonyUnrootedTree {
         // work from the root down, setting the dna strings on the way
 
         val workList: MutableList<Node> = mutableListOf()
-        val r = root.right!!
-        val l = root.left!!
-        workList.add(r)
-        workList.add(l)
-        // first compare is special, as the root is an inserted root
-        r.dnaString = parsimoniousString(r.scoringArray!!)
-        l.dnaString = parsimoniousString(l.scoringArray!!)
-
-        val hd = hammingDistance(l.dnaString!!, r.dnaString!!)
-        totalHammingDistance += hd
-        changeList.add(DnaTransform(r.dnaString!!, l.dnaString!!, hd, n = r.id))
-        changeList.add(DnaTransform(l.dnaString!!, r.dnaString!!, hd, n = l.id))
+        workList.add(root)
+        root.dnaString = parsimoniousString(root.scoringArray!!)
+//        val r = root.right!!
+//        val l = root.left!!
+//        workList.add(r)
+//        workList.add(l)
+//        // first compare is special, as the root is an inserted root
+//        r.dnaString = parsimoniousString(r.scoringArray!!)
+//        l.dnaString = parsimoniousString(l.scoringArray!!)
+//
+//        val hd = hammingDistance(l.dnaString!!, r.dnaString!!)
+//        totalHammingDistance += hd
+//        changeList.add(DnaTransform(r.dnaString!!, l.dnaString!!, hd, n = r.id))
+//        changeList.add(DnaTransform(l.dnaString!!, r.dnaString!!, hd, n = l.id))
 
         do {
             val node = workList.removeFirst()
