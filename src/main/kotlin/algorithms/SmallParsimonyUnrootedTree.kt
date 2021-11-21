@@ -7,18 +7,16 @@
 
 package algorithms
 
+import algorithms.SmallParsimonyUnrootedTree.NodeType.LEAF
+import algorithms.SmallParsimonyUnrootedTree.NodeType.NODE
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
-import org.jetbrains.kotlinx.multik.ndarray.operations.*
-import java.lang.StringBuilder
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.MutableList
-import kotlin.collections.hashMapOf
-import kotlin.collections.removeFirst
+import org.jetbrains.kotlinx.multik.ndarray.operations.count
+import org.jetbrains.kotlinx.multik.ndarray.operations.indexOf
+import org.jetbrains.kotlinx.multik.ndarray.operations.min
 import kotlin.collections.set
 
 /**
@@ -34,7 +32,6 @@ import kotlin.collections.set
  */
 
 class SmallParsimonyUnrootedTree {
-    var verbose = false // for debug printout
 
     /**
     Code Challenge: Solve the Small Parsimony in an Unrooted Tree Problem.
@@ -47,15 +44,15 @@ class SmallParsimonyUnrootedTree {
     internal nodes by DNA strings in order to minimize the parsimony
     score of the tree.
      */
+
     /**
      * Nodes are either a internal NODE, or a LEAF
      *   Internal NODEs have an id number, and have a Left and Right component defined.
      *   LEAF nodes have a dnaString defined and that is all.
-     *  The scoringArray is calculated as given in the pseudoCode.
      */
     enum class NodeType { NODE, LEAF }
     data class Node(
-        var nodeType: NodeType = NodeType.NODE,
+        var nodeType: NodeType = NODE,
         val id: Int,
         var isScored: Boolean = false,
         var isOutput: Boolean = false,
@@ -71,29 +68,34 @@ class SmallParsimonyUnrootedTree {
         }
     }
 
+    lateinit var root: Node  // the hacked up root of this tree
+
+    /**
+     * this is a record of the expected output -
+     *   string to string with distance
+     */
     data class DnaTransform(
         val str1: String,
         val str2: String,
-        val hammingDistance: Int
+        val hammingDistance: Int,
+        val n: Int = -1,
     ) {
         override fun toString(): String {
-            return "$str1->$str2:$hammingDistance"
+            return "$str1->$str2:$hammingDistance node: $n"
         }
     }
 
-    var numLeaves = 0
+    var numLeaves = 0 // this is specified in line 1 of the test input
 
     // this is the map set up after parsing the input - node number to Node structure
-    val nodeMapParsed: HashMap<Int, Node> = hashMapOf()
+    val leafHashMap: HashMap<Int, Node> = hashMapOf()
 
-    // this is the map form the input that has Int->Int records
-    // note that there will (hopefully) be two nodes that have only one connection in the list.
-    //   These are the two end nodes.
+    // from the test input - the lines that have Int -> Int
     val edgeMap: HashMap<Int, MutableList<Int>> = hashMapOf()
 
     var dnaLen = -1
     var totalHammingDistance = 0
-    lateinit var lastNode: Node
+    var maxEdgeNum = 0
 
     /**
      * parse the test input:
@@ -112,13 +114,15 @@ class SmallParsimonyUnrootedTree {
     4->5
     5->4
 
-    Note: the parser simply ignores lines beginning with a codon
+    Note: this parser simply ignores lines beginning with a codon
      */
+
     fun parseInputStrings(inputStrings: MutableList<String>) {
 
-        numLeaves = inputStrings[0].toInt()
+        numLeaves = inputStrings[0].toInt()  // line 1 of test input specifies how many leaf DNA strings
         inputStrings.removeFirst()
 
+        var leafNumber = 0
         while (inputStrings.size > 0) {
             val line = inputStrings[0].split("->")
 
@@ -151,17 +155,17 @@ class SmallParsimonyUnrootedTree {
                 // this is a node num -> dnaString
 
                 var nodeStruct: Node
-                if (nodeMapParsed.containsKey(nodeNum)) {
-                    nodeStruct = nodeMapParsed[nodeNum]!!
+                if (leafHashMap.containsKey(nodeNum)) {
+                    nodeStruct = leafHashMap[nodeNum]!!
                 } else {
                     nodeStruct = Node(id = nodeNum)
-                    nodeMapParsed[nodeNum] = nodeStruct
+                    leafHashMap[nodeNum] = nodeStruct
                 }
 
                 dnaLen = line[1].length
                 val leafNode = Node(
-                    nodeType = NodeType.LEAF,
-                    id = 0,
+                    nodeType = LEAF,
+                    id = leafNumber++,
                     isScored = true,
                     isOutput = true,
                     dnaString = line[1],
@@ -177,71 +181,83 @@ class SmallParsimonyUnrootedTree {
             inputStrings.removeFirst()
         }
 
-        // complete the nodes in the edge list
+        treeHacking()
 
-        for (key in edgeMap.keys) {
-            if (!nodeMapParsed.containsKey(key)) {
-                val connList = edgeMap[key]
-
-                if (connList == null || connList.size == 0) {
-                    println("OOPSie1")
-                    continue
-                }
-                val conns: List<Int> =
-                    connList.filter {
-                        nodeMapParsed.containsKey(it)
-                    }
-
-                if (conns.isEmpty()) {
-                    println("oopsie")
-                    continue
-                }
-                var right: Node? = null
-                if (conns.size > 1) {
-                    right = nodeMapParsed[conns[1]]
-                }
-                val newNode = Node(
-                    nodeType = NodeType.NODE,
-                    id = key,
-                    left = nodeMapParsed[conns[0]],
-                    right = right
-                )
-                nodeMapParsed[key] = newNode
-
-            }
-        }
-
-        // now score all the nodes
         doScoring()
+    }
 
-        // find end nodes
+    /**
+     * transform this mess into a binary tree suitable for traversing.
+     *
+     * Process:
+     *    Start at the edge of the edges.
+     *    Make a root node at the edge, hooking up the last two edges.
+     */
+    fun treeHacking() {
+        maxEdgeNum = edgeMap.keys.maxOrNull()!!
+        root = Node(
+            nodeType = NODE,
+            id = 0
+        )
+        // prune out the edges between maxEdgeNum and maxEdgeNum-1
+        val iE = edgeMap[maxEdgeNum]!!.indexOf(maxEdgeNum - 1)
+        edgeMap[maxEdgeNum]!!.removeAt(iE)
 
-//        val ends: MutableList<Int> = mutableListOf()
-//        for (key in edgeMap.keys) {
-//            if (edgeMap[key]!!.size == 1) {
-//                ends.add(key)
-//            }
-//        }
+        val iEm1 = edgeMap[maxEdgeNum - 1]!!.indexOf(maxEdgeNum)
+        edgeMap[maxEdgeNum - 1]!!.removeAt(iEm1)
 
-        // are any nodes not scored?
+        val left = descent(maxEdgeNum - 1, maxEdgeNum)
+        val right = descent(maxEdgeNum, 0)
 
-        for (n in nodeMapParsed.keys) {
-            if (nodeMapParsed[n]!!.scoringArray == null) {
-                println("not scored: node ${nodeMapParsed[n]!!.id}")
+        root.left = left
+        root.right = right
+        // finished for now
+    }
+
+    /**
+     *  recursively descend the edges from parent to child.
+     *    Stop the descent at LEAF nodes -
+     *       i.e. nodes that are present in the
+     *       leafHashMap.
+     */
+    fun descent(myNodeNum: Int, parentNodeNum: Int): Node? {
+        val conns = edgeMap[myNodeNum]
+        conns!!.remove(parentNodeNum)
+        if (conns.isEmpty()) {
+            if (leafHashMap.containsKey(myNodeNum)) {
+                return leafHashMap[myNodeNum]
             } else {
-                lastNode = nodeMapParsed[n]!!
+                return null
             }
         }
+
+        var left: Node
+        if (leafHashMap.containsKey(conns[0])) {
+            left = leafHashMap[conns[0]]!!
+        } else {
+            left = descent(conns[0], myNodeNum)!!
+        }
+
+        var right: Node
+        if (leafHashMap.containsKey(conns[1])) {
+            right = leafHashMap[conns[1]]!!
+        } else {
+            right = descent(conns[1], myNodeNum)!!
+        }
+
+        val thisNode = Node(
+            nodeType = NODE,
+            id = myNodeNum,
+            left = left,
+            right = right
+        )
+        return thisNode
     }
 
 
     /**
-     * loop through the nodes until there are no unscored nodes
-     * and all scoring matrices have been calculated.
-     *
-     * This is different from the SmallParsimony algo
-     *   in that the nodes don't necessarily have a left and right child
-     *
+     * descend ITERATIVELY through the nodes starting at the root until there are no unscored nodes
+     * and therefore all scoring matrices have been calculated.
      */
     fun doScoring() {
 
@@ -252,34 +268,67 @@ class SmallParsimonyUnrootedTree {
 
         do {
             var foundUnscoredNode = false
-            for (n in nodeMapParsed) {
-                val node = n.value
-                if (node.isScored) {
-                    continue
-                }
-                // if this node doesn't have a pair of sub-nodes,
-                //   then skip it
-                if (node.right == null) {
-                    println("node ${node.id} - no right side, skipping")
-                    continue
-                }
-                if (node.left == null) {
-                    println("node ${node.id} - no LEFT side, skipping")
-                    continue
-                }
+            val workList: MutableList<Node> = mutableListOf()
+            workList.add(root.right!!)
+            workList.add(root.left!!)
 
+            do {
+                val node = workList.removeFirst()
                 val left = node.left
                 val right = node.right
-                if (left!!.isScored && right!!.isScored) {
-                    foundUnscoredNode = true
 
+                if (node.isScored || left == null || right == null) {
+                    continue
+                }
+
+                if (left.isScored && right.isScored) {
+                    foundUnscoredNode = true
                     val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
                     node.scoringArray = scoredArray
                     node.isScored = true
                 }
+                if (!left.isScored) {
+                    workList.add(left)
+                    foundUnscoredNode = true
+                }
+                if (!right.isScored) {
+                    workList.add(right)
+                    foundUnscoredNode = true
+                }
+            } while (workList.isNotEmpty())
 
-            }
         } while (foundUnscoredNode == true)
+    }
+
+    fun printTree(n: Node) {
+
+        if (n.left != null) {
+            val str = StringBuilder()
+            str.append(n.id)
+            str.append("->")
+            str.append(n.left!!.id)
+            str.append(" ${n.dnaString} ${n.left!!.dnaString}")
+            println(str.toString())
+        }
+
+        if (n.right != null) {
+            val str = StringBuilder()
+            str.append(n.id)
+            str.append("->")
+            str.append(n.right!!.id)
+            str.append(" ${n.dnaString} ${n.right!!.dnaString}")
+            println(str.toString())
+        }
+
+        if (n.left != null) {
+            printTree(n.left!!)
+        }
+
+        if (n.right != null) {
+            printTree(n.right!!)
+        }
+
+        
     }
 
     /**
@@ -294,79 +343,80 @@ class SmallParsimonyUnrootedTree {
 
         // work from the root down, setting the dna strings on the way
 
-        val workList: MutableList<Node> = mutableListOf(lastNode)
-        lastNode.dnaString = parsimoniousString(lastNode.scoringArray!!)
+        val workList: MutableList<Node> = mutableListOf()
+        val r = root.right!!
+        val l = root.left!!
+        workList.add(r)
+        workList.add(l)
+        // first compare is special, as the root is an inserted root
+        r.dnaString = parsimoniousString(r.scoringArray!!)
+        l.dnaString = parsimoniousString(l.scoringArray!!)
 
-        while (workList.isNotEmpty()) {
+        val hd = hammingDistance(l.dnaString!!, r.dnaString!!)
+        totalHammingDistance += hd
+        changeList.add(DnaTransform(r.dnaString!!, l.dnaString!!, hd, n = r.id))
+        changeList.add(DnaTransform(l.dnaString!!, r.dnaString!!, hd, n = l.id))
+
+        do {
             val node = workList.removeFirst()
+            if (node.isOutput) {
+                println("Node ${node.id} is already output")
+                continue
+            }
+            println("node ${node.id} left ${node.left!!.id} right ${node.right!!.id}")
 
-            // if no more work, then scan the edge list for the next node that
-            //  hasn't been scored
-            if (workList.isEmpty()) {
-                val conn = edgeMap[lastNode.id]
-                if (conn != null) {
-                    for (n in conn) {
-                        val nextNode = nodeMapParsed[n]!!
-                        if (!nextNode.isOutput) {
-                            workList.add(nextNode)
-                            // TODO: calculate cross-DNA string here!!
-                            nextNode.dnaString = parsimoniusCompareString(lastNode, nextNode)
-                        }
-                    }
-                }
+            val left = node.left
+            val right = node.right
+
+            if (left!!.nodeType != LEAF) {
+                // compose the dna strings for the child
+                left.dnaString = parsimoniusCompareString(node, left)
             }
 
-            if (node.left != null && node.right != null) {
-                val left = node.left
-                val right = node.right
+            // calculate the hamming distance from root to left child
+            val hammingLeft = hammingDistance(left.dnaString!!, node.dnaString!!)
+            totalHammingDistance += hammingLeft
 
-                if (left!!.nodeType != NodeType.LEAF) {
-                    // compose the dna strings for the children
-                    left.dnaString = parsimoniusCompareString(node, left)
-                    right!!.dnaString = parsimoniusCompareString(node, right)
-                }
-                lastNode = node
+            val c1 = DnaTransform(node.dnaString!!, left.dnaString!!, hammingLeft)
+            val c2 = DnaTransform(left.dnaString!!, node.dnaString!!, hammingLeft)
 
-                // calculate the hamming distance from root to children
-                val hammingLeft = hammingDistance(left.dnaString!!, node.dnaString!!)
-                val hammingRight = hammingDistance(right!!.dnaString!!, node.dnaString!!)
-                node.hdLeft = hammingLeft
-                node.hdRight = hammingRight
-                totalHammingDistance += hammingLeft + hammingRight
-
-                val c1 = DnaTransform(node.dnaString!!, left.dnaString!!, hammingLeft)
-                val c2 = DnaTransform(left.dnaString!!, node.dnaString!!, hammingLeft)
-                val c3 = DnaTransform(node.dnaString!!, right.dnaString!!, hammingRight)
-                val c4 = DnaTransform(right.dnaString!!, node.dnaString!!, hammingRight)
-                changeList.add(c1)
-                changeList.add(c2)
-                changeList.add(c3)
-                changeList.add(c4)
-
-                if (!left.isOutput) {
-                    workList.add(left)
-
-                }
-                if (!right.isOutput) {
-                    workList.add(right)
-
-                }
-
-                node.isOutput = true
-
+            changeList.add(c1)
+            changeList.add(c2)
+            if (!left.isOutput) {
+                workList.add(left)
             }
+
+            if (right!!.nodeType != LEAF) {
+                // compose the dna strings for the child
+                right.dnaString = parsimoniusCompareString(node, right)
+            }
+
+            val hammingRight = hammingDistance(right.dnaString!!, node.dnaString!!)
+            totalHammingDistance += hammingRight
+
+            val c3 = DnaTransform(node.dnaString!!, right.dnaString!!, hammingRight)
+            val c4 = DnaTransform(right.dnaString!!, node.dnaString!!, hammingRight)
+
+            changeList.add(c3)
+            changeList.add(c4)
+            if (!right.isOutput) {
+                workList.add(right)
+            }
+
+            node.isOutput = true
+
+        } while (workList.size != 0)
+
+        // check change list hamming distance and compare to accumulated hamming distance
+
+        var checkHamming = 0
+        for (entry in changeList) {
+            checkHamming += entry.hammingDistance
         }
-
-
-        // are any nodes not printed?
-
-        for (n in nodeMapParsed.keys) {
-            if (!nodeMapParsed[n]!!.isOutput) {
-                println("not printed: node ${nodeMapParsed[n]!!.id}")
-            }
-        }
-
+        checkHamming = checkHamming / 2
+        println("Accumulated Hamming $totalHammingDistance checks with $checkHamming")
         return changeList
+
     }
 
     /**

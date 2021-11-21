@@ -3,14 +3,11 @@
     "ReplaceManualRangeWithIndicesCalls", "UnnecessaryVariable"
 )
 
-import algorithms.SmallParsimony
-import algorithms.SmallParsimony.NodeType
 import algorithms.SmallParsimonyUnrootedTree
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 /**
  *
@@ -51,9 +48,11 @@ internal class S07c09p10SmallParsimonyUnrootedTreeFromFileTest {
 
         spurt.parseInputStrings(sampleInput.toMutableList())
 
-        val numNodes = spurt.nodeMapParsed.keys.size
+        val numNodes = spurt.leafHashMap.keys.size
         val numEdges = spurt.edgeMap.keys.size
         println("num Nodes = $numNodes num Edges = $numEdges")
+
+
 
         val result = spurt.buildChangeList()
         println(spurt.totalHammingDistance)
@@ -66,16 +65,14 @@ internal class S07c09p10SmallParsimonyUnrootedTreeFromFileTest {
     fun smallParsimonyUnrootedTreeRosalindQuizDatasetTest() {
 
         val loader = Foo()
-        val sampleInput = loader.getResourceAsStrings("SmallParsimonyUnrootedTreeRosalindQuizDataset.txt")
-        val expectedOutput = loader.getResourceAsStrings("SmallParsimonyUnrootedTreeExtraDatasetSolution.txt")
-
-        val expectedList = expectedOutput.toMutableList()
-        val expectedHammingDistance = expectedList[0].toInt()
-        expectedList.removeFirst()
+        val sampleInput = loader.getResourceAsStrings("SmallParsimonyUnrootedTreeRosalindStepikQuiz2Dataset.txt")
+//        val expectedList = expectedOutput.toMutableList()
+//        val expectedHammingDistance = expectedList[0].toInt()
+//        expectedList.removeFirst()
 
         spurt.parseInputStrings(sampleInput.toMutableList())
 
-        val numNodes = spurt.nodeMapParsed.keys.size
+        val numNodes = spurt.leafHashMap.keys.size
         val numEdges = spurt.edgeMap.keys.size
         println("num Nodes = $numNodes num Edges = $numEdges")
 
@@ -95,11 +92,11 @@ internal class S07c09p10SmallParsimonyUnrootedTreeFromFileTest {
 
         // build map of String to Int dna to node num
         val m : HashMap<String, Int> = hashMapOf()
-        for (k in spurt.nodeMapParsed.keys) {
-            val dnaL = spurt.nodeMapParsed[k]!!.left!!.dnaString!!
-            val dnaR = spurt.nodeMapParsed[k]!!.right!!.dnaString!!
-            m[dnaL] = spurt.nodeMapParsed[k]!!.id
-            m[dnaR] = spurt.nodeMapParsed[k]!!.id
+        for (k in spurt.leafHashMap.keys) {
+            val dnaL = spurt.leafHashMap[k]!!.left!!.dnaString!!
+            val dnaR = spurt.leafHashMap[k]!!.right!!.dnaString!!
+            m[dnaL] = spurt.leafHashMap[k]!!.id
+            m[dnaR] = spurt.leafHashMap[k]!!.id
         }
 
         for (i in 0 until e.size) {

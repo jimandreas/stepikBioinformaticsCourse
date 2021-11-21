@@ -9,7 +9,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 /**
  *
@@ -65,6 +64,8 @@ TGAGTACC->5
         println(spurt.totalHammingDistance)
         println(result.joinToString("\n"))
 
+        spurt.printTree(spurt.root)
+
     }
 
     @Test
@@ -114,7 +115,7 @@ GG->11
      *   this is valid for the initial map.
      */
     fun printMap() {
-        val m = spurt.nodeMapParsed
+        val m = spurt.leafHashMap
         for (e in m.keys) {
             val n = m[e]!!
             print("${n.id}: ")
