@@ -48,7 +48,7 @@ internal class S07c09p10SmallParsimonyFromFileTest {
         val expectedHammingDistance = expectedList[0].toInt()
         expectedList.removeFirst()
 
-        sp.parseInputStrings(sampleInput.toMutableList())
+        sp.parseInputStringsRooted(sampleInput.toMutableList())
         sp.doScoring()
         //printMap()
 
@@ -83,7 +83,7 @@ internal class S07c09p10SmallParsimonyFromFileTest {
         val expectedHammingDistance = expectedList[0].toInt()
         expectedList.removeFirst()
 
-        sp.parseInputStrings(sampleInput.toMutableList())
+        sp.parseInputStringsRooted(sampleInput.toMutableList())
         sp.doScoring()
         //printMap()
 
@@ -117,7 +117,7 @@ internal class S07c09p10SmallParsimonyFromFileTest {
         val expectedHammingDistance = expectedList[0].toInt()
         expectedList.removeFirst()
 
-        sp.parseInputStrings(sampleInput.toMutableList())
+        sp.parseInputStringsRooted(sampleInput.toMutableList())
         sp.doScoring()
         //printMap()
 

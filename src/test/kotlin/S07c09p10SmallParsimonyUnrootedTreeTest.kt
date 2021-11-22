@@ -3,12 +3,14 @@
     "ReplaceManualRangeWithIndicesCalls"
 )
 
+import algorithms.SmallParsimony
 import algorithms.SmallParsimonyUnrootedTree
-import algorithms.SmallParsimonyUnrootedTree.NodeType
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 /**
  *
@@ -24,11 +26,13 @@ import org.junit.jupiter.api.Test
 
 internal class S07c09p10SmallParsimonyUnrootedTreeTest {
 
+    lateinit var sp: SmallParsimony
     lateinit var spurt: SmallParsimonyUnrootedTree
 
     @BeforeEach
     fun setUp() {
-        spurt = SmallParsimonyUnrootedTree()
+        sp = SmallParsimony()
+        spurt = SmallParsimonyUnrootedTree(sp)
     }
 
     @AfterEach
@@ -40,74 +44,51 @@ internal class S07c09p10SmallParsimonyUnrootedTreeTest {
     @DisplayName("Small Parsimony Unrooted Tree sample test")
     fun smallParsimonyUnrootedTreeSampleTest() {
         val sampleInput = """
-4
-TCGGCCAA->4
-4->TCGGCCAA
-CCTGGCTG->4
-4->CCTGGCTG
-CACAGGAT->5
-5->CACAGGAT
-TGAGTACC->5
-5->TGAGTACC
-4->5
-5->4
-        """.trimIndent()
+            4
+            TCGGCCAA->4
+            4->TCGGCCAA
+            CCTGGCTG->4
+            4->CCTGGCTG
+            CACAGGAT->5
+            5->CACAGGAT
+            TGAGTACC->5
+            5->TGAGTACC
+            4->5
+            5->4
+        """.trimIndent().lines().toMutableList()
 
+        val expectedResult = """
+            17
+            TGCGGGAT->TCTGGCAG:4
+            TCTGGCAG->TGCGGGAT:4
+            TCTGGCAG->TCGGCCAA:3
+            TCGGCCAA->TCTGGCAG:3
+            TCTGGCAG->CCTGGCTG:2
+            CCTGGCTG->TCTGGCAG:2
+            TGCGGGAT->CACAGGAT:3
+            CACAGGAT->TGCGGGAT:3
+            TGCGGGAT->TGAGTACC:5
+            TGAGTACC->TGCGGGAT:5
+        """.trimIndent().lines().toMutableList()
 
-        val input = sampleInput.reader().readLines().toMutableList()
+        spurt.parseInputStringsUnrooted(sampleInput)
 
-        val expectedHammingDistance = 17
+        val result = spurt.voteOnDnaStringsAndBuildChangeList()
+//        println(spurt.totalHammingDistance)
+//        println(result.joinToString("\n"))
 
-        spurt.parseInputStrings(sampleInput.lines().toMutableList())
+        //spurt.printTree(spurt.root)
 
-        val result = spurt.buildChangeList()
-        println(spurt.totalHammingDistance)
-        println(result.joinToString("\n"))
+        val expectedHamming = expectedResult.removeFirst().toInt()
+        assertEquals(expectedHamming, spurt.totalHammingDistance)
 
-        spurt.printTree(spurt.root)
+        val sortedExpected = expectedResult.sorted()
+        val sortedResult = result.joinToString("\n").lines().sorted()
+
+        assertContentEquals(sortedExpected, sortedResult)
 
     }
 
-    @Test
-    @DisplayName("Small Parsimony Unrooted Tree debug test")
-    fun smallParsimonyUnrootedTreeDebugTest() {
-        val sampleInput = """
-8
-AA->8
-8->AA
-AC->8
-8->AC
-AG->9
-9->AG
-AT->9
-9->AT
-CA->10
-10->CA
-CC->10
-10->CC
-TT->11
-11->TT
-GG->11
-11->GG
-8->9
-9->8
-9->10
-10->9
-10->11
-11->10
-        """.trimIndent()
-
-
-        val input = sampleInput.reader().readLines().toMutableList()
-
-        val expectedHammingDistance = 17
-
-        spurt.parseInputStrings(sampleInput.lines().toMutableList())
-
-        val result = spurt.buildChangeList()
-        println(spurt.totalHammingDistance)
-        println(result.joinToString("\n"))
-    }
 
     /**
      * walk the node map and print the node connections
@@ -122,13 +103,13 @@ GG->11
             if (n.left != null) {
                 val l = n.left!!
                 val r = n.right!!
-                if (l.nodeType == NodeType.LEAF) {
+                if (l.nodeType == SmallParsimony.NodeType.LEAF) {
                     print(l.dnaString)
                 } else {
                     print(l.id)
                 }
                 print(" ")
-                if (r.nodeType == NodeType.LEAF) {
+                if (r.nodeType == SmallParsimony.NodeType.LEAF) {
                     print(r.dnaString)
                 } else {
                     print(r.id)

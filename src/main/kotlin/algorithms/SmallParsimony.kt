@@ -82,6 +82,8 @@ class SmallParsimony {
         var nodeType: NodeType = NodeType.NODE,
         val id: Int,
         var ripe: Boolean = false,
+        var isScored: Boolean = false,
+        var isOutput: Boolean = false,
         var dnaString: String? = null,
         var left: Node? = null,
         var right: Node? = null,
@@ -123,7 +125,7 @@ class SmallParsimony {
     6->4
     6->5
      */
-    fun parseInputStrings(inputStrings: MutableList<String>) {
+    fun parseInputStringsRooted(inputStrings: MutableList<String>) {
 //        val outputList: MutableList<Node> = mutableListOf()
 
         numLeaves = inputStrings[0].toInt()
@@ -320,7 +322,7 @@ class SmallParsimony {
                 nP > 1 && nC > 1 -> {
                     var foundMatch = false
                     var letter = 'A'
-                    for (j in 0..3) {
+                    for (j in 3 downTo 0) {
                         if (parent[j, i] == mP && child[j, i] == mC) {
                             letter = "ACGT"[j]
                             foundMatch = true
@@ -354,12 +356,24 @@ class SmallParsimony {
     fun parsimoniousString(arr: D2Array<Int>): String {
         val str = StringBuilder()
         for (i in 0 until dnaLen) {
-            val minValLeft = arr[0..4, i].min()
-            val letterNum = arr[0..4, i].indexOf(minValLeft as Int)
+            val score = arr[0..4, i].toList()
+            val letterNum = lastMin(score)
             val letter = "ACGT"[letterNum]
             str.append(letter)
         }
         return str.toString()
+    }
+
+    fun lastMin(l: List<Int>): Int {
+        var m = Int.MAX_VALUE
+        var minIndex = -1
+        for (i in 0 until l.size) {
+            if (l[i] <= m) {
+                m = l[i]
+                minIndex = i
+            }
+        }
+        return minIndex
     }
 
     /**

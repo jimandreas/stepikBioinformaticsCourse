@@ -76,7 +76,7 @@ CAAATCCC->ATAGCCAC:5
         val expectedHammingDistance = expectedList[0].toInt()
         expectedList.removeFirst()
 
-        sp.parseInputStrings(sampleInput.lines().toMutableList())
+        sp.parseInputStringsRooted(sampleInput.lines().toMutableList())
         sp.doScoring()
         //printMap()
 
@@ -193,7 +193,7 @@ CC->CC:0
 
         val input = sampleInput.reader().readLines().toMutableList()
 
-        sp.parseInputStrings(input)
+        sp.parseInputStringsRooted(input)
         sp.doScoring()
 
         val changeList = sp.buildChangeList()
@@ -257,7 +257,7 @@ T->T:0
 
         val input = sampleInput.reader().readLines().toMutableList()
 
-        sp.parseInputStrings(input)
+        sp.parseInputStringsRooted(input)
         sp.doScoring()
 
         /*
