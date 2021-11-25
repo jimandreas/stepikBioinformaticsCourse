@@ -42,9 +42,9 @@ internal class RosieFindProteinMotifTest {
         download = UniprotDownloadFASTA()
         findMotif = FindProteinMotif()
 
-        println("--------------------------")
-        println("RosieFindProteinMotifTest")
-        println("--------------------------")
+//        println("--------------------------")
+//        println("RosieFindProteinMotifTest")
+//        println("--------------------------")
     }
 
     @AfterEach
@@ -80,8 +80,8 @@ P20840_SAG1_YEAST
             val indexes = findMotif.findMotifs(fastaString[0])
 
             if (indexes.isNotEmpty()) {
-                println(id)
-                println(indexes.joinToString(" "))
+//                println(id)
+//                println(indexes.joinToString(" "))
 
                 assertEquals(expectedResult[expectedIndex++], id)
                 val expectedIndexes = expectedResult[expectedIndex++].split(" ").map { it.toInt() }.toList()
@@ -142,8 +142,8 @@ P08709_FA7_HUMAN
             val indexes = findMotif.findMotifs(fastaString[0])
 
             if (indexes.isNotEmpty()) {
-                println(id)
-                println(indexes.joinToString(" "))
+//                println(id)
+//                println(indexes.joinToString(" "))
 
                 assertEquals(expectedResult[expectedIndex++], id)
                 val expectedIndexes = expectedResult[expectedIndex++].split(" ").map { it.toInt() }.toList()

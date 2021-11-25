@@ -281,9 +281,9 @@ fun indexSearchDnaStringAndPeptide(dnaString: String, peptide: String): Int {
             break
         }
     }
-    if (idx != -1) {
-        println("success at $idx")
-    }
+//    if (idx != -1) {
+//        println("success at $idx")
+//    }
 
     return idx+1
 }

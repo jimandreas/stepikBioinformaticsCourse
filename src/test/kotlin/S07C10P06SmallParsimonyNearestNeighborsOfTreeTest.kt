@@ -3,7 +3,7 @@
     "ReplaceManualRangeWithIndicesCalls", "ReplaceSizeZeroCheckWithIsEmpty"
 )
 
-import algorithms.NearestNeighborsOfTree
+import algorithms.SmallParsimonyNearestNeighborsOfTree
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -23,13 +23,13 @@ import kotlin.test.assertEquals
  * @link: https://github.com/Kotlin/multik
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
-internal class S07c10p06NearestNeighborsOfTreeTest {
+internal class S07C10P06SmallParsimonyNearestNeighborsOfTreeTest {
 
-    lateinit var nn: NearestNeighborsOfTree
+    lateinit var nn: SmallParsimonyNearestNeighborsOfTree
 
     @BeforeEach
     fun setUp() {
-        nn = NearestNeighborsOfTree()
+        nn = SmallParsimonyNearestNeighborsOfTree()
     }
 
     @AfterEach

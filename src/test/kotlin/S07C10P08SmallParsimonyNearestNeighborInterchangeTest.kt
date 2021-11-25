@@ -3,13 +3,13 @@
     "ReplaceManualRangeWithIndicesCalls", "ReplaceSizeZeroCheckWithIsEmpty"
 )
 
-import algorithms.NearestNeighborInterchange
-import algorithms.NearestNeighborsOfTree
+import algorithms.SmallParsimonyNearestNeighborInterchange
+import algorithms.SmallParsimony
+import algorithms.SmallParsimonyUnrootedTree
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 /**
  *
@@ -24,13 +24,17 @@ import kotlin.test.assertEquals
  * @link: https://github.com/Kotlin/multik
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
-internal class S07c10p08NearestNeighborInterchangeTest {
+internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
 
-    lateinit var nni: NearestNeighborInterchange
+    lateinit var nni: SmallParsimonyNearestNeighborInterchange
+    lateinit var sp: SmallParsimony
+    lateinit var spurt: SmallParsimonyUnrootedTree
 
     @BeforeEach
     fun setUp() {
-        nni = NearestNeighborInterchange()
+        nni = SmallParsimonyNearestNeighborInterchange()
+        sp = SmallParsimony()
+        spurt = SmallParsimonyUnrootedTree(sp)
     }
 
     @AfterEach
@@ -58,6 +62,15 @@ TCCGTAGT->7
 6->CGACCTGA
 6->7
         """.trimIndent().lines().toMutableList()
+
+        spurt.parseInputStringsUnrooted(sampleInput)
+
+        val result = spurt.voteOnDnaStringsAndBuildChangeList()
+
+        val t = spurt.printTree()
+        println(t.sorted().joinToString("\n"))
+//        println(spurt.totalHammingDistance)
+//        println(result.joinToString("\n"))
 
 //        val edge = sampleInput.removeFirst().split(" ")
 //        val a = edge[0].toInt()

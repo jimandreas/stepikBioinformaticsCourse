@@ -65,7 +65,7 @@ internal class RosieTestingBipartitenessTest {
             sampleInput.removeFirst()
             val m = parseGraphInput(numLines, numNodes, sampleInput)
             val result = bip.testBipartiteness(m)
-            println(result)
+//            println(result)
 
             for (n in 0 until numLines) {
                 sampleInput.removeFirst()
@@ -1014,7 +1014,7 @@ internal class RosieTestingBipartitenessTest {
             sampleInput.removeFirst()
             val m = parseGraphInput(numLines, numNodes, sampleInput)
             val result = bip.testBipartiteness(m)
-            println(result)
+//            println(result)
 
             for (n in 0 until numLines) {
                 sampleInput.removeFirst()
@@ -26887,7 +26887,7 @@ internal class RosieTestingBipartitenessTest {
             sampleInput.removeFirst()
             val m = parseGraphInput(numLines, numNodes, sampleInput)
             val result = bip.testBipartiteness(m)
-            println(result)
+            //println(result)
             resultList.add(result)
 
             for (n in 0 until numLines) {

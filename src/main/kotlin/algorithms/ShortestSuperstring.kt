@@ -65,7 +65,7 @@ class ShortestSuperstring {
                     if (maxLen > (hashStringList[i]!!.length + hashStringList[j]!!.length)) {
                         continue
                     }
-                    println("i $i j $j")
+                    //println("i $i j $j")
                     val keysb = StringBuilder().append(hashStringList[i])
                     keysb.append(hashStringList[j])
                     val key = keysb.toString()
@@ -77,18 +77,18 @@ class ShortestSuperstring {
 
                             maxLen = hashMotif[key]!!.length
                             maxKey = Pair(i, j)
-                            println("from cache i $i j $j New max $maxLen with ${hashMotif[key]}")
+                            //println("from cache i $i j $j New max $maxLen with ${hashMotif[key]}")
                         }
                     } else {
                         val sharedMotif = fsm.findMostLikelyCommonAncestor(
                             listOf(hashStringList[i]!!, hashStringList[j]!!)
                         )
-                        println("i $i j $j of ${stringList.size} $sharedMotif")
+                        //println("i $i j $j of ${stringList.size} $sharedMotif")
                         hashMotif[key] = sharedMotif
                         if (sharedMotif.length > maxLen) {
 
                             maxLen = sharedMotif.length
-                            println("i $i j $j key $key New max $maxLen with $sharedMotif")
+                            //println("i $i j $j key $key New max $maxLen with $sharedMotif")
 
                             maxKey = Pair(i, j)
                         }
@@ -104,7 +104,7 @@ class ShortestSuperstring {
             val j = maxKey.second
             val s2 = hashStringList[j]
 
-            println("strings s1 $s1 s2 and $s2 BEFORE")
+            //println("strings s1 $s1 s2 and $s2 BEFORE")
 
             val keysb = StringBuilder()
             keysb.append(s1)
@@ -154,9 +154,9 @@ class ShortestSuperstring {
 
             result = str.toString()
 
-            println("strings s1 $s1 s2 and $s2 AFTER")
-            println("********* merging i $i j $j key $key")
-            println("strings $s1 and $s2 with motif $motif result $str")
+//            println("strings s1 $s1 s2 and $s2 AFTER")
+//            println("********* merging i $i j $j key $key")
+//            println("strings $s1 and $s2 with motif $motif result $str")
             hashStringList[i] = result
             hashStringList[j] = ""
             merged++

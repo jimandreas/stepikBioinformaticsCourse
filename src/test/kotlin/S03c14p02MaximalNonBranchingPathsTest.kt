@@ -172,9 +172,9 @@ internal class S03c14p02MaximalNonBranchingPathsTest {
 
     private fun checkAnswer(e: String, r: List<List<Int>>) {
         val eMap = parseExpected(e)
-        if (eMap == r) {
-            println("Success!")
-        }
+//        if (eMap == r) {
+//            println("Success!")
+//        }
     }
 
     private fun parseExpected(eString: String): List<List<Int>> {

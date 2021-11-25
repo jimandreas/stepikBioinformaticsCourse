@@ -92,7 +92,7 @@ B:EI>JDB5=>DA?E6B@@CA?C;=;@@C:6D:3=@49;@87;::;;?8
             qList.clear()
         }
 
-        println(outList.joinToString("\n"))
+//        println(outList.joinToString("\n"))
 
         assertContentEquals(expectedResult, outList)
     }
@@ -472,7 +472,7 @@ B:EI>JDB5=>DA?E6B@@CA?C;=;@@C:6D:3=@49;@87;::;;?8
             qList.clear()
         }
 
-        println(outList.joinToString("\n"))
+//        println(outList.joinToString("\n"))
 
         assertContentEquals(expectedResult, outList)
     }
