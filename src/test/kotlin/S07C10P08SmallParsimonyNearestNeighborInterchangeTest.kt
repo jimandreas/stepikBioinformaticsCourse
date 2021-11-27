@@ -4,8 +4,6 @@
 )
 
 import algorithms.SmallParsimonyNearestNeighborInterchange
-import algorithms.SmallParsimony
-import algorithms.SmallParsimonyUnrootedTree
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -27,14 +25,10 @@ import org.junit.jupiter.api.Test
 internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
 
     lateinit var nni: SmallParsimonyNearestNeighborInterchange
-    lateinit var sp: SmallParsimony
-    lateinit var spurt: SmallParsimonyUnrootedTree
 
     @BeforeEach
     fun setUp() {
         nni = SmallParsimonyNearestNeighborInterchange()
-        sp = SmallParsimony()
-        spurt = SmallParsimonyUnrootedTree(sp)
     }
 
     @AfterEach
@@ -63,29 +57,12 @@ TCCGTAGT->7
 6->7
         """.trimIndent().lines().toMutableList()
 
-        spurt.parseInputStringsUnrooted(sampleInput)
+        nni.parseInputStringsUnrooted(sampleInput)
 
-        val result = spurt.voteOnDnaStringsAndBuildChangeList()
+        val result = nni.voteOnDnaStringsAndBuildChangeList()
 
-        val t = spurt.printTree()
+        val t = nni.printTree()
         println(t.sorted().joinToString("\n"))
-//        println(spurt.totalHammingDistance)
-//        println(result.joinToString("\n"))
-
-//        val edge = sampleInput.removeFirst().split(" ")
-//        val a = edge[0].toInt()
-//        val b = edge[1].toInt()
-//        val m : MutableMap<Int, MutableList<Int>> = hashMapOf()
-//        for (s in sampleInput) {
-//            val conn = s.split("->")
-//            val from = conn[0].toInt()
-//            val to = conn[1].toInt()
-//            if (m.containsKey(from)) {
-//                m[from]!!.add(to)
-//            } else {
-//                m[from] = mutableListOf(to)
-//            }
-//        }
 
 
         val expectedOutputString = """

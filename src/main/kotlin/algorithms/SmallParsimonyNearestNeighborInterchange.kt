@@ -36,7 +36,7 @@ then the algorithm selects the one with smallest parsimony score
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-class SmallParsimonyNearestNeighborInterchange {
+class SmallParsimonyNearestNeighborInterchange: SmallParsimonyUnrootedTree() {
 
     /**
 

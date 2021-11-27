@@ -7,8 +7,6 @@
 
 package algorithms
 
-import algorithms.SmallParsimony.*
-import algorithms.SmallParsimony.NodeType.LEAF
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
@@ -29,7 +27,7 @@ import kotlin.collections.set
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
+open class SmallParsimonyUnrootedTree : SmallParsimony() {
 
     /**
     Code Challenge: Solve the Small Parsimony in an Unrooted Tree Problem.
@@ -45,16 +43,9 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
 
     lateinit var root: Node  // the hacked up root of this tree
 
-    var numLeaves = 0 // this is specified in line 1 of the test input
-
-    // this is the map set up after parsing the input - node number to Node structure
-    val leafHashMap: HashMap<Int, Node> = hashMapOf()
-
-    // from the test input - the lines that have Int -> Int
+    // the input lines that have Int -> Int
     val edgeMap: HashMap<Int, MutableList<Int>> = hashMapOf()
 
-    var dnaLen = -1
-    var totalHammingDistance = 0
     var maxEdgeNum = 0
 
     /**
@@ -82,7 +73,7 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
         numLeaves = inputStrings[0].toInt()  // line 1 of test input specifies how many leaf DNA strings
         inputStrings.removeFirst()
 
-        var leafNumber = 0
+        var nextLeafId = 0
         while (inputStrings.size > 0) {
             val line = inputStrings[0].split("->")
 
@@ -99,7 +90,7 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
             // see if this a node to node connection, or a DNA string definition
             if (codon == -1) {
 
-                // this is a node -> node line, add to edge list
+                // this is a node -> node line, add to edge map
                 //   assumes dataset provides reverse edges
 
                 val edgeTo = line[1].toInt()
@@ -112,32 +103,14 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
 
             } else {
 
-                // this is a node num -> dnaString
-
-                var nodeStruct: Node
-                if (leafHashMap.containsKey(nodeNum)) {
-                    nodeStruct = leafHashMap[nodeNum]!!
-                } else {
-                    nodeStruct = Node(id = nodeNum)
-                    leafHashMap[nodeNum] = nodeStruct
-                }
-
+                // this a connection to a leaf
                 dnaLen = line[1].length
-                sp.dnaLen = dnaLen
-                val leafNode = Node(
-                    nodeType = LEAF,
-                    id = leafNumber++,
-                    isScored = true,
-                    isOutput = true,
+                val leafNode = Leaf(
+                    id = nextLeafId++,
                     dnaString = line[1],
                     scoringArray = mkArrayWithScores(line[1])
                 )
-
-                if (nodeStruct.left == null) {
-                    nodeStruct.left = leafNode
-                } else {
-                    nodeStruct.right = leafNode
-                }
+                leafMap[leafNode.id] = leafNode
             }
             inputStrings.removeFirst()
         }
@@ -157,8 +130,7 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
     fun treeHacking() {
         maxEdgeNum = edgeMap.keys.maxOrNull()!!
         root = Node(
-            nodeType = NodeType.NODE,
-            id = maxEdgeNum+1
+            id = maxEdgeNum + 1
         )
         // prune out the edges between maxEdgeNum and maxEdgeNum-1
         val iE = edgeMap[maxEdgeNum]!!.indexOf(maxEdgeNum - 1)
@@ -178,43 +150,40 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
 
     /**
      *  recursively descend the edges from parent to child.
-     *    Stop the descent at LEAF nodes -
-     *       i.e. nodes that are present in the
-     *       leafHashMap.
      */
     fun descent(myNodeNum: Int, parentNodeNum: Int): Node? {
         val conns = edgeMap[myNodeNum]
         conns!!.remove(parentNodeNum)
         if (conns.isEmpty()) {
-            if (leafHashMap.containsKey(myNodeNum)) {
-                return leafHashMap[myNodeNum]
+            if (nodeMap.containsKey(myNodeNum)) {
+                return nodeMap[myNodeNum]
             } else {
                 return null
             }
         }
 
         var left: Node
-        if (leafHashMap.containsKey(conns[0])) {
-            left = leafHashMap[conns[0]]!!
+        if (nodeMap.containsKey(conns[0])) {
+            left = nodeMap[conns[0]]!!
         } else {
             left = descent(conns[0], myNodeNum)!!
         }
 
         var right: Node? = null
         if (conns.size > 1) {
-            if (leafHashMap.containsKey(conns[1])) {
-                right = leafHashMap[conns[1]]!!
+            if (nodeMap.containsKey(conns[1])) {
+                right = nodeMap[conns[1]]!!
             } else {
                 right = descent(conns[1], myNodeNum)!!
             }
         }
 
         val thisNode = Node(
-            nodeType = NodeType.NODE,
             id = myNodeNum,
             left = left,
             right = right
         )
+        nodeMap[myNodeNum] = thisNode
         return thisNode
     }
 
@@ -225,6 +194,9 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
      * until there are no unscored nodes
      * and therefore all scoring matrices
      * have been calculated.
+     *
+     * NOTE: the scores are additive - so add up the child nodes and then
+     *   add in any leaf node scores.
      */
     fun doUnrootedTreeScoring() {
 
@@ -246,27 +218,30 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
                 if (node.isScored) {
                     continue
                 }
+                foundUnscoredNode = true
 
-                if (left!!.isScored && right != null && right.isScored) {
-                    foundUnscoredNode = true
+                when {
+                    left != null && left.isScored == false -> {
+                        workList.add(left)
+                        continue
+                    }
+                    right != null && right.isScored == false -> {
+                        workList.add(right)
+                        continue
+                    }
+                }
+                if (left != null && left!!.isScored) {
+                    node.scoringArray = scoreArrays(left.scoringArray!!, node.scoringArray!!)
 
-                    val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
-                    node.scoringArray = scoredArray
-                    node.isScored = true
-                } else if (left.isScored) {
-                    foundUnscoredNode = true
-                    val scoredArray = scoreLeftArray(left.scoringArray!!)
-                    node.scoringArray = scoredArray
-                    node.isScored = true
                 }
-                if (!left.isScored) {
-                    workList.add(left)
-                    foundUnscoredNode = true
+                if (right != null && right.isScored) {
+                    node.scoringArray = scoreArrays(right.scoringArray!!, node.scoringArray!!)
+
                 }
-                if (right != null && !right.isScored) {
-                    workList.add(right)
-                    foundUnscoredNode = true
+                for (leaf in node.leafList) {
+                    node.scoringArray = scoreArrays(leaf.scoringArray!!, node.scoringArray!!)
                 }
+                node.isScored = true
             } while (workList.isNotEmpty())
 
         } while (foundUnscoredNode == true)
@@ -324,7 +299,7 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
         // work from the root down, setting the dna strings on the way
 
         val workList: MutableList<Node> = mutableListOf()
-        root.dnaString = sp.parsimoniousString(root.scoringArray!!)
+        root.dnaString = parsimoniousString(root.scoringArray!!)
         workList.add(root)
 
         do {
@@ -337,14 +312,12 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
             val left = node.left
             val right = node.right
 
-            if (left!!.nodeType != LEAF) {
-                // compose the dna strings for the child
-                left.dnaString = sp.parsimoniusCompareString(node, left)
-            }
+            // compose the dna strings for the child
+            left!!.dnaString = parsimoniusCompareString(node, left)
 
-            if (right != null && right.nodeType != LEAF) {
+            if (right != null) {
                 // compose the dna strings for the child
-                right.dnaString = sp.parsimoniusCompareString(node, right)
+                right.dnaString = parsimoniusCompareString(node, right)
             }
 
             if (node == root) {
@@ -403,51 +376,6 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
 
     /**
      * algorithm in English, rather than mathematics:
-     * for each of the left and right {ACGT} columns
-     *   find the min value
-     * then for each of the {ACGT} value - if it equal
-     * to the minimum copy it.
-     * Otherwise bump it by one for the one letter change penalty.
-     *
-     * Then add the two intermediate arrays to get the result for the
-     * next upper node.
-     */
-    fun scoreArrays(larr1: D2Array<Int>, rarr2: D2Array<Int>): D2Array<Int> {
-
-        val resultArr = mk.d2array(4, dnaLen) { 0 }
-        val resultLeft = mk.d2array(4, dnaLen) { 0 }
-        val resultRight = mk.d2array(4, dnaLen) { 0 }
-
-        if (dnaLen == -1) {
-            println("scoreArrays: global variable dnaLen is not initialized.  Giving up.")
-            return resultArr
-        }
-
-        for (i in 0 until dnaLen) {
-            val minValLeft = larr1[0..4, i].min()
-            val minValRight = rarr2[0..4, i].min()
-
-            for (j in 0..3) {
-                resultLeft[j, i] = larr1[j, i]
-                if (larr1[j, i] != minValLeft) {
-                    resultLeft[j, i] = minValLeft!! + 1
-                }
-            }
-            for (j in 0..3) {
-                resultRight[j, i] = rarr2[j, i]
-                if (rarr2[j, i] != minValRight) {
-                    resultRight[j, i] = minValRight!! + 1
-                }
-            }
-            for (j in 0..3) {
-                resultArr[j, i] = resultLeft[j, i] + resultRight[j, i]
-            }
-        }
-        return resultArr
-    }
-
-    /**
-     * algorithm in English, rather than mathematics:
      * for the left {ACGT} columns ONLY
      *   find the min value
      * then for each of the {ACGT} value - if it equal
@@ -455,65 +383,34 @@ class SmallParsimonyUnrootedTree(val sp: SmallParsimony) {
      * Otherwise bump it by one for the one letter change penalty.
      *
      */
-    fun scoreLeftArray(larr1: D2Array<Int>): D2Array<Int> {
+    fun scoreArray(childArray: D2Array<Int>, parentArray: D2Array<Int>) {
 
         val resultArr = mk.d2array(4, dnaLen) { 0 }
-        val resultLeft = mk.d2array(4, dnaLen) { 0 }
-        val resultRight = mk.d2array(4, dnaLen) { 0 }
+        val result = mk.d2array(4, dnaLen) { 0 }
 
         if (dnaLen == -1) {
             println("scoreArrays: global variable dnaLen is not initialized.  Giving up.")
-            return resultArr
         }
 
         for (i in 0 until dnaLen) {
-            val minValLeft = larr1[0..4, i].min()
+            val minVal = childArray[0..4, i].min()
 
             for (j in 0..3) {
-                resultLeft[j, i] = larr1[j, i]
-                if (larr1[j, i] != minValLeft) {
-                    resultLeft[j, i] = minValLeft!! + 1
+                result[j, i] = childArray[j, i]
+                if (childArray[j, i] != minVal) {
+                    result[j, i] = minVal!! + 1
                 }
             }
 
             for (j in 0..3) {
-                resultArr[j, i] = resultLeft[j, i]
+                resultArr[j, i] = result[j, i]
+            }
+
+            for (j in 0..3) {
+                parentArray[j, i] += childArray[j, i]
             }
         }
-        return resultArr
+
     }
 
-
-    fun mkArrayWithScores(dnaString: String): D2Array<Int> {
-        val len = dnaString.length
-        val arr = mk.d2array(4, len) { Int.MAX_VALUE }
-        for (i in 0 until len) {
-            when (dnaString[i]) {
-                'A' -> arr[0, i] = 0
-                'C' -> arr[1, i] = 0
-                'G' -> arr[2, i] = 0
-                'T' -> arr[3, i] = 0
-            }
-        }
-        return arr
-    }
-
-    fun mkArray(): D2Array<Int> {
-        return mk.d2array(numLeaves, 4) { 0 }
-    }
-
-    fun hammingDistance(str1: String, str2: String): Int {
-
-        var hammingCount = 0
-        if (str1.length != str2.length) {
-            println("ERROR hamming distance - strings do not match lengths str1 ${str1.length} str2 ${str2.length}")
-            return 0
-        }
-        for (i in 0 until str1.length) {
-            if (str1[i] != str2[i]) {
-                hammingCount++
-            }
-        }
-        return hammingCount
-    }
 }

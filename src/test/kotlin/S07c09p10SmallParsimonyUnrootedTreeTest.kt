@@ -26,13 +26,11 @@ import kotlin.test.assertEquals
 
 internal class S07c09p10SmallParsimonyUnrootedTreeTest {
 
-    lateinit var sp: SmallParsimony
     lateinit var spurt: SmallParsimonyUnrootedTree
 
     @BeforeEach
     fun setUp() {
-        sp = SmallParsimony()
-        spurt = SmallParsimonyUnrootedTree(sp)
+        spurt = SmallParsimonyUnrootedTree()
     }
 
     @AfterEach
@@ -77,7 +75,8 @@ internal class S07c09p10SmallParsimonyUnrootedTreeTest {
 //        println(spurt.totalHammingDistance)
 //        println(result.joinToString("\n"))
 
-        //spurt.printTree(spurt.root)
+        val tree = spurt.printTree()
+        println(tree.sorted().joinToString("\n"))
 
         val expectedHamming = expectedResult.removeFirst().toInt()
         assertEquals(expectedHamming, spurt.totalHammingDistance)
@@ -95,27 +94,20 @@ internal class S07c09p10SmallParsimonyUnrootedTreeTest {
      * or the node to dna string
      *   this is valid for the initial map.
      */
-    fun printMap() {
-        val m = spurt.leafHashMap
-        for (e in m.keys) {
-            val n = m[e]!!
-            print("${n.id}: ")
-            if (n.left != null) {
-                val l = n.left!!
-                val r = n.right!!
-                if (l.nodeType == SmallParsimony.NodeType.LEAF) {
-                    print(l.dnaString)
-                } else {
-                    print(l.id)
-                }
-                print(" ")
-                if (r.nodeType == SmallParsimony.NodeType.LEAF) {
-                    print(r.dnaString)
-                } else {
-                    print(r.id)
-                }
-            }
-            print("\n")
-        }
-    }
+//    fun printMap() {
+//        val m = spurt.nodeMap
+//        for (e in m.keys) {
+//            val n = m[e]!!
+//            print("${n.id}: ")
+//            if (n.left != null) {
+//                val l = n.left!!
+//                print(l.id)
+//            }
+//            if (n.right != null) {
+//                val r = n.right!!
+//                print(r.id)
+//            }
+//        }
+//        print("\n")
+//    }
 }

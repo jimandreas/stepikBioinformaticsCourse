@@ -33,7 +33,7 @@ import kotlin.collections.set
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-class SmallParsimony {
+open class SmallParsimony {
     var verbose = false // for debug printout
 
     /**
@@ -72,14 +72,12 @@ class SmallParsimony {
     """.trimIndent()
 
     /**
-     * Nodes are either a internal NODE, or a LEAF
      *   Internal NODEs have an id number, and have a Left and Right component defined.
-     *   LEAF nodes have a dnaString defined and that is all.
+     *   LEAF nodes have an id number, a scoring array, and a dnaString defined.
      *  The scoringArray is calculated as given in the pseudoCode.
      */
-    enum class NodeType { NODE, LEAF }
+
     data class Node(
-        var nodeType: NodeType = NodeType.NODE,
         val id: Int,
         var ripe: Boolean = false,
         var isScored: Boolean = false,
@@ -87,14 +85,21 @@ class SmallParsimony {
         var dnaString: String? = null,
         var left: Node? = null,
         var right: Node? = null,
-        var hdLeft : Int = 0,
+        var leafList: MutableList<Leaf> = mutableListOf(),
+        var hdLeft : Int = 0,  // hd = Hamming Distance
         var hdRight : Int = 0,
         var scoringArray: D2Array<Int>? = null
     ) {
         override fun toString(): String {
-            return "Node num $id type: $nodeType d:$dnaString l:${left?.id} r:${right?.id}"
+            return "Node num $id d:$dnaString l:${left?.id} r:${right?.id}"
         }
     }
+
+    data class Leaf(
+        val id: Int,
+        val dnaString: String? = null,
+        var scoringArray: D2Array<Int>? = null
+    )
 
     data class DnaTransform(
         val str1: String,
@@ -108,6 +113,7 @@ class SmallParsimony {
 
     var numLeaves = 0
     val nodeMap: HashMap<Int, Node> = hashMapOf()
+    val leafMap: HashMap<Int, Leaf> = hashMapOf()
     var dnaLen = -1
     var totalHammingDistance = 0
     var lastNode: Node? = null
@@ -126,9 +132,9 @@ class SmallParsimony {
     6->5
      */
     fun parseInputStringsRooted(inputStrings: MutableList<String>) {
-//        val outputList: MutableList<Node> = mutableListOf()
 
         numLeaves = inputStrings[0].toInt()
+        var nextLeafId = 0
 
         inputStrings.removeFirst()
         while (inputStrings.size > 0) {
@@ -140,7 +146,6 @@ class SmallParsimony {
             } else {
                 nodeStruct = Node(id = nodeNum)
                 nodeMap[nodeNum] = nodeStruct
-//                outputList.add(nodeStruct)
             }
             val codon = "ACGT".indexOf(line[1][0])
             // see if this a node to node connection, or a DNA string definition
@@ -151,7 +156,6 @@ class SmallParsimony {
                 if (!nodeMap.containsKey(edgeTo)) {
                     val newNode = Node(id = edgeTo)
                     nodeMap[edgeTo] = newNode
-//                    outputList.add(newNode)
                     edgeToNode = newNode
                 } else {
                     edgeToNode = nodeMap[edgeTo]!!
@@ -162,25 +166,19 @@ class SmallParsimony {
                     nodeStruct.right = edgeToNode
                 }
             } else {
-                // this is a dnaString
+                // this a connection to a leaf
                 dnaLen = line[1].length
-                val leafNode = Node(
-                    nodeType = NodeType.LEAF,
-                    id = 0,
-                    ripe = true,
+                val leafNode = Leaf(
+                    id = nextLeafId++,
                     dnaString = line[1],
                     scoringArray = mkArrayWithScores(line[1])
                 )
-//                outputList.add(leafNode)
-                if (nodeStruct.left == null) {
-                    nodeStruct.left = leafNode
-                } else {
-                    nodeStruct.right = leafNode
-                }
+
+                nodeStruct.leafList.add(leafNode)
+                leafMap[leafNode.id] = leafNode
             }
             inputStrings.removeFirst()
         }
-//        return outputList
     }
 
     /**
@@ -212,8 +210,6 @@ class SmallParsimony {
                         lastNode = node
                         val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
                         node.scoringArray = scoredArray
-//                        val bestString = parsimoniousString(scoredArray)
-//                        node.dnaString = bestString
                         node.ripe = true
                     }
                 }
@@ -236,26 +232,27 @@ class SmallParsimony {
         }
 
         // work from the root down, setting the dna strings on the way
+        //   note that the leaf nodes do not need to be accessed here
+        //   as they don't affect the assignments - as their
+        //   scores are propagated upwards.
 
         val workList: MutableList<Node> = mutableListOf(lastNode!!)
         lastNode!!.dnaString = parsimoniousString(lastNode!!.scoringArray!!)
 
         while (workList.isNotEmpty()) {
             val node = workList.removeFirst()
+            val left = node.left
+            val right = node.right
 
-            if (node.left != null && node.right != null) {
-                val left = node.left
-                val right = node.right
+            if (left != null && right != null) {
 
-                if (left!!.nodeType != NodeType.LEAF) {
-                    // compose the dna strings for the children
-                    left.dnaString = parsimoniusCompareString(node, left)
-                    right!!.dnaString = parsimoniusCompareString(node, right)
-                }
+                // compose the dna strings for the children
+                left.dnaString = parsimoniusCompareString(node, left)
+                right.dnaString = parsimoniusCompareString(node, right)
 
                 // calculate the hamming distance from root to children
                 val hammingLeft = hammingDistance(left.dnaString!!, node.dnaString!!)
-                val hammingRight = hammingDistance(right!!.dnaString!!, node.dnaString!!)
+                val hammingRight = hammingDistance(right.dnaString!!, node.dnaString!!)
                 node.hdLeft = hammingLeft
                 node.hdRight = hammingRight
                 totalHammingDistance += hammingLeft + hammingRight
@@ -271,7 +268,6 @@ class SmallParsimony {
 
                 workList.add(left)
                 workList.add(right)
-
             }
         }
         return changeList

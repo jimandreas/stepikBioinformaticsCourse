@@ -4,7 +4,6 @@
 )
 
 import algorithms.SmallParsimony
-import algorithms.SmallParsimony.NodeType
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -53,7 +52,7 @@ internal class S07c09p10SmallParsimonyFromFileTest {
         //printMap()
 
         val changeList = sp.buildChangeList()
-        val resultsList : MutableList<String> = mutableListOf()
+        val resultsList: MutableList<String> = mutableListOf()
         for (change in changeList) {
             resultsList.add(change.toString())
         }
@@ -88,7 +87,7 @@ internal class S07c09p10SmallParsimonyFromFileTest {
         //printMap()
 
         val changeList = sp.buildChangeList()
-        val resultsList : MutableList<String> = mutableListOf()
+        val resultsList: MutableList<String> = mutableListOf()
         for (change in changeList) {
             resultsList.add(change.toString())
         }
@@ -122,7 +121,7 @@ internal class S07c09p10SmallParsimonyFromFileTest {
         //printMap()
 
         val changeList = sp.buildChangeList()
-        val resultsList : MutableList<String> = mutableListOf()
+        val resultsList: MutableList<String> = mutableListOf()
         for (change in changeList) {
             resultsList.add(change.toString())
         }
@@ -160,37 +159,6 @@ internal class S07c09p10SmallParsimonyFromFileTest {
         println(sp.totalHammingDistance)
         println(changeList.joinToString("\n"))
     }*/
-
-
-
-    /**
-     * walk the node map and print the node connections
-     * or the node to dna string
-     *   this is valid for the initial map.
-     */
-    fun printMap() {
-        val m = sp.nodeMap
-        for (e in m.keys) {
-            val n = m[e]!!
-            print("${n.id}: ")
-            if (n.left != null) {
-                val l = n.left!!
-                val r = n.right!!
-                if (l.nodeType == NodeType.LEAF) {
-                    print(l.dnaString)
-                } else {
-                    print(l.id)
-                }
-                print(" ")
-                if (r.nodeType == NodeType.LEAF) {
-                    print(r.dnaString)
-                } else {
-                    print(r.id)
-                }
-            }
-            print("\n")
-        }
-    }
 
 
     class Foo {
