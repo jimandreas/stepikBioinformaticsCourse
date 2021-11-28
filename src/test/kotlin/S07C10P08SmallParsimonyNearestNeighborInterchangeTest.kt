@@ -35,6 +35,37 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
     fun tearDown() {
     }
 
+    @Test
+    @DisplayName("Nearest Neighbor Interchange small test")
+    fun nearestNeighborOfTreeSmallTest() {
+        val sampleInput = """
+5
+5->TAA
+5->ACC
+6->AAT
+6->AAA
+7->AAC
+7->5
+5->7
+7->6
+6->7
+        """.trimIndent().lines().toMutableList()
+
+        nni.parseInputStringsUnrooted(sampleInput)
+
+        val result = nni.voteOnDnaStringsAndBuildChangeList()
+
+        val t = nni.printTree()
+        println(t.sorted().joinToString("\n"))
+
+
+        val expectedOutputString = """
+        """.trimIndent().lines().toMutableList()
+
+
+
+    }
+
 
     @Test
     @DisplayName("Nearest Neighbor Interchange sample test")

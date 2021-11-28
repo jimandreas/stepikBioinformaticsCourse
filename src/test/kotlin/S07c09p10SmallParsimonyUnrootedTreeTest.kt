@@ -89,6 +89,46 @@ internal class S07c09p10SmallParsimonyUnrootedTreeTest {
     }
 
 
+    @Test
+    @DisplayName("Small Parsimony Unrooted Tree simple test")
+    fun smallParsimonyUnrootedTreeSimpleTest() {
+        val sampleInput = """
+5
+5->TAA
+5->ACC
+6->AAT
+6->AAA
+7->AAC
+7->5
+5->7
+7->6
+6->7
+        """.trimIndent().lines().toMutableList()
+
+        val expectedResult = """
+
+        """.trimIndent().lines().toMutableList()
+
+        spurt.parseInputStringsUnrooted(sampleInput)
+
+        val result = spurt.voteOnDnaStringsAndBuildChangeList()
+//        println(spurt.totalHammingDistance)
+//        println(result.joinToString("\n"))
+
+        val tree = spurt.printTree()
+        println(tree.sorted().joinToString("\n"))
+
+        val expectedHamming = expectedResult.removeFirst().toInt()
+        assertEquals(expectedHamming, spurt.totalHammingDistance)
+
+        val sortedExpected = expectedResult.sorted()
+        val sortedResult = result.joinToString("\n").lines().sorted()
+
+        assertContentEquals(sortedExpected, sortedResult)
+
+    }
+
+
     /**
      * walk the node map and print the node connections
      * or the node to dna string

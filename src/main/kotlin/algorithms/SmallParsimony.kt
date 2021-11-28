@@ -85,7 +85,7 @@ open class SmallParsimony {
         var dnaString: String? = null,
         var left: Node? = null,
         var right: Node? = null,
-        var leafList: MutableList<Leaf> = mutableListOf(),
+        var leafList: MutableList<Int> = mutableListOf(),
         var hdLeft : Int = 0,  // hd = Hamming Distance
         var hdRight : Int = 0,
         var scoringArray: D2Array<Int>? = null
@@ -101,6 +101,13 @@ open class SmallParsimony {
         var scoringArray: D2Array<Int>? = null
     )
 
+    var numLeaves = 0
+    val nodeMap: HashMap<Int, Node> = hashMapOf()
+    val leafMap: HashMap<Int, Leaf> = hashMapOf()
+    var dnaLen = -1
+    var totalHammingDistance = 0
+    var lastNode: Node? = null
+
     data class DnaTransform(
         val str1: String,
         val str2: String,
@@ -110,13 +117,6 @@ open class SmallParsimony {
             return "$str1->$str2:$hammingDistance"
         }
     }
-
-    var numLeaves = 0
-    val nodeMap: HashMap<Int, Node> = hashMapOf()
-    val leafMap: HashMap<Int, Leaf> = hashMapOf()
-    var dnaLen = -1
-    var totalHammingDistance = 0
-    var lastNode: Node? = null
 
     /**
      * parse the test input:
@@ -174,7 +174,7 @@ open class SmallParsimony {
                     scoringArray = mkArrayWithScores(line[1])
                 )
 
-                nodeStruct.leafList.add(leafNode)
+                nodeStruct.leafList.add(leafNode.id)
                 leafMap[leafNode.id] = leafNode
             }
             inputStrings.removeFirst()
