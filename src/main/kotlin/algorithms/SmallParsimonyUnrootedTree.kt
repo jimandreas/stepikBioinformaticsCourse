@@ -45,8 +45,10 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
 
     // the input lines that have Int -> Int
     val edgeMap: HashMap<Int, MutableList<Int>> = hashMapOf()
-
     var maxEdgeNum = 0
+
+    // add all edges for use in Nearest Neighbor Interchange
+    val allEdgesMap: HashMap<Int, MutableList<Int>> = hashMapOf()
 
     /**
      * parse the test input:
@@ -67,8 +69,6 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
 
     Note: this parser simply ignores lines beginning with a codon
      */
-
-
 
     fun parseInputStringsUnrooted(inputStrings: MutableList<String>) {
 
@@ -97,6 +97,8 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
                 val toNode = line[1].toInt()
                 edgeMap.addTo(nodeNum, toNode)
                 makeNodes(nodeNum, toNode)
+                // add to all edges
+                allEdgesMap.addTo(nodeNum, toNode)
             } else {
 
                 // this an internal node connection to a leaf
@@ -110,6 +112,9 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
                 leafMap[leafNode.id] = leafNode
                 val parentNode = fetchNode(nodeNum)
                 parentNode.leafList.add(leafNode.id)
+
+                // add to all edges
+                allEdgesMap.addTo(nodeNum, leafNode.id)
             }
             inputStrings.removeFirst()
         }
@@ -146,28 +151,34 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
         root.left = nodeMap[oldFromNode]
         root.right = nodeMap[oldToNode]
 
-        /*
-         * iterate through the edge list, and add the destination
-         * nodes to the left/right links in the nodes.
-         *    Note: leaf connections are already set up in the nodes.
-         */
         val visited: MutableList<Int> = mutableListOf()
-        visited.add(oldFromNode)
-        visited.add(oldToNode)
-        for (e in edgeMap.keys) {
-            if (!visited.contains(e)) {
-                visited.add(e)
-                val n = nodeMap[e]!!
-                for (conn in edgeMap[e]!!) {
-                    if (conn >= numLeaves) {
-                        when {
-                            n.left == null -> {
-                                n.left = nodeMap[conn]
-                            }
-                            n.right == null -> {
-                                n.right = nodeMap[conn]
-                            }
-                        }
+        buildTree(root.left!!, visited)
+        buildTree(root.right!!, visited)
+
+    }
+
+    /**
+     * follow list of connections for node [n] in the
+     * [edgeMap] list and build the connections in the nodes.
+     */
+    fun buildTree(n: Node, visited: MutableList<Int>) {
+        if (edgeMap[n.id] == null || edgeMap[n.id]!!.size == 0) {
+            return
+        }
+        visited.add(n.id)
+        for (nodeId in edgeMap[n.id]!!) {
+            if (visited.contains(nodeId)) { // don't save reverse links
+                continue
+            }
+            if (nodeId >= numLeaves) { // if this is a node, not a leaf
+                when {
+                    n.left == null -> {
+                        n.left = nodeMap[nodeId]
+                        buildTree(n.left!!, visited)
+                    }
+                    n.right == null -> {
+                        n.right = nodeMap[nodeId]
+                        buildTree(n.right!!, visited)
                     }
                 }
             }

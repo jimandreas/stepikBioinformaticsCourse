@@ -36,15 +36,15 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
     }
 
     @Test
-    @DisplayName("Nearest Neighbor Interchange small test")
-    fun nearestNeighborOfTreeSmallTest() {
+    @DisplayName("Nearest Neighbor Interchange simple test")
+    fun nearestNeighborOfTreeSimpleTest() {
         val sampleInput = """
 5
-5->TAA
-5->ACC
-6->AAT
-6->AAA
-7->AAC
+5->A
+5->C
+6->A
+6->A
+7->C
 7->5
 5->7
 7->6
@@ -55,6 +55,8 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
 
         val result = nni.voteOnDnaStringsAndBuildChangeList()
 
+        val hamming = nni.totalHammingDistance
+        println(hamming)
         val t = nni.printTree()
         println(t.sorted().joinToString("\n"))
 
@@ -92,6 +94,8 @@ TCCGTAGT->7
 
         val result = nni.voteOnDnaStringsAndBuildChangeList()
 
+        val hamming = nni.totalHammingDistance
+        println(hamming)
         val t = nni.printTree()
         println(t.sorted().joinToString("\n"))
 

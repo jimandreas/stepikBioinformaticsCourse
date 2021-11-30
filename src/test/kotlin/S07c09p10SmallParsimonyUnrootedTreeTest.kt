@@ -88,17 +88,21 @@ internal class S07c09p10SmallParsimonyUnrootedTreeTest {
 
     }
 
+    /**
+     * this test is a study leading up to the nearest Neighbor interchange
+     *   algorithm test.
+     */
 
     @Test
     @DisplayName("Small Parsimony Unrooted Tree simple test")
     fun smallParsimonyUnrootedTreeSimpleTest() {
         val sampleInput = """
 5
-5->TAA
-5->ACC
-6->AAT
-6->AAA
-7->AAC
+5->A
+5->C
+6->A
+6->A
+7->C
 7->5
 5->7
 7->6
@@ -106,17 +110,31 @@ internal class S07c09p10SmallParsimonyUnrootedTreeTest {
         """.trimIndent().lines().toMutableList()
 
         val expectedResult = """
-
+2
+C->A:1
+A->C:1
+A->A:0
+A->A:0
+A->A:0
+A->A:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->A:1
+A->C:1
+C->C:0
+C->C:0
         """.trimIndent().lines().toMutableList()
 
         spurt.parseInputStringsUnrooted(sampleInput)
 
         val result = spurt.voteOnDnaStringsAndBuildChangeList()
-//        println(spurt.totalHammingDistance)
-//        println(result.joinToString("\n"))
+        println(spurt.totalHammingDistance)
+        println(result.joinToString("\n"))
 
-        val tree = spurt.printTree()
-        println(tree.sorted().joinToString("\n"))
+//        val tree = spurt.printTree()
+//        println(tree.sorted().joinToString("\n"))
 
         val expectedHamming = expectedResult.removeFirst().toInt()
         assertEquals(expectedHamming, spurt.totalHammingDistance)

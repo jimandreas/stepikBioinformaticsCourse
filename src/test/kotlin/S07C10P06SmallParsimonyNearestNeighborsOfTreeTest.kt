@@ -36,6 +36,117 @@ internal class S07C10P06SmallParsimonyNearestNeighborsOfTreeTest {
     fun tearDown() {
     }
 
+    /**
+     * a practice test where one internal node (7) only has one leaf
+     */
+    @Test
+    @DisplayName("Nearest Neighbor Of Tree practice test")
+    fun nearestNeighborOfTreePracticeTest() {
+        val sampleInput = """
+5 7
+0->5
+5->0
+1->5
+5->1
+2->6
+6->2
+3->6
+6->3
+4->7
+7->4
+5->7
+7->5
+6->7
+7->6
+        """.trimIndent().lines().toMutableList()
+
+        val edge = sampleInput.removeFirst().split(" ")
+        val a = edge[0].toInt()
+        val b = edge[1].toInt()
+        val m : MutableMap<Int, MutableList<Int>> = hashMapOf()
+        for (s in sampleInput) {
+            val conn = s.split("->")
+            val from = conn[0].toInt()
+            val to = conn[1].toInt()
+            if (m.containsKey(from)) {
+                m[from]!!.add(to)
+            } else {
+                m[from] = mutableListOf(to)
+            }
+        }
+
+        val result = nn.twoNearestNeighbors(a, b, m)
+
+        val expectedOutputString = """
+0->5
+1->7
+2->6
+3->6
+4->5
+5->0
+5->4
+5->7
+6->2
+6->3
+6->7
+7->1
+7->5
+7->6
+
+0->5
+1->7
+2->6
+3->6
+4->7
+5->0
+5->6
+5->7
+6->2
+6->3
+6->5
+7->1
+7->4
+7->5
+        """.trimIndent().lines().toMutableList()
+
+        // form the two expected result lists
+        val expectedList1 : MutableList<String> = mutableListOf()
+        val expectedList2 : MutableList<String> = mutableListOf()
+        var currList = expectedList1
+        for (i in 0 until expectedOutputString.size) {
+            val s = expectedOutputString[i]
+            if (s.length == 0) {
+                currList = expectedList2
+                continue
+            }
+            currList.add(s)
+        }
+
+        // now make two lists from the results
+        val resultsList1 : MutableList<String> = mutableListOf()
+        val resultsList2 : MutableList<String> = mutableListOf()
+        var curDecodeOutput = resultsList1
+        var curDecodeInput = result[0]
+        for (l in 0..1) {
+            for (k in curDecodeInput.keys) {
+                for (to in curDecodeInput[k]!!)
+                    curDecodeOutput.add("$k->$to")
+            }
+            curDecodeInput = result[1]
+            curDecodeOutput = resultsList2
+        }
+
+//        println(resultsList1.sorted().joinToString("\n"))
+//        println("")
+//        println(resultsList2.sorted().joinToString("\n"))
+
+        assertEquals(expectedList1.sorted(), resultsList1.sorted())
+        assertEquals(expectedList2.sorted(), resultsList2.sorted())
+
+
+    }
+
+
 
     @Test
     @DisplayName("Nearest Neighbor Of Tree sample test")
