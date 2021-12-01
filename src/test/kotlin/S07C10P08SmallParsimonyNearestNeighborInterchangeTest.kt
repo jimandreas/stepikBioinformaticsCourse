@@ -53,7 +53,7 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
 
         nni.parseInputStringsUnrooted(sampleInput)
 
-        val result = nni.voteOnDnaStringsAndBuildChangeList()
+        val result0 = nni.voteOnDnaStringsAndBuildChangeList(outputRoot = false)
 
         val hamming = nni.totalHammingDistance
         println(hamming)
@@ -61,8 +61,42 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
         println(t.sorted().joinToString("\n"))
 
 
+        val result = nni.twoNearestNeighbors(5, 7, nni.allEdgesMap)
+
+        // now make two lists from the results
+        val resultsList1 : MutableList<String> = mutableListOf()
+        val resultsList2 : MutableList<String> = mutableListOf()
+        var curDecodeOutput = resultsList1
+        var curDecodeInput = result[0]
+        for (l in 0..1) {
+            for (k in curDecodeInput.keys) {
+                for (to in curDecodeInput[k]!!)
+                    curDecodeOutput.add("$k->$to")
+            }
+            curDecodeInput = result[1]
+            curDecodeOutput = resultsList2
+        }
+
+        println(resultsList1.sorted().joinToString("\n"))
+        println("")
+        println(resultsList2.sorted().joinToString("\n"))
+
+        nni.buildTreeFromEdges(result[0])
+        nni.doUnrootedTreeScoring()
+        val resultAfterInterchange0 = nni.voteOnDnaStringsAndBuildChangeList()
+        val hamming0 = nni.totalHammingDistance
+        println("result after NNI 0: $hamming0")
+
+        nni.buildTreeFromEdges(result[1])
+        nni.doUnrootedTreeScoring()
+        val resultAfterInterchange1 = nni.voteOnDnaStringsAndBuildChangeList()
+        val hamming1 = nni.totalHammingDistance
+        println("result after NNI 1: $hamming1")
+
+
         val expectedOutputString = """
         """.trimIndent().lines().toMutableList()
+
 
 
 

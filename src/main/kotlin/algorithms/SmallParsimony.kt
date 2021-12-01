@@ -14,10 +14,10 @@ import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
 import org.jetbrains.kotlinx.multik.ndarray.operations.*
 import java.lang.StringBuilder
-import kotlin.collections.HashMap
+import kotlin.collections.MutableMap
 import kotlin.collections.List
 import kotlin.collections.MutableList
-import kotlin.collections.hashMapOf
+import kotlin.collections.mutableMapOf
 import kotlin.collections.removeFirst
 import kotlin.collections.set
 
@@ -86,8 +86,8 @@ open class SmallParsimony {
         var left: Node? = null,
         var right: Node? = null,
         var leafList: MutableList<Int> = mutableListOf(),
-        var hdLeft : Int = 0,  // hd = Hamming Distance
-        var hdRight : Int = 0,
+        var hdLeft: Int = 0,  // hd = Hamming Distance
+        var hdRight: Int = 0,
         var scoringArray: D2Array<Int>? = null
     ) {
         override fun toString(): String {
@@ -102,11 +102,12 @@ open class SmallParsimony {
     )
 
     var numLeaves = 0
-    val nodeMap: HashMap<Int, Node> = hashMapOf()
-    val leafMap: HashMap<Int, Leaf> = hashMapOf()
+    val nodeMap: MutableMap<Int, Node> = mutableMapOf()
+    val leafMap: MutableMap<Int, Leaf> = mutableMapOf()
     var dnaLen = -1
     var totalHammingDistance = 0
-    var lastNode: Node? = null
+
+    lateinit var root: Node  // the hacked up root of this tree
 
     data class DnaTransform(
         val str1: String,
@@ -185,10 +186,8 @@ open class SmallParsimony {
      * loop through the nodes until there are no ripe pairs left,
      * and all scoring matrices have been calculated
      *
-     * Note: also sets lastNode - this will be the root of
-     * the binary tree at the end
      */
-    fun doScoring() {
+    fun doRootedTreeScoring() {
 
         if (dnaLen == -1) {
             println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
@@ -199,19 +198,39 @@ open class SmallParsimony {
             var foundRipePair = false
             for (n in nodeMap) {
                 val node = n.value
-                if (node.scoringArray != null) {
-                    continue
+                if (node.scoringArray == null) {
+                    node.scoringArray = mk.d2array(4, dnaLen) { 0 }
                 }
-                if (node.left != null && node.right != null) {
+                if (!node.ripe && node.left != null && node.right != null) {
                     val left = node.left
                     val right = node.right
                     if (left!!.ripe && right!!.ripe) {
                         foundRipePair = true
-                        lastNode = node
-                        val scoredArray = scoreArrays(left.scoringArray!!, right.scoringArray!!)
-                        node.scoringArray = scoredArray
+                        root = node
+                        if (left.isScored) {
+                            node.scoringArray = scoreArrays(left.scoringArray!!, node.scoringArray!!)
+                        }
+                        if (right.isScored) {
+                            node.scoringArray = scoreArrays(right.scoringArray!!, node.scoringArray!!)
+                        }
+                        for (leafId in node.leafList) {
+                            val leaf = leafMap[leafId]!!
+                            node.scoringArray = scoreArrays(leaf.scoringArray!!, node.scoringArray!!)
+                        }
                         node.ripe = true
+                        node.isScored = true
                     }
+                }
+
+                // handle case where there are no left and right nodes, only leaves
+
+                if (node.left == null && node.right == null && !node.isScored && node.leafList.size != 0) {
+                    for (leafId in node.leafList) {
+                        val leaf = leafMap[leafId]!!
+                        node.scoringArray = scoreArrays(leaf.scoringArray!!, node.scoringArray!!)
+                    }
+                    node.isScored = true
+                    node.ripe = true
                 }
             }
         } while (foundRipePair == true)
@@ -219,59 +238,120 @@ open class SmallParsimony {
 
     /**
      * loop again through the nodes
-     *   starting with lastNode.
+     *   starting with root.
      *
      * find the dna letters that result in the
      * minimum change in the children nodes.
      */
-    fun buildChangeList(): List<DnaTransform> {
+
+    fun voteOnDnaStringsAndBuildChangeList(outputRoot : Boolean = true): List<DnaTransform> {
         val changeList: MutableList<DnaTransform> = mutableListOf()
-        if (dnaLen == -1 || lastNode == null) {
-            println("iterateNodes: global variable dnaLen or lastNode is not initialized.  Giving up.")
+
+        if (dnaLen == -1) {
+            println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
             return changeList
         }
 
         // work from the root down, setting the dna strings on the way
-        //   note that the leaf nodes do not need to be accessed here
-        //   as they don't affect the assignments - as their
-        //   scores are propagated upwards.
 
-        val workList: MutableList<Node> = mutableListOf(lastNode!!)
-        lastNode!!.dnaString = parsimoniousString(lastNode!!.scoringArray!!)
+        val workList: MutableList<Node> = mutableListOf()
+        root.dnaString = parsimoniousString(root.scoringArray!!)
+        workList.add(root)
 
-        while (workList.isNotEmpty()) {
+        do {
             val node = workList.removeFirst()
+            if (node.isOutput) {
+                println("Node ${node.id} is already output")
+                continue
+            }
+
             val left = node.left
             val right = node.right
 
-            if (left != null && right != null) {
-
-                // compose the dna strings for the children
+            // compose the dna strings for the child
+            if (left != null) {
                 left.dnaString = parsimoniusCompareString(node, left)
+            }
+
+            if (right != null) {
+                // compose the dna strings for the child
                 right.dnaString = parsimoniusCompareString(node, right)
+            }
 
-                // calculate the hamming distance from root to children
-                val hammingLeft = hammingDistance(left.dnaString!!, node.dnaString!!)
-                val hammingRight = hammingDistance(right.dnaString!!, node.dnaString!!)
-                node.hdLeft = hammingLeft
-                node.hdRight = hammingRight
-                totalHammingDistance += hammingLeft + hammingRight
+            // special case the root
+            if (outputRoot == false && node == root) {
 
-                val c1 = DnaTransform(node.dnaString!!, left.dnaString!!, hammingLeft)
-                val c2 = DnaTransform(left.dnaString!!, node.dnaString!!, hammingLeft)
-                val c3 = DnaTransform(node.dnaString!!, right.dnaString!!, hammingRight)
-                val c4 = DnaTransform(right.dnaString!!, node.dnaString!!, hammingRight)
+                val hammingRoot = hammingDistance(left!!.dnaString!!, right!!.dnaString!!)
+                totalHammingDistance += hammingRoot
+
+                val c1 = DnaTransform(right.dnaString!!, left.dnaString!!, hammingRoot)
+                val c2 = DnaTransform(left.dnaString!!, right.dnaString!!, hammingRoot)
                 changeList.add(c1)
                 changeList.add(c2)
-                changeList.add(c3)
-                changeList.add(c4)
 
+
+            } else {
+
+                if (left != null) {
+                    val hammingLeft = hammingDistance(left.dnaString!!, node.dnaString!!)
+                    totalHammingDistance += hammingLeft
+
+                    val c1 = DnaTransform(node.dnaString!!, left.dnaString!!, hammingLeft)
+                    val c2 = DnaTransform(left.dnaString!!, node.dnaString!!, hammingLeft)
+                    changeList.add(c1)
+                    changeList.add(c2)
+                }
+
+
+                if (right != null) {
+                    val hammingRight = hammingDistance(right.dnaString!!, node.dnaString!!)
+                    totalHammingDistance += hammingRight
+
+                    val c3 = DnaTransform(node.dnaString!!, right.dnaString!!, hammingRight)
+                    val c4 = DnaTransform(right.dnaString!!, node.dnaString!!, hammingRight)
+                    changeList.add(c3)
+                    changeList.add(c4)
+                }
+
+                // now go through the leaf list
+                for (leafId in node.leafList) {
+                    val hammingLeaf = hammingDistance(leafMap[leafId]!!.dnaString!!, node.dnaString!!)
+                    totalHammingDistance += hammingLeaf
+
+                    val c3 = DnaTransform(node.dnaString!!, leafMap[leafId]!!.dnaString!!, hammingLeaf)
+                    val c4 = DnaTransform(leafMap[leafId]!!.dnaString!!, node.dnaString!!, hammingLeaf)
+                    changeList.add(c3)
+                    changeList.add(c4)
+                }
+
+            }
+
+            if (left != null && !left.isOutput) {
                 workList.add(left)
+            }
+            if (right != null && !right.isOutput) {
                 workList.add(right)
             }
+
+            node.isOutput = true
+
+        } while (workList.size != 0)
+
+        // check change list hamming distance and compare to accumulated hamming distance
+
+        var checkHamming = 0
+        for (entry in changeList) {
+            checkHamming += entry.hammingDistance
+        }
+        checkHamming = checkHamming / 2
+
+        if (checkHamming != totalHammingDistance) {
+            println("ERROR: hamming distances do not check")
         }
         return changeList
+
     }
+
 
     /**
      *
@@ -326,7 +406,7 @@ open class SmallParsimony {
                         }
                     }
                     if (foundMatch == false) { // set to the first min value
-                        val minIndex = child[0..4,i].indexOf(mC!!)
+                        val minIndex = child[0..4, i].indexOf(mC!!)
                         letter = "ACGT"[minIndex]
                     }
                     str.append(letter)
@@ -335,7 +415,7 @@ open class SmallParsimony {
                  * choose the character at the child's first scoring min value
                  */
                 else -> {
-                    val minIndex = child[0..4,i].indexOf(mC!!)
+                    val minIndex = child[0..4, i].indexOf(mC!!)
                     val letter = "ACGT"[minIndex]
                     str.append(letter)
                 }
@@ -449,6 +529,53 @@ open class SmallParsimony {
             }
         }
         return hammingCount
+    }
+
+    /**
+     * pretty print the tree.
+     */
+    fun printTree(): List<String> {
+        val outList: MutableList<String> = mutableListOf()
+        p(root, outList)
+        return outList
+    }
+
+    private fun p(n: Node, l: MutableList<String>) {
+
+        if (n.left != null) {
+            val str = StringBuilder()
+            str.append(n.id)
+            str.append("->")
+            str.append(n.left!!.id)
+            str.append(" ${n.dnaString} ${n.left!!.dnaString}")
+            l.add(str.toString())
+        }
+
+        if (n.right != null) {
+            val str = StringBuilder()
+            str.append(n.id)
+            str.append("->")
+            str.append(n.right!!.id)
+            str.append(" ${n.dnaString} ${n.right!!.dnaString}")
+            l.add(str.toString())
+        }
+
+        for (leaf in n.leafList) {
+            val str = StringBuilder()
+            str.append(n.id)
+            str.append("->")
+            str.append(leafMap[leaf]!!.id)
+            str.append(" ${n.dnaString} ${leafMap[leaf]!!.dnaString}")
+            l.add(str.toString())
+        }
+
+        if (n.left != null) {
+            p(n.left!!, l)
+        }
+
+        if (n.right != null) {
+            p(n.right!!, l)
+        }
     }
 
 

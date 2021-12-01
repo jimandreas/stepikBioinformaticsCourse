@@ -41,7 +41,7 @@ then the algorithm selects the one with smallest parsimony score
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-class SmallParsimonyNearestNeighborInterchange: SmallParsimonyUnrootedTree() {
+class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsOfTree() {
 
     /**
 
@@ -78,6 +78,54 @@ class SmallParsimonyNearestNeighborInterchange: SmallParsimonyUnrootedTree() {
                          newTree ← NeighborTree
      return newTree
     """.trimIndent()
+
+    /**
+     * transform this mess into a binary tree suitable for traversing.
+     *
+     * Process:
+     *    Start at the edge of the edges.
+     *    Make a root node at the edge, hooking up the last two edges.
+     */
+    fun buildTreeFromEdges(edges: MutableMap<Int, MutableList<Int>>) {
+        maxEdgeNum = edges.keys.maxOrNull()!!
+        root = Node(
+            id = maxEdgeNum + 1
+        )
+
+        // clear old internal node left/right entries
+        for (i in numLeaves..maxEdgeNum) {
+            val n = nodeMap[i]
+            if (n == null) {
+                println("buildTreeFromEdges: Error null node at node number $i")
+                continue
+            }
+            n.left = null
+            n.right = null
+        }
+
+        val oldToNode = maxEdgeNum
+        val oldFromNode = edges[maxEdgeNum]!!.filter { it >= numLeaves }.first()
+
+        // prune out the edges between maxEdgeNum (at index to)
+        // and oldFromNode (at index from)
+
+        val fromIndex = edges[oldToNode]!!.indexOf(oldFromNode)
+        edges[maxEdgeNum]!!.removeAt(fromIndex)
+
+        val toIndex = edges[oldFromNode]!!.indexOf(oldToNode)
+        edges[oldFromNode]!!.removeAt(toIndex)
+
+        root.left = nodeMap[oldFromNode]
+        root.right = nodeMap[oldToNode]
+
+        val visited: MutableList<Int> = mutableListOf()
+        buildTree(root.left!!, visited, edges)
+        buildTree(root.right!!, visited, edges)
+
+        // the new tree is rooted at the global "root" node
+
+    }
+
 
 
 

@@ -21,7 +21,7 @@ package algorithms
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-class SmallParsimonyNearestNeighborsOfTree {
+open class SmallParsimonyNearestNeighborsOfTree: SmallParsimonyUnrootedTree() {
 
     /**
 

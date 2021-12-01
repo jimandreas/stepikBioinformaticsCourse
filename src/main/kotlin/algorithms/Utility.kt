@@ -13,3 +13,11 @@ fun <K>HashMap<Int, MutableList<K>>.addTo(key: Int, newItem: K) {
         this[key] = mutableListOf(newItem)
     }
 }
+
+fun <K>MutableMap<Int, MutableList<K>>.addTo(key: Int, newItem: K) {
+    if (this.containsKey(key)) {
+        this[key]!!.add(newItem)
+    } else {
+        this[key] = mutableListOf(newItem)
+    }
+}

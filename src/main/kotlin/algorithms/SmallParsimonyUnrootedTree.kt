@@ -41,14 +41,14 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
     score of the tree.
      */
 
-    lateinit var root: Node  // the hacked up root of this tree
+
 
     // the input lines that have Int -> Int
-    val edgeMap: HashMap<Int, MutableList<Int>> = hashMapOf()
+    val edgeMap: MutableMap<Int, MutableList<Int>> = mutableMapOf()
     var maxEdgeNum = 0
 
     // add all edges for use in Nearest Neighbor Interchange
-    val allEdgesMap: HashMap<Int, MutableList<Int>> = hashMapOf()
+    val allEdgesMap: MutableMap<Int, MutableList<Int>> = mutableMapOf()
 
     /**
      * parse the test input:
@@ -115,6 +115,7 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
 
                 // add to all edges
                 allEdgesMap.addTo(nodeNum, leafNode.id)
+                allEdgesMap.addTo(leafNode.id, nodeNum)
             }
             inputStrings.removeFirst()
         }
@@ -152,8 +153,8 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
         root.right = nodeMap[oldToNode]
 
         val visited: MutableList<Int> = mutableListOf()
-        buildTree(root.left!!, visited)
-        buildTree(root.right!!, visited)
+        buildTree(root.left!!, visited, edgeMap)
+        buildTree(root.right!!, visited, edgeMap)
 
     }
 
@@ -161,12 +162,12 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
      * follow list of connections for node [n] in the
      * [edgeMap] list and build the connections in the nodes.
      */
-    fun buildTree(n: Node, visited: MutableList<Int>) {
-        if (edgeMap[n.id] == null || edgeMap[n.id]!!.size == 0) {
+    fun buildTree(n: Node, visited: MutableList<Int>, edges: MutableMap<Int, MutableList<Int>>) {
+        if (edges[n.id] == null || edges[n.id]!!.size == 0) {
             return
         }
         visited.add(n.id)
-        for (nodeId in edgeMap[n.id]!!) {
+        for (nodeId in edges[n.id]!!) {
             if (visited.contains(nodeId)) { // don't save reverse links
                 continue
             }
@@ -174,11 +175,11 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
                 when {
                     n.left == null -> {
                         n.left = nodeMap[nodeId]
-                        buildTree(n.left!!, visited)
+                        buildTree(n.left!!, visited, edges)
                     }
                     n.right == null -> {
                         n.right = nodeMap[nodeId]
-                        buildTree(n.right!!, visited)
+                        buildTree(n.right!!, visited, edges)
                     }
                 }
             }
@@ -248,160 +249,8 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
         } while (foundUnscoredNode == true)
     }
 
-    /**
-     * pretty print the tree.
-     */
-    fun printTree(): List<String> {
-        val outList: MutableList<String> = mutableListOf()
-        p(root, outList)
-        return outList
-    }
-
-    private fun p(n: Node, l: MutableList<String>) {
-
-        if (n.left != null) {
-            val str = StringBuilder()
-            str.append(n.id)
-            str.append("->")
-            str.append(n.left!!.id)
-            str.append(" ${n.dnaString} ${n.left!!.dnaString}")
-            l.add(str.toString())
-        }
-
-        if (n.right != null) {
-            val str = StringBuilder()
-            str.append(n.id)
-            str.append("->")
-            str.append(n.right!!.id)
-            str.append(" ${n.dnaString} ${n.right!!.dnaString}")
-            l.add(str.toString())
-        }
-
-        for (leaf in n.leafList) {
-            val str = StringBuilder()
-            str.append(n.id)
-            str.append("->")
-            str.append(leafMap[leaf]!!.id)
-            str.append(" ${n.dnaString} ${leafMap[leaf]!!.dnaString}")
-            l.add(str.toString())
-        }
-
-        if (n.left != null) {
-            p(n.left!!, l)
-        }
-
-        if (n.right != null) {
-            p(n.right!!, l)
-        }
-    }
-
-    /**
-     *
-     */
-    fun voteOnDnaStringsAndBuildChangeList(): List<DnaTransform> {
-        val changeList: MutableList<DnaTransform> = mutableListOf()
-
-        if (dnaLen == -1) {
-            println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
-            return changeList
-        }
-
-        // work from the root down, setting the dna strings on the way
-
-        val workList: MutableList<Node> = mutableListOf()
-        root.dnaString = parsimoniousString(root.scoringArray!!)
-        workList.add(root)
-
-        do {
-            val node = workList.removeFirst()
-            if (node.isOutput) {
-                println("Node ${node.id} is already output")
-                continue
-            }
-
-            val left = node.left
-            val right = node.right
-
-            // compose the dna strings for the child
-            if (left != null) {
-                left.dnaString = parsimoniusCompareString(node, left)
-            }
-
-            if (right != null) {
-                // compose the dna strings for the child
-                right.dnaString = parsimoniusCompareString(node, right)
-            }
-
-            // special case the root
-            if (node == root) {
-
-                val hammingRoot = hammingDistance(left!!.dnaString!!, right!!.dnaString!!)
-                totalHammingDistance += hammingRoot
-
-                val c1 = DnaTransform(right.dnaString!!, left.dnaString!!, hammingRoot)
-                val c2 = DnaTransform(left.dnaString!!, right.dnaString!!, hammingRoot)
-                changeList.add(c1)
-                changeList.add(c2)
 
 
-            } else {
-
-                if (left != null) {
-                    val hammingLeft = hammingDistance(left.dnaString!!, node.dnaString!!)
-                    totalHammingDistance += hammingLeft
-
-                    val c1 = DnaTransform(node.dnaString!!, left.dnaString!!, hammingLeft)
-                    val c2 = DnaTransform(left.dnaString!!, node.dnaString!!, hammingLeft)
-                    changeList.add(c1)
-                    changeList.add(c2)
-                }
-
-
-                if (right != null) {
-                    val hammingRight = hammingDistance(right.dnaString!!, node.dnaString!!)
-                    totalHammingDistance += hammingRight
-
-                    val c3 = DnaTransform(node.dnaString!!, right.dnaString!!, hammingRight)
-                    val c4 = DnaTransform(right.dnaString!!, node.dnaString!!, hammingRight)
-                    changeList.add(c3)
-                    changeList.add(c4)
-                }
-
-                // now go through the leaf list
-                for (leafId in node.leafList) {
-                    val hammingLeaf = hammingDistance(leafMap[leafId]!!.dnaString!!, node.dnaString!!)
-                    totalHammingDistance += hammingLeaf
-
-                    val c3 = DnaTransform(node.dnaString!!, leafMap[leafId]!!.dnaString!!, hammingLeaf)
-                    val c4 = DnaTransform(leafMap[leafId]!!.dnaString!!, node.dnaString!!, hammingLeaf)
-                    changeList.add(c3)
-                    changeList.add(c4)
-                }
-
-            }
-
-            if (left != null && !left.isOutput) {
-                workList.add(left)
-            }
-            if (right != null && !right.isOutput) {
-                workList.add(right)
-            }
-
-            node.isOutput = true
-
-        } while (workList.size != 0)
-
-        // check change list hamming distance and compare to accumulated hamming distance
-
-        var checkHamming = 0
-        for (entry in changeList) {
-            checkHamming += entry.hammingDistance
-        }
-        checkHamming = checkHamming / 2
-        //println("Accumulated Hamming $totalHammingDistance checks with $checkHamming")
-        return changeList
-
-    }
 
     /**
      * algorithm in English, rather than mathematics:

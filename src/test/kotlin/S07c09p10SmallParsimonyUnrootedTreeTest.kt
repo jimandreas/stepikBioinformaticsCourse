@@ -3,7 +3,6 @@
     "ReplaceManualRangeWithIndicesCalls"
 )
 
-import algorithms.SmallParsimony
 import algorithms.SmallParsimonyUnrootedTree
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -71,12 +70,12 @@ internal class S07c09p10SmallParsimonyUnrootedTreeTest {
 
         spurt.parseInputStringsUnrooted(sampleInput)
 
-        val result = spurt.voteOnDnaStringsAndBuildChangeList()
+        val result = spurt.voteOnDnaStringsAndBuildChangeList(outputRoot = false)
 //        println(spurt.totalHammingDistance)
 //        println(result.joinToString("\n"))
 
-        val tree = spurt.printTree()
-        println(tree.sorted().joinToString("\n"))
+//        val tree = spurt.printTree()
+//        println(tree.sorted().joinToString("\n"))
 
         val expectedHamming = expectedResult.removeFirst().toInt()
         assertEquals(expectedHamming, spurt.totalHammingDistance)
@@ -129,9 +128,9 @@ C->C:0
 
         spurt.parseInputStringsUnrooted(sampleInput)
 
-        val result = spurt.voteOnDnaStringsAndBuildChangeList()
-        println(spurt.totalHammingDistance)
-        println(result.joinToString("\n"))
+        val result = spurt.voteOnDnaStringsAndBuildChangeList(outputRoot = false)
+//        println(spurt.totalHammingDistance)
+//        println(result.joinToString("\n"))
 
 //        val tree = spurt.printTree()
 //        println(tree.sorted().joinToString("\n"))
