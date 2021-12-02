@@ -51,7 +51,9 @@ open class SmallParsimonyNearestNeighborsOfTree: SmallParsimonyUnrootedTree() {
         connListA.add(b)
         connListB.add(a)
 
-        var edgesVersionA = edges.toMutableMap()
+        var edgesVersionA = edges.deepCopy().toMutableMap()
+        var edgesVersionB = edges.deepCopy().toMutableMap()
+
         edgesVersionA[a] = connListA
         edgesVersionA[b] = connListB
 
@@ -77,7 +79,6 @@ open class SmallParsimonyNearestNeighborsOfTree: SmallParsimonyUnrootedTree() {
         connListA.add(b)
         connListB.add(a)
 
-        var edgesVersionB = edges.toMutableMap()
         edgesVersionB[a] = connListA
         edgesVersionB[b] = connListB
 

@@ -7,6 +7,10 @@
 
 package algorithms
 
+import okhttp3.internal.toImmutableMap
+import org.jetbrains.kotlinx.multik.api.d2array
+import org.jetbrains.kotlinx.multik.api.mk
+
 /**
  *
  * See also:
@@ -80,16 +84,92 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
     """.trimIndent()
 
     /**
-     * transform this mess into a binary tree suitable for traversing.
+     * first calculate a base hamming distance value.
+     *   Then perform a nearest neighbor break on all edges,
+     *   and recalculate the hamming distance.   For each
+     *   winning iteration save the changes.
+     */
+
+    fun nearestNeighborExchangeHeuristic() {
+        if (allEdgesMap.isEmpty()) {
+            println("nearestNeighborExchangeHeuristic: ERROR tree must be parsed first")
+            return
+        }
+
+        // get the baseline hamming distance
+        voteOnDnaStringsAndBuildChangeList(outputRoot = false)
+        val baseHammingDistance = totalHammingDistance
+        println("initial hamming distance: $baseHammingDistance")
+
+        val baseEdgesMap = allEdgesMap.deepCopy()
+
+        // build a tree just from edges (experiment)
+        buildTreeFromEdges(allEdgesMap)
+        doUnrootedTreeScoring()
+        voteOnDnaStringsAndBuildChangeList(outputRoot= false)
+
+        println("What is distance now? : $totalHammingDistance")
+        // the distances *should* match
+        if (baseHammingDistance != totalHammingDistance) {
+            println("nearestNeighborExchangeHeuristic: base hamming $baseHammingDistance doesn't match $totalHammingDistance")
+        }
+
+        var minHammingDistance = baseHammingDistance
+        do {
+
+            var foundNewMin = false
+
+            // iterate through all edges
+            for (fromNodeId in baseEdgesMap.keys.sorted().filter { it >= numLeaves}) {
+                for (toNodeId in baseEdgesMap[fromNodeId]!!) {
+                    if (toNodeId < numLeaves) {
+                        continue
+                    }
+                    val twoCandidateMaps = twoNearestNeighbors(fromNodeId, toNodeId, baseEdgesMap.toMutableMap())
+                    
+                    buildTreeFromEdges(twoCandidateMaps[0])
+                    doUnrootedTreeScoring()
+                    val outputParsimonyList0 = voteOnDnaStringsAndBuildChangeList(outputRoot= false)
+                    val outputHammingDistance0 = totalHammingDistance
+                    val saveMap0 = twoCandidateMaps[0].toMutableMap()
+
+                    buildTreeFromEdges(twoCandidateMaps[1])
+                    doUnrootedTreeScoring()
+                    val outputParsimonyList1 = voteOnDnaStringsAndBuildChangeList(outputRoot= false)
+                    val outputHammingDistance1 = totalHammingDistance
+                    val saveMap1 = twoCandidateMaps[1].toMutableMap()
+
+                    // do we have a winner?
+
+                    if (outputHammingDistance0 < minHammingDistance) {
+                        println("Winner $outputHammingDistance0")
+                        minHammingDistance = outputHammingDistance0
+                        foundNewMin = true
+                    }
+
+                    if (outputHammingDistance1 < minHammingDistance) {
+                        println("Winner $outputHammingDistance1")
+                        minHammingDistance = outputHammingDistance1
+                        foundNewMin = true
+                    }
+                }
+            }
+        } while (foundNewMin)
+        
+    }
+
+    /**
+     * convert the edge list into the tree data structure
      *
      * Process:
      *    Start at the edge of the edges.
      *    Make a root node at the edge, hooking up the last two edges.
      */
-    fun buildTreeFromEdges(edges: MutableMap<Int, MutableList<Int>>) {
-        maxEdgeNum = edges.keys.maxOrNull()!!
+    fun buildTreeFromEdges(allEdges: MutableMap<Int, MutableList<Int>>) {
+        maxEdgeNum = allEdges.keys.maxOrNull()!!
         root = Node(
-            id = maxEdgeNum + 1
+            id = maxEdgeNum + 1,
+            scoringArray = mk.d2array(4, dnaLen) { 0 }
         )
 
         // clear old internal node left/right entries
@@ -101,32 +181,33 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
             }
             n.left = null
             n.right = null
+            n.isScored = false
+            n.isOutput = false
+            n.ripe = false
+            n.dnaString = null
+            nodeMap[i] = n
         }
 
         val oldToNode = maxEdgeNum
-        val oldFromNode = edges[maxEdgeNum]!!.filter { it >= numLeaves }.first()
+        val oldFromNode = allEdges[maxEdgeNum]!!.filter { it >= numLeaves }.first()
 
         // prune out the edges between maxEdgeNum (at index to)
         // and oldFromNode (at index from)
 
-        val fromIndex = edges[oldToNode]!!.indexOf(oldFromNode)
-        edges[maxEdgeNum]!!.removeAt(fromIndex)
+        val fromIndex = allEdges[oldToNode]!!.indexOf(oldFromNode)
+        allEdges[maxEdgeNum]!!.removeAt(fromIndex)
 
-        val toIndex = edges[oldFromNode]!!.indexOf(oldToNode)
-        edges[oldFromNode]!!.removeAt(toIndex)
+        val toIndex = allEdges[oldFromNode]!!.indexOf(oldToNode)
+        allEdges[oldFromNode]!!.removeAt(toIndex)
 
         root.left = nodeMap[oldFromNode]
         root.right = nodeMap[oldToNode]
 
         val visited: MutableList<Int> = mutableListOf()
-        buildTree(root.left!!, visited, edges)
-        buildTree(root.right!!, visited, edges)
+        buildTree(root.left!!, visited, allEdges)
+        buildTree(root.right!!, visited, allEdges)
 
         // the new tree is rooted at the global "root" node
 
     }
-
-
-
-
 }

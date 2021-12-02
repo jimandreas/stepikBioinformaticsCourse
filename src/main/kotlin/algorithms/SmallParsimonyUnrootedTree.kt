@@ -135,7 +135,8 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
     fun treeHacking() {
         maxEdgeNum = edgeMap.keys.maxOrNull()!!
         root = Node(
-            id = maxEdgeNum + 1
+            id = maxEdgeNum + 1,
+            scoringArray = mk.d2array(4, dnaLen) { 0 }
         )
 
         val oldToNode = maxEdgeNum
@@ -162,12 +163,16 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
      * follow list of connections for node [n] in the
      * [edgeMap] list and build the connections in the nodes.
      */
-    fun buildTree(n: Node, visited: MutableList<Int>, edges: MutableMap<Int, MutableList<Int>>) {
-        if (edges[n.id] == null || edges[n.id]!!.size == 0) {
+    fun buildTree(n: Node, visited: MutableList<Int>, allEdges: MutableMap<Int, MutableList<Int>>) {
+        if (allEdges[n.id] == null || allEdges[n.id]!!.size == 0) {
             return
         }
         visited.add(n.id)
-        for (nodeId in edges[n.id]!!) {
+        n.dnaString = null
+        n.ripe = false
+        n.isScored = false
+        n.leafList.clear()
+        for (nodeId in allEdges[n.id]!!) {
             if (visited.contains(nodeId)) { // don't save reverse links
                 continue
             }
@@ -175,13 +180,15 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
                 when {
                     n.left == null -> {
                         n.left = nodeMap[nodeId]
-                        buildTree(n.left!!, visited, edges)
+                        buildTree(n.left!!, visited, allEdges)
                     }
                     n.right == null -> {
                         n.right = nodeMap[nodeId]
-                        buildTree(n.right!!, visited, edges)
+                        buildTree(n.right!!, visited, allEdges)
                     }
                 }
+            } else {
+                n.leafList.add(nodeId)
             }
         }
     }

@@ -246,6 +246,7 @@ open class SmallParsimony {
 
     fun voteOnDnaStringsAndBuildChangeList(outputRoot : Boolean = true): List<DnaTransform> {
         val changeList: MutableList<DnaTransform> = mutableListOf()
+        totalHammingDistance = 0
 
         if (dnaLen == -1) {
             println("iterateNodes: global variable dnaLen is not initialized.  Giving up.")
@@ -279,7 +280,7 @@ open class SmallParsimony {
             }
 
             // special case the root
-            if (outputRoot == false && node == root) {
+            if (outputRoot == true && node == root) {
 
                 val hammingRoot = hammingDistance(left!!.dnaString!!, right!!.dnaString!!)
                 totalHammingDistance += hammingRoot
@@ -346,7 +347,7 @@ open class SmallParsimony {
         checkHamming = checkHamming / 2
 
         if (checkHamming != totalHammingDistance) {
-            println("ERROR: hamming distances do not check")
+            println("ERROR: hamming distances do not check was total $totalHammingDistance after vote $checkHamming")
         }
         return changeList
 

@@ -35,20 +35,64 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
     fun tearDown() {
     }
 
+
+
+    /*
+     *  The nearest neighbor solution to this 4-leaf problem
+     *     is to swap a C and G leaf.   This gives a tree
+     *     with a hamming distance of 1 (C to G from node 4 to 5)
+     */
+
+    @Test
+    @DisplayName("Nearest Neighbor Interchange very simple test")
+    fun nearestNeighborOfTreeVerySimpleTest() {
+        val sampleInput = """
+4
+4->C
+4->G
+5->C
+5->G
+5->4
+4->5
+        """.trimIndent().lines().toMutableList()
+
+        nni.parseInputStringsUnrooted(sampleInput)
+
+        nni.nearestNeighborExchangeHeuristic()
+
+    }
+
     @Test
     @DisplayName("Nearest Neighbor Interchange simple test")
     fun nearestNeighborOfTreeSimpleTest() {
         val sampleInput = """
-5
-5->A
-5->C
-6->A
-6->A
-7->C
-7->5
-5->7
-7->6
-6->7
+8
+8->C
+C->8
+8->C
+C->8
+9->G
+G->9
+9->G
+G->9
+10->G
+G->10
+10->G
+G->10
+11->C
+C->11
+11->C
+C->11
+12->8
+8->12
+12->9
+9->12
+13->10
+10->13
+13->11
+11->13
+12->13
+13->12
         """.trimIndent().lines().toMutableList()
 
         nni.parseInputStringsUnrooted(sampleInput)
@@ -58,8 +102,7 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
         val hamming = nni.totalHammingDistance
         println(hamming)
         val t = nni.printTree()
-        println(t.sorted().joinToString("\n"))
-
+        println(t.joinToString("\n"))
 
         val result = nni.twoNearestNeighbors(5, 7, nni.allEdgesMap)
 
@@ -69,7 +112,7 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
         var curDecodeOutput = resultsList1
         var curDecodeInput = result[0]
         for (l in 0..1) {
-            for (k in curDecodeInput.keys) {
+            for (k in curDecodeInput.keys.sorted()) {
                 for (to in curDecodeInput[k]!!)
                     curDecodeOutput.add("$k->$to")
             }
@@ -77,9 +120,9 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
             curDecodeOutput = resultsList2
         }
 
-        println(resultsList1.sorted().joinToString("\n"))
+        println(resultsList1.joinToString(" "))
         println("")
-        println(resultsList2.sorted().joinToString("\n"))
+        println(resultsList2.joinToString(" "))
 
         nni.buildTreeFromEdges(result[0])
         nni.doUnrootedTreeScoring()
