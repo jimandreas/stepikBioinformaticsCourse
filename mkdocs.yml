@@ -82,7 +82,7 @@ theme:
   font:
     text: Roboto
     code: Roboto Mono
-  favicon: assets/favicon.png
+  favicon: assets/favicon.jpg
   icon:
     logo: logo
 
@@ -145,4 +145,5 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Notes: Notes.md
+  - Parsimony: Parsimony.md
   - Uploading: Uploading.md

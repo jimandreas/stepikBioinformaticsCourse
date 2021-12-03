@@ -90,6 +90,15 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
      *   winning iteration save the changes.
      */
 
+    /**
+     * [resultDnaTransformList] - the dna string from / to list required by the problem
+     * [resultHammingDistance] - the associated hamming distance with the above list
+     * [resultEdgeList] - the "winning" list of edges resulting in a lower hamming distance than the previous set
+     */
+    val resultDnaTransformList: MutableList<List<DnaTransform>> = mutableListOf()
+    val resultHammingDistance: MutableList<Int> = mutableListOf()
+    val resultEdgeList: MutableList<MutableMap<Int, MutableList<Int>>> = mutableListOf()
+
     fun nearestNeighborExchangeHeuristic() {
         if (allEdgesMap.isEmpty()) {
             println("nearestNeighborExchangeHeuristic: ERROR tree must be parsed first")
@@ -101,7 +110,7 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
         val baseHammingDistance = totalHammingDistance
         println("initial hamming distance: $baseHammingDistance")
 
-        val baseEdgesMap = allEdgesMap.deepCopy()
+        var baseEdgesMap = allEdgesMap.deepCopy()
 
         // build a tree just from edges (experiment)
         buildTreeFromEdges(allEdgesMap)
@@ -145,12 +154,22 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
                         println("Winner $outputHammingDistance0")
                         minHammingDistance = outputHammingDistance0
                         foundNewMin = true
+                        resultHammingDistance.add(minHammingDistance)
+                        resultDnaTransformList.add(outputParsimonyList0)
+                        resultEdgeList.add(twoCandidateMaps[0])
+
+                        baseEdgesMap = twoCandidateMaps[0].deepCopy()
                     }
 
                     if (outputHammingDistance1 < minHammingDistance) {
                         println("Winner $outputHammingDistance1")
                         minHammingDistance = outputHammingDistance1
                         foundNewMin = true
+                        resultHammingDistance.add(minHammingDistance)
+                        resultDnaTransformList.add(outputParsimonyList1)
+                        resultEdgeList.add(twoCandidateMaps[1])
+
+                        baseEdgesMap = twoCandidateMaps[1].deepCopy()
                     }
                 }
             }

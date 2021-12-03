@@ -8,6 +8,9 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import java.lang.StringBuilder
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 /**
  *
@@ -60,7 +63,43 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
 
         nni.nearestNeighborExchangeHeuristic()
 
+        // solution should only take one iteration of nearest neighbor interchange
+        assertEquals(1, nni.resultHammingDistance.size)
+        // winning hamming distance is one
+        assertEquals(1, nni.resultHammingDistance[0])
+
+        // unpack the winning edge list (internals)
+        val resultWinningList = nni.resultEdgeList[0]
+        val resultStringList = prettyPrintEdgeList(resultWinningList)
+
+        println(resultStringList.joinToString("\n"))
+
+        // result should exchange node 4 "G" with node 5 "C"
+        val expectedResult = """
+            0 ->4
+            1 ->5
+            2 ->4
+            3 ->5
+            4 ->0 2
+            5 ->3 1
+        """.trimIndent().lines()
+
+        assertContentEquals(expectedResult, resultStringList)
+
     }
+
+    private fun prettyPrintEdgeList(result: MutableMap<Int, MutableList<Int>>): List<String> {
+
+        val outputList :MutableList<String> = mutableListOf()
+        for (k in result.keys.sorted()) {
+            val str = StringBuilder()
+            str.append("$k ->")
+            str.append(result[k]!!.joinToString(" "))
+            outputList.add(str.toString())
+        }
+        return outputList
+    }
+
 
     @Test
     @DisplayName("Nearest Neighbor Interchange simple test")
@@ -97,48 +136,18 @@ C->11
 
         nni.parseInputStringsUnrooted(sampleInput)
 
-        val result0 = nni.voteOnDnaStringsAndBuildChangeList(outputRoot = false)
+        nni.nearestNeighborExchangeHeuristic()
 
-        val hamming = nni.totalHammingDistance
-        println(hamming)
-        val t = nni.printTree()
-        println(t.joinToString("\n"))
+        // solution should only take one iteration of nearest neighbor interchange
+        assertEquals(2, nni.resultHammingDistance.size)
+        // winning hamming distance
+        assertEquals(2, nni.resultHammingDistance[1])
 
-        val result = nni.twoNearestNeighbors(5, 7, nni.allEdgesMap)
+        // unpack the winning edge list (internals)
+        val resultWinningList = nni.resultEdgeList[0]
+        val resultStringList = prettyPrintEdgeList(resultWinningList)
 
-        // now make two lists from the results
-        val resultsList1 : MutableList<String> = mutableListOf()
-        val resultsList2 : MutableList<String> = mutableListOf()
-        var curDecodeOutput = resultsList1
-        var curDecodeInput = result[0]
-        for (l in 0..1) {
-            for (k in curDecodeInput.keys.sorted()) {
-                for (to in curDecodeInput[k]!!)
-                    curDecodeOutput.add("$k->$to")
-            }
-            curDecodeInput = result[1]
-            curDecodeOutput = resultsList2
-        }
-
-        println(resultsList1.joinToString(" "))
-        println("")
-        println(resultsList2.joinToString(" "))
-
-        nni.buildTreeFromEdges(result[0])
-        nni.doUnrootedTreeScoring()
-        val resultAfterInterchange0 = nni.voteOnDnaStringsAndBuildChangeList()
-        val hamming0 = nni.totalHammingDistance
-        println("result after NNI 0: $hamming0")
-
-        nni.buildTreeFromEdges(result[1])
-        nni.doUnrootedTreeScoring()
-        val resultAfterInterchange1 = nni.voteOnDnaStringsAndBuildChangeList()
-        val hamming1 = nni.totalHammingDistance
-        println("result after NNI 1: $hamming1")
-
-
-        val expectedOutputString = """
-        """.trimIndent().lines().toMutableList()
+        println(resultStringList.joinToString("\n"))
 
 
 
