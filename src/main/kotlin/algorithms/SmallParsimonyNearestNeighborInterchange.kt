@@ -7,7 +7,6 @@
 
 package algorithms
 
-import okhttp3.internal.toImmutableMap
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
 
@@ -124,6 +123,7 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
         do {
 
             var foundNewMin = false
+            var winnerString = ""
 
             // iterate through all edges
             for (fromNodeId in baseEdgesMap.keys.sorted().filter { it >= numLeaves}) {
@@ -131,52 +131,29 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
                     if (toNodeId < numLeaves) {
                         continue
                     }
-                    val twoCandidateMaps = twoNearestNeighbors(fromNodeId, toNodeId, baseEdgesMap.toMutableMap())
-                    val c0 = twoCandidateMaps[0].deepCopy()
-                    val c1 = twoCandidateMaps[1].deepCopy()
-                    
-                    buildTreeFromEdges(twoCandidateMaps[0])
-                    doUnrootedTreeScoring()
-                    val outputParsimonyList0 = voteOnDnaStringsAndBuildChangeList(outputRoot= false)
-                    val outputHammingDistance0 = totalHammingDistance
-                    val saveMap0 = twoCandidateMaps[0].toMutableMap()
+                    val candidateMaps = fourNearestNeighbors(fromNodeId, toNodeId, baseEdgesMap.toMutableMap())
+                    for (i in 0 until candidateMaps.size) {
+                        val candidate = candidateMaps[i].deepCopy()
+                        buildTreeFromEdges(candidateMaps[i])
+                        doUnrootedTreeScoring()
+                        val outputParsimonyList0 = voteOnDnaStringsAndBuildChangeList(outputRoot= false)
+                        val outputHammingDistance0 = totalHammingDistance
 
-                    buildTreeFromEdges(twoCandidateMaps[1])
-                    doUnrootedTreeScoring()
-                    val outputParsimonyList1 = voteOnDnaStringsAndBuildChangeList(outputRoot= false)
-                    val outputHammingDistance1 = totalHammingDistance
-                    val saveMap1 = twoCandidateMaps[1].toMutableMap()
+                        if (outputHammingDistance0 < minHammingDistance) {
+                            println("Winner $outputHammingDistance0 i is $i")
 
-                    // do we have a winner?
-//                    println("from $fromNodeId to $toNodeId h0 $outputHammingDistance0 h1 $outputHammingDistance1")
-                    println("0: f $fromNodeId t $toNodeId hd $outputHammingDistance0 $c0")
-                    println("1: f $fromNodeId t $toNodeId hd $outputHammingDistance1 $c1")
-
-                    if (outputHammingDistance0 < minHammingDistance) {
-                        println("Winner $outputHammingDistance0")
-                        minHammingDistance = outputHammingDistance0
-                        foundNewMin = true
-                        resultHammingDistance.add(minHammingDistance)
-                        resultDnaTransformList.add(outputParsimonyList0)
-                        resultEdgeList.add(c0)
-
-                        baseEdgesMap = c0
-                        break
-                    }
-
-                    if (outputHammingDistance1 < minHammingDistance) {
-                        println("Winner $outputHammingDistance1")
-                        minHammingDistance = outputHammingDistance1
-                        foundNewMin = true
-                        resultHammingDistance.add(minHammingDistance)
-                        resultDnaTransformList.add(outputParsimonyList1)
-                        resultEdgeList.add(c1)
-
-                        baseEdgesMap = c1
-                        break
+                            minHammingDistance = outputHammingDistance0
+                            foundNewMin = true
+                            resultHammingDistance.add(minHammingDistance)
+                            resultDnaTransformList.add(outputParsimonyList0)
+                            resultEdgeList.add(candidate)
+                            winnerString = "$fromNodeId $toNodeId"
+                            baseEdgesMap = candidate
+                        }
                     }
                 }
             }
+            println("Final Winner $minHammingDistance $winnerString")
         } while (foundNewMin)
         
     }

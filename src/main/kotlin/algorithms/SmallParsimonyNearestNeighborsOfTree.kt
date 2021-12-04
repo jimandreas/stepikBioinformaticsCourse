@@ -40,14 +40,18 @@ open class SmallParsimonyNearestNeighborsOfTree: SmallParsimonyUnrootedTree() {
         edges: MutableMap<Int, MutableList<Int>>
     ): List<MutableMap<Int, MutableList<Int>>> {
 
+/*
+         * first group - the last edge in A swaps with the 1st edge in B
+         */
+
         var connListA = edges[a]!!.filter { it != b }.toMutableList()
         var connListB = edges[b]!!.filter { it != a }.toMutableList()
 
-        var lastA = connListA.removeLast()
-        var firstB = connListB.removeFirst()
+        var newA = connListA.removeLast()
+        var newB = connListB.removeFirst()
 
-        connListA.add(firstB)
-        connListB.add(lastA)
+        connListA.add(newB)
+        connListB.add(newA)
         connListA.add(b)
         connListB.add(a)
 
@@ -57,39 +61,149 @@ open class SmallParsimonyNearestNeighborsOfTree: SmallParsimonyUnrootedTree() {
         edgesVersionA[a] = connListA
         edgesVersionA[b] = connListB
 
-        // now update the conns for lastA and firstB
-
-        edgesVersionA[lastA] = edgesVersionA[lastA]!!.filter { it != a }.toMutableList()
-        edgesVersionA[lastA]!!.add(b)
-        edgesVersionA[firstB] = edgesVersionA[firstB]!!.filter { it != b }.toMutableList()
-        edgesVersionA[firstB]!!.add(a)
+        edgesVersionA[newA] = edgesVersionA[newA]!!.filter { it != a }.toMutableList()
+        edgesVersionA[newA]!!.add(b)
+        edgesVersionA[newB] = edgesVersionA[newB]!!.filter { it != b }.toMutableList()
+        edgesVersionA[newB]!!.add(a)
 
         /*
-         * now the second group - the 2nd edge in A swaps with the 1st edge in B
+         * now the second group - the last edge in A swaps with the last edge in B
          */
 
         connListA = edges[a]!!.filter { it != b }.toMutableList()
         connListB = edges[b]!!.filter { it != a }.toMutableList()
 
-        lastA = connListA.removeLast()
-        val lastB = connListB.removeLast()
+        newA = connListA.removeLast()
+        newB = connListB.removeLast()
 
-        connListA.add(lastB)
-        connListB.add(lastA)
+        connListA.add(newB)
+        connListB.add(newA)
         connListA.add(b)
         connListB.add(a)
 
         edgesVersionB[a] = connListA
         edgesVersionB[b] = connListB
 
-        // now update the conns for lastA and firstB  (swap edges to a and b)
+        edgesVersionB[newA] = edgesVersionB[newA]!!.filter { it != a }.toMutableList()
+        edgesVersionB[newA]!!.add(b)
+        edgesVersionB[newB] = edgesVersionB[newB]!!.filter { it != b }.toMutableList()
+        edgesVersionB[newB]!!.add(a)
 
-        edgesVersionB[lastA] = edgesVersionB[lastA]!!.filter { it != a }.toMutableList()
-        edgesVersionB[lastA]!!.add(b)
-        edgesVersionB[lastB] = edgesVersionB[lastB]!!.filter { it != b }.toMutableList()
-        edgesVersionB[lastB]!!.add(a)
 
         return listOf(edgesVersionA, edgesVersionB)
+    }
+
+
+    fun fourNearestNeighbors(
+        a: Int,
+        b: Int,
+        edges: MutableMap<Int, MutableList<Int>>
+    ): List<MutableMap<Int, MutableList<Int>>> {
+
+        /*
+         * first group - the last edge in A swaps with the 1st edge in B
+         */
+        
+        var connListA = edges[a]!!.filter { it != b }.toMutableList()
+        var connListB = edges[b]!!.filter { it != a }.toMutableList()
+
+        var newA = connListA.removeLast()
+        var newB = connListB.removeFirst()
+
+        connListA.add(newB)
+        connListB.add(newA)
+        connListA.add(b)
+        connListB.add(a)
+
+        var edgesVersionA = edges.deepCopy().toMutableMap()
+        
+
+        edgesVersionA[a] = connListA
+        edgesVersionA[b] = connListB
+
+        edgesVersionA[newA] = edgesVersionA[newA]!!.filter { it != a }.toMutableList()
+        edgesVersionA[newA]!!.add(b)
+        edgesVersionA[newB] = edgesVersionA[newB]!!.filter { it != b }.toMutableList()
+        edgesVersionA[newB]!!.add(a)
+
+        /*
+         * now the second group - the last edge in A swaps with the last edge in B
+         */
+
+        connListA = edges[a]!!.filter { it != b }.toMutableList()
+        connListB = edges[b]!!.filter { it != a }.toMutableList()
+
+        newA = connListA.removeLast()
+        newB = connListB.removeLast()
+
+        connListA.add(newB)
+        connListB.add(newA)
+        connListA.add(b)
+        connListB.add(a)
+
+        var edgesVersionB = edges.deepCopy().toMutableMap()
+        edgesVersionB[a] = connListA
+        edgesVersionB[b] = connListB
+        
+        edgesVersionB[newA] = edgesVersionB[newA]!!.filter { it != a }.toMutableList()
+        edgesVersionB[newA]!!.add(b)
+        edgesVersionB[newB] = edgesVersionB[newB]!!.filter { it != b }.toMutableList()
+        edgesVersionB[newB]!!.add(a)
+
+        
+       /* -----------------*/
+
+        /*
+         * third group - the first edge in A swaps with the 1st edge in B
+         */
+
+        connListA = edges[a]!!.filter { it != b }.toMutableList()
+        connListB = edges[b]!!.filter { it != a }.toMutableList()
+
+        newA = connListA.removeFirst()
+        newB = connListB.removeFirst()
+
+        connListA.add(newB)
+        connListB.add(newA)
+        connListA.add(b)
+        connListB.add(a)
+
+        var edgesVersionC = edges.deepCopy().toMutableMap()
+
+        edgesVersionC[a] = connListA
+        edgesVersionC[b] = connListB
+
+        edgesVersionC[newA] = edgesVersionC[newA]!!.filter { it != a }.toMutableList()
+        edgesVersionC[newA]!!.add(b)
+        edgesVersionC[newB] = edgesVersionC[newB]!!.filter { it != b }.toMutableList()
+        edgesVersionC[newB]!!.add(a)
+
+        /*
+         * now the fourth group - the first edge in A swaps with the last edge in B
+         */
+
+        connListA = edges[a]!!.filter { it != b }.toMutableList()
+        connListB = edges[b]!!.filter { it != a }.toMutableList()
+
+        newA = connListA.removeFirst()
+        newB = connListB.removeLast()
+
+        connListA.add(newB)
+        connListB.add(newA)
+        connListA.add(b)
+        connListB.add(a)
+
+        var edgesVersionD = edges.deepCopy().toMutableMap()
+        edgesVersionD[a] = connListA
+        edgesVersionD[b] = connListB
+
+        edgesVersionD[newA] = edgesVersionD[newA]!!.filter { it != a }.toMutableList()
+        edgesVersionD[newA]!!.add(b)
+        edgesVersionD[newB] = edgesVersionD[newB]!!.filter { it != b }.toMutableList()
+        edgesVersionD[newB]!!.add(a)
+
+
+        return listOf(edgesVersionA, edgesVersionB, edgesVersionC, edgesVersionD)
     }
 
 }
