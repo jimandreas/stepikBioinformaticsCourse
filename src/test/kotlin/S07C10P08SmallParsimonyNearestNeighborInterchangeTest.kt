@@ -76,24 +76,24 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
 
         // result should exchange node 4 "G" with node 5 "C"
         val expectedResult = """
-            0 ->4
-            1 ->5
-            2 ->4
-            3 ->5
-            4 ->0 2
-            5 ->3 1
+0->4
+1->5
+2->4
+3->5
+4->0 2 5
+5->3 1 4
         """.trimIndent().lines()
 
         assertContentEquals(expectedResult, resultStringList)
 
     }
 
-    private fun prettyPrintEdgeList(result: MutableMap<Int, MutableList<Int>>): List<String> {
+    private fun prettyPrintEdgeList(result: Map<Int, MutableList<Int>>): List<String> {
 
         val outputList :MutableList<String> = mutableListOf()
         for (k in result.keys.sorted()) {
             val str = StringBuilder()
-            str.append("$k ->")
+            str.append("$k->")
             str.append(result[k]!!.joinToString(" "))
             outputList.add(str.toString())
         }
@@ -139,9 +139,9 @@ C->11
         nni.nearestNeighborExchangeHeuristic()
 
         // solution should only take one iteration of nearest neighbor interchange
-        assertEquals(2, nni.resultHammingDistance.size)
+        assertEquals(1, nni.resultHammingDistance.size)
         // winning hamming distance
-        assertEquals(2, nni.resultHammingDistance[1])
+        assertEquals(1, nni.resultHammingDistance[0])
 
         // unpack the winning edge list (internals)
         val resultWinningList = nni.resultEdgeList[0]
@@ -149,7 +149,25 @@ C->11
 
         println(resultStringList.joinToString("\n"))
 
+        // result should exchange node 4 "G" with node 5 "C"
+        val expectedResult = """
+0->8
+1->8
+2->9
+3->9
+4->10
+5->10
+6->11
+7->11
+8->0 1 12
+9->2 3 13
+10->4 5 13
+11->6 7 12
+12->8 11 13
+13->10 9 12
+        """.trimIndent().lines()
 
+        assertContentEquals(expectedResult, resultStringList)
 
 
     }
@@ -160,31 +178,31 @@ C->11
     fun nearestNeighborOfTreeSampleTest() {
         val sampleInput = """
 5
-GCAGGGTA->5
-TTTACGCG->5
-CGACCTGA->6
-GATTCCAC->6
-5->TTTACGCG
 5->GCAGGGTA
+5->TTTACGCG
+6->CGACCTGA
+6->GATTCCAC
+7->TCCGTAGT
 5->7
-TCCGTAGT->7
 7->5
 7->6
-7->TCCGTAGT
-6->GATTCCAC
-6->CGACCTGA
 6->7
         """.trimIndent().lines().toMutableList()
 
         nni.parseInputStringsUnrooted(sampleInput)
 
-        val result = nni.voteOnDnaStringsAndBuildChangeList()
+        nni.nearestNeighborExchangeHeuristic()
 
-        val hamming = nni.totalHammingDistance
-        println(hamming)
-        val t = nni.printTree()
-        println(t.sorted().joinToString("\n"))
+        // solution should only take one iteration of nearest neighbor interchange
+//        assertEquals(1, nni.resultHammingDistance.size)
+        // winning hamming distance
+//        assertEquals(1, nni.resultHammingDistance[0])
 
+        // unpack the winning edge list (internals)
+        val resultWinningList = nni.resultEdgeList[0]
+        val resultStringList = prettyPrintEdgeList(resultWinningList)
+
+        println(resultStringList.joinToString("\n"))
 
         val expectedOutputString = """
 22

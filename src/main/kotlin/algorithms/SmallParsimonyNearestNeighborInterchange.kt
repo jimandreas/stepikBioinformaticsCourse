@@ -97,7 +97,7 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
      */
     val resultDnaTransformList: MutableList<List<DnaTransform>> = mutableListOf()
     val resultHammingDistance: MutableList<Int> = mutableListOf()
-    val resultEdgeList: MutableList<MutableMap<Int, MutableList<Int>>> = mutableListOf()
+    val resultEdgeList: MutableList<Map<Int, MutableList<Int>>> = mutableListOf()
 
     fun nearestNeighborExchangeHeuristic() {
         if (allEdgesMap.isEmpty()) {
@@ -105,10 +105,10 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
             return
         }
 
-        // get the baseline hamming distance
-        voteOnDnaStringsAndBuildChangeList(outputRoot = false)
-        val baseHammingDistance = totalHammingDistance
-        println("initial hamming distance: $baseHammingDistance")
+//        // get the baseline hamming distance
+//        voteOnDnaStringsAndBuildChangeList(outputRoot = false)
+//        val baseHammingDistance = totalHammingDistance
+//        println("initial hamming distance: $baseHammingDistance")
 
         var baseEdgesMap = allEdgesMap.deepCopy()
 
@@ -117,11 +117,8 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
         doUnrootedTreeScoring()
         voteOnDnaStringsAndBuildChangeList(outputRoot= false)
 
+        val baseHammingDistance = totalHammingDistance
         println("What is distance now? : $totalHammingDistance")
-        // the distances *should* match
-        if (baseHammingDistance != totalHammingDistance) {
-            println("nearestNeighborExchangeHeuristic: base hamming $baseHammingDistance doesn't match $totalHammingDistance")
-        }
 
         var minHammingDistance = baseHammingDistance
         do {
@@ -135,6 +132,8 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
                         continue
                     }
                     val twoCandidateMaps = twoNearestNeighbors(fromNodeId, toNodeId, baseEdgesMap.toMutableMap())
+                    val c0 = twoCandidateMaps[0].deepCopy()
+                    val c1 = twoCandidateMaps[1].deepCopy()
                     
                     buildTreeFromEdges(twoCandidateMaps[0])
                     doUnrootedTreeScoring()
@@ -149,6 +148,9 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
                     val saveMap1 = twoCandidateMaps[1].toMutableMap()
 
                     // do we have a winner?
+//                    println("from $fromNodeId to $toNodeId h0 $outputHammingDistance0 h1 $outputHammingDistance1")
+                    println("0: f $fromNodeId t $toNodeId hd $outputHammingDistance0 $c0")
+                    println("1: f $fromNodeId t $toNodeId hd $outputHammingDistance1 $c1")
 
                     if (outputHammingDistance0 < minHammingDistance) {
                         println("Winner $outputHammingDistance0")
@@ -156,9 +158,10 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
                         foundNewMin = true
                         resultHammingDistance.add(minHammingDistance)
                         resultDnaTransformList.add(outputParsimonyList0)
-                        resultEdgeList.add(twoCandidateMaps[0])
+                        resultEdgeList.add(c0)
 
-                        baseEdgesMap = twoCandidateMaps[0].deepCopy()
+                        baseEdgesMap = c0
+                        break
                     }
 
                     if (outputHammingDistance1 < minHammingDistance) {
@@ -167,9 +170,10 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
                         foundNewMin = true
                         resultHammingDistance.add(minHammingDistance)
                         resultDnaTransformList.add(outputParsimonyList1)
-                        resultEdgeList.add(twoCandidateMaps[1])
+                        resultEdgeList.add(c1)
 
-                        baseEdgesMap = twoCandidateMaps[1].deepCopy()
+                        baseEdgesMap = c1
+                        break
                     }
                 }
             }
@@ -208,7 +212,7 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
         }
 
         val oldToNode = maxEdgeNum
-        val oldFromNode = allEdges[maxEdgeNum]!!.filter { it >= numLeaves }.first()
+        val oldFromNode = allEdges[maxEdgeNum]!!.filter { it >= numLeaves }.maxOf { it }
 
         // prune out the edges between maxEdgeNum (at index to)
         // and oldFromNode (at index from)
