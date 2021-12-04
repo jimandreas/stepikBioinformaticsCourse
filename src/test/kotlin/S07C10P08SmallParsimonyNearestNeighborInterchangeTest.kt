@@ -199,7 +199,7 @@ C->11
 //        assertEquals(1, nni.resultHammingDistance[0])
 
         // unpack the winning edge list (internals)
-        val resultWinningList = nni.resultEdgeList[0]
+        val resultWinningList = nni.resultEdgeList[1]
         val resultStringList = prettyPrintEdgeList(resultWinningList)
 
         println(resultStringList.joinToString("\n"))

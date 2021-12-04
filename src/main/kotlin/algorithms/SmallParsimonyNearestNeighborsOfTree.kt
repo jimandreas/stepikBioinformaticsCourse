@@ -21,7 +21,7 @@ package algorithms
  * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
  */
 
-open class SmallParsimonyNearestNeighborsOfTree: SmallParsimonyUnrootedTree() {
+open class SmallParsimonyNearestNeighborsOfTree : SmallParsimonyUnrootedTree() {
 
     /**
 
@@ -103,7 +103,7 @@ open class SmallParsimonyNearestNeighborsOfTree: SmallParsimonyUnrootedTree() {
         /*
          * first group - the last edge in A swaps with the 1st edge in B
          */
-        
+
         var connListA = edges[a]!!.filter { it != b }.toMutableList()
         var connListB = edges[b]!!.filter { it != a }.toMutableList()
 
@@ -116,7 +116,7 @@ open class SmallParsimonyNearestNeighborsOfTree: SmallParsimonyUnrootedTree() {
         connListB.add(a)
 
         var edgesVersionA = edges.deepCopy().toMutableMap()
-        
+
 
         edgesVersionA[a] = connListA
         edgesVersionA[b] = connListB
@@ -144,14 +144,14 @@ open class SmallParsimonyNearestNeighborsOfTree: SmallParsimonyUnrootedTree() {
         var edgesVersionB = edges.deepCopy().toMutableMap()
         edgesVersionB[a] = connListA
         edgesVersionB[b] = connListB
-        
+
         edgesVersionB[newA] = edgesVersionB[newA]!!.filter { it != a }.toMutableList()
         edgesVersionB[newA]!!.add(b)
         edgesVersionB[newB] = edgesVersionB[newB]!!.filter { it != b }.toMutableList()
         edgesVersionB[newB]!!.add(a)
 
-        
-       /* -----------------*/
+
+        /* -----------------*/
 
         /*
          * third group - the first edge in A swaps with the 1st edge in B
@@ -205,5 +205,40 @@ open class SmallParsimonyNearestNeighborsOfTree: SmallParsimonyUnrootedTree() {
 
         return listOf(edgesVersionA, edgesVersionB, edgesVersionC, edgesVersionD)
     }
+
+    fun prettyPrintFourNearestNeighbors(
+        a: Int,
+        b: Int,
+        edges: MutableMap<Int, MutableList<Int>>,
+        outputList: List<MutableMap<Int, MutableList<Int>>> ) : List<String>
+    {
+        val outputStrings: MutableList<String> = mutableListOf()
+
+        val keysList = edges.keys.sorted()
+
+        if (keysList.size != outputList[0].keys.size) {
+            println("prettyPrintFourNearestNeighbors: ERROR size of keys do not match")
+            return emptyList()
+        }
+        if (outputList.size != 4) {
+            println("prettyPrintFourNearestNeighbors: ERROR the list does not contain FOUR members")
+            return emptyList()
+        }
+        for (k in edges.keys.sorted()) {
+            val str = StringBuilder()
+            str.append("$k: ")
+            val eString = edges[k]!!.joinToString(",")
+            str.append(eString)
+            str.append(" ")
+            for (i in 0 until 4) {
+                val outputString = outputList[i][k]!!.joinToString(",")
+                str.append(outputString)
+                str.append(" ")
+            }
+            outputStrings.add(str.toString())
+        }
+        return outputStrings
+    }
+
 
 }
