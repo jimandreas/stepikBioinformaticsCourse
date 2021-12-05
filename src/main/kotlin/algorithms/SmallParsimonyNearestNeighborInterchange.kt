@@ -114,10 +114,19 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
         val baseHammingDistance = totalHammingDistance
         println("What is distance now? : $totalHammingDistance")
 
+        for (k in baseEdgesMap.keys.sorted()) {
+            print(" $k:")
+            print(baseEdgesMap[k]!!)
+        }
+        println()
+
+        var round = 1
         var minHammingDistance = baseHammingDistance
         do {
             var foundNewMin = false
             var winnerString = ""
+
+
 
             // iterate through all edges
             for (fromNodeId in baseEdgesMap.keys.sorted().filter { it >= numLeaves}) {
@@ -128,13 +137,33 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
                     val candidateMaps = fourNearestNeighbors(fromNodeId, toNodeId, baseEdgesMap.toMutableMap())
                     for (i in 0 until candidateMaps.size) {
                         val deepCopyCandidate = candidateMaps[i].deepCopy()
+
+
+
                         buildTreeFromEdges(candidateMaps[i])
                         doUnrootedTreeScoring()
                         val outputParsimonyList0 = voteOnDnaStringsAndBuildChangeList(outputRoot= false)
                         val outputHammingDistance0 = totalHammingDistance
 
+                        if (round == 2 && fromNodeId == 6 && toNodeId == 7) {
+                            for (k in deepCopyCandidate.keys.sorted()) {
+                                print(" $k:")
+                                print(deepCopyCandidate[k]!!)
+                            }
+                            println(" hd = $totalHammingDistance")
+                        }
+
+                        //println("$fromNodeId $toNodeId loop $i hd $outputHammingDistance0")
+
                         if (outputHammingDistance0 < minHammingDistance) {
                             println("Winner $outputHammingDistance0 iter: $i fromNode: $fromNodeId to: $toNodeId")
+
+                            for (k in deepCopyCandidate.keys.sorted()) {
+                                print(" $k:")
+                                print(deepCopyCandidate[k]!!)
+                            }
+                            println()
+
 
                             minHammingDistance = outputHammingDistance0
                             foundNewMin = true
@@ -148,8 +177,9 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
                     }
                 }
             }
-            println("Loop Winner $minHammingDistance $winnerString")
+            println("\nLoop Winner $minHammingDistance $winnerString\n")
             baseEdgesMap = winningLoopEdges
+            round++
 
         } while (foundNewMin)
         
