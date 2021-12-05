@@ -183,12 +183,8 @@ C->11
 7->5
 7->6
 6->7
-     */
 
-    @Test
-    @DisplayName("Nearest Neighbor Interchange sample test")
-    fun nearestNeighborOfTreeSampleTest() {
-        val sampleInput = """
+winner hd = 21
 5
 7->GCAGGGTA
 5->TTTACGCG
@@ -197,6 +193,22 @@ C->11
 5->TCCGTAGT
 5->6
 6->5
+7->6
+6->7
+     */
+
+    @Test
+    @DisplayName("Nearest Neighbor Interchange sample test")
+    fun nearestNeighborOfTreeSampleTest() {
+        val sampleInput = """
+5
+5->GCAGGGTA
+5->TTTACGCG
+6->CGACCTGA
+6->GATTCCAC
+7->TCCGTAGT
+5->7
+7->5
 7->6
 6->7
         """.trimIndent().lines().toMutableList()

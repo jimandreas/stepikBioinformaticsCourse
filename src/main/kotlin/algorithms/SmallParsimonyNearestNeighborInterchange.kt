@@ -212,6 +212,7 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
             n.isOutput = false
             n.ripe = false
             n.dnaString = null
+            n.scoringArray = mk.d2array(4, dnaLen) { 0 }
             nodeMap[i] = n
         }
 
