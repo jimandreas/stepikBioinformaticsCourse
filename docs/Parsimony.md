@@ -22,4 +22,4 @@ Another test example - this time the solution is to swap two internal
 nodes, as shown below.
 <br>
 
-![Placeholder](assets/LargeParsimonyNNItest2solution.png){ align=left }
+![Placeholder](assets/LargeParsimonyNNItest2Solution.png){ align=left }
