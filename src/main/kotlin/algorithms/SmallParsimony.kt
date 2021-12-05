@@ -112,7 +112,9 @@ open class SmallParsimony {
     data class DnaTransform(
         val str1: String,
         val str2: String,
-        val hammingDistance: Int
+        val hammingDistance: Int,
+        val node1: Int = 0,
+        val node2: Int = 0
     ) {
         override fun toString(): String {
             return "$str1->$str2:$hammingDistance"
@@ -280,7 +282,7 @@ open class SmallParsimony {
             }
 
             // special case the root
-            if (outputRoot == true && node == root) {
+            if (outputRoot == false && node == root) {
 
                 val hammingRoot = hammingDistance(left!!.dnaString!!, right!!.dnaString!!)
                 totalHammingDistance += hammingRoot
@@ -297,7 +299,7 @@ open class SmallParsimony {
                     val hammingLeft = hammingDistance(left.dnaString!!, node.dnaString!!)
                     totalHammingDistance += hammingLeft
 
-                    val c1 = DnaTransform(node.dnaString!!, left.dnaString!!, hammingLeft)
+                    val c1 = DnaTransform(node.dnaString!!, left.dnaString!!, hammingLeft, node.id, left.id)
                     val c2 = DnaTransform(left.dnaString!!, node.dnaString!!, hammingLeft)
                     changeList.add(c1)
                     changeList.add(c2)
@@ -308,7 +310,7 @@ open class SmallParsimony {
                     val hammingRight = hammingDistance(right.dnaString!!, node.dnaString!!)
                     totalHammingDistance += hammingRight
 
-                    val c3 = DnaTransform(node.dnaString!!, right.dnaString!!, hammingRight)
+                    val c3 = DnaTransform(node.dnaString!!, right.dnaString!!, hammingRight, node.id, right.id)
                     val c4 = DnaTransform(right.dnaString!!, node.dnaString!!, hammingRight)
                     changeList.add(c3)
                     changeList.add(c4)
@@ -319,10 +321,10 @@ open class SmallParsimony {
                     val hammingLeaf = hammingDistance(leafMap[leafId]!!.dnaString!!, node.dnaString!!)
                     totalHammingDistance += hammingLeaf
 
-                    val c3 = DnaTransform(node.dnaString!!, leafMap[leafId]!!.dnaString!!, hammingLeaf)
-                    val c4 = DnaTransform(leafMap[leafId]!!.dnaString!!, node.dnaString!!, hammingLeaf)
-                    changeList.add(c3)
-                    changeList.add(c4)
+                    val l1 = DnaTransform(node.dnaString!!, leafMap[leafId]!!.dnaString!!, hammingLeaf, node.id, leafId)
+                    val l2 = DnaTransform(leafMap[leafId]!!.dnaString!!, node.dnaString!!, hammingLeaf)
+                    changeList.add(l1)
+                    changeList.add(l2)
                 }
 
             }
