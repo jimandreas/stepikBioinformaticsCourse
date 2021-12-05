@@ -7,7 +7,6 @@
 
 package algorithms
 
-import okhttp3.internal.toImmutableMap
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
 
@@ -46,6 +45,8 @@ then the algorithm selects the one with smallest parsimony score
  */
 
 class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsOfTree() {
+
+    var debug = false
 
     /**
 
@@ -97,7 +98,7 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
      */
     val resultDnaTransformList: MutableList<List<DnaTransform>> = mutableListOf()
     val resultHammingDistance: MutableList<Int> = mutableListOf()
-    val resultEdgeList: MutableList<MutableMap<Int, MutableList<Int>>> = mutableListOf()
+    val resultEdgeList: MutableList<Map<Int, MutableList<Int>>> = mutableListOf()
 
     fun nearestNeighborExchangeHeuristic() {
         if (allEdgesMap.isEmpty()) {
@@ -105,28 +106,27 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
             return
         }
 
-        // get the baseline hamming distance
-        voteOnDnaStringsAndBuildChangeList(outputRoot = false)
-        val baseHammingDistance = totalHammingDistance
-        println("initial hamming distance: $baseHammingDistance")
-
         var baseEdgesMap = allEdgesMap.deepCopy()
+        var winningLoopEdges: Map<Int, MutableList<Int>> = mutableMapOf()
 
-        // build a tree just from edges (experiment)
         buildTreeFromEdges(allEdgesMap)
         doUnrootedTreeScoring()
         voteOnDnaStringsAndBuildChangeList(outputRoot= false)
 
-        println("What is distance now? : $totalHammingDistance")
-        // the distances *should* match
-        if (baseHammingDistance != totalHammingDistance) {
-            println("nearestNeighborExchangeHeuristic: base hamming $baseHammingDistance doesn't match $totalHammingDistance")
-        }
+        val baseHammingDistance = totalHammingDistance
+        if (debug) println("What is distance now? : $totalHammingDistance")
 
+//        for (k in baseEdgesMap.keys.sorted()) {
+//            print(" $k:")
+//            print(baseEdgesMap[k]!!)
+//        }
+        if (debug) println()
+
+        var round = 1
         var minHammingDistance = baseHammingDistance
         do {
-
             var foundNewMin = false
+            var winnerString = ""
 
             // iterate through all edges
             for (fromNodeId in baseEdgesMap.keys.sorted().filter { it >= numLeaves}) {
@@ -134,45 +134,42 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
                     if (toNodeId < numLeaves) {
                         continue
                     }
-                    val twoCandidateMaps = twoNearestNeighbors(fromNodeId, toNodeId, baseEdgesMap.toMutableMap())
-                    
-                    buildTreeFromEdges(twoCandidateMaps[0])
-                    doUnrootedTreeScoring()
-                    val outputParsimonyList0 = voteOnDnaStringsAndBuildChangeList(outputRoot= false)
-                    val outputHammingDistance0 = totalHammingDistance
-                    val saveMap0 = twoCandidateMaps[0].toMutableMap()
+                    val candidateMaps = fourNearestNeighbors(fromNodeId, toNodeId, baseEdgesMap.toMutableMap())
+                    for (i in 0 until candidateMaps.size) {
+                        val deepCopyCandidate = candidateMaps[i].deepCopy()
 
-                    buildTreeFromEdges(twoCandidateMaps[1])
-                    doUnrootedTreeScoring()
-                    val outputParsimonyList1 = voteOnDnaStringsAndBuildChangeList(outputRoot= false)
-                    val outputHammingDistance1 = totalHammingDistance
-                    val saveMap1 = twoCandidateMaps[1].toMutableMap()
+                        buildTreeFromEdges(candidateMaps[i])
+                        doUnrootedTreeScoring()
+                        val outputParsimonyList0 = voteOnDnaStringsAndBuildChangeList(outputRoot= false)
+                        val outputHammingDistance0 = totalHammingDistance
 
-                    // do we have a winner?
+                        //if (debug) println("$fromNodeId $toNodeId loop $i hd $outputHammingDistance0")
 
-                    if (outputHammingDistance0 < minHammingDistance) {
-                        println("Winner $outputHammingDistance0")
-                        minHammingDistance = outputHammingDistance0
-                        foundNewMin = true
-                        resultHammingDistance.add(minHammingDistance)
-                        resultDnaTransformList.add(outputParsimonyList0)
-                        resultEdgeList.add(twoCandidateMaps[0])
+                        if (outputHammingDistance0 < minHammingDistance) {
+                            if (debug) println("Winner $outputHammingDistance0 iter: $i fromNode: $fromNodeId to: $toNodeId")
 
-                        baseEdgesMap = twoCandidateMaps[0].deepCopy()
-                    }
+//                            for (k in deepCopyCandidate.keys.sorted()) {
+//                                print(" $k:")
+//                                print(deepCopyCandidate[k]!!)
+//                            }
+                            if (debug) println()
 
-                    if (outputHammingDistance1 < minHammingDistance) {
-                        println("Winner $outputHammingDistance1")
-                        minHammingDistance = outputHammingDistance1
-                        foundNewMin = true
-                        resultHammingDistance.add(minHammingDistance)
-                        resultDnaTransformList.add(outputParsimonyList1)
-                        resultEdgeList.add(twoCandidateMaps[1])
-
-                        baseEdgesMap = twoCandidateMaps[1].deepCopy()
+                            minHammingDistance = outputHammingDistance0
+                            foundNewMin = true
+                            resultHammingDistance.add(minHammingDistance)
+                            resultDnaTransformList.add(outputParsimonyList0)
+                            resultEdgeList.add(deepCopyCandidate)
+                            winnerString = "$fromNodeId $toNodeId"
+                            //baseEdgesMap = candidate
+                            winningLoopEdges = deepCopyCandidate
+                        }
                     }
                 }
             }
+            if (debug) println("\nLoop Winner $minHammingDistance $winnerString\n")
+            baseEdgesMap = winningLoopEdges
+            round++
+
         } while (foundNewMin)
         
     }
@@ -204,11 +201,12 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
             n.isOutput = false
             n.ripe = false
             n.dnaString = null
+            n.scoringArray = mk.d2array(4, dnaLen) { 0 }
             nodeMap[i] = n
         }
 
         val oldToNode = maxEdgeNum
-        val oldFromNode = allEdges[maxEdgeNum]!!.filter { it >= numLeaves }.first()
+        val oldFromNode = allEdges[maxEdgeNum]!!.filter { it >= numLeaves }.maxOf { it }
 
         // prune out the edges between maxEdgeNum (at index to)
         // and oldFromNode (at index from)
