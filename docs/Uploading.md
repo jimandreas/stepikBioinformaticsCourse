@@ -30,5 +30,5 @@ This clones the repo from github and compiles the docs.   It then uploads the
 docs to the `gh-deploy` utility and initiates the build of the docs there.
 
 Once successfully finished the docs will be available at:  
-https://jimandreas.github.io/stepikBioInformaticsCourse/
+https://jimandreas.github.io/stepikBioinformaticsCourse/
 
