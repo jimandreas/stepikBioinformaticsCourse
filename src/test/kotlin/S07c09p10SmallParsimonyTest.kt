@@ -159,35 +159,35 @@ CAAATCCC->ATAGCCAC:5
 
         // string output expected results
         val expectedStrings = """
-6
-CC->CC:0
-CC->CC:0
-CC->CC:0
-CC->CC:0
-CC->CC:0
-CC->CC:0
-CC->CC:0
-CC->CC:0
-CC->CC:0
-CC->CC:0
-CC->CC:0
-CC->CC:0
-CC->AA:2
-AA->CC:2
-CC->CC:0
-CC->CC:0
-CC->GG:2
-GG->CC:2
-CC->CC:0
-CC->CC:0
-GG->GG:0
-GG->GG:0
-GG->GG:0
-GG->GG:0
-CC->TT:2
-TT->CC:2
-CC->CC:0
-CC->CC:0
+3
+A->C:1
+C->A:1
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->C:0
+C->G:1
+C->T:1
+G->C:1
+G->G:0
+G->G:0
+G->G:0
+G->G:0
+T->C:1
         """.trimIndent().lines().toMutableList()
 
         val input = sampleInput.reader().readLines().toMutableList()
@@ -198,21 +198,20 @@ CC->CC:0
         val changeList = sp.voteOnDnaStringsAndBuildChangeList()
 
         val t = sp.printTree()
-        println(t.sorted().joinToString("\n"))
-
-        println(sp.totalHammingDistance)
+//        println(t.sorted().joinToString("\n"))
+//
+//        println(sp.totalHammingDistance)
         //println(changeList.joinToString("\n"))
 
         // check the total distance for the tree
-//        val expectedHammingDistance = expectedStrings[0].toInt()
-//        assertEquals(expectedHammingDistance, sp.totalHammingDistance)
-        expectedStrings.removeFirst()
+        val expectedHammingDistance = expectedStrings.removeFirst().toInt()
+        assertEquals(expectedHammingDistance, sp.totalHammingDistance)
 
         // now check the edges
         val changeListStrings = changeList.joinToString("\n").lines().sorted()
         val expectedStringsSorted = expectedStrings.sorted()
-        println(changeListStrings.sorted().joinToString("\n"))
-//        assertContentEquals(expectedStringsSorted, changeListStrings)
+//        println(changeListStrings.sorted().joinToString("\n"))
+        assertContentEquals(expectedStringsSorted, changeListStrings)
     }
 
 
@@ -282,9 +281,8 @@ T->T:0
 //        println(changeList.joinToString("\n"))
 
         // check the total distance for the tree
-        val expectedHammingDistance = expectedStrings[0].toInt()
+        val expectedHammingDistance = expectedStrings.removeFirst().toInt()
         assertEquals(expectedHammingDistance, sp.totalHammingDistance)
-        expectedStrings.removeFirst()
 
         // now check the edges
         val changeListStrings = changeList.joinToString("\n").lines().sorted()

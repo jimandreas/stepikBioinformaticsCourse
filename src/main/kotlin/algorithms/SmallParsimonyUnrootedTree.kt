@@ -119,10 +119,6 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
             }
             inputStrings.removeFirst()
         }
-
-        treeHacking()
-
-        doUnrootedTreeScoring()
     }
 
     /**
@@ -133,7 +129,7 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
      *    Make a root node at the edge, hooking up the last two edges.
      */
     fun treeHacking() {
-        maxEdgeNum = edgeMap.keys.maxOrNull()!!
+        maxEdgeNum = allEdgesMap.keys.maxOrNull()!!
         root = Node(
             id = maxEdgeNum + 1,
             scoringArray = mk.d2array(4, dnaLen) { 0 }
@@ -144,18 +140,18 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
         // prune out the edges between maxEdgeNum (at index iE)
         // and maxEdgeNum-1 (at index iEm1)
 
-        val iE = edgeMap[maxEdgeNum]!!.indexOf(maxEdgeNum - 1)
-        edgeMap[maxEdgeNum]!!.removeAt(iE)
+        val iE = allEdgesMap[maxEdgeNum]!!.indexOf(maxEdgeNum - 1)
+        allEdgesMap[maxEdgeNum]!!.removeAt(iE)
 
-        val iEm1 = edgeMap[maxEdgeNum - 1]!!.indexOf(maxEdgeNum)
-        edgeMap[maxEdgeNum - 1]!!.removeAt(iEm1)
+        val iEm1 = allEdgesMap[maxEdgeNum - 1]!!.indexOf(maxEdgeNum)
+        allEdgesMap[maxEdgeNum - 1]!!.removeAt(iEm1)
 
         root.left = nodeMap[oldFromNode]
         root.right = nodeMap[oldToNode]
 
         val visited: MutableList<Int> = mutableListOf()
-        buildTree(root.left!!, visited, edgeMap)
-        buildTree(root.right!!, visited, edgeMap)
+        buildTree(root.left!!, visited, allEdgesMap)
+        buildTree(root.right!!, visited, allEdgesMap)
 
     }
 

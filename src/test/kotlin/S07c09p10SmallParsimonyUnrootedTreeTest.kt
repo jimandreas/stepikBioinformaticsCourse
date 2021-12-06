@@ -69,6 +69,8 @@ internal class S07c09p10SmallParsimonyUnrootedTreeTest {
         """.trimIndent().lines().toMutableList()
 
         spurt.parseInputStringsUnrooted(sampleInput)
+        spurt.treeHacking()
+        spurt.doUnrootedTreeScoring()
 
         val result = spurt.voteOnDnaStringsAndBuildChangeList(outputRoot = false)
 //        println(spurt.totalHammingDistance)
@@ -127,6 +129,8 @@ C->C:0
         """.trimIndent().lines().toMutableList()
 
         spurt.parseInputStringsUnrooted(sampleInput)
+        spurt.treeHacking()
+        spurt.doUnrootedTreeScoring()
 
         val result = spurt.voteOnDnaStringsAndBuildChangeList(outputRoot = false)
 //        println(spurt.totalHammingDistance)
