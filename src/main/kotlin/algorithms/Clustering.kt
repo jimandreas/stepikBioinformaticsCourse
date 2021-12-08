@@ -13,12 +13,18 @@ class Clustering {
      * See also:
      * Stepik: https://stepik.org/lesson/240358/step/2?unit=212704
      * (squared error distorition): https://stepik.org/lesson/240359/step/3?unit=212705
+     * (lloyd k-Means clustering): https://stepik.org/lesson/240360/step/3?unit=212706
+     *
      * Rosalind: https://rosalind.info/problems/ba8a/
      * (squared error distorition): https://rosalind.info/problems/ba8b/
+     * (lloyd k-Means clustering): https://rosalind.info/problems/ba8c/
      *
      * Youtube:
      * Clustering as an Optimization Problem (Farthest First Traversal)
      * https://youtu.be/JAC0GqadoiA?t=369
+     *
+     * The Lloyd Algorithm for k-Means Clustering
+     * https://www.youtube.com/watch?v=9rp1pzYn3hY
      */
 
     var farthestFirstTraversalPsuedocode = """
@@ -116,6 +122,28 @@ class Clustering {
         }
 
         return totalDistance / points.size
+    }
+
+    /**
+     * Code Challenge: Implement the Lloyd algorithm for k-means clustering.
+     *
+     * Input: Integers [numCentersK] and [numDimensionsM] followed by a
+     * set of [points] Data in m-dimensional space.
+     *
+     * Output: A set Centers consisting of k points (centers)
+     * resulting from applying the Lloyd algorithm to
+     * Data and Centers, where the first k points from
+     * Data are selected as the first k centers.
+     */
+    fun lloydAlgorithmKmeans(
+        numCentersK: Int,
+        numDimensionsM: Int,
+        points: List<List<Double>>
+    ): List<List<Double>> {
+
+
+
+        return emptyList()
     }
 
 }
