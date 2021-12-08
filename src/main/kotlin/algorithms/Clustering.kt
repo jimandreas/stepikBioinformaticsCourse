@@ -12,7 +12,9 @@ class Clustering {
     /**
      * See also:
      * Stepik: https://stepik.org/lesson/240358/step/2?unit=212704
+     * (squared error distorition): https://stepik.org/lesson/240359/step/3?unit=212705
      * Rosalind: https://rosalind.info/problems/ba8a/
+     * (squared error distorition): https://rosalind.info/problems/ba8b/
      *
      * Youtube:
      * Clustering as an Optimization Problem (Farthest First Traversal)
@@ -28,6 +30,16 @@ class Clustering {
                 
             return Centers 
     """.trimIndent()
+
+    /**
+     * k-Center Clustering Problem: Given a set of data points,
+     * find k centers minimizing the maximum distance between
+     * these data points and centers.
+     *
+     * Input: A set of [points] Data and an integer [numCentersK].
+     * Output: A set Centers of k centers that minimize the distance
+     * MaxDistance(DataPoints, Centers) over all possible choices of k centers.
+     */
 
     fun clustersFarthestFirstTraversal(
         numCentersK: Int,
@@ -77,5 +89,23 @@ class Clustering {
         return theMinD
     }
 
+    /**
+     * Compute the Squared Error Distortion
+     *
+     * Code Challenge: Solve the Squared Error Distortion Problem.
+     * Input: Integers [numCentersK] and [numDimensionsM],
+     * followed by a set of [centers] Centers and a set of [points] Data.
+     *
+     * Output: The squared error distortion Distortion(Data, Centers).
+     */
+
+    fun squaredErrorDistortion(
+        numCentersK: Int,
+        numDimensionsM: Int,
+        centers: List<List<Double>>,
+        points: List<List<Double>>
+    ): Double {
+        return 0.0
+    }
 
 }
