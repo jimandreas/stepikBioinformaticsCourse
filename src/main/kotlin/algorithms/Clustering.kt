@@ -76,7 +76,7 @@ class Clustering {
     /**
      * return the min distance to a center.  The outerloop will then select the maximum of these values.
      */
-    private fun whatIsTheMinDistanceToCenters(point: List<Double>, centers: MutableList<List<Double>>): Double {
+    private fun whatIsTheMinDistanceToCenters(point: List<Double>, centers: List<List<Double>>): Double {
 
         var theMinD = Double.MAX_VALUE
 
@@ -92,6 +92,8 @@ class Clustering {
     /**
      * Compute the Squared Error Distortion
      *
+     * Distortion(Data,Centers) = (1/n) ∑ all points DataPoint in Data d(DataPoint, Centers) exp 2
+     *
      * Code Challenge: Solve the Squared Error Distortion Problem.
      * Input: Integers [numCentersK] and [numDimensionsM],
      * followed by a set of [centers] Centers and a set of [points] Data.
@@ -105,7 +107,15 @@ class Clustering {
         centers: List<List<Double>>,
         points: List<List<Double>>
     ): Double {
-        return 0.0
+
+        var totalDistance = 0.0
+
+        for (p in points) {
+            val distance = whatIsTheMinDistanceToCenters(p, centers)
+            totalDistance += distance * distance
+        }
+
+        return totalDistance / points.size
     }
 
 }
