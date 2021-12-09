@@ -61,39 +61,6 @@ class Clustering {
         return centerList
     }
 
-    /**
-     * iterate through the center list, computing the distance from all centers to all points.
-     *   Find the point that represents the maximum distance to all centers.
-     */
-    private fun getMaxD(centers: MutableList<List<Double>>, points: List<List<Double>>): List<Double> {
-        var theMaxD = 0.0
-        var theMaxPoint: List<Double> = points[0]
-
-        for (i in 0 until points.size) {
-            val theDistance = whatIsTheMinDistanceToCenters(points[i], centers)
-            if (theDistance > theMaxD) {
-                theMaxD = theDistance
-                theMaxPoint = points[i]
-            }
-        }
-        return theMaxPoint
-    }
-
-    /**
-     * return the min distance to a center.  The outerloop will then select the maximum of these values.
-     */
-    private fun whatIsTheMinDistanceToCenters(point: List<Double>, centers: List<List<Double>>): Double {
-
-        var theMinD = Double.MAX_VALUE
-
-        for (j in 0 until centers.size) {
-            val theDistance = apacheDistance(point, centers[j])
-            if (theDistance < theMinD) {
-                theMinD = theDistance
-            }
-        }
-        return theMinD
-    }
 
     /**
      * Compute the Squared Error Distortion
@@ -142,80 +109,56 @@ class Clustering {
     ): List<List<Double>> {
 
         // Phase 1: set up initial centers
-        val centers = clustersFarthestFirstTraversal(numCentersK, numDimensionsM, points)
+        var centers = clustersFarthestFirstTraversal(numCentersK, numDimensionsM, points)
+
+        // Phase 2: Looping, a) assign points to centers
+
+        val newCenterList: MutableList<List<Double>> = mutableListOf()
+        do {
+            val clusterMap = assignPointsToClusters(numCentersK, numDimensionsM, centers, points)
+
+            // b) for each set of points in a cluster, find the center of gravity
+            //      and make this center the new "center"
 
 
-        return emptyList()
-    }
+            for (i in 0 until centers.size) {
 
-    /**
-     * partition the points into coordinate lists
-     *  based on the nearest center
-     *
-     * Keep a map of the center index to a list of point indices.
-     *    This forms the "cluster".
-     */
-    fun assignPointsToClusters(
-        numCentersK: Int,
-        numDimensionsM: Int,
-        centers: List<List<Double>>,
-        points: List<List<Double>>
-    ): Map<Int, List<Int>> {
+                // we need to get the points from the clusterMap that
+                //   are associated with cluster "i"
 
-        val mapCenterIndexToPoints: MutableMap<Int, MutableList<Int>> = mutableMapOf()
+                val extractedList: MutableList<List<Double>> = mutableListOf()
+                clusterMap[i]!!.forEach {
+                    extractedList.add(points[it])
+                }
 
-        for (i in 0 until points.size) {
-            val indexOfClosestCenter = findClosestIndex(numCentersK, numDimensionsM, points[i], centers)
-            mapCenterIndexToPoints.addTo(indexOfClosestCenter, i)
-        }
+                // now hand this set of multidimensional points to the center of gravity function
+                //    It will return a new multidimensional point - which is the new "center"
 
-        return mapCenterIndexToPoints
-    }
-
-    /**
-     * go through the centers and return the index of the center that is closest to the point
-     */
-    fun findClosestIndex(
-        numCentersK: Int,
-        numDimensionsM: Int,
-        point: List<Double>,
-        centers: List<List<Double>>
-    ): Int {
-        var theMinD = Double.MAX_VALUE
-        var theMinIndex = 0
-
-        for (j in 0 until centers.size) {
-            val theDistance = apacheDistance(point, centers[j])
-            if (theDistance < theMinD) {
-                theMinD = theDistance
-                theMinIndex = j
+                val newCenter = clusterCenterOfGravity(extractedList)
+                newCenterList.add(newCenter)
             }
-        }
-        return theMinIndex
-    }
 
+            // OK we are done with the loop.   Did the set of cluster centers of gravity change??
 
-    /**
-     * Multidimension Center Of Gravity
-     * add all the coordinates of the points and
-     * return the average value of each coordinate
-     */
-    fun clusterCenterOfGravity(
-        points: List<List<Double>>
-    ): List<Double> {
-
-        val numdims = points[0].size
-        val sums: MutableList<Double> = DoubleArray(numdims).toMutableList()
-
-        for (p in points) {
-            for (i in 0 until numdims) {
-                sums[i] += p[i]
+            var changed = true
+            for (i in 0 until centers.size) {
+                if (!isEqual(newCenterList[i], centers[i])) {
+                    changed = false
+                    break
+                }
             }
-        }
+            centers = newCenterList.toMutableList()
+            newCenterList.clear()
 
-        for (i in 0 until numdims) {
-            sums[i] = sums[i] / points.size
-        }
-        return sums
+            // if nothing changed, we are done.  Break out and return
+            if (changed) {
+                break
+            }
+
+        } while (true)
+
+
+        return centers
     }
+
 }

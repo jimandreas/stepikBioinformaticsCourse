@@ -4,6 +4,8 @@
 )
 
 import algorithms.Clustering
+import algorithms.assignPointsToClusters
+import algorithms.clusterCenterOfGravity
 import algorithms.compareTwoMaps
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -69,7 +71,7 @@ internal class S08C07P02ClustersLloydAlgorithmKmeansTest {
             subjectString.split(" ").map { it.toDouble() }
         }
 
-        val result1 = cluster.assignPointsToClusters(2, 2, centers1,  points1)
+        val result1 = assignPointsToClusters(2, 2, centers1,  points1)
         val expectedResult1 = mapOf(
             Pair(0, listOf(1, 2)),
             Pair(1, listOf(0))
@@ -96,7 +98,7 @@ internal class S08C07P02ClustersLloydAlgorithmKmeansTest {
             subjectString.split(" ").map { it.toDouble() }
         }
 
-        val result1 = cluster.clusterCenterOfGravity( points1)
+        val result1 = clusterCenterOfGravity( points1)
         val expectedResult1 = listOf(1.0, 1.0)
         assertContentEquals(expectedResult1, result1)
 
@@ -110,15 +112,15 @@ internal class S08C07P02ClustersLloydAlgorithmKmeansTest {
             subjectString.split(" ").map { it.toDouble() }
         }
 
-        val result2 = cluster.clusterCenterOfGravity( points2)
+        val result2 = clusterCenterOfGravity( points2)
         val expectedResult2 = listOf(3.0, 3.0, 10.0)
         assertContentEquals(expectedResult2, result2)
     }
 
 
     @Test
-    @DisplayName("Clusters Squared Error Distortion sample test")
-    fun clustersSquaredErrorDistortionSampleTest() {
+    @DisplayName("Clusters Lloyd Algorithm k means sample test")
+    fun clustersLloydAlgorithmKmeansSampleTest() {
         val inputString = """
             2 2
             1.3 1.1
@@ -146,6 +148,8 @@ internal class S08C07P02ClustersLloydAlgorithmKmeansTest {
         }
 
         val result = cluster.lloydAlgorithmKmeans(numCentersK, numDimensionsM,  points)
+
+        println(result.joinToString("\n"))
     }
 
 }
