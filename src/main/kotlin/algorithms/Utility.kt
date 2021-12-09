@@ -35,3 +35,39 @@ fun <K, V> Map<K, MutableList<V>>.deepCopy(): Map<K, MutableList<V>> {
     }
     return retMap
 }
+
+/**
+ * for two maps with keys of type [K] mapping to lists of type [V],
+ *    compare the two maps, and return true if they are equivalent
+ */
+fun <K, Int> Map<K, List<Int>>.compareTwoMaps(target: Map<K, List<Int>>): Boolean {
+
+    if (this.keys.size != target.keys.size) {
+        return false
+    }
+
+    if (!this.keys.containsAll(target.keys)) {
+        return false
+    }
+
+    var resultOfTest = true
+    for (k in this.keys) {
+        val targetList = target[k]
+        if (targetList == null) {
+            resultOfTest = false
+        } else {
+            val compareThis = this[k]!!
+            if (compareThis.size != targetList.size) {
+                resultOfTest = false
+            } else {
+                val boolResult = compareThis.containsAll(targetList)
+                if (!boolResult) {
+                    resultOfTest = false
+                }
+            }
+        }
+    }
+
+    return resultOfTest
+
+}
