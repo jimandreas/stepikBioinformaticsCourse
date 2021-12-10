@@ -108,8 +108,9 @@ class Clustering {
         points: List<List<Double>>
     ): List<List<Double>> {
 
-        // Phase 1: set up initial centers
-        var centers = clustersFarthestFirstTraversal(numCentersK, numDimensionsM, points)
+        // Phase 1: set up initial centers - just use the first "numCenters" points
+
+        var centers = points.subList(0, numCentersK)
 
         // Phase 2: Looping, a) assign points to centers
 

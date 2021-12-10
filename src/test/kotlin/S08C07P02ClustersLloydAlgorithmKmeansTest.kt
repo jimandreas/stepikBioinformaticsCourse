@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.math.exp
 import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 /**
  * See also:
@@ -149,7 +149,43 @@ internal class S08C07P02ClustersLloydAlgorithmKmeansTest {
 
         val result = cluster.lloydAlgorithmKmeans(numCentersK, numDimensionsM,  points)
 
-        println(result.joinToString("\n"))
+        //printResult(result)
+
+        val expectedResult = """
+            1.800 2.867
+            1.060 1.140
+        """.trimIndent()
+
+        checkResult(expectedResult, result)
+
+    }
+
+
+
+    private fun printResult(result: List<List<Double>>) {
+        for (r in result) {
+            for (i in 0 until r.size) {
+                print(String.format("%6.3f", r[i]))
+                if (i == r.size - 1) {
+                    print("\n")
+                } else {
+                    print(" ")
+                }
+            }
+        }
+    }
+
+    private fun checkResult(str: String, result: List<List<Double>>) {
+        val lines = str.lines()
+        val expectedResultList: MutableList<List<Double>> = mutableListOf()
+        val coords =  lines.map { it.split(" ") }
+        for (line in 0 until coords.size) {
+            for (i in 0 until coords[line].size) {
+                val rcoord = result[line][i]
+                val expectedcoord = coords[line][i].toDouble()
+                assertEquals(rcoord, expectedcoord, 0.01)
+            }
+        }
     }
 
 }
