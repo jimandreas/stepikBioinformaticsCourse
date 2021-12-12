@@ -4,15 +4,10 @@
 )
 
 import algorithms.Clustering
-import algorithms.assignPointsToClusters
-import algorithms.clusterCenterOfGravity
-import algorithms.compareTwoMaps
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 /**
@@ -28,7 +23,7 @@ import kotlin.test.assertEquals
  * https://www.youtube.com/watch?v=9rp1pzYn3hY
  */
 
-internal class S08C07P02ClustersLloydAlgorithmKmeansFromFileTest {
+internal class S08C07P03ClustersLloydAlgorithmKmeansFromFileTest {
 
     lateinit var cluster: Clustering
 

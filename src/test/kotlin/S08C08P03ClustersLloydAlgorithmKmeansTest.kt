@@ -28,7 +28,7 @@ import kotlin.test.assertEquals
  * https://www.youtube.com/watch?v=9rp1pzYn3hY
  */
 
-internal class S08C07P02ClustersLloydAlgorithmKmeansTest {
+internal class S08C08P03ClustersLloydAlgorithmKmeansTest {
 
     lateinit var cluster: Clustering
 
