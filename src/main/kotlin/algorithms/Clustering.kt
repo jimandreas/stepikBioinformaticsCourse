@@ -207,7 +207,7 @@ class Clustering {
     fun softKmeansClusteringAlgorithm(
         numCentersK: Int,
         numDimensionsM: Int,
-        stiffnessParameterB: Int,
+        stiffnessParameterB: Double,
         points: List<List<Double>>
     ): List<List<Double>> {
 
@@ -222,24 +222,21 @@ class Clustering {
         do {
             val clusterMap = assignPointsToClusters(numCentersK, numDimensionsM, centers, points)
 
-            // b) for each set of points in a cluster, find the center of gravity
-            //      and make this center the new "center"
+            // b) calculate the "hidden matrix" for the points
+            //      each center will have a list of values - one per point
+
+            val hiddenMatrix = hiddenMatrixPartitionFunction(stiffnessParameterB, centers, points)
 
 
             for (i in 0 until centers.size) {
 
-                // we need to get the points from the clusterMap that
-                //   are associated with cluster "i"
+                // for this center, get this set of weights - one per point
+                val thisCenterMatrix = hiddenMatrix[i]!!
 
-                val extractedList: MutableList<List<Double>> = mutableListOf()
-                clusterMap[i]!!.forEach {
-                    extractedList.add(points[it])
-                }
+                //printHiddenMatrix(i, thisCenterMatrix)
 
-                // now hand this set of multidimensional points to the center of gravity function
-                //    It will return a new multidimensional point - which is the new "center"
-
-                val newCenter = clusterCenterOfGravity(extractedList)
+                val newCenter = calcNewCenter(thisCenterMatrix, points)
+                //printHiddenMatrix(0, newCenter)
                 newCenterList.add(newCenter)
             }
 
@@ -254,6 +251,10 @@ class Clustering {
             }
             centers = newCenterList.toMutableList()
             newCenterList.clear()
+            iteration++
+            if (iteration == 100) {
+                break
+            }
 
             // if nothing changed, we are done.  Break out and return
             if (changed) {
@@ -262,8 +263,60 @@ class Clustering {
 
         } while (true)
 
+        //println("took $iteration iterations")
 
         return centers
+    }
+
+    private fun printHiddenMatrix(iter: Int, theHiddenMatrix: List<Double>) {
+
+        print("$iter: ")
+
+        for (i in 0 until theHiddenMatrix.size) {
+            print(String.format("%5.3f", theHiddenMatrix[i]))
+            if (i == theHiddenMatrix.size - 1) {
+                print("\n")
+            } else {
+                print(" ")
+            }
+        }
+
+    }
+
+    /**
+     * for a weighting matrix [hiddenMatrix] (one per center)
+     * and a list of multidimensional [points],
+     *
+     * calculate a new center and return it.
+     *
+     * NOTE: the hiddenMatrix has one scalar value per point.
+     *    This scalar value is applied uniformly across the multidimensional point values
+     *
+     * Reference:
+     * @link: https://stepik.org/lesson/240365/step/7?unit=212711
+     *
+     */
+    fun calcNewCenter(hiddenMatrix: List<Double>, points: List<List<Double>>): List<Double> {
+
+        var numerator = 0.0
+
+        val newCenter: MutableList<Double> = mutableListOf()
+
+        val denominator = hiddenMatrix.sum()
+
+        // iterate through all dimensions in the multidimensional points
+        for (dimen in 0 until points[0].size) {
+            // now iterate through all points and weight each points' dimension
+            for (i in 0 until points.size) {
+                val pointDimension = points[i][dimen]
+                numerator += pointDimension * hiddenMatrix[i]
+            }
+            val newCenterDimension = numerator / denominator
+            newCenter.add(newCenterDimension)
+            numerator = 0.0
+        }
+
+        return newCenter
     }
 
 

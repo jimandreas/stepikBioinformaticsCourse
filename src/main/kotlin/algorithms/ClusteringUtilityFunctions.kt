@@ -192,12 +192,13 @@ fun hiddenMatrixPartitionFunction(
         val pointList: MutableList<Double> = mutableListOf()
         for (pointNum in 0 until points.size) {
 
+            val debugExponent = -stiffmessB * apacheDistance(points[pointNum], centers[centerNum])
             val thisPointNumerator = exp(-stiffmessB * apacheDistance(points[pointNum], centers[centerNum]))
 
             // normalize to the sum of all distances squared (inverted)
             var allCentersSum = 0.0
             for (allCentersNum in 0 until centers.size) {
-                allCentersSum += exp(-stiffmessB * apacheDistance(points[pointNum], centers[allCentersNum]))
+                allCentersSum += Math.exp(-stiffmessB * apacheDistance(points[pointNum], centers[allCentersNum]))
             }
 
             val weighting = thisPointNumerator / allCentersSum

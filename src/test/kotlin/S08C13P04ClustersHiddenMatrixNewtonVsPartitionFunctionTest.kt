@@ -91,9 +91,9 @@ internal class S08C13P04ClustersHiddenMatrixNewtonVsPartitionFunctionTest {
             listOf(3.0)
         )
 
-        val stiffNessB = listOf(0.00000001, 0.5, 1.0, 1000.0)
+        val stiffNessB = listOf(0.00000001, 0.5, 1.0, 100.0)
 
-        val expectedTrialResults= listOf(
+        val expectedTrialResults = listOf(
             mapOf(  // stiffness = 0.0
                 Pair(0, listOf(0.500, 0.500, 0.500, 0.500, 0.500)),
                 Pair(1, listOf(0.500, 0.500, 0.500, 0.500, 0.500))
@@ -113,7 +113,7 @@ internal class S08C13P04ClustersHiddenMatrixNewtonVsPartitionFunctionTest {
         )
 
         for (j in 0 until stiffNessB.size) {
-            val result1 = hiddenMatrixPartitionFunction(stiffNessB[j],centers, points)
+            val result1 = hiddenMatrixPartitionFunction(stiffNessB[j], centers, points)
             // there are two centers in this test
             val expectedResult1 = expectedTrialResults[j]
             for (i in listOf(0, 1)) {
@@ -126,6 +126,39 @@ internal class S08C13P04ClustersHiddenMatrixNewtonVsPartitionFunctionTest {
         }
 
 
+    }
+
+    /**
+     * a touch test of the hiddenMatrixPartitionFunction weighting function
+     * @link: https://stepik.org/lesson/240365/step/4?unit=212711
+     * @link: https://rosalind.info/problems/ba8d/
+     */
+    @Test
+    @DisplayName("Clusters calcNewCenter test")
+    fun clustersCalcNewCenterTest() {
+
+
+        val centers = listOf(listOf(-2.5), listOf(2.5))
+
+        val points = listOf(
+            listOf(-3.0),
+            listOf(-2.0),
+            listOf(0.0),
+            listOf(2.0),
+            listOf(3.0)
+        )
+
+
+        val hiddenMatrix0 = listOf(0.993, 0.982, 0.500, 0.018, 0.007)
+        val hiddenMatrix1 = listOf(0.007, 0.018, 0.500, 0.982, 0.993)
+
+        // see: https://stepik.org/lesson/240365/step/7?unit=212711
+
+        val center0 = cluster.calcNewCenter(hiddenMatrix0, points)
+        assertEquals(-1.9544, center0[0], 0.01)
+
+        val center1 = cluster.calcNewCenter(hiddenMatrix1, points)
+        assertEquals(1.9544, center1[0], 0.01)
     }
 
 
