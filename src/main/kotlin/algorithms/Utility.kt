@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package algorithms
 
 
@@ -27,7 +29,7 @@ fun <K>MutableMap<Int, MutableList<K>>.addTo(key: Int, newItem: K) {
  *    create a DEEP COPY of the map with copies of the lists.
  * this avoids side effects from modifying values of the lists in a map.
  */
-fun <K, V> Map<K, MutableList<V>>.deepCopy(): Map<K, MutableList<V>> {
+fun <K, V> Map<K, MutableList<V>>.deepCopyMap(): Map<K, MutableList<V>> {
     val retMap : MutableMap<K, MutableList<V>> = mutableMapOf()
     for (k in this.keys) {
         val l = this[k]!!.toList().toMutableList()
@@ -37,7 +39,7 @@ fun <K, V> Map<K, MutableList<V>>.deepCopy(): Map<K, MutableList<V>> {
 }
 
 /**
- * for two maps with keys of type [K] mapping to lists of type [V],
+ * for two maps with keys of type [K] mapping to lists of type Int,
  *    compare the two maps, and return true if they are equivalent
  */
 fun <K, Int> Map<K, List<Int>>.compareTwoMaps(target: Map<K, List<Int>>): Boolean {

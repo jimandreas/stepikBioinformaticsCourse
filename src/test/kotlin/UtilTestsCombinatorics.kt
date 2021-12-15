@@ -1,13 +1,13 @@
 @file:Suppress("ReplaceManualRangeWithIndicesCalls")
 
-import algorithms.Combinatorics
+import algorithms.UtilityCombinatorics
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-internal class UtilTestsCombinatorics {
+internal class UtilTestsUtilityCombinatorics {
 
     @BeforeEach
     fun setUp() {
@@ -23,18 +23,18 @@ internal class UtilTestsCombinatorics {
     @DisplayName("factorial test")
     @Test
     fun testFactorial() {
-        val zero = Combinatorics.fact(0)
+        val zero = UtilityCombinatorics.fact(0)
         assertEquals(1, zero)
-        val one = Combinatorics.fact(1)
+        val one = UtilityCombinatorics.fact(1)
         assertEquals(1, one)
-        val two = Combinatorics.fact(2)
+        val two = UtilityCombinatorics.fact(2)
         assertEquals(2, two)
-        val three = Combinatorics.fact(3)
+        val three = UtilityCombinatorics.fact(3)
         assertEquals(6, three)
-        val four = Combinatorics.fact(4)
+        val four = UtilityCombinatorics.fact(4)
         assertEquals(24, four)
 
-        val big = Combinatorics.fact(11)
+        val big = UtilityCombinatorics.fact(11)
         assertEquals(39916800, big)
 
     }
@@ -50,20 +50,20 @@ internal class UtilTestsCombinatorics {
     @DisplayName("Binomial Coefficient test - n Select k")
     @Test
     fun binomialCoefficientTest() {
-        val one = Combinatorics.select(1, 1)
+        val one = UtilityCombinatorics.select(1, 1)
         assertEquals(1, one)
-        val two = Combinatorics.select(2, 1)
+        val two = UtilityCombinatorics.select(2, 1)
         assertEquals(2, two)
-        val three = Combinatorics.select(3, 1)
+        val three = UtilityCombinatorics.select(3, 1)
         assertEquals(3, three)
 
-        val v1 = Combinatorics.select(6, 2)
+        val v1 = UtilityCombinatorics.select(6, 2)
         assertEquals(15, v1)
 
-        val v2 = Combinatorics.select(8, 4)
+        val v2 = UtilityCombinatorics.select(8, 4)
         assertEquals(70, v2)
 
-        val err = Combinatorics.select(1, -1)
+        val err = UtilityCombinatorics.select(1, -1)
         assertEquals(0, err)
     }
 
@@ -87,9 +87,9 @@ internal class UtilTestsCombinatorics {
     @Test
     fun permutationTest() {
 
-        //val p1 = Combinatorics.permutation(2)
-        val p2 = Combinatorics.permutation(6)
-        println(Combinatorics.fact(6))
+        //val p1 = UtilityCombinatorics.permutation(2)
+        val p2 = UtilityCombinatorics.permutation(6)
+        println(UtilityCombinatorics.fact(6))
         for (i in 0 until p2.size) {
             val l = p2[i]
             println(l.joinToString(" "))

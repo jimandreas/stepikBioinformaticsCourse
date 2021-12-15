@@ -106,7 +106,7 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
             return
         }
 
-        var baseEdgesMap = allEdgesMap.deepCopy()
+        var baseEdgesMap = allEdgesMap.deepCopyMap()
         var winningLoopEdges: Map<Int, MutableList<Int>> = mutableMapOf()
 
         buildTreeFromEdges(allEdgesMap)
@@ -136,7 +136,7 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
                     }
                     val candidateMaps = fourNearestNeighbors(fromNodeId, toNodeId, baseEdgesMap.toMutableMap())
                     for (i in 0 until candidateMaps.size) {
-                        val deepCopyCandidate = candidateMaps[i].deepCopy()
+                        val deepCopyCandidate = candidateMaps[i].deepCopyMap()
 
                         buildTreeFromEdges(candidateMaps[i])
                         doUnrootedTreeScoring()

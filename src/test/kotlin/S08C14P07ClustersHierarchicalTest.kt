@@ -71,14 +71,13 @@ internal class S08C14P07ClustersHierarchicalTest {
 
     }
 
-    private fun parseMatrix(numElements: Int, matrixStrings: MutableList<String>): D2Array<Double> {
-        val matrix = mk.d2array(numElements, numElements) {0.0}
+    private fun parseMatrix(numElements: Int, matrixStrings: MutableList<String>): MutableList<MutableList<Double>> {
+
+        val matrix: MutableList<MutableList<Double>> = mutableListOf()
 
         for (row in 0 until numElements) {
-            val rowValues = matrixStrings[row].split(" ").map { it.toDouble()}
-            for (column in 0 until numElements) {
-                matrix[row, column] = rowValues[column]
-            }
+            val rowValues = matrixStrings[row].split(" ").map { it.toDouble()}.toMutableList()
+            matrix.add(rowValues)
         }
 
         return matrix

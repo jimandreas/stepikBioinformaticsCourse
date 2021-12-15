@@ -8,7 +8,7 @@ import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
 import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
 
-object Combinatorics {
+object UtilityCombinatorics {
 
     /**
      * take an int [i] and return i! (i factorial)

@@ -7,8 +7,6 @@
 
 package algorithms
 
-import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
-
 class ClusteringHierarchical {
 
     /**
@@ -51,11 +49,97 @@ class ClusteringHierarchical {
      * cluster listed on each line.
      */
 
+    var currentClusters: MutableMap<Int, Cluster> = mutableMapOf()
+    lateinit var theMatrix: MutableList<MutableList<Double>>
+
+    class Cluster {
+        var elementsList: MutableList<Int> = mutableListOf()
+        var active = true
+
+        constructor(elementNumber: Int) {
+            elementsList = mutableListOf(elementNumber)
+        }
+
+        constructor(elementsInit: MutableList<Int>) {
+            elementsList = elementsInit
+        }
+
+
+    }
+
+    fun merge(c1: Cluster, c2: Cluster): Cluster {
+        val sumOfElements = c1.elementsList.toMutableList()
+        sumOfElements.addAll(c2.elementsList)
+        c1.active = false
+        c2.active = false
+        return Cluster(sumOfElements.toMutableList())
+    }
+
+    fun Cluster.contains(element: Int): Boolean {
+        return this.elementsList.contains(element)
+    }
+
     fun hierarchicalClustering(
         numElements: Int,
-        distanceMatrix: D2Array<Double>
+        matrixIn: MutableList<MutableList<Double>>
     ): List<List<Int>> {
+
+        IntRange(0, numElements - 1).map { currentClusters[it] = Cluster(it) }
+        theMatrix = deepCopyArray(matrixIn)
+
+        var nextNewClusterNumber = numElements
+        if (nextNewClusterNumber != matrixIn.size) {
+            println("hierarchicalClustering: ERROR number of elements should match nxn matrix size")
+            return emptyList()
+        }
+
+        for (iter in 0 until numElements) {
+            val winningPair = findClosestClusterPair(theMatrix, currentClusters)
+            val i = winningPair.first
+            val j = winningPair.second
+
+            val newCluster = merge(currentClusters[i]!!, currentClusters[j]!!)
+            currentClusters[nextNewClusterNumber++] = newCluster
+
+            // create a new row/col for the distance matrix
+
+            val newMatrixRow: MutableList<Double> = mutableListOf()
+            for (idx in 0 until theMatrix[theMatrix.size - 1].size) {
+                val clSizei = (currentClusters[i]!!.elementsList.size)
+                val clSizej = (currentClusters[j]!!.elementsList.size)
+                val newDistance = (theMatrix[idx][i] * clSizei + theMatrix[idx][j] * clSizej) / (clSizei + clSizej)
+                newMatrixRow.add(newDistance)
+            }
+            newMatrixRow.add(0.0)  // for self to self distance
+            // add in a column at the end
+            for (idx in 0 until theMatrix[theMatrix.size - 1].size) {
+                theMatrix[idx].add(newMatrixRow[idx])
+            }
+            theMatrix.add(newMatrixRow)
+
+        }
+
         return listOf()
+    }
+
+    private fun findClosestClusterPair(
+        matrix: MutableList<MutableList<Double>>,
+        currentClusters: Map<Int, Cluster>
+    ): Pair<Int, Int> {
+        var min = Double.MAX_VALUE
+        var winningPair = Pair(0, 0)
+        for (i in 0 until currentClusters.size) {
+            for (j in 0 until matrix[i].size) {
+                if (i == j) continue
+                if (currentClusters[i]!!.active && currentClusters[j]!!.active) {
+                    if (min > matrix[i][j]) {
+                        min = matrix[i][j]
+                        winningPair = Pair(i, j)
+                    }
+                }
+            }
+        }
+        return winningPair
     }
 
 

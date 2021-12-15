@@ -55,8 +55,8 @@ open class SmallParsimonyNearestNeighborsOfTree : SmallParsimonyUnrootedTree() {
         connListA.add(b)
         connListB.add(a)
 
-        var edgesVersionA = edges.deepCopy().toMutableMap()
-        var edgesVersionB = edges.deepCopy().toMutableMap()
+        var edgesVersionA = edges.deepCopyMap().toMutableMap()
+        var edgesVersionB = edges.deepCopyMap().toMutableMap()
 
         edgesVersionA[a] = connListA
         edgesVersionA[b] = connListB
@@ -115,7 +115,7 @@ open class SmallParsimonyNearestNeighborsOfTree : SmallParsimonyUnrootedTree() {
         connListA.add(b)
         connListB.add(a)
 
-        var edgesVersionA = edges.deepCopy().toMutableMap()
+        var edgesVersionA = edges.deepCopyMap().toMutableMap()
 
 
         edgesVersionA[a] = connListA
@@ -141,7 +141,7 @@ open class SmallParsimonyNearestNeighborsOfTree : SmallParsimonyUnrootedTree() {
         connListA.add(b)
         connListB.add(a)
 
-        var edgesVersionB = edges.deepCopy().toMutableMap()
+        var edgesVersionB = edges.deepCopyMap().toMutableMap()
         edgesVersionB[a] = connListA
         edgesVersionB[b] = connListB
 
@@ -168,7 +168,7 @@ open class SmallParsimonyNearestNeighborsOfTree : SmallParsimonyUnrootedTree() {
         connListA.add(b)
         connListB.add(a)
 
-        var edgesVersionC = edges.deepCopy().toMutableMap()
+        var edgesVersionC = edges.deepCopyMap().toMutableMap()
 
         edgesVersionC[a] = connListA
         edgesVersionC[b] = connListB
@@ -193,7 +193,7 @@ open class SmallParsimonyNearestNeighborsOfTree : SmallParsimonyUnrootedTree() {
         connListA.add(b)
         connListB.add(a)
 
-        var edgesVersionD = edges.deepCopy().toMutableMap()
+        var edgesVersionD = edges.deepCopyMap().toMutableMap()
         edgesVersionD[a] = connListA
         edgesVersionD[b] = connListB
 

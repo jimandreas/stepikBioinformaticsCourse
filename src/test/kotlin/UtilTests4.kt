@@ -27,7 +27,7 @@ internal class UtilTests4 {
         foo[1] = mutableListOf(2, 3)
         foo[10] = mutableListOf(11, 12)
 
-        val myDeepCopy = foo.deepCopy()
+        val myDeepCopy = foo.deepCopyMap()
 
         val bar = foo.toMutableMap()
         bar[1]!!.removeLast()
