@@ -22,7 +22,7 @@ class ClusteringHierarchical {
      * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
      */
 
-    var farthestFirstTraversalPsuedocode = """
+    var hierarchicalClusteringPseudocode = """
      HierarchicalClustering(D, n)
         Clusters ← n single-element clusters labeled 1, ... , n
         construct a graph T with n isolated nodes labeled by single elements 1, ... , n
@@ -79,6 +79,18 @@ class ClusteringHierarchical {
         return this.elementsList.contains(element)
     }
 
+    /**
+     * The actual algorithm.  This algorithm deviates from the pseudoCode
+     * in that the matrix is never reduced in size.   It instead relies
+     * on the Cluster class marking of "active" to filter out
+     * elements added to clusters from the "min" search.
+     *
+     * Also there is no notion of an explicit "tree" formation.   The
+     * problem formulation appears to accept a simple statement of
+     * which elements are grouped in a stepwise fashion.   If you use
+     * your imagination you can assemble the tree by inspecting this
+     * resulting list.
+     */
     fun hierarchicalClustering(
         numElements: Int,
         matrixIn: MutableList<MutableList<Double>>
@@ -119,7 +131,14 @@ class ClusteringHierarchical {
 
         }
 
-        return listOf()
+        // build list of elements as they were assembled into the tree
+
+        val retList: MutableList<MutableList<Int>> = mutableListOf()
+        for (iter in numElements until numElements * 2 -1) {
+            retList.add(currentClusters[iter]!!.elementsList)
+        }
+
+        return retList
     }
 
     private fun findClosestClusterPair(
@@ -141,6 +160,4 @@ class ClusteringHierarchical {
         }
         return winningPair
     }
-
-
 }
