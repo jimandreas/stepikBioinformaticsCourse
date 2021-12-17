@@ -10,15 +10,25 @@ package algorithms
 class PatternMatching {
 
     /**
-     * See also:
+     * Construct a Trie from a Collection of Patterns
      * Stepik: https://stepik.org/lesson/240376/step/4?unit=212722
      * Rosalind: https://rosalind.info/problems/ba9a/
+     *
+     * TrieMatching
+     * Stepik: https://stepik.org/lesson/240376/step/8?unit=212722
+     * Rosalind: https://rosalind.info/problems/ba9b/
      *
      * Using the Trie 2/10
      * https://www.youtube.com/watch?v=9U0ynguwoNA
      *
      * From a Trie to a Suffix Tree (3/10)
      * https://www.youtube.com/watch?v=LB-ANFydv30
+     *
+     * String Compression and the Burrows-Wheeler Transform (4/10)
+     * https://www.youtube.com/watch?v=G7YBi04HOEY
+     *
+     * Inverting Burrows-Wheeler (5/10)
+     * https://www.youtube.com/watch?v=DqdjbK68l3s
      */
 
 
@@ -38,16 +48,16 @@ class PatternMatching {
      * must be the symbol labeling the edge.
      */
 
-    fun trieConstruction(patterns: List<String>): Map<Int, Map<Char, Int>> {
 
-        // for each node - the list of characters at that node
-        val trieDictionary: MutableMap<Int, MutableList<Char>> = mutableMapOf()
 
-        // for each node - what node number the characters map to
-        val trieMap: MutableMap<Int, MutableMap<Char, Int>> = mutableMapOf()
+    fun trieConstruction(patterns: List<String>, addTerminator: Boolean = false): Map<Int, Map<Char, Int>> {
 
         var nextNodeNum = 1
-        for (p in patterns) {
+        for (pIter in patterns) {
+            var p = pIter
+            if (addTerminator) {
+                p += "$"
+            }
             var currentNode = 0
             outerloop@ for (idx in 0 until p.length) {
 
@@ -91,6 +101,84 @@ class PatternMatching {
             }
         }
         return trieMap
+    }
+
+    /**
+     * Code Challenge: Implement TrieMatching to solve the Multiple Pattern Matching Problem.
+     *
+     * Input: A string Text and a space-separated collection of strings Patterns.
+     *
+     * Output: All starting positions in Text where a string from Patterns
+     * appears as a substring.
+     */
+
+    fun trieMatching(stringToScan: String, patterns: List<String>): Map<String, List<Int>> {
+
+        trieConstruction(patterns, addTerminator = true)
+
+        val retMap : MutableMap<String, List<Int>> = mutableMapOf()
+        for (p in patterns) {
+            val positions = trieScanForPattern(stringToScan, p)
+            retMap[p] = positions
+        }
+        return retMap
+    }
+
+    // for each node - the list of characters at that node
+    val trieDictionary: MutableMap<Int, MutableList<Char>> = mutableMapOf()
+
+    // for each node - what node number the characters map to
+    val trieMap: MutableMap<Int, MutableMap<Char, Int>> = mutableMapOf()
+
+    /**
+     * using the previously built dictionary and map,
+     * scan the [stringToScan] for [pattern] and
+     * return the list of indexes where it occurs.
+     */
+    private fun trieScanForPattern(stringToScan: String, pattern: String): List<Int> {
+
+        val outList : MutableList<Int> = mutableListOf()
+
+        for (i in 0 until stringToScan.length) {
+            if (trieTrieMatching(
+                    stringToScan.substring(i, stringToScan.length),
+                    pattern)) {
+                outList.add(i)
+            }
+        }
+
+        return outList
+    }
+
+    /**
+     * scan the trie for the string, and if a terminating '$' is found,
+     *  then the trie contains a substring match.
+     */
+    private fun trieTrieMatching(stringToScan: String, patternString: String): Boolean {
+
+        var stringIdx = 0
+        var trieMapIdx = 0
+
+        if (stringToScan.length < patternString.length) {
+            return false
+        }
+        while (true) {
+            val c = stringToScan[stringIdx]
+            val patternChar = patternString[stringIdx]
+
+            if (c != patternChar) {
+                return false
+            }
+
+            if (!trieDictionary[trieMapIdx]!!.contains(c)) {
+                return false
+            }
+            trieMapIdx = trieMap[trieMapIdx]!![c]!!
+            if (trieDictionary[trieMapIdx]!!.contains('$')) {
+                return true
+            }
+            stringIdx++
+        }
     }
 
 
