@@ -47,10 +47,6 @@ internal class S07c07p07NeighborJoiningTest {
         nj = NeighborJoining()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     /**
     example from:
     https://www.youtube.com/watch?v=Dj24mCLQYUE

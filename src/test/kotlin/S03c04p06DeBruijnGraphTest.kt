@@ -1,9 +1,7 @@
-import org.junit.jupiter.api.AfterEach
+import algorithms.DeBruijnGraphFromString
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.DeBruijnGraphFromString
 
 /**
 
@@ -18,14 +16,6 @@ Output: DeBruijnk(Text), in the form of an adjacency list.
  */
 
 internal class S03c04p06DeBruijnGraphTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     private val dbgfs = DeBruijnGraphFromString()
 

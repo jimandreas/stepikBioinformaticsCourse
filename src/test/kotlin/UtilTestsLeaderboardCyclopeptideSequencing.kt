@@ -7,14 +7,6 @@ import kotlin.test.assertEquals
 
 internal class UtilTestsLeaderboardCyclopeptideSequencing {
 
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
     /**
      * test LeaderboardCyclopeptideSequencing
     Given: An integer N and a collection of integers Spectrum.

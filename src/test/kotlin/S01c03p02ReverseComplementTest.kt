@@ -1,10 +1,7 @@
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
 import algorithms.reverseComplement
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 /**
  *  1.3 Some Hidden Messages are More Surprising than Others
@@ -21,14 +18,6 @@ rosalind: http://rosalind.info/problems/ba1c/
  */
 
 internal class S01c03p02ReverseComplementTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName("ReverseDNA - test with DNA strip supplied by class")

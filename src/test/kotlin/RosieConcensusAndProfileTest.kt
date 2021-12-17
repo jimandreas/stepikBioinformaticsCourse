@@ -5,7 +5,6 @@
 
 import algorithms.ConcensusStringAndMatrix
 import org.jetbrains.kotlinx.multik.ndarray.data.get
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -26,10 +25,6 @@ internal class RosieConcensusAndProfileTest {
     fun setUp() {
         csam = ConcensusStringAndMatrix()
         u = Utility()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

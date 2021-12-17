@@ -7,14 +7,6 @@ import kotlin.test.assertEquals
 
 internal class UtilTests3 {
 
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
     /**
      * The String Spelled by a Genome Path Problem.
      * first test - the denerate case of single character input

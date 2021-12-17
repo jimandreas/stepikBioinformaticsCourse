@@ -7,14 +7,6 @@ import kotlin.test.assertEquals
 
 internal class UtilTestsSpectrumScoring {
 
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
     /**
      * Cyclopeptide Scoring Problem: Compute the score of a cyclic peptide against a spectrum.
 

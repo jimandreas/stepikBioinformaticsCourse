@@ -60,10 +60,6 @@ internal class S07c04p11PhylogenyAdditiveCritterTest {
         dbl = DistancesBetweenLeaves()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Test
     @DisplayName("Distances Between Leaves Corona virus distance test")
     fun phylogenyLimbLengthCoronaVirusDistanceTest() {

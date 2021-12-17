@@ -29,10 +29,6 @@ internal class S08C13P04ClustersSoftKmeansAlgorithmFromFileTest {
         cluster = Clustering()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     /**
      * Implement the Soft k-Means Clustering Algorithm
      *

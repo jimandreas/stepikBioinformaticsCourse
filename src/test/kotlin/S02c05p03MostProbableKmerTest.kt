@@ -1,9 +1,7 @@
-import org.junit.jupiter.api.AfterEach
+import algorithms.mostProbableKmer
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.mostProbableKmer
 
 /**
 
@@ -28,14 +26,6 @@ Code Challenge: Solve the Profile-most Probable k-mer Problem.
  */
 
 internal class S02c05p03MostProbableKmerTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName("test mostProbableKmer 1")

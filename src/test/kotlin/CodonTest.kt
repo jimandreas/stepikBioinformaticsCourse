@@ -1,25 +1,14 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
 import algorithms.aminoAcidsTable
 import algorithms.indexSearchDnaStringAndPeptide
-import algorithms.translateDnaCodonStringToAminoAcidString
 import algorithms.translateRnaCodonStringToAminoAcidString
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.test.assertEquals
 
 internal class CodonTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * test codonToAminoAcid

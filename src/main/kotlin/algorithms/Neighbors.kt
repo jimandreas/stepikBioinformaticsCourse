@@ -129,7 +129,7 @@ fun motifEnumeration(
         if (accumulatorList.isEmpty()) {
             accumulatorList = neighborList.sorted()
         } else {
-            accumulatorList = accumulatorList.intersect(neighborList).toList()
+            accumulatorList = accumulatorList.intersect(neighborList.toSet()).toList()
         }
     }
     accumulatorList = accumulatorList.sorted().distinct()

@@ -3,8 +3,9 @@
     "ReplaceManualRangeWithIndicesCalls", "ReplaceSizeZeroCheckWithIsEmpty"
 )
 
-import algorithms.*
-import org.junit.jupiter.api.AfterEach
+import algorithms.Clustering
+import algorithms.hiddenMatrixNewtonian
+import algorithms.hiddenMatrixPartitionFunction
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -27,10 +28,6 @@ internal class S08C13P04ClustersHiddenMatrixNewtonVsPartitionFunctionTest {
     @BeforeEach
     fun setUp() {
         cluster = Clustering()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     /**

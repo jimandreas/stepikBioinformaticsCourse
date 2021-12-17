@@ -1,7 +1,8 @@
 @file:Suppress(
     "UnnecessaryVariable", "unused", "MemberVisibilityCanBePrivate", "LiftReturnOrAssignment",
     "IntroduceWhenSubject", "VARIABLE_WITH_REDUNDANT_INITIALIZER", "UNUSED_PARAMETER", "UNUSED_VARIABLE",
-    "UNUSED_CHANGED_VALUE", "CanBeParameter", "MoveVariableDeclarationIntoWhen"
+    "UNUSED_CHANGED_VALUE", "CanBeParameter", "MoveVariableDeclarationIntoWhen", "KotlinConstantConditions",
+    "KotlinConstantConditions"
 )
 
 package algorithms

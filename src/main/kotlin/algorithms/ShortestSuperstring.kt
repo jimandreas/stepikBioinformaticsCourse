@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package algorithms
 
 /**
@@ -70,7 +72,7 @@ class ShortestSuperstring {
                     keysb.append(hashStringList[j])
                     val key = keysb.toString()
 
-                    if (hashMotif.containsKey(key.toString())) {
+                    if (hashMotif.containsKey(key)) {
                         //println("Found Key in cache $key")
 
                         if (hashMotif[key]!!.length > maxLen) {

@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable")
+@file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable", "CatchMayIgnoreException")
 
 package problems
 

@@ -2,9 +2,7 @@
 
 package problems
 
-import tables.TheGeneticCodesNCBI
 import tables.codonUtilsFindLongestPeptide
-import tables.codonUtilsTranslate
 
 /**
  * see also:

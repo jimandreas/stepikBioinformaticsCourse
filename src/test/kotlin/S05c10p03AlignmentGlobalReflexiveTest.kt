@@ -21,14 +21,6 @@ the solution path.
 
 internal class S05c10p03AlignmentGlobalReflexiveTest {
 
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
     /*
     * the sample problem
     * @link: http://rosalind.info/problems/ba5e/

@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.AlignmentAffineGap
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.AlignmentAffineGap
 
 /**
  * Code Challenge: Solve the Alignment with Affine Gap Penalties Problem.
@@ -31,14 +29,6 @@ for each cell.
  */
 
 internal class S05c12p08AlignmentAffineGapTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * first sample in the Test Dataset

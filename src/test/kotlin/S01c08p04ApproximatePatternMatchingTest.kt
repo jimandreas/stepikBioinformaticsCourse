@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import problems.matchPatternWithErrorRate
 
 /**
@@ -42,14 +40,6 @@ stepik: https://stepik.org/lesson/240221/step/4?unit=212567
 rosalind: http://rosalind.info/problems/ba1h/
  */
 internal class S01c08p04ApproximatePatternMatchingTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName( "test with match kMer pattern with hamming distance")

@@ -4,13 +4,11 @@
 )
 
 import algorithms.ShortestSuperstring
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 import kotlin.test.assertEquals
-import kotlin.test.junit5.JUnit5Asserter.assertEquals
 
 /**
  * See also:
@@ -48,10 +46,6 @@ internal class RosieIntroductionToGenomeSequencingTest {
     @BeforeEach
     fun setUp() {
         u = Utility()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test
@@ -141,15 +135,9 @@ ttca
 atgcatc
         """.trimIndent().lines()
 
-        // note that this algorithm does not find the best result:
-        // AAABBBA
         val expectedResult = """
 gctaagttcatgcatc
         """.trimIndent()
-
-        /*
-         * set up the lookup of the results back to the origina strings
-         */
 
         val dnaList = u.utilityParseFASTA(sampleInput).toMutableList()
 

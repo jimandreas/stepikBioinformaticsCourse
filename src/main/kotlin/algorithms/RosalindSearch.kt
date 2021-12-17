@@ -7,12 +7,7 @@
 
 package algorithms
 
-import org.jetbrains.kotlinx.multik.api.d1array
-import org.jetbrains.kotlinx.multik.api.mk
-import org.jetbrains.kotlinx.multik.ndarray.data.D1Array
-import org.jetbrains.kotlinx.multik.ndarray.data.get
-import org.jetbrains.kotlinx.multik.ndarray.data.set
-import org.jetbrains.kotlinx.multik.ndarray.operations.contains
+import kotlin.collections.set
 
 /**
  *

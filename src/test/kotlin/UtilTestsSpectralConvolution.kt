@@ -7,14 +7,6 @@ import kotlin.test.assertEquals
 
 internal class UtilTestsSpectralConvolution {
 
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
     /**
      * Spectral Convolution Problem: Compute the convolution of a spectrum.
 

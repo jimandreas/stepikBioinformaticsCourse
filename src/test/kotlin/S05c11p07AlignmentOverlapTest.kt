@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.AlignmentOverlap
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.AlignmentOverlap
 import kotlin.test.Ignore
 
 /**
@@ -26,14 +24,6 @@ matches count +1 and both the mismatch and indel penalties are 2.
  */
 
 internal class S05c11p07AlignmentOverlapTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * first sample in the Test Dataset

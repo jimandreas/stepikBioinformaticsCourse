@@ -1,10 +1,8 @@
-@file:Suppress("UNUSED_VARIABLE", "LiftReturnOrAssignment", "MemberVisibilityCanBePrivate")
+@file:Suppress("UNUSED_VARIABLE", "LiftReturnOrAssignment", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import algorithms.MaximalNonBranchingPaths
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.MaximalNonBranchingPaths
 
 /**
 Code Challenge: Implement MaximalNonBranchingPaths.
@@ -17,14 +15,6 @@ Output: The collection of all maximal nonbranching paths in this graph.
  * rosalind: @link: http://rosalind.info/problems/ba3m/
  */
 internal class S03c14p02MaximalNonBranchingPathsTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     val mnbp = MaximalNonBranchingPaths()
 

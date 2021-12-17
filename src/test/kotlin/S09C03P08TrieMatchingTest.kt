@@ -4,7 +4,6 @@
 )
 
 import algorithms.PatternMatching
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -39,10 +38,6 @@ internal class S09C03P08TrieMatchingTest {
     @BeforeEach
     fun setUp() {
         pm = PatternMatching()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     /**

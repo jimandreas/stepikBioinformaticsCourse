@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.LongestCommonSubsequenceLCS
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.LongestCommonSubsequenceLCS
 import kotlin.test.assertNotNull
 
 /**
@@ -18,14 +16,6 @@ import kotlin.test.assertNotNull
  */
 
 internal class S05c08p05LongestCommonSubsequenceTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     val lcs = LongestCommonSubsequenceLCS()
 

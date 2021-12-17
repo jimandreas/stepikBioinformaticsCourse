@@ -1,20 +1,10 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import algorithms.trimLeaderboard
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.trimLeaderboard
 
 internal class UtilTestsTrimLeaderBoard {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * test the trim function -

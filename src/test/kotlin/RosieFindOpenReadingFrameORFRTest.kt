@@ -3,7 +3,6 @@
     "ReplaceManualRangeWithIndicesCalls"
 )
 
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -38,10 +37,6 @@ internal class RosieFindOpenReadingFrameORFRTest {
     fun setUp() {
 
         u = Utility()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

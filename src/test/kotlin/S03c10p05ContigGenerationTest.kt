@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "LiftReturnOrAssignment")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.ContigGeneration
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.*
 import kotlin.test.assertContentEquals
 
 /**
@@ -20,14 +18,6 @@ Output: All contigs in DeBruijn(Patterns).
  */
 
 internal class S03c10p05ContigGenerationTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     private val cg = ContigGeneration()
 

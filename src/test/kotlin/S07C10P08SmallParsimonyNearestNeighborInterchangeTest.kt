@@ -4,11 +4,9 @@
 )
 
 import algorithms.SmallParsimonyNearestNeighborInterchange
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import java.lang.StringBuilder
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
@@ -33,11 +31,6 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
     fun setUp() {
         nni = SmallParsimonyNearestNeighborInterchange()
     }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
 
 
     /*

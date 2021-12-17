@@ -9,14 +9,6 @@ import kotlin.test.assertEquals
 
 internal class UtilTests4 {
 
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
     /**
      *  touch test the deep copy of a map utility function
      */

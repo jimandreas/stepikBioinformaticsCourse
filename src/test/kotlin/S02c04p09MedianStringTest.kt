@@ -1,9 +1,7 @@
-import org.junit.jupiter.api.AfterEach
+import algorithms.medianString
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.medianString
 
 /**
 
@@ -22,14 +20,6 @@ possible choices of k-mers. (If there are multiple such strings Pattern, then yo
  */
 
 internal class S02c04p09MedianStringTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName("test medianString 1")

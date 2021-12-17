@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.MiddleEdgeLinearSpace
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.MiddleEdgeLinearSpace
 
 /**
  * Code Challenge: Solve the Middle Edge in Linear Space Problem (for protein strings).
@@ -25,14 +23,6 @@ Output: A middle edge in the alignment graph in the form "(i, j) (k, l)", where 
  */
 
 internal class S05c13p12FindMiddleEdgeTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * Basic Function:

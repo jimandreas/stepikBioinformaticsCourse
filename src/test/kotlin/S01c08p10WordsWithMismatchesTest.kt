@@ -1,10 +1,7 @@
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.DisplayName
 import algorithms.frequentWordsWithMismatches
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 /**
  * @link: https://stepik.org/lesson/240221/step/10?unit=212567
@@ -37,14 +34,6 @@ rosalind: http://rosalind.info/problems/ba1j/
  */
 
 internal class S01c08p10WordsWithMismatchesTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      *  TEST DATASET 1:

@@ -1,9 +1,6 @@
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import problems.printRepeatedTargetIndexesWithOverlap
 
 /**
@@ -21,14 +18,6 @@ rosalind: http://rosalind.info/problems/ba1d/
  */
 
 internal class S01c03p05PatternMatchingTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName( "test with DNA strip supplied by class")

@@ -1,8 +1,6 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import problems.dpChange
@@ -17,14 +15,6 @@ Input: An integer money and an array Coins = (coin1, ..., coind).
 Output: The minimum number of coins with denominations Coins that changes money.
  */
 internal class S05c05p10DPChangeDynamicProgrammingTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName("test the dynamic programming function DPChange 01")

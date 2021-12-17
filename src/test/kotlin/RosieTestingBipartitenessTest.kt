@@ -4,13 +4,11 @@
 )
 
 import algorithms.RosalindBipartiteGraph
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import kotlin.collections.set
 import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
 
 /**
  *
@@ -26,10 +24,6 @@ internal class RosieTestingBipartitenessTest {
     @BeforeEach
     fun setUp() {
         bip = RosalindBipartiteGraph()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

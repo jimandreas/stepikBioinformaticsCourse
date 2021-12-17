@@ -37,10 +37,6 @@ internal class S06c13p02p03SolvingTwoBreakSortingTest {
         twoBreak = TwoBreakOnGenomeGraph()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     /**
 
     Code Challenge: Implement 2-BreakOnGenomeGraph.

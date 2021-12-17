@@ -1,12 +1,11 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER", "unused")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
 import algorithms.TwoBreakDistance
 import algorithms.TwoBreakGenomesToBreakpointGraph
 import algorithms.TwoBreakOnGenomeGraph
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 /**
@@ -42,10 +41,6 @@ internal class S06c09p04SolveTwoBreakDistanceTest {
         twoBreakDistance = TwoBreakDistance()
         twoBreakUtils = TwoBreakGenomesToBreakpointGraph()
         twoBreak = TwoBreakOnGenomeGraph()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     /**

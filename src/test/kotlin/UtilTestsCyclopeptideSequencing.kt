@@ -1,20 +1,10 @@
 @file:Suppress("UNUSED_VARIABLE", "UNUSED_VALUE")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import algorithms.cyclopeptideSequencing
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.cyclopeptideSequencing
 
 internal class UtilTestsCyclopeptideSequencing {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
 
     /**

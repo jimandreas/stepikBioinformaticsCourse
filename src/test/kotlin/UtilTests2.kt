@@ -1,23 +1,12 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.DisplayName
 import algorithms.*
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 internal class UtilTests2 {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName("util: frequenceTableTest function test")

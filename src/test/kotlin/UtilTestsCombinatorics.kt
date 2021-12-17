@@ -1,21 +1,11 @@
 @file:Suppress("ReplaceManualRangeWithIndicesCalls")
 
 import algorithms.UtilityCombinatorics
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 internal class UtilTestsUtilityCombinatorics {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * see: https://en.wikipedia.org/wiki/Factorial

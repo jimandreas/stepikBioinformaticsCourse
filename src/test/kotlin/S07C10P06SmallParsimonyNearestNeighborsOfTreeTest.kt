@@ -32,10 +32,6 @@ internal class S07C10P06SmallParsimonyNearestNeighborsOfTreeTest {
         nn = SmallParsimonyNearestNeighborsOfTree()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     /**
      * a practice test where one internal node (7) only has one leaf
      */

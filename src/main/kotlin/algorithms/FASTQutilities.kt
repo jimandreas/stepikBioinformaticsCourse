@@ -1,3 +1,8 @@
+@file:Suppress("BooleanMethodIsAlwaysInverted", "BooleanMethodIsAlwaysInverted", "BooleanMethodIsAlwaysInverted",
+    "BooleanMethodIsAlwaysInverted", "BooleanMethodIsAlwaysInverted", "BooleanMethodIsAlwaysInverted",
+    "BooleanMethodIsAlwaysInverted", "BooleanMethodIsAlwaysInverted"
+)
+
 package algorithms
 
 /**
@@ -44,7 +49,7 @@ class FASTQutilities {
         }
         // OK did the qLine pass the percentage test?
 
-        val testPercentage = numOverThreshold.toFloat() / len.toFloat() * 100f
+        val testPercentage = numOverThreshold / len.toFloat() * 100f
         if (testPercentage >= percentage.toFloat()) {
             return true
         }

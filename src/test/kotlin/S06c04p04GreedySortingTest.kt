@@ -1,15 +1,13 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 
+import algorithms.GreedySorting
 import org.jetbrains.kotlinx.multik.api.d1array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.api.toNDArray
 import org.jetbrains.kotlinx.multik.ndarray.data.set
 import org.jetbrains.kotlinx.multik.ndarray.operations.toList
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.GreedySorting
 import kotlin.test.assertEquals
 
 /**
@@ -34,14 +32,6 @@ GreedySorting to P, ending with the identity permutation.
  */
 
 internal class S06c04p04GreedySortingTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
 
     /**

@@ -10,14 +10,6 @@ import kotlin.test.assertEquals
 internal class UtilTestsTurnpikeReconstructionDepthFirst {
 
     private val tpdf = TurnpikeReconstructionDepthFirst()
-    
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * Turnpike Problem: Given all pairwise distances between points on a line segment, reconstruct the positions of those points.

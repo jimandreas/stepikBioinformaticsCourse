@@ -4,8 +4,6 @@
 )
 
 import algorithms.RnaSplicing
-import algorithms.createProfile
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -38,10 +36,6 @@ internal class RosieRnaSplicingTest {
     fun setUp() {
         rs = RnaSplicing()
         u = Utility()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

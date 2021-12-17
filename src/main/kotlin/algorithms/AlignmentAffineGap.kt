@@ -1,6 +1,10 @@
 @file:Suppress(
     "UnnecessaryVariable", "unused", "MemberVisibilityCanBePrivate", "LiftReturnOrAssignment",
-    "IntroduceWhenSubject", "VARIABLE_WITH_REDUNDANT_INITIALIZER", "UNUSED_PARAMETER", "UNUSED_VARIABLE", "CascadeIf"
+    "IntroduceWhenSubject", "VARIABLE_WITH_REDUNDANT_INITIALIZER", "UNUSED_PARAMETER", "UNUSED_VARIABLE", "CascadeIf",
+    "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused",
+    "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused",
+    "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused", "unused",
+    "unused", "unused"
 )
 
 package algorithms
@@ -31,6 +35,7 @@ for each cell.
  * youtube: @link: https://www.youtube.com/watch?v=Npv180dQ_4Y
  */
 
+@Suppress("unused", "unused")
 class AlignmentAffineGap(
     val mMatchValue: Int,
     val uMismatchValue: Int,

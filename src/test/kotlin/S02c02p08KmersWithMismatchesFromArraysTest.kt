@@ -1,9 +1,7 @@
-import org.junit.jupiter.api.AfterEach
+import algorithms.motifEnumeration
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.motifEnumeration
 
 /**
 
@@ -31,14 +29,6 @@ return Patterns
  */
 
 internal class S02c02p08KmersWithMismatchesFromArraysTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      *   Sample Input:

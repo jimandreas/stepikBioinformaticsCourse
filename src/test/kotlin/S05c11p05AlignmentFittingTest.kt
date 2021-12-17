@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.AlignmentFitting
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.AlignmentFitting
 import kotlin.test.Ignore
 
 /**
@@ -34,14 +32,6 @@ for each cell.
  */
 
 internal class S05c11p05AlignmentFittingTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * first sample in the Test Dataset

@@ -6,7 +6,6 @@
 import algorithms.SmallParsimony
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -33,10 +32,6 @@ internal class S07c09p10SmallParsimonyTest {
     @BeforeEach
     fun setUp() {
         sp = SmallParsimony()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
 

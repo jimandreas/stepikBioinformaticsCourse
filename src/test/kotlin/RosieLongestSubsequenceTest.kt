@@ -4,11 +4,9 @@
 )
 
 import algorithms.LongestSubsequence
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.collections.set
 import kotlin.test.assertEquals
 
 /**
@@ -41,10 +39,6 @@ internal class RosieLongestSubsequenceTest {
     @BeforeEach
     fun setUp() {
         ls = LongestSubsequence()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @DisplayName("Rosalind Longest Subsequence sample test")

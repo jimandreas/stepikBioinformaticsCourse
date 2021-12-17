@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.ManhattanTouristProblem
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.ManhattanTouristProblem
 import kotlin.test.assertNotNull
 
 /**
@@ -18,14 +16,6 @@ import kotlin.test.assertNotNull
  */
 
 internal class S05c06p10ManhattenTouristProblemTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     val mt = ManhattanTouristProblem()
 

@@ -1,11 +1,9 @@
 @file:Suppress("MemberVisibilityCanBePrivate", "ReplaceManualRangeWithIndicesCalls")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.GibbsSampler
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.GibbsSampler
 import kotlin.test.Ignore
 
 /**
@@ -27,14 +25,6 @@ so you may wish to return to this problem later.
  */
 
 internal class S02c09p04GibbsSamplerTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     val gs = GibbsSampler()
 

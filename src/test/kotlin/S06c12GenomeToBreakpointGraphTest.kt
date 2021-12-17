@@ -37,10 +37,6 @@ internal class S06c12GenomeToBreakpointGraphTest {
         twoBreakFunctions = TwoBreakGenomesToBreakpointGraph()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     /**
      * ChromosomeToCycle 1:
      * Basic test of "Chromosome" (list of +/- digits) to pairs encoding

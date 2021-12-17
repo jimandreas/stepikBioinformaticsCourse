@@ -1,10 +1,8 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import algorithms.MultipleLongestCommonSubsequence
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.MultipleLongestCommonSubsequence
 
 /**
  * In the Multiple Longest Common Subsequence Problem,
@@ -28,14 +26,6 @@ Output: The length of a longest common subsequence of these three strings, follo
  */
 
 internal class S05c14p05MultipleAlignmentTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
 
     /**

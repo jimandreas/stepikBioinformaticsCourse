@@ -1,22 +1,12 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import algorithms.peptideMassSpectrum
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.peptideMassSpectrum
 import kotlin.test.assertEquals
 
 
 internal class UtilTestsSpectrumLinearCyclic {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * Code Challenge: Implement LinearSpectrum.

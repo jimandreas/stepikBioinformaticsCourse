@@ -51,10 +51,6 @@ internal class S07c06p08UPGMAtest {
         upgma = UPGMA()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     // example from:
     // https://www.youtube.com/watch?v=8-8eZdeqUsw
     // C100 Week 5 Discussion

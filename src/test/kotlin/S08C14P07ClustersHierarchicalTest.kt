@@ -1,10 +1,10 @@
 @file:Suppress(
     "UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER", "unused",
-    "ReplaceManualRangeWithIndicesCalls", "ReplaceSizeZeroCheckWithIsEmpty", "SameParameterValue"
+    "ReplaceManualRangeWithIndicesCalls", "ReplaceSizeZeroCheckWithIsEmpty", "SameParameterValue", "SameParameterValue",
+    "SameParameterValue"
 )
 
-import algorithms.*
-import org.junit.jupiter.api.AfterEach
+import algorithms.ClusteringHierarchical
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -27,10 +27,6 @@ internal class S08C14P07ClustersHierarchicalTest {
     @BeforeEach
     fun setUp() {
         cluster = ClusteringHierarchical()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     /**

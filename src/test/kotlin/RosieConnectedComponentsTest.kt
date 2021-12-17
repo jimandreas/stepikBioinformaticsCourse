@@ -4,19 +4,10 @@
 )
 
 import algorithms.RosalindSearch
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.MutableList
-import kotlin.collections.hashMapOf
-import kotlin.collections.map
-import kotlin.collections.mutableListOf
-import kotlin.collections.removeFirst
 import kotlin.collections.set
-import kotlin.collections.toMutableList
 import kotlin.test.assertEquals
 
 /**
@@ -33,10 +24,6 @@ internal class RosieConnectedComponentsTest {
     @BeforeEach
     fun setUp() {
         rbfs = RosalindSearch()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     // example from:

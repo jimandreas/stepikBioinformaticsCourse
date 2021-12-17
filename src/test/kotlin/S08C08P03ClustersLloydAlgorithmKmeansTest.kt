@@ -7,7 +7,6 @@ import algorithms.Clustering
 import algorithms.assignPointsToClusters
 import algorithms.clusterCenterOfGravity
 import algorithms.compareTwoMaps
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -35,10 +34,6 @@ internal class S08C08P03ClustersLloydAlgorithmKmeansTest {
     @BeforeEach
     fun setUp() {
         cluster = Clustering()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     /**

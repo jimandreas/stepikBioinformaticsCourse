@@ -1,4 +1,6 @@
-@file:Suppress("UNUSED_VARIABLE")
+@file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable", "UnnecessaryVariable", "UnnecessaryVariable",
+    "UnnecessaryVariable", "UnnecessaryVariable"
+)
 
 package problems
 

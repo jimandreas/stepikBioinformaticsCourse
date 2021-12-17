@@ -4,7 +4,6 @@
 )
 
 import algorithms.DijkstraAlgorithm
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -31,10 +30,6 @@ internal class DijkstraAlgorithmTest {
     @BeforeEach
     fun setUp() {
         dj = DijkstraAlgorithm()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

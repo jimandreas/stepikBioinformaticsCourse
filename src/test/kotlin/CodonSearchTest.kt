@@ -1,22 +1,12 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
 import algorithms.reverseComplement
 import algorithms.scanDnaStringForPeptideEncoding
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class CodonSearchTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * test scanDnaStringForPeptideEncoding

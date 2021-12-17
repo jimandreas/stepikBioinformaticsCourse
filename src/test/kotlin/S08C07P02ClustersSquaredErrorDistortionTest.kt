@@ -4,7 +4,6 @@
 )
 
 import algorithms.Clustering
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -30,10 +29,6 @@ internal class S08C07P02ClustersSquaredErrorDistortionTest {
     @BeforeEach
     fun setUp() {
         cluster = Clustering()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

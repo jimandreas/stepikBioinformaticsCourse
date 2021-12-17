@@ -1,11 +1,9 @@
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.RandomizedMotifSearch
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.RandomizedMotifSearch
 import kotlin.test.Ignore
 
 /**
@@ -25,14 +23,6 @@ RandomizedMotifSearch(Dna, k, t) 1,000 times. Remember to use pseudocounts!
  * @link: https://www.youtube.com/watch?v=MP6O_Z2AUDU
  */
 internal class S02c07p07RandomizedMotifSearchTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     val rms = RandomizedMotifSearch()
 

@@ -3,13 +3,10 @@
     "ReplaceManualRangeWithIndicesCalls"
 )
 
-import algorithms.OverlapGraphsOofN
 import algorithms.RosalindReverseComplement
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 /**
@@ -40,10 +37,6 @@ internal class RosieReverseComplementRVCOTest {
     fun setUp() {
         rcSum = RosalindReverseComplement()
         u = Utility()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

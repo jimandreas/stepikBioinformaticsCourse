@@ -3,10 +3,7 @@
     "ReplaceManualRangeWithIndicesCalls"
 )
 
-import algorithms.ConcensusStringAndMatrix
 import algorithms.FindSharedMotif
-import org.jetbrains.kotlinx.multik.ndarray.data.get
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -45,10 +42,6 @@ internal class RosieFindSharedMotifTest {
     fun setUp() {
         fsm = FindSharedMotif()
         u = Utility()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

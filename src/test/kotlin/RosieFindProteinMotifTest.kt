@@ -4,15 +4,10 @@
 )
 
 import algorithms.FindProteinMotif
-import algorithms.RnaSplicing
 import algorithms.UniprotDownloadFASTA
-import algorithms.createProfile
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.math.exp
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 /**
@@ -45,10 +40,6 @@ internal class RosieFindProteinMotifTest {
 //        println("--------------------------")
 //        println("RosieFindProteinMotifTest")
 //        println("--------------------------")
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

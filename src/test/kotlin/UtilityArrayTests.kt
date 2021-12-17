@@ -1,10 +1,10 @@
-@file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable")
+@file:Suppress("UNUSED_VARIABLE", "UnnecessaryVariable", "ReplaceManualRangeWithIndicesCalls")
 
-import org.junit.jupiter.api.*
-
-import algorithms.*
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import algorithms.deepCopyArray
+import algorithms.removeColumn
+import algorithms.removeRow
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class UtilityArrayTests {

@@ -1,22 +1,12 @@
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
 import algorithms.EulerConnectionData
 import algorithms.EulerianPathArrayBased
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 internal class S03c08p02EulerianCycleProblemTest {
 
     private val ep = EulerianPathArrayBased()
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName("test eulerCycleParseLine 01")

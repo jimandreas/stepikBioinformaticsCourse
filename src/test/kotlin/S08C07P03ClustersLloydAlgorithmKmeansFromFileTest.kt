@@ -1,6 +1,7 @@
 @file:Suppress(
     "UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER", "unused",
-    "ReplaceManualRangeWithIndicesCalls", "ReplaceSizeZeroCheckWithIsEmpty"
+    "ReplaceManualRangeWithIndicesCalls", "ReplaceSizeZeroCheckWithIsEmpty", "UnnecessaryVariable",
+    "UnnecessaryVariable"
 )
 
 import algorithms.Clustering
@@ -30,10 +31,6 @@ internal class S08C07P03ClustersLloydAlgorithmKmeansFromFileTest {
     @BeforeEach
     fun setUp() {
         cluster = Clustering()
-    }
-
-    @AfterEach
-    fun tearDown() {
     }
 
     @Test

@@ -2,11 +2,7 @@
 
 package algorithms
 
-import org.jetbrains.kotlinx.multik.api.d2array
-import org.jetbrains.kotlinx.multik.api.mk
-import org.jetbrains.kotlinx.multik.ndarray.data.get
-import org.jetbrains.kotlinx.multik.ndarray.data.set
-import kotlin.math.max
+import kotlin.collections.set
 
 /**
  * FASTQ functions

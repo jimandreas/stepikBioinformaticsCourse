@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.AlignmentLocal
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.AlignmentLocal
 
 /**
  * Code Challenge: Solve the Local Alignment Problem.
@@ -37,14 +35,6 @@ for each cell.
  */
 
 internal class S05c10p10AlignmentLocalTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
 
     /**

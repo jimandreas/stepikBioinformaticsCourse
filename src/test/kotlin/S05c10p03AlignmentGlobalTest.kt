@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.AlignmentGlobal
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.AlignmentGlobal
 
 /**
 Code Challenge: Solve the Global Alignment Problem.
@@ -23,14 +21,6 @@ mismatches as well as the indel penalty σ = 5.
 
 internal class S05c10p03AlignmentGlobalTest {
 
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
 
     /**
      * Test the scoring function - this checks to make sure the BLOSUM62
@@ -47,50 +37,6 @@ internal class S05c10p03AlignmentGlobalTest {
 
         val test2 = ga.score('A', 'A')
         assertEquals(4, test2)
-    }
-
-    /*
-     * VERY basic test.
-     */
-    @Test
-    @DisplayName("global alignment test 01")
-    fun globalAlignmentTest01() {
-
-//        val sCol = "A"
-//        val sRow = "A"
-//        val resultMatrix = ga.backtrack(sCol, sRow)
-//
-//        val str = StringBuilder()
-//        val lcsStringBuilderString = ga.outputLCS(resultMatrix, sCol, sCol.length, sRow.length, str)
-//
-//        val max = ga.maxCellVal
-//        assertEquals(4, max) // value in BLOSSUM62 table for A=A
-//
-//        val result = lcsStringBuilderString.toString()
-//        val expectedResult = "A"
-//        assertEquals(expectedResult, result)
-    }
-
-    /*
-     * verify corners of the BLOSUM62 matrix (A=A, Y=Y)
-     */
-    @Test
-    @DisplayName("global alignment test 02")
-    fun globalAlignmentTest02() {
-
-//        val sCol = "AY"
-//        val sRow = "AY"
-//        val resultMatrix = ga.backtrack(sCol, sRow)
-//
-//        val str = StringBuilder()
-//        val lcsStringBuilderString = ga.outputLCS(resultMatrix, sCol, sCol.length, sRow.length, str)
-//
-//        val max = ga.maxCellVal
-//        assertEquals(11, max) // value in BLOSSUM62 table for A=A + Y=Y
-//
-//        val result = lcsStringBuilderString.toString()
-//        val expectedResult = "AY"
-//        assertEquals(expectedResult, result)
     }
 
     /*

@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.*
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.*
 
 /**
 Code Challenge: Implement StringSpelledByGappedPatterns.
@@ -25,14 +23,6 @@ for 1 ≤ i ≤ n (if such a string exists).
 internal class S03c09p16ReadPairsStringSpelledByGappedPatternsTest {
 
 //    private val problems.ep = EulerianPathStrings()
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName("test reconstructing a string 04")

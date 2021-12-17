@@ -49,10 +49,6 @@ internal class S07c04p06PhylogenyAdditiveTest {
         dbl = DistancesBetweenLeaves()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Test
     @DisplayName("Distances Between Leaves sample test")
     fun phylogenyLimbLengthSampleTest() {

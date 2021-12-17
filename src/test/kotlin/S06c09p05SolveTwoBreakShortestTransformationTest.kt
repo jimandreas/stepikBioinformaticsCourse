@@ -2,15 +2,14 @@
     "ReplaceManualRangeWithIndicesCalls"
 )
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
 import algorithms.TwoBreakDistance
 import algorithms.TwoBreakGenomesToBreakpointGraph
 import algorithms.TwoBreakOnGenomeGraph
 import algorithms.TwoBreakSortingShortestTransformation
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 /**
  *
@@ -51,9 +50,6 @@ internal class S06c09p05SolveTwoBreakShortestTransformationTest {
         twoBreakSorting = TwoBreakSortingShortestTransformation()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
     /**
     Sample Input:
 

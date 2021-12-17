@@ -1,9 +1,6 @@
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 /**
  *  1.2 Hidden Messages in the Replication Origin
@@ -18,14 +15,6 @@ rosalind: http://rosalind.info/problems/ba1a/
  */
 
 internal class S01c02p06PatternCountTest {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName( "test with DNA strip supplied by class")

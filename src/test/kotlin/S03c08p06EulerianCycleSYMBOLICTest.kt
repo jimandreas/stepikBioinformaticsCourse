@@ -1,9 +1,7 @@
-import org.junit.jupiter.api.AfterEach
+import algorithms.EulerianPathSymbolicMap
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.EulerianPathSymbolicMap
 
 /**
  *  testing the euler cycle code - converted to handle the nodes as hash key entries
@@ -12,14 +10,6 @@ import algorithms.EulerianPathSymbolicMap
 internal class S03c08p06EulerianCycleSYMBOLICTest {
 
     private val ep = EulerianPathSymbolicMap()
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     @Test
     @DisplayName("test eulerCycleParseLine 01")

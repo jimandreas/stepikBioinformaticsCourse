@@ -1,12 +1,8 @@
 @file:Suppress("UnnecessaryVariable")
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
-import problems.Foo
+import org.junit.jupiter.api.Test
 import problems.scanForSkew
 
 /**
@@ -33,14 +29,6 @@ rosalind: http://rosalind.info/problems/ba1f/
 
 
 internal class S01c07p10Test {
-
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
 
     /**
      * Supplied test:

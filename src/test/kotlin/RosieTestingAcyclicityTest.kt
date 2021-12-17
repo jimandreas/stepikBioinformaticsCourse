@@ -35,10 +35,6 @@ internal class RosieTestingAcyclicityTest {
         rbfs = RosalindSearch()
     }
 
-    @AfterEach
-    fun tearDown() {
-    }
-
     // example from:
     // http://rosalind.info/problems/cc/
 
