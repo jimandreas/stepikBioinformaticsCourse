@@ -7,6 +7,8 @@
 
 package algorithms
 
+import org.jetbrains.kotlinx.multik.ndarray.data.sl
+
 class PatternMatchingSuffixTrees {
 
     /**
@@ -42,9 +44,13 @@ class PatternMatchingSuffixTrees {
      * Output: A space-separated list of the edge labels of SuffixTree(Text). You may return these strings in any order.
      */
 
-    class Node {
+
+    var nextNodeNum = 0
+
+    inner class Node {
+        val nodeNum = nextNodeNum++
         var internalNode = true
-        val nodeMap : MutableMap<String, Node> = mutableMapOf()
+        val nodeMap: MutableMap<String, Node> = mutableMapOf()
         var offset = -1
         var len = -1
     }
@@ -60,8 +66,8 @@ class PatternMatchingSuffixTrees {
         root.len = 0
 
         // first add the letter of each substring to the tree
-        for (i in 1 ..tslen) {
-            addToTree(tslen-i, theString.substring(tslen-i, tslen))
+        for (i in 1..tslen) {
+            addToTree(tslen - i, theString.substring(tslen - i, tslen))
         }
 
         // now compress the tree by collapsing single-node connections
@@ -115,47 +121,50 @@ class PatternMatchingSuffixTrees {
      */
     fun compressNode(node: Node) {
         val map = node.nodeMap
-        // if this node is not a single node connection, then don't go on
-        if (map.keys.size != 1) {
-            return
-        }
-
         var curNode = node
-        var curKey = curNode.nodeMap.keys.first()
-        var nextNode = curNode.nodeMap[curKey]!!
 
+        val keyList = map.keys.toMutableList()
+        for (originalKey in keyList) {
 
-        // if the next node is ALSO a single node connection, then compress it
-        while (nextNode.nodeMap.keys.size == 1) {
+            var nextNode = map[originalKey]!!
+            var oldKey = originalKey
 
-            val nextKey = nextNode.nodeMap.keys.first()
+            // if the next node is ALSO a single node connection, then compress it
+            while (nextNode.nodeMap.keys.size == 1) {
 
-            val secondNode = nextNode.nodeMap[nextKey]!!
+                val nextKey = nextNode.nodeMap.keys.first()
 
-            val newKey = node.nodeMap.keys.first() + nextKey
-            node.nodeMap[newKey] = secondNode
+                val secondNode = nextNode.nodeMap[nextKey]!!
 
-            nextNode = secondNode
+                val newKey = oldKey + nextKey
+                node.nodeMap[newKey] = secondNode
+                node.nodeMap.remove(oldKey)
 
-            node.len = node.len + nextNode.len
+                oldKey = newKey
+                nextNode = secondNode
 
+                secondNode.len = nextNode.len + secondNode.len
+
+            }
         }
+
 
     }
 
     /**
      * recursive print utility function for debugging
      */
-    fun printTree(node: Node) {
-        val curString = theString.substring(node.offset, node.offset+node.len)
-        print(curString)
-        if (node.nodeMap.keys.size != 0) {
-            println(" ->")
-            for (key in node.nodeMap.keys) {
-                printTree(node.nodeMap[key]!!)
-            }
-        } else {
-            println("")
+    fun printTree(node: Node): List<String> {
+        val slist: MutableList<String> = mutableListOf()
+        pTree(slist, node)
+        return slist
+    }
+    fun pTree(slist: MutableList<String>, node: Node): List<String> {
+
+        for (key in node.nodeMap.keys) {
+            slist.add(key)
+            pTree(slist, node.nodeMap[key]!!)
         }
+        return slist
     }
 }

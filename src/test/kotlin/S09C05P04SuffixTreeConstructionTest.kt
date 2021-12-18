@@ -8,7 +8,9 @@ import algorithms.PatternMatchingSuffixTrees
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import kotlin.math.exp
 import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 /**
  * Construct the Suffix Tree of a String
@@ -59,9 +61,29 @@ internal class S09C05P04SuffixTreeConstructionTest {
 
         pmst.createSuffixTree(inputString)
 
-        pmst.printTree(pmst.root)
+        val result = pmst.printTree(pmst.root).sorted()
 
-        val expectedResult = "AAATG$ G$ T ATG$ TG$ A A AAATG$ G$ T G$ $".split(" ")
+        val expectedResult = "AAATG$ G$ T ATG$ TG$ A A AAATG$ G$ T G$ $".split(" ").sorted()
+
+        assertContentEquals(expectedResult, result)
+
+
+    }
+
+    @Test
+    @DisplayName("Pattern Matching Suffix Tree Simple Problem")
+    fun patternMatchingSuffixTreeSimpleest() {
+
+        val inputString = "AA$"
+
+        pmst.createSuffixTree(inputString)
+
+        val result = pmst.printTree(pmst.root).sorted()
+        println(result.joinToString(" "))
+
+        val expectedResult = "$ $ A A$".split(" ").sorted()
+
+        assertContentEquals(expectedResult, result)
 
 
     }
