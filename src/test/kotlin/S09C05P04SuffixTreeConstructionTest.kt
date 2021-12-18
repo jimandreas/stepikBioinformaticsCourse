@@ -59,6 +59,8 @@ internal class S09C05P04SuffixTreeConstructionTest {
 
         pmst.createSuffixTree(inputString)
 
+        pmst.printTree(pmst.root)
+
         val expectedResult = "AAATG$ G$ T ATG$ TG$ A A AAATG$ G$ T G$ $".split(" ")
 
 

@@ -42,61 +42,120 @@ class PatternMatchingSuffixTrees {
      * Output: A space-separated list of the edge labels of SuffixTree(Text). You may return these strings in any order.
      */
 
+    class Node {
+        var internalNode = true
+        val nodeMap : MutableMap<String, Node> = mutableMapOf()
+        var offset = -1
+        var len = -1
+    }
 
-    /*
-     * from:  https://stepik.org/lesson/240388/step/2?unit=212734
-     The following pseudocode constructs the modified suffix trie
-     of a string Text by traversing the suffixes of Text from
-     longest to shortest. Given a suffix, it attempts to spell the
-     suffix by moving downward in the tree, following edge labels
-     as far as possible until it can go no further. At that point,
-     it adds the rest of the suffix to the trie in the form of a
-     path to a leaf, along with the position of each symbol in the suffix.
-     */
+    val root = Node()
 
-    private val psuedoCode = """
-    ModifiedSuffixTrieConstruction(Text)
-        Trie ← a graph consisting of a single node root
-        for i ← 0 to |Text| - 1
-            currentNode ← root
-            for j ← i to |Text| - 1
-                currentSymbol ← j-th symbol of Text
-                if there is an outgoing edge from currentNode labeled by currentSymbol
-                    currentNode ← ending node of this edge
-                else
-                    add a new node newNode to Trie
-                    add an edge newEdge connecting currentNode to newNode in Trie
-                    Symbol(newEdge) ← currentSymbol
-                    Position(newEdge) ← j
-                    currentNode ← newNode
-            if currentNode is a leaf in Trie
-                assign label i to this leaf
-        return Trie
-    """.trimIndent()
-
-    /*
-     And collapsing the non-branching paths per:  https://stepik.org/lesson/240388/step/5?unit=212734
-     The following pseudocode constructs a suffix tree using the
-     modified suffix trie constructed by ModifiedSuffixTrieConstruction.
-     This algorithm will consolidate each non-branching path of the modified
-     suffix trie into a single edge.
-     */
-
-    private val modifiedSuffixTree = """
-    ModifiedSuffixTreeConstruction(Text)
-        Trie ← ModifiedSuffixTrieConstruction
-        for each non-branching path Path in Trie
-            substitute Path by a single edge e connecting the first and last nodes of Path
-            Position(e) ← Position(first edge of Path)
-            Length(e) ← number of edges of Path
-        return Trie
-    """.trimIndent()
+    var theString = ""
 
     fun createSuffixTree(s: String) {
+        theString = s
+        val tslen = theString.length
+        root.offset = 0
+        root.len = 0
+
+        // first add the letter of each substring to the tree
+        for (i in 1 ..tslen) {
+            addToTree(tslen-i, theString.substring(tslen-i, tslen))
+        }
+
+        // now compress the tree by collapsing single-node connections
+        compressTree(root)
+    }
+
+    /**
+     * add each character in the substring to the tree.
+     */
+    fun addToTree(idx: Int, substring: String) {
+        var curString = substring
+
+        var curNode = root
+
+        for (i in 0 until curString.length) {
+            val c = curString[i].toString()
+            // if the letter is already in the tree, just follow the tree
+            if (curNode.nodeMap.containsKey(c)) {
+                curNode = curNode.nodeMap[c]!!
+            } else {
+                // add the letter to the tree
+                val newNode = Node()
+                curNode.nodeMap[c] = newNode
+                newNode.offset = idx + i
+                newNode.len = 1
+                curNode = newNode
+            }
+        }
+    }
+
+    /**
+     * traverse the tree and compress the nodes
+     */
+    fun compressTree(node: Node) {
+        if (node.nodeMap.keys.size > 0) {
+            for (key in node.nodeMap.keys) {
+                compressNode(node.nodeMap[key]!!)
+            }
+
+            // repeat the for loop as the key set may have changed
+
+            for (key in node.nodeMap.keys) {
+                compressTree(node.nodeMap[key]!!)
+            }
+        }
+    }
+
+    /**
+     * compress nodes that have a single-node connection to the
+     * next node
+     */
+    fun compressNode(node: Node) {
+        val map = node.nodeMap
+        // if this node is not a single node connection, then don't go on
+        if (map.keys.size != 1) {
+            return
+        }
+
+        var curNode = node
+        var curKey = curNode.nodeMap.keys.first()
+        var nextNode = curNode.nodeMap[curKey]!!
+
+
+        // if the next node is ALSO a single node connection, then compress it
+        while (nextNode.nodeMap.keys.size == 1) {
+
+            val nextKey = nextNode.nodeMap.keys.first()
+
+            val secondNode = nextNode.nodeMap[nextKey]!!
+
+            val newKey = node.nodeMap.keys.first() + nextKey
+            node.nodeMap[newKey] = secondNode
+
+            nextNode = secondNode
+
+            node.len = node.len + nextNode.len
+
+        }
 
     }
 
-
-
-
+    /**
+     * recursive print utility function for debugging
+     */
+    fun printTree(node: Node) {
+        val curString = theString.substring(node.offset, node.offset+node.len)
+        print(curString)
+        if (node.nodeMap.keys.size != 0) {
+            println(" ->")
+            for (key in node.nodeMap.keys) {
+                printTree(node.nodeMap[key]!!)
+            }
+        } else {
+            println("")
+        }
+    }
 }
