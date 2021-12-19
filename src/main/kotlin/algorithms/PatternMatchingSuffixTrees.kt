@@ -102,6 +102,8 @@ class PatternMatchingSuffixTrees {
      * traverse the tree and compress the nodes
      */
     fun compressTree(node: Node) {
+        compressNode(node)
+
         if (node.nodeMap.keys.size > 0) {
             for (key in node.nodeMap.keys) {
                 compressNode(node.nodeMap[key]!!)
