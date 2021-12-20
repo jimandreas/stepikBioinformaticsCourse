@@ -8,7 +8,7 @@ package algorithms
  *   then create the new mutable list of the hash target.
  * otherwise add the newItem of type K to the list of existing targets.
  */
-fun <K>HashMap<Int, MutableList<K>>.addTo(key: Int, newItem: K) {
+fun <K> HashMap<Int, MutableList<K>>.addTo(key: Int, newItem: K) {
     if (this.containsKey(key)) {
         this[key]!!.add(newItem)
     } else {
@@ -16,11 +16,30 @@ fun <K>HashMap<Int, MutableList<K>>.addTo(key: Int, newItem: K) {
     }
 }
 
-fun <K>MutableMap<Int, MutableList<K>>.addTo(key: Int, newItem: K) {
+fun <K> MutableMap<Int, MutableList<K>>.addTo(key: Int, newItem: K) {
     if (this.containsKey(key)) {
         this[key]!!.add(newItem)
     } else {
         this[key] = mutableListOf(newItem)
+    }
+}
+
+/**
+ * increment a counter for occurences of [key]
+ */
+fun MutableMap<String, Int>.incrementMatches(key: String) {
+    if (this.containsKey(key)) {
+        this[key] = this[key]!! + 1
+    } else {
+        this[key] = 1
+    }
+}
+
+fun MutableMap<String, Int>.decrementMatches(key: String) {
+    if (this.containsKey(key)) {
+        this[key] = this[key]!! - 1
+    } else {
+        this[key] = 1
     }
 }
 
@@ -30,7 +49,7 @@ fun <K>MutableMap<Int, MutableList<K>>.addTo(key: Int, newItem: K) {
  * this avoids side effects from modifying values of the lists in a map.
  */
 fun <K, V> Map<K, MutableList<V>>.deepCopyMap(): Map<K, MutableList<V>> {
-    val retMap : MutableMap<K, MutableList<V>> = mutableMapOf()
+    val retMap: MutableMap<K, MutableList<V>> = mutableMapOf()
     for (k in this.keys) {
         val l = this[k]!!.toList().toMutableList()
         retMap[k] = l
@@ -79,12 +98,16 @@ fun <K, Int> Map<K, List<Int>>.compareTwoMaps(target: Map<K, List<Int>>): Boolea
  * Compare two lists for equality
  * https://www.techiedelight.com/compare-two-lists-kotlin-equality/
  */
-fun<T> isEqual(first: List<T>, second: List<T>): Boolean {
+fun <T> isEqual(first: List<T>, second: List<T>): Boolean {
 
     if (first.size != second.size) {
         return false
     }
 
-    first.forEachIndexed { index, value -> if (second[index] != value) { return false} }
+    first.forEachIndexed { index, value ->
+        if (second[index] != value) {
+            return false
+        }
+    }
     return true
 }

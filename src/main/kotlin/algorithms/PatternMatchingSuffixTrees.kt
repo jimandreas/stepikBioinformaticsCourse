@@ -7,14 +7,16 @@
 
 package algorithms
 
-import org.jetbrains.kotlinx.multik.ndarray.data.sl
-
 class PatternMatchingSuffixTrees {
 
     /**
      * Construct the Suffix Tree of a String
      * Stepik: https://stepik.org/lesson/240378/step/4?unit=212724
      * Rosalind: https://rosalind.info/problems/ba9c/
+     *
+     * Find the Longest Repeat in a String
+     * Stepik: https://stepik.org/lesson/240378/step/5?unit=212724
+     * Rosalind: https://rosalind.info/problems/ba9d/
      *
      * SEE ALSO for a tree example:
      * https://stepik.org/lesson/240388/step/2?unit=212734
@@ -149,24 +151,84 @@ class PatternMatchingSuffixTrees {
 
             }
         }
-
-
     }
 
     /**
-     * recursive print utility function for debugging
+     * repeats -
+     *    for each recursively descend each key
+     *    and accumulate the strings that connect to
+     *    another key where the child key has more than
+     *    one key of its own (namely it is repeated).
+     *
+     */
+    fun longestRepeat(): String {
+        val slist: MutableList<String> = mutableListOf()
+
+        findRepeats(slist, root, "")
+
+        return slist.maxByOrNull { it.length }!!
+    }
+
+    /**
+     * if this [key] has multiple
+     */
+    fun findRepeats(slist: MutableList<String>, node: Node, keyString: String) {
+
+        if (node.nodeMap.keys.size > 1) {
+            for (key in node.nodeMap.keys) {
+                var newKeyString = keyString
+                if (node.nodeMap[key]!!.nodeMap.size > 1) {
+                    // if this daughter node has more than one child, then this key is repeated
+                    newKeyString = keyString + key
+                    slist.add(newKeyString)
+                }
+                findRepeats(slist, node.nodeMap[key]!!, newKeyString)
+            }
+        }
+    }
+
+    /**
+     * recursive print utility function
      */
     fun printTree(node: Node): List<String> {
         val slist: MutableList<String> = mutableListOf()
         pTree(slist, node)
         return slist
     }
+
     fun pTree(slist: MutableList<String>, node: Node): List<String> {
 
         for (key in node.nodeMap.keys) {
             slist.add(key)
             pTree(slist, node.nodeMap[key]!!)
         }
+        return slist
+    }
+
+    /**
+     * DEBUG print utility function
+     */
+    fun printTreeDebug(node: Node): List<String> {
+        val slist: MutableList<String> = mutableListOf()
+        pTreeDebug(slist, node)
+        return slist
+    }
+
+    fun pTreeDebug(slist: MutableList<String>, node: Node): List<String> {
+
+        slist.add(node.nodeNum.toString())
+        slist.add(":")
+        for (key in node.nodeMap.keys) {
+            slist.add(key)
+            slist.add("(" + node.nodeMap[key]!!.nodeNum.toString() + ") ")
+
+        }
+        slist.add("\n")
+        for (key in node.nodeMap.keys) {
+
+            pTreeDebug(slist, node.nodeMap[key]!!)
+        }
+
         return slist
     }
 }

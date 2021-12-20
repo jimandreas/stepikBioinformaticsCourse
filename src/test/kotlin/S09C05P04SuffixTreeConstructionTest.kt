@@ -86,12 +86,14 @@ internal class S09C05P04SuffixTreeConstructionTest {
         val result = pmst.printTree(pmst.root).sorted()
         //println(result.joinToString(" "))
 
-        val expectedResult = "$ A A$".split(" ").sorted()
+        val expectedResult = "$ $ A A$".split(" ").sorted()
 
-        //assertContentEquals(expectedResult, result)
+        assertContentEquals(expectedResult, result)
 
 
     }
+
+
 
     @Test
     @DisplayName("Pattern Matching Suffix Tree case3 Problem")
