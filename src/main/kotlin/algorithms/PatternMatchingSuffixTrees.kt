@@ -24,6 +24,9 @@ class PatternMatchingSuffixTrees {
      * https://www.bioinformaticsalgorithms.org/faq-chapter-9
      * (see :  What are the edge labels in the suffix tree for "panamabananas$"?)
      *
+     * Wikipedia: Longest common substring problem
+     * https://en.wikipedia.org/wiki/Longest_common_substring_problem
+     *
      * Using the Trie 2/10
      * https://www.youtube.com/watch?v=9U0ynguwoNA
      *
@@ -52,24 +55,35 @@ class PatternMatchingSuffixTrees {
     inner class Node {
         val nodeNum = nextNodeNum++
         var internalNode = true
+        var sourceBitMap = 0
         val nodeMap: MutableMap<String, Node> = mutableMapOf()
         var offset = -1
         var len = -1
     }
 
     val root = Node()
+    var source = 1
 
-    var theString = ""
-
-    fun createSuffixTree(s: String) {
-        theString = s
-        val tslen = theString.length
+    fun createSuffixTree(s1: String, s2: String = "") {
         root.offset = 0
         root.len = 0
 
+        var theString = s1
+        var tslen = theString.length
+        source = 1  // to mark nodes derived from string 1
         // first add the letter of each substring to the tree
         for (i in 1..tslen) {
             addToTree(tslen - i, theString.substring(tslen - i, tslen))
+        }
+
+        if (s2.length != 0) {
+            theString = s2
+            tslen = theString.length
+            source = 2  // to mark nodes derived from string 2
+            // first add the letter of each substring to the tree
+            for (i in 1..tslen) {
+                addToTree(tslen - i, theString.substring(tslen - i, tslen))
+            }
         }
 
         // now compress the tree by collapsing single-node connections
@@ -89,12 +103,14 @@ class PatternMatchingSuffixTrees {
             // if the letter is already in the tree, just follow the tree
             if (curNode.nodeMap.containsKey(c)) {
                 curNode = curNode.nodeMap[c]!!
+                curNode.sourceBitMap = curNode.sourceBitMap.or(source)
             } else {
                 // add the letter to the tree
                 val newNode = Node()
                 curNode.nodeMap[c] = newNode
                 newNode.offset = idx + i
                 newNode.len = 1
+                newNode.sourceBitMap = newNode.sourceBitMap.or(source)
                 curNode = newNode
             }
         }
@@ -170,7 +186,7 @@ class PatternMatchingSuffixTrees {
     }
 
     /**
-     * if this [key] has multiple
+     *
      */
     fun findRepeats(slist: MutableList<String>, node: Node, keyString: String) {
 
@@ -185,6 +201,83 @@ class PatternMatchingSuffixTrees {
                 findRepeats(slist, node.nodeMap[key]!!, newKeyString)
             }
         }
+    }
+
+
+    /**
+     * longest shared string -
+     *    for each node recursively descend each key
+     *    and accumulate the strings where the source
+     *    is both string 1 and string 2 (source = 3).
+     */
+    fun longestSharedString(): String {
+        val slist: MutableList<String> = mutableListOf("")
+
+        findSharedStrings(slist, root, "")
+
+        return slist.maxByOrNull { it.length }!!
+    }
+
+    /**
+     *
+     */
+    fun findSharedStrings(slist: MutableList<String>, node: Node, keyString: String) {
+
+        if (node.nodeMap.keys.size > 1) {
+            for (key in node.nodeMap.keys) {
+                var newKeyString = keyString
+                if (node.nodeMap[key]!!.nodeMap.size > 1) {
+                    // check that this node is sourced from both strings
+                    if (node.nodeMap[key]!!.sourceBitMap == 3) {
+                        newKeyString = keyString + key
+                        //println("FOUND: $newKeyString")
+                        slist.add(newKeyString)
+                        findSharedStrings(slist, node.nodeMap[key]!!, newKeyString)
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Stepik: https://stepik.org/lesson/240378/step/7?unit=212724
+     * Rosalind: https://rosalind.info/problems/ba9f/
+     * Shortest Non-Shared Substring Problem
+     * Find the shortest substring of one string that does not appear in another string.
+     *
+     * Given: Strings Text1 and Text2.
+     *
+     * Return: The shortest substring of Text1 that does not
+     * appear in Text2. (Multiple solutions may exist, in which case you may return any one.)
+     */
+    fun shortestNonsharedString(): String {
+        val slist: MutableList<String> = mutableListOf("")
+
+        findNonsharedStrings(slist, root, "")
+
+        return slist.minByOrNull { it.length }!!
+    }
+
+    /**
+     *
+     */
+    fun findNonsharedStrings(slist: MutableList<String>, node: Node, keyString: String) {
+
+        for (key in node.nodeMap.keys) {
+            var newKeyString = keyString
+            // check that this node is sourced from only one string
+            val sourceString = node.nodeMap[key]!!.sourceBitMap
+            if (sourceString == 1) {
+                newKeyString = /*keyString + */ key
+                println("FOUND: $newKeyString")
+                slist.add(newKeyString)
+
+                if (node.nodeMap[key]!!.nodeMap.size > 1) {
+                    findNonsharedStrings(slist, node.nodeMap[key]!!, newKeyString)
+                }
+            }
+        }
+
     }
 
     /**
@@ -217,6 +310,7 @@ class PatternMatchingSuffixTrees {
     fun pTreeDebug(slist: MutableList<String>, node: Node): List<String> {
 
         slist.add(node.nodeNum.toString())
+        slist.add(" Src:${node.sourceBitMap}")
         slist.add(":")
         for (key in node.nodeMap.keys) {
             slist.add(key)
