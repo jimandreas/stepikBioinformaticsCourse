@@ -251,31 +251,60 @@ class PatternMatchingSuffixTrees {
      * appear in Text2. (Multiple solutions may exist, in which case you may return any one.)
      */
     fun shortestNonsharedString(): String {
-        val slist: MutableList<String> = mutableListOf("")
+        val slist: MutableList<String> = mutableListOf()
 
         findNonsharedStrings(slist, root, "")
 
-        return slist.minByOrNull { it.length }!!
+        println(slist.sorted().joinToString(" "))
+        val retVal = slist.minByOrNull { it.length }
+        if (retVal == null) {
+            return ""
+        } else {
+            return retVal
+        }
     }
 
     /**
+     *  Strategy: find a node that is shared, and connects to
+     *    two nodes - one of which is string 1, and one of
+     *    which is sourced from string 2.
      *
+     *    Accumulate the first plus the string 1 node child.
      */
     fun findNonsharedStrings(slist: MutableList<String>, node: Node, keyString: String) {
 
+        // iterate through the keys for this node.  (it might be the root node)
         for (key in node.nodeMap.keys) {
-            var newKeyString = keyString
-            // check that this node is sourced from only one string
-            val sourceString = node.nodeMap[key]!!.sourceBitMap
-            if (sourceString == 1) {
-                newKeyString = /*keyString + */ key
-                println("FOUND: $newKeyString")
-                slist.add(newKeyString)
+            // check to see if the child node is from both strings (source = 3)
+            val thisChildNode = node.nodeMap[key]!!
+            val sourceString = thisChildNode.sourceBitMap
+            if (sourceString == 3) {
+                // OK we have a shared node.   Check to see
+                //   if there are the two child nodes that are needed.
 
-                if (node.nodeMap[key]!!.nodeMap.size > 1) {
-                    findNonsharedStrings(slist, node.nodeMap[key]!!, newKeyString)
+                if (thisChildNode.nodeMap.size >= 2) {
+                    val keys = thisChildNode.nodeMap.keys.toList()
+                    var followonString = ""
+                    for (k in keys) {
+
+                        val n = thisChildNode.nodeMap[k]!!
+                        if (n.sourceBitMap == 1) {
+                            followonString = k
+
+                            break
+                        }
+                    }
+                    if (followonString != "" && followonString != "$") {
+
+
+//                        val nonSharedString = "$key${followonString.substring(0, 1)}"
+                        val nonSharedString = "$key${followonString.substring(0, followonString.length-1)}"
+                        slist.add(nonSharedString)
+                    }
                 }
             }
+
+            findNonsharedStrings(slist, node.nodeMap[key]!!, "")
         }
 
     }
