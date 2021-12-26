@@ -64,9 +64,15 @@ class PatternMatchingSuffixTrees {
     val root = Node()
     var source = 1
 
+    // for validation of non-shared string
+    var string1: String = ""
+    var string2: String = ""
+
     fun createSuffixTree(s1: String, s2: String = "") {
         root.offset = 0
         root.len = 0
+        string1 = s1
+        string2 = s2
 
         var theString = s1
         var tslen = theString.length
@@ -255,7 +261,7 @@ class PatternMatchingSuffixTrees {
 
         findNonsharedStrings(slist, root, "")
 
-        println(slist.sorted().joinToString(" "))
+        //println(slist.sorted().joinToString(" "))
         val retVal = slist.minByOrNull { it.length }
         if (retVal == null) {
             return ""
@@ -295,18 +301,60 @@ class PatternMatchingSuffixTrees {
                         }
                     }
                     if (followonString != "" && followonString != "$") {
-
-
-//                        val nonSharedString = "$key${followonString.substring(0, 1)}"
-                        val nonSharedString = "$key${followonString.substring(0, followonString.length-1)}"
-                        slist.add(nonSharedString)
+                        val nonSharedString = "$key$followonString"
+                        validateCandidateString(nonSharedString, slist)
                     }
                 }
             }
-
             findNonsharedStrings(slist, node.nodeMap[key]!!, "")
         }
+    }
 
+    /**
+     * check to verify that the candidate non-shared string is:
+     * 1) present in String 1
+     * 2) absent in String 2
+     * 3) as short as possible but not shorter
+     */
+    fun validateCandidateString(str: String, slist: MutableList<String>) {
+
+        if (!string1.contains(str)) {
+            println("Internal error : candidate is not present in String1")
+            return
+        }
+        if (string2.contains(str)) {
+            //println("Internal error: candate is present in String2")
+            return
+        }
+
+        var baseString = str
+        var shortestString = str
+        // prune the string in both directions
+        for (i in baseString.length - 1 downTo 1) {
+            val shorterString = baseString.substring(0, i)
+            if (string1.contains(shorterString) && !string2.contains(shorterString)) {
+                shortestString = shorterString
+            } else {
+                break
+            }
+        }
+
+        baseString = shortestString
+        for (i in 1..baseString.length) {
+            val shorterString = baseString.substring(i, baseString.length)
+            if (string1.contains(shorterString) && !string2.contains(shorterString)) {
+                shortestString = shorterString
+            } else {
+                break
+            }
+        }
+
+        if (shortestString == "$") { // reject just a $
+            return
+        }
+
+        //println(shortestString)
+        slist.add(shortestString)
     }
 
     /**

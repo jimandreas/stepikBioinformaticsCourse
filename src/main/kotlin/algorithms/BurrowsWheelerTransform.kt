@@ -7,7 +7,7 @@
 
 package algorithms
 
-class PatternMatchingBurrowsWheeler {
+class BurrowsWheelerTransform {
 
     /**
      * Construct the Burrows-Wheeler transform of a string.
@@ -20,6 +20,8 @@ class PatternMatchingBurrowsWheeler {
      * Inverting Burrows-Wheeler (5/10)
      * https://www.youtube.com/watch?v=DqdjbK68l3s
      *
+     * Using Burrows-Wheeler for Pattern Matching (6/10)
+     * https://www.youtube.com/watch?v=z5EDLODQPtg
      *
      * See also:
      * https://en.wikipedia.org/wiki/Burrows%E2%80%93Wheeler_transform
@@ -34,12 +36,32 @@ class PatternMatchingBurrowsWheeler {
     Output: BWT(Text).
 
     Code Challenge: Solve the Burrows-Wheeler Transform Construction Problem.
-
-    Debug Datasets
-
-    Note: Although it is possible to construct the Burrows-Wheeler transform in O(|Text|) time and space, we do not expect you to implement such a fast algorithm. In other words, it is perfectly fine to produce BWT(Text) by first producing the complete Burrows-Wheeler matrix M(Text).
      */
 
+    fun bwtEncode(inString: String): String {
+        var m: MutableList<String> = mutableListOf()
+        val len = inString.length
+
+        // build the rotated matrix
+        m.add(inString)
+        for (i in 1 until inString.length) {
+            val lastChar = m[i-1][len-1]
+            var newString = "$lastChar${m[i-1].substring(0, len-1)}"
+            m.add(newString)
+        }
+
+        // sort
+        val sorted = m.sorted()
+
+        // return last column as a string
+
+        val str = StringBuilder()
+        sorted.map {
+            str.append(it.last())
+        }
+
+        return str.toString()
+    }
 
 
 }
