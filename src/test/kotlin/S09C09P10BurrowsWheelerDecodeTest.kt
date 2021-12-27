@@ -18,7 +18,7 @@ internal class S09C09P10BurrowsWheelerDecodeTest {
         bwt = BurrowsWheelerTransform()
     }
     /**
-     * Construct the Burrows-Wheeler transform of a string.
+     * Inverse Burrows-Wheeler Transform Problem
      * Stepik: https://stepik.org/lesson/240382/step/10?unit=212728
      * Rosalind: https://rosalind.info/problems/ba9j/
      *
