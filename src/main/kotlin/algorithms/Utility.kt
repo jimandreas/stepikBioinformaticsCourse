@@ -24,9 +24,26 @@ fun <K> MutableMap<Int, MutableList<K>>.addTo(key: Int, newItem: K) {
     }
 }
 
+fun <T, K> MutableMap<T, MutableList<K>>.addTo(key: T, newItem: K) {
+    if (this.containsKey(key)) {
+        this[key]!!.add(newItem)
+    } else {
+        this[key] = mutableListOf(newItem)
+    }
+}
+
 /**
  * increment a counter for occurences of [key]
  */
+
+fun MutableMap<Char, Int>.incrementMatches(key: Char) {
+    if (this.containsKey(key)) {
+        this[key] = this[key]!! + 1
+    } else {
+        this[key] = 1
+    }
+}
+
 fun MutableMap<String, Int>.incrementMatches(key: String) {
     if (this.containsKey(key)) {
         this[key] = this[key]!! + 1
