@@ -231,7 +231,7 @@ class PatternMatchingSuffixTrees {
 
         if (node.nodeMap.keys.size > 1) {
             for (key in node.nodeMap.keys) {
-                var newKeyString = keyString
+                var newKeyString: String
                 if (node.nodeMap[key]!!.nodeMap.size > 1) {
                     // check that this node is sourced from both strings
                     if (node.nodeMap[key]!!.sourceBitMap == 3) {

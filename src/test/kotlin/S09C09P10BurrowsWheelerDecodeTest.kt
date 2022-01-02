@@ -87,6 +87,23 @@ internal class S09C09P10BurrowsWheelerDecodeTest {
     }
 
     @Test
+    @DisplayName("Burrows Wheeler Decode Simple2 Test")
+    fun burrowsWheelerDecodeSimple2Test() {
+
+        val inputString = "AAAG$"
+        val encodedString = bwt.bwtEncode(inputString)
+        //println(encodedString)
+        assertEquals("G\$AAA", encodedString)
+
+        val result = bwt.bwtDecode(encodedString)
+        //println(result)
+
+        val expectedResult = inputString
+        assertEquals(expectedResult, result)
+
+    }
+
+    @Test
     @DisplayName("Burrows Wheeler Decode Stepik Quiz Test")
     fun burrowsWheelerDecodeStepikQuizTest() {
 
