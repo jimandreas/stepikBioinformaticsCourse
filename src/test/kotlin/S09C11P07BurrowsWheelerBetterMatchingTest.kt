@@ -52,7 +52,7 @@ internal class S09C11P07BurrowsWheelerBetterMatchingTest {
      */
 
     // accumulate counts of each symbol in the test string
-    //   the default symbol set (ACGT$) is used
+    //   the default symbol set ($ACGT) is used
     @Test
     @DisplayName("Burrows Wheeler Better Matching Count subroutine Test")
     fun burrowsWheelerBetterMatchingCountSubroutineTest() {
@@ -61,7 +61,7 @@ internal class S09C11P07BurrowsWheelerBetterMatchingTest {
 
         val endingValues = bwm.countArray[testString.length, 0 .. bwm.symbolSet.length]
 
-        val expectedEndingValues = "1 2 3 4 1"
+        val expectedEndingValues = "1 1 2 3 4"
         val result = endingValues.joinToString(" ")
         assertEquals(expectedEndingValues, result)
 
