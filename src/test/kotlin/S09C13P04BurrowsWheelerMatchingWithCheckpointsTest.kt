@@ -85,7 +85,7 @@ internal class S09C13P04BurrowsWheelerMatchingWithCheckpointsTest {
             AC: 1
         """.trimIndent().lines()
         val resultList = prettyPrint(result)
-        println(resultList.joinToString("\n"))
+        //println(resultList.joinToString("\n"))
 
         assertContentEquals(expectedResult, resultList)
     }
@@ -118,7 +118,7 @@ internal class S09C13P04BurrowsWheelerMatchingWithCheckpointsTest {
         val result = bwmwc.burrowsWheelerBetterMatchingMultipleWithCheckpoints(symbols, indexArray)
 
         val resultList = prettyPrint(result)
-        println(resultList.joinToString("\n"))
+        //println(resultList.joinToString("\n"))
 
         assertContentEquals(expectedResult, resultList)
     }
@@ -148,7 +148,7 @@ internal class S09C13P04BurrowsWheelerMatchingWithCheckpointsTest {
         val result = bwmwc.burrowsWheelerBetterMatchingMultipleWithCheckpoints(symbols, indexArray)
 
         val resultList = prettyPrint(result)
-        println(resultList.joinToString("\n"))
+        //println(resultList.joinToString("\n"))
 
         assertContentEquals(expectedResult, resultList)
     }
@@ -174,7 +174,7 @@ internal class S09C13P04BurrowsWheelerMatchingWithCheckpointsTest {
         val result = bwmwc.burrowsWheelerBetterMatchingMultipleWithCheckpoints(symbols, indexArray)
 
         val resultList = prettyPrint(result)
-        println(resultList.joinToString("\n"))
+        //println(resultList.joinToString("\n"))
 
         assertContentEquals(expectedResult, resultList)
     }
@@ -193,33 +193,12 @@ internal class S09C13P04BurrowsWheelerMatchingWithCheckpointsTest {
         return outList
     }
 
-    /*
-    @Test
-    @DisplayName("Burrows Wheeler Better Matching Rosalind Quiz Test")
-    fun burrowsWheelerBetterMatchingRosalindQuizTest() {
-
-        val loader = Foo()
-        val sampleInput = loader.getResourceAsString("BurrowsWheelerBetterMatchingRosalindString.txt")
-        bwmwc.initializeCountArrayAndFirstOccurrence(sampleInput)
-
-        val symbolString = loader.getResourceAsString("BurrowsWheelerBetterMatchingRosalindPatterns.txt")
-        val symbols = symbolString.split(" ")
-        val result = bwmwc.burrowsWheelerBetterMatchingMultiple(symbols)
-
-        val expectedResult = loader.getResourceAsString("BurrowsWheelerBetterMatchingRosalindExpectedResult.txt")
-
-        assertEquals(expectedResult, result.joinToString(" "))
-
-    }
-    */
-
     @Test
     @DisplayName("Burrows Wheeler Better Matching Stepik Quiz Test")
     fun burrowsWheelerBetterMatchingStepikQuizTest() {
 
         val loader = Foo()
         val sampleInput = loader.getResourceAsString("BurrowsWheelerMultipleStepikString.txt")
-        bwmwc.initializeCountArrayAndFirstOccurrence(sampleInput)
 
         val symbolString = loader.getResourceAsString("BurrowsWheelerMultipleStepikPatterns.txt")
         val symbols = symbolString.split(" ")
@@ -232,18 +211,69 @@ internal class S09C13P04BurrowsWheelerMatchingWithCheckpointsTest {
 
         val result = bwmwc.burrowsWheelerBetterMatchingMultipleWithCheckpoints(symbols, indexArray)
 
+        val resultList : MutableList<String> = mutableListOf()
         for (patternPair in result) {
             val sym = patternPair.first
             val offsets = patternPair.second
             if (offsets.isEmpty()) {
-                println("$sym:")
+                //println("$sym:")
+                resultList.add("$sym:")
             } else {
-                println("$sym: ${offsets.sorted().joinToString(" ")}")
+                //println("$sym: ${offsets.sorted().joinToString(" ")}")
+                resultList.add("$sym: ${offsets.sorted().joinToString(" ")}")
             }
         }
 
+        val expectedResult = loader.getResourceAsString("BurrowsWheelerMultipleStepikExpectedResult.txt").lines()
+        assertContentEquals(expectedResult, resultList)
+
     }
 
+    @Test
+    @DisplayName("Burrows Wheeler Better Matching Rosalind Quiz Test")
+    fun burrowsWheelerBetterMatchingRosalindQuizTest() {
+
+        val loader = Foo()
+        val sampleInput = loader.getResourceAsString("BurrowsWheelerMultipleRosalindString.txt")
+
+        val symbolString = loader.getResourceAsString("BurrowsWheelerMultipleRosalindPatterns.txt")
+        val symbols = symbolString.lines()
+
+        val pairResult = bwmwc.bwtEncodeWithSuffixArray(sampleInput)
+        val encodedString = pairResult.first
+        val indexArray = pairResult.second
+
+        bwmwc.initializeCountArrayAndFirstOccurrence(encodedString)
+
+        val result = bwmwc.burrowsWheelerBetterMatchingMultipleWithCheckpoints(symbols, indexArray)
+
+        val resultList : MutableList<String> = mutableListOf()
+        val resultListInt : MutableList<Int> = mutableListOf()
+        for (patternPair in result) {
+            val sym = patternPair.first
+            val offsets = patternPair.second
+            if (offsets.isEmpty()) {
+                //println("$sym:")
+                //resultList.add("$sym:")
+            } else {
+                //println("$sym: ${offsets.sorted().joinToString(" ")}")
+                resultList.add("$sym: ${offsets.sorted().joinToString(" ")}")
+                resultListInt.addAll(offsets)
+            }
+        }
+        //println(resultListInt.sorted().joinToString(" "))
+
+        val expectedResult = loader.getResourceAsString("BurrowsWheelerMultipleRosalindExpectedResult.txt").lines()
+        assertContentEquals(expectedResult, resultList)
+
+        // and check the expected "rosalind ints"
+        val expectedResultInts = loader.getResourceAsString("BurrowsWheelerMultipleRosalindExpectedInts.txt")
+            .split(" ").map { it.toInt() }
+
+        assertContentEquals(expectedResultInts, resultListInt.sorted())
+
+
+    }
   
     class Foo {
         fun getResourceAsString(path: String): String {
