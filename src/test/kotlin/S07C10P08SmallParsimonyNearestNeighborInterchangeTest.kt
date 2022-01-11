@@ -65,7 +65,7 @@ internal class S07C10P08SmallParsimonyNearestNeighborInterchangeTest {
         val resultWinningList = nni.resultEdgeList[0]
         val resultStringList = prettyPrintEdgeList(resultWinningList)
 
-        println(resultStringList.joinToString("\n"))
+        //println(resultStringList.joinToString("\n"))
 
         // result should exchange node 4 "G" with node 5 "C"
         val expectedResult = """

@@ -234,7 +234,7 @@ open class SmallParsimonyUnrootedTree : SmallParsimony() {
                         continue
                     }
                 }
-                if (left != null && left.isScored) {
+                if (left != null /* && left.isScored */) {
                     node.scoringArray = scoreArrays(left.scoringArray!!, node.scoringArray!!)
 
                 }

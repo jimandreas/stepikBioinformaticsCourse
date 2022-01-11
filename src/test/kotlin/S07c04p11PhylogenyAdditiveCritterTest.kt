@@ -8,12 +8,11 @@ import algorithms.Phylogeny
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
-import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import kotlin.collections.set
 import kotlin.test.assertEquals
 
 /**
@@ -132,17 +131,17 @@ internal class S07c04p11PhylogenyAdditiveCritterTest {
 
     }
 
-    private fun printGraph(g: Map<Int, Map<Int, Int>>) {
-        for (e in g) {
-            val key = e.key
-            val theMap = e.value
-
-            for (c in theMap) {
-                print("$key->")
-                println("${c.key}:${c.value}")
-            }
-        }
-    }
+//    private fun printGraph(g: Map<Int, Map<Int, Int>>) {
+//        for (e in g) {
+//            val key = e.key
+//            val theMap = e.value
+//
+//            for (c in theMap) {
+//                print("$key->")
+//                println("${c.key}:${c.value}")
+//            }
+//        }
+//    }
 
 
 
@@ -226,18 +225,18 @@ internal class S07c04p11PhylogenyAdditiveCritterTest {
     /**
      * pretty print a 2D matrix
      */
-    private fun printMatrix(matrixSize: Int, gArr: D2Array<Int>) {
-        val outStr = StringBuilder()
-        for (i in 0 until matrixSize) {
-            for (j in 0 until matrixSize) {
-                val numVal = String.format("%5d", gArr[i, j])
-                outStr.append(numVal)
-                if (j < matrixSize - 1) {
-                    outStr.append(" ")
-                }
-            }
-            outStr.append("\n")
-        }
-        println(outStr.toString())
-    }
+//    private fun printMatrix(matrixSize: Int, gArr: D2Array<Int>) {
+//        val outStr = StringBuilder()
+//        for (i in 0 until matrixSize) {
+//            for (j in 0 until matrixSize) {
+//                val numVal = String.format("%5d", gArr[i, j])
+//                outStr.append(numVal)
+//                if (j < matrixSize - 1) {
+//                    outStr.append(" ")
+//                }
+//            }
+//            outStr.append("\n")
+//        }
+//        println(outStr.toString())
+//    }
 }

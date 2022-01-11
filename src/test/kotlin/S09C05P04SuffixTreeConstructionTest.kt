@@ -3,14 +3,11 @@
     "ReplaceManualRangeWithIndicesCalls", "ReplaceSizeZeroCheckWithIsEmpty", "SameParameterValue", "UnnecessaryVariable"
 )
 
-import algorithms.PatternMatching
 import algorithms.PatternMatchingSuffixTrees
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.math.exp
 import kotlin.test.assertContentEquals
-import kotlin.test.assertEquals
 
 /**
  * Construct the Suffix Tree of a String

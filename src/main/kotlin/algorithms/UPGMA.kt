@@ -265,7 +265,7 @@ class UPGMA /* Unweighted Pair Group Method with Arithmetic Mean */{
             }
 
             // both clusters are internal nodes
-            first >= matrixSize && second >= matrixSize -> {
+            else /* first >= matrixSize && second >= matrixSize */ -> {
 
                 // combine both sets of leaves
                 val previousLeaves = clusters[first]

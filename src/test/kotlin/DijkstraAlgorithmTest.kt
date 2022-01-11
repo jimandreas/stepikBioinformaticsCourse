@@ -61,7 +61,7 @@ internal class DijkstraAlgorithmTest {
 
         val result = dj.dijkstraAlgorithmFindShortestPaths(graph)
 
-        println(result.joinToString(" "))
+        //println(result.joinToString(" "))
 
         val expectedResult = expectedOutputString.split(" ").map { it.toInt() }
         assertEquals(expectedResult, result)

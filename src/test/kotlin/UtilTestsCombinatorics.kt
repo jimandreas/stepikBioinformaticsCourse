@@ -79,10 +79,10 @@ internal class UtilTestsUtilityCombinatorics {
 
         //val p1 = UtilityCombinatorics.permutation(2)
         val p2 = UtilityCombinatorics.permutation(6)
-        println(UtilityCombinatorics.fact(6))
+        //println(UtilityCombinatorics.fact(6))
         for (i in 0 until p2.size) {
             val l = p2[i]
-            println(l.joinToString(" "))
+            //println(l.joinToString(" "))
         }
 
     }

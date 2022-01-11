@@ -86,17 +86,17 @@ CGGTTCGTCGGCCGTAATACGAAATATAGGGTTCCGTCCCGTAGTTCGACTTACTGCGTACAACATATATGATTATGGCA
 
     }
 
-    println("$winCount winners in $iterations tries")
-    if (scoreList.size > 1) {
-        var diffCount = 0
-        for (score in 1 until scoreList.size) {
-            if (scoreList[score - 1] != scoreList[score]) {
-                diffCount++
-            }
-        }
-
-        println("$diffCount diffs first value ${scoreList[0]}")
-    }
+//    println("$winCount winners in $iterations tries")
+//    if (scoreList.size > 1) {
+//        var diffCount = 0
+//        for (score in 1 until scoreList.size) {
+//            if (scoreList[score - 1] != scoreList[score]) {
+//                diffCount++
+//            }
+//        }
+//
+//        println("$diffCount diffs first value ${scoreList[0]}")
+//    }
 
     println("best score $minScore")
 //    println(bestResult.joinToString("\n")) // rosalind format

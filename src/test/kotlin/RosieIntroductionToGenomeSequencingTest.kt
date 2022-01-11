@@ -73,7 +73,7 @@ ATTAGACCTGCCGGAATAC
         val dnaList = u.utilityParseFASTA(sampleInput).toMutableList()
 
         val resultString = shortest.shortestSuperstring(dnaList.toMutableList())
-        println(resultString)
+        //println(resultString)
 
         assertEquals(expectedResult, resultString)
 
@@ -110,7 +110,7 @@ AAABBABBB
         val dnaList = u.utilityParseFASTA(sampleInput).toMutableList()
 
         val resultString = shortest.shortestSuperstring(dnaList.toMutableList())
-        println(resultString)
+        //println(resultString)
 
         assertEquals(expectedResult, resultString)
 
@@ -144,7 +144,7 @@ gctaagttcatgcatc
         val dnaList = u.utilityParseFASTA(sampleInput).toMutableList()
 
         val resultString = shortest.shortestSuperstring(dnaList.toMutableList())
-        println(resultString)
+        //println(resultString)
 
         assertEquals(expectedResult, resultString)
 
@@ -1069,9 +1069,9 @@ ATTAGACCTGCCGGAATAC
 
         val resultString = shortest.shortestSuperstring(dnaList.toMutableList())
 
-        println("ANSWER HERE")
-        println("=================================================")
-        println(resultString)
+//        println("ANSWER HERE")
+//        println("=================================================")
+//        println(resultString)
 
         //assertEquals(expectedResult, resultString)
 

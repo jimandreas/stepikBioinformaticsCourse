@@ -9,7 +9,6 @@ import org.jetbrains.kotlinx.multik.ndarray.operations.joinToString
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.math.exp
 import kotlin.test.assertEquals
 
 internal class S09C11P07BurrowsWheelerBetterMatchingTest {

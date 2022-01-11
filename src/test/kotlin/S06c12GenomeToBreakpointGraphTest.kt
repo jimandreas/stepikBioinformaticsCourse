@@ -1,10 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER", "unused")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.TwoBreakGenomesToBreakpointGraph
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.TwoBreakGenomesToBreakpointGraph
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 

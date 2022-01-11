@@ -7,7 +7,6 @@ import algorithms.PatternMatchingSuffixTrees
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 
@@ -38,7 +37,7 @@ internal class S09C05P07ShortestNonSharedSubstringTest {
 
         val inputString1 = "CCAAGCTGCTAGAGG$"
         val inputString2 = "CATGCTGGGCTGGCT#"
-        var expectedResult = "TA"
+        val expectedResult = "TA"
 
         pmst.createSuffixTree(inputString1, inputString2)
         val result = pmst.shortestNonsharedString()

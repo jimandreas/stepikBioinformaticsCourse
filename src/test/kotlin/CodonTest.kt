@@ -38,7 +38,7 @@ internal class CodonTest {
         val expectedResult = 1
 
         val idx = indexSearchDnaStringAndPeptide(dnaString = dnaString, peptide = peptideString)
-        println(idx)
+        //println(idx)
         assertEquals(expectedResult, idx)
     }
 
@@ -63,7 +63,7 @@ internal class CodonTest {
         val idx = indexSearchDnaStringAndPeptide(
             dnaString = dnaString,
             peptide = peptideString)
-        println(idx)
+        //println(idx)
         //assertEquals(expectedResult, idx)
     }
 

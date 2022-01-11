@@ -68,7 +68,7 @@ class TwoBreakOnGenomeGraph {
                 outList.add(breakEdges[1])
                 outList.add(breakEdges[3])
             }
-            find1.second == DIR.FORWARD && find2.second == DIR.REVERSE -> {
+            else /* find1.second == DIR.FORWARD && find2.second == DIR.REVERSE */ -> {
                 outList.add(breakEdges[0])
                 outList.add(breakEdges[2])
                 outList.add(breakEdges[3])

@@ -462,7 +462,7 @@ class NeighborJoining {
 
             // both clusters are internal nodes
             //   just connect them with each other using the distance matrix
-            first >= matrixSize && second >= matrixSize -> {
+            else /* first >= matrixSize && second >= matrixSize */ -> {
                 // special case the end condition
                 if (joinedPairMap.size == 2) {
                     theMap[first]!![second] = distance

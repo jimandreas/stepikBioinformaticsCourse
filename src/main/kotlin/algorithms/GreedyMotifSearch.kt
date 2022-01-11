@@ -1,4 +1,4 @@
-@file:Suppress("UnnecessaryVariable", "unused")
+@file:Suppress("UnnecessaryVariable", "unused", "KotlinConstantConditions")
 
 package algorithms
 

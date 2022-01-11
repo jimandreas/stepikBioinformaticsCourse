@@ -1311,7 +1311,7 @@ internal class RosieConnectedComponentsTest {
         // note that node numbers start at 1
         val result = rbfs.numberOfConnectedComponents(numNodes, m)
 
-        println(result)
+        //println(result)
 
         //assertEquals(expectedResult, result)
     }

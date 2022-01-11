@@ -7,12 +7,16 @@ import algorithms.DistancesBetweenLeaves
 import org.jetbrains.kotlinx.multik.api.d2array
 import org.jetbrains.kotlinx.multik.api.mk
 import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
-import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.jetbrains.kotlinx.multik.ndarray.data.set
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
+import kotlin.collections.toMutableList
 
 /**
  *
@@ -78,7 +82,7 @@ internal class S07c02p12DistancesBetweenLeavesTest {
 
         // distancesBetweenLeaves(leafCount: Int, g: MutableMap<Int, MutableList<Pair<Int, Int>>>)
         val result = dbl.distancesBetweenLeaves(matrixSize, edges)
-        printit(matrixSize, result)
+        //printit(matrixSize, result)
 
         val expectedMatrix = parseExpectedOutput(matrixSize, expectedOutput)
         assertEquals(expectedMatrix, result)
@@ -111,20 +115,20 @@ internal class S07c02p12DistancesBetweenLeavesTest {
     /**
      * pretty print a 2D matrix
      */
-    private fun printit(matrixSize: Int, gArr: D2Array<Int>) {
-        val outStr = StringBuilder()
-        for (i in 0 until matrixSize) {
-            for (j in 0 until matrixSize) {
-                val numVal = String.format("%5d", gArr[i, j])
-                outStr.append(numVal)
-                if (j < matrixSize - 1) {
-                    outStr.append(" ")
-                }
-            }
-            outStr.append("\n")
-        }
-        println(outStr.toString())
-    }
+//    private fun printit(matrixSize: Int, gArr: D2Array<Int>) {
+//        val outStr = StringBuilder()
+//        for (i in 0 until matrixSize) {
+//            for (j in 0 until matrixSize) {
+//                val numVal = String.format("%5d", gArr[i, j])
+//                outStr.append(numVal)
+//                if (j < matrixSize - 1) {
+//                    outStr.append(" ")
+//                }
+//            }
+//            outStr.append("\n")
+//        }
+//        println(outStr.toString())
+//    }
 
     fun parseSampleInput(edges: List<String>): MutableMap<Int, MutableMap<Int, Int>> {
         val edgeMap: MutableMap<Int, MutableMap<Int, Int>> = mutableMapOf()

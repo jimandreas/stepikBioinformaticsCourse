@@ -1,11 +1,9 @@
 @file:Suppress("UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "ReplaceManualRangeWithIndicesCalls")
 
-import org.junit.jupiter.api.AfterEach
+import algorithms.AlignmentGlobal
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import algorithms.AlignmentGlobal
 
 /**
 Global alignment reflexive test
