@@ -260,4 +260,41 @@ class BurrowsWheelerMatchingWithCheckpoints {
 
         return Pair( str.toString(), suffixArray.toList())
     }
+
+
+    /**
+     * Stepik: https://stepik.org/lesson/240387/step/10?unit=212733
+     * Rosalind: https://rosalind.info/problems/ba9o/
+
+    Code Challenge: Solve the Multiple Approximate Pattern Matching Problem.
+
+    Input: A string Text, followed by a collection of space-separated strings
+    Patterns, and an integer d.
+
+    Output: For each string Pattern in Patterns, the string Pattern followed
+    by a colon, followed by a space-separated collection of all positions
+    where Pattern appears as a substring of Text with at most d mismatches.
+
+     */
+
+    fun burrowsWheelerMismatchTolerantReadMappingForSymbolSet(symbols: List<String>, mismatchCounti: Int, suffixArray: List<Int>):
+            List<Pair<String, List<Int>>> {
+
+        val returnList : MutableList<Pair<String, List<Int>>> = mutableListOf()
+        // for each symbol, build list of offsets where the symbol is found
+        for (s in symbols) {
+            val offsetList: MutableList<Int> = mutableListOf()
+            offsetList.addAll(burrowsWheelerMismatchTolerantReadMapping(s, mismatchCounti, suffixArray))
+            returnList.add(Pair(s, offsetList))
+        }
+        return returnList
+    }
+
+    fun burrowsWheelerMismatchTolerantReadMapping(symbol: String, mismatchCounti: Int, suffixArray: List<Int>):
+            List<Int> {
+
+        return emptyList()
+    }
+
+
 }
