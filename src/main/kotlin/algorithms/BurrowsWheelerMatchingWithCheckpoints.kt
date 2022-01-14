@@ -48,6 +48,8 @@ class BurrowsWheelerMatchingWithCheckpoints {
 
     var modulus = MODULUS
 
+    var originalString: String = ""
+
     val sparseCountArray: MutableList<D1Array<Int>> = mutableListOf()
 
     val firstOccurrence: MutableMap<Char, Int> = mutableMapOf()
@@ -140,7 +142,7 @@ class BurrowsWheelerMatchingWithCheckpoints {
     fun burrowsWheelerBetterMatchingMultipleWithCheckpoints(symbols: List<String>, suffixArray: List<Int>):
             List<Pair<String, List<Int>>> {
 
-        val returnList : MutableList<Pair<String, List<Int>>> = mutableListOf()
+        val returnList: MutableList<Pair<String, List<Int>>> = mutableListOf()
         // for each symbol, build list of offsets where the symbol is found
         for (s in symbols) {
             val offsetList: MutableList<Int> = mutableListOf()
@@ -165,9 +167,9 @@ class BurrowsWheelerMatchingWithCheckpoints {
             if (len == 0) {
                 //return bottom - top + 1
                 //println("$patternIn $top $bottom  ${suffixArray[top]} ${suffixArray[bottom]}")
-                val retList : MutableList<Int> = mutableListOf()
-                for (i in top .. bottom)
-                retList.add(suffixArray[i])
+                val retList: MutableList<Int> = mutableListOf()
+                for (i in top..bottom)
+                    retList.add(suffixArray[i])
                 return retList
             }
 
@@ -195,21 +197,22 @@ class BurrowsWheelerMatchingWithCheckpoints {
 
     /**
 
-        Burrows-Wheeler Transform Construction Problem:
-        Construct the Burrows-Wheeler transform of a string.
+    Burrows-Wheeler Transform Construction Problem:
+    Construct the Burrows-Wheeler transform of a string.
 
-        Input: A string Text.
-        Output: BWT(Text).
+    Input: A string Text.
+    Output: BWT(Text).
 
-        Code Challenge: Solve the Burrows-Wheeler Transform Construction Problem.
+    Code Challenge: Solve the Burrows-Wheeler Transform Construction Problem.
 
-        MODIFIED: modify the sort function to retain the original
-            offset position.   This forms the "suffix Array" that
-            maps the resulting character offset in the transformed
-            string to the offset in the original string.
+    MODIFIED: modify the sort function to retain the original
+    offset position.   This forms the "suffix Array" that
+    maps the resulting character offset in the transformed
+    string to the offset in the original string.
      */
 
     fun bwtEncodeWithSuffixArray(inString: String): Pair<String, List<Int>> {
+        originalString = inString
         var m: MutableList<String> = mutableListOf()
         val len = inString.length
 
@@ -239,11 +242,11 @@ class BurrowsWheelerMatchingWithCheckpoints {
         for (i in 0 until len - 1) {
             for (j in 1 until len) {
                 if (m[j - 1] > m[j]) {
-                    val temp = m[j-1]
-                    val tempIdx = suffixArray[j-1]
+                    val temp = m[j - 1]
+                    val tempIdx = suffixArray[j - 1]
 
-                    m[j-1] = m[j]
-                    suffixArray[j-1] = suffixArray[j]
+                    m[j - 1] = m[j]
+                    suffixArray[j - 1] = suffixArray[j]
 
                     m[j] = temp
                     suffixArray[j] = tempIdx
@@ -258,13 +261,17 @@ class BurrowsWheelerMatchingWithCheckpoints {
             str.append(it.last())
         }
 
-        return Pair( str.toString(), suffixArray.toList())
+        return Pair(str.toString(), suffixArray.toList())
     }
 
 
     /**
      * Stepik: https://stepik.org/lesson/240387/step/10?unit=212733
      * Rosalind: https://rosalind.info/problems/ba9o/
+     *
+     * Youtube:
+     * Inexact Matching (9/10)
+     * https://www.youtube.com/watch?v=Vjnm-jF1PBQ
 
     Code Challenge: Solve the Multiple Approximate Pattern Matching Problem.
 
@@ -277,24 +284,92 @@ class BurrowsWheelerMatchingWithCheckpoints {
 
      */
 
-    fun burrowsWheelerMismatchTolerantReadMappingForSymbolSet(symbols: List<String>, mismatchCounti: Int, suffixArray: List<Int>):
-            List<Pair<String, List<Int>>> {
+    /**
+     * [symbols] - list of symbols to match against source string
+     * [mismatchCounti] - accept at most mismatches in source string for a symbol
+     * [suffixArray] - the pre-computed mapping of positions of a char
+     *   in the [lastColumn] to its position in the source string
+     *
+     * @return listOf:
+     *   the symbol followed by a list of where it occcurs in the original string
+     */
 
-        val returnList : MutableList<Pair<String, List<Int>>> = mutableListOf()
-        // for each symbol, build list of offsets where the symbol is found
+    fun burrowsWheelerMismatchTolerantReadMappingForSymbolSet(
+        symbols: List<String>,
+        mismatchCounti: Int,
+        suffixArray: List<Int>
+    ): List<Pair<String, List<Int>>> {
+
+        val returnList: MutableList<Pair<String, List<Int>>> = mutableListOf()
+
         for (s in symbols) {
-            val offsetList: MutableList<Int> = mutableListOf()
-            offsetList.addAll(burrowsWheelerMismatchTolerantReadMapping(s, mismatchCounti, suffixArray))
-            returnList.add(Pair(s, offsetList))
+            val seeds = makeSeeds(s, mismatchCounti)
+            val matchList : MutableList<Int> = mutableListOf()
+            for (seedPair in seeds) {
+                val seed = seedPair.first
+                val seedOffset = seedPair.second
+                val matchingOffsetsPair = burrowsWheelerBetterMatchingMultipleWithCheckpoints(listOf(seed), suffixArray)
+                val matches = checkOffsetsForMatches(s, mismatchCounti, seedOffset, matchingOffsetsPair[0].second)
+                matchList.addAll(matches)
+            }
+            returnList.add(Pair(s, matchList.sorted().distinct()))
         }
         return returnList
     }
 
-    fun burrowsWheelerMismatchTolerantReadMapping(symbol: String, mismatchCounti: Int, suffixArray: List<Int>):
-            List<Int> {
+    /**
+     * for the given [subStringToMatch] and a list of [offsets],
+     *    check the portion of the original string at each offset
+     *    for a match, where the match has less than or equal to
+     *    [mismatchCounti] mismatches.
+     */
+    fun checkOffsetsForMatches(
+        subStringToMatch: String,
+        mismatchCounti: Int,
+        seedOffset: Int,
+        offsets: List<Int>
+    ): List<Int> {
 
-        return emptyList()
+        val approvedList: MutableList<Int> = mutableListOf()
+        val len = subStringToMatch.length
+
+        for (i in 0 until offsets.size) {
+            val candidateOffset = offsets[i]
+            var misMatchCount = 0
+            for (idx in 0 until len) {
+                val a = subStringToMatch[idx]
+                val b = originalString[candidateOffset - seedOffset + idx]
+                if (a != b) {
+                    misMatchCount++
+                }
+            }
+
+            if (misMatchCount <= mismatchCounti) {
+                approvedList.add(candidateOffset - seedOffset)
+            }
+        }
+        return approvedList
     }
 
+    /**
+     * for a given string to match [s], and a max mismatch count [mismatchCounti],
+     *   generate k-mers of len k = n / (mismatchCounti + 1), where n is the length of [s]
+     */
+    fun makeSeeds(s: String, mismatchCounti: Int): List<Pair<String, Int>> {
+        val numSeeds = mismatchCounti + 1
+        val len = s.length
+        val seedLen = len / numSeeds
+
+        var seedOffset = 0
+        val seedList: MutableList<Pair<String, Int>> = mutableListOf()
+        for (i in 0 until numSeeds) {
+            val endIndex = if (i == numSeeds - 1) len else seedOffset + seedLen
+            val seed = s.substring(seedOffset, endIndex)
+            seedList.add(Pair(seed, seedOffset))
+
+            seedOffset += seedLen
+        }
+        return seedList
+    }
 
 }
