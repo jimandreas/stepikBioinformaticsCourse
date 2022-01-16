@@ -131,12 +131,12 @@ internal class S09C13P04BurrowsWheelerMismatchTolerantTest {
         val result = bwmwc.burrowsWheelerMismatchTolerantReadMappingForSymbolSet(symbols, mismatchCount, indexArray)
 
         val expectedResult = """
-            AC: 0 1
+            AA: 0 1
         """.trimIndent().lines()
         val resultList = prettyPrint(result)
-        println(resultList.joinToString("\n"))
+        //println(resultList.joinToString("\n"))
 
-//        assertContentEquals(expectedResult, resultList)
+        assertContentEquals(expectedResult, resultList)
     }
 
 
@@ -228,7 +228,7 @@ internal class S09C13P04BurrowsWheelerMismatchTolerantTest {
         }
     }
 
-  
+
     class Foo {
         fun getResourceAsString(path: String): String {
             val ress = this.javaClass.getResource(path)
