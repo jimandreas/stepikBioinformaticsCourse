@@ -34,9 +34,9 @@ fun main() {
     val hmm = HiddenMarkovModelsHMM()
 
     val testInput = """
-            xxyy
+            HHTT
             --------
-            x y
+            H T
             --------
             F B
             --------
@@ -44,8 +44,8 @@ fun main() {
             F	0.9 0.1
             B	0.1 0.9
             --------
-                x	y
-            F	0.5 0.5	
+                H       T
+            F	0.5     0.5	
             B	0.75    0.25
         """.trimIndent().lines()
 
