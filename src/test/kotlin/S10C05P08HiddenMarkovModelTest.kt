@@ -11,7 +11,6 @@ import org.jetbrains.kotlinx.multik.ndarray.data.set
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.math.exp
 import kotlin.test.assertEquals
 
 

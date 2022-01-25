@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 
-internal class S10C13P10HiddenMarkovOutcomeProbabilityTest {
+internal class S10C05P10HiddenMarkovOutcomeProbabilityTest {
 
     lateinit var hmm: HiddenMarkovModelsHMM
 
