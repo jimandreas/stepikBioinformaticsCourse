@@ -103,7 +103,6 @@ class HiddenMarkovModelsHMM {
 
      */
 
-    var winningProbability = 0.0
     fun viterbiBestPath(
         emissionStringx: String,
         emissionCharList: List<String>,
@@ -198,7 +197,93 @@ class HiddenMarkovModelsHMM {
             maxRow = nextRow
         }
 
-        winningProbability = maxProb // the best prob at the end of the matix
         return str.toString()
     }
+
+
+    /**
+
+    Code Challenge: Solve the Outcome Likelihood Problem.
+
+    Input: A string x, followed by the alphabet from which x
+    was constructed, followed by the states States, transition
+    matrix Transition, and emission matrix Emission of an HMM
+    (Σ, States, Transition, Emission).
+
+    Output: The probability Pr(x) that the HMM emits x.
+     */
+
+    fun viterbiOutcomeLikelihood(
+        emissionStringx: String,
+        emissionCharList: List<String>,
+        statesCharList: List<String>,
+        transitionMatrix: D2Array<Double>,
+        emissionMatrix: D2Array<Double>
+    ): Double {
+
+        val elen = emissionStringx.length
+        val states = statesCharList.size
+
+        val viterbiMatrix = mk.d2array(states, elen) { 0.0 }
+        //val backtrackMatrix = mk.d2array(states, elen) { -1 }
+
+        for (i in 0 until elen) {  // which letter in the emitted string (horizontal)
+
+            val emissionChar = emissionStringx[i]
+            val emissionIndex = emissionCharList.indexOf(emissionChar.toString())
+
+            for (j in 0 until states) {  // which letter, A = 0, B = 1 (vertical)
+
+                // state to state probs array for a given alphabet letter {A, B, ...}
+                //   e.g. 0: A to A, 1: B to A, 2: C to A, etc
+                val transitionValues = transitionMatrix[0..states, j]
+
+                // the previous base probability for a given column (i-1) (emissionIndex)
+                //  and rows (A, B, C, ...)  (initially 0.5 for all at start)
+                val previousProb = mk.d1array(states) { 0.0 }
+                for (stateIndex in 0 until states) {
+                    previousProb[stateIndex] =
+                        if (i == 0) {
+                            1.0 / states
+                        } else {
+                            viterbiMatrix[stateIndex, i - 1]
+                        }
+                }
+
+                var sumProbabilities = 0.0
+
+                // now add all probabilities
+                for (stateIndex in 0 until states) {
+                    val previous = previousProb[stateIndex]
+                    val transition = if (i == 0) {
+                        1.0 / states
+                    } else {
+                        transitionValues[stateIndex]
+                    }
+                    // prob for this state (A, B, C, ...) to emit the emissionChar (as emissionIndex)
+                    val emissionProb = emissionMatrix[j, emissionIndex]
+
+                    val resultForThisRow = previous * transition * emissionProb
+
+                    sumProbabilities += resultForThisRow
+                }
+
+                // record the sum of all probabilities
+                viterbiMatrix[j, i] = sumProbabilities
+                //backtrackMatrix[j, i] = maxRowIndex
+            }
+        }
+
+        // add the sum of the final column
+
+        var summation = 0.0
+
+        for (row in 0 until states) {
+            val cur = viterbiMatrix[row, elen-1]
+            summation += cur
+        }
+
+        return summation
+    }
+
 }
