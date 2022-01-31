@@ -76,6 +76,60 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
         hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
     }
 
+    /**
+    This dataset makes sure that your code is correctly applying the
+    threshold when determining the seed alignment. Since half of
+    the second column is gap characters the second column will not
+    be a part of the seed alignment (0.5 > threshold of 0.4). If your
+    output has the wrong states there is likely an error in application
+    of the threshold value. Be sure that all columns with a fraction of
+    gap characters greater than the threshold are not in the seed alignment.
+    If your outputted transition matrix is incorrect make sure that your
+    code follows the rules for profile construction from the seed alignment
+    and original multiple alignment. Similarly to Test Dataset 1, the
+    only option from the starting state is to go into a match state and
+    emit an A. Since the second column is not a part of the seed alignment
+    the B character from the first string corresponds to an insertion state.
+    The gap in the second string is ignored since it isn’t a part of the
+    seed alignment. This means that from state M1 the HMM can either
+    transition to I1 and emit a B character or transition to E and terminate.
+    Check that your code correctly implements this logic if your output
+    doesn’t match the correct output.
+     */
+    @Test
+    @DisplayName("Profile Alignment Test Dataset 2")
+    fun testProfileAlignmentDataset2() {
+        val inputData = """
+            0.4
+            --------
+            A B
+            --------
+            AB
+            A-
+        """.trimIndent()
+
+        val expectedResultsString = """
+                S	I0	M1	D1	I1	E
+            S	0	0	1.0	0	0	0
+            I0	0	0	0	0	0	0
+            M1	0	0	0	0	0.5	0.5
+            D1	0	0	0	0	0	0
+            I1	0	0	0	0	0	1.0
+            E	0	0	0	0	0	0
+            --------
+                A	B
+            S	0	0
+            I0	0	0
+            M1	1.0	0
+            D1	0	0
+            I1	0	1.0
+            E	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+    }
+
 
     @Test
     @DisplayName("test input string parsing")
