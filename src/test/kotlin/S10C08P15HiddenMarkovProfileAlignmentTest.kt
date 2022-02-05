@@ -130,6 +130,92 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
         hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
     }
 
+    /**
+     * this is a simple test of multiple insert states at the start of the alignment
+     */
+    @Test
+    @DisplayName("Profile Alignment Test Simple Test 1")
+    fun testProfileAlignmentSimpleTest1() {
+        val inputData = """
+            0.3
+            --------
+            A B C
+            --------
+            ABB
+            -C-
+            --B
+            --B
+        """.trimIndent()
+
+        val expectedResultsString = """
+                S	I0	M1	D1	I1	E
+            S	0	0	1.0	0	0	0
+            I0	0	0	0	0	0	0
+            M1	0	0	0	0	0.5	0.5
+            D1	0	0	0	0	0	0
+            I1	0	0	0	0	0	1.0
+            E	0	0	0	0	0	0
+            --------
+                A	B
+            S	0	0
+            I0	0	0
+            M1	1.0	0
+            D1	0	0
+            I1	0	1.0
+            E	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+    }
+
+    @Test
+    @DisplayName("Profile Alignment Test Sample Dataset")
+    fun testProfileAlignmentSample() {
+        val inputData = """
+            0.289
+            --------
+            A B C D E
+            --------
+            EBA
+            E-D
+            EB-
+            EED
+            EBD
+            EBE
+            E-D
+            E-D
+        """.trimIndent()
+
+        val expectedResultsString = """
+S	I0	M1	D1	I1	M2	D2	I2	E	
+S	0	0	1.0	0	0	0	0	0	0
+I0	0	0	0	0	0	0	0	0	0
+M1	0	0	0	0	0.625	0.375	0	0	0
+D1	0	0	0	0	0	0	0	0	0
+I1	0	0	0	0	0	0.8	0.2	0	0
+M2	0	0	0	0	0	0	0	0	1.0
+D2	0	0	0	0	0	0	0	0	1.0
+I2	0	0	0	0	0	0	0	0	0
+E	0	0	0	0	0	0	0	0	0
+--------
+	A	B	C	D	E
+S	0	0	0	0	0
+I0	0	0	0	0	0
+M1	0	0	0	0	1.0
+D1	0	0	0	0	0
+I1	0	0.8	0	0	0.2
+M2	0.143	0	0	0.714	0.143
+D2	0	0	0	0	0
+I2	0	0	0	0	0
+E	0	0	0	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+    }
+
+
 
     @Test
     @DisplayName("test input string parsing")
