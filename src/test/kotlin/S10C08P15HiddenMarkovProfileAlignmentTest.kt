@@ -141,10 +141,10 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
             --------
             A B C
             --------
-            ABB
-            -C-
-            --B
-            --B
+            ABBB
+            -C--
+            --BB
+            --BB
         """.trimIndent()
 
         val expectedResultsString = """
