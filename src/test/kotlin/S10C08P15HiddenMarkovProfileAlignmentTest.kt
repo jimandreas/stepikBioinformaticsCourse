@@ -130,8 +130,43 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
         hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
     }
 
+    @Test
+    @DisplayName("Profile Alignment Test Dataset 5")
+    fun testProfileAlignmentDataset5() {
+        val inputData = """
+            0.5
+            --------
+            A B
+            --------
+            AA-
+            --A
+            --B
+        """.trimIndent()
+
+        val expectedResultsString = """
+	S	I0	    M1	   D1	I1	E
+S	0	0.333	0.667	0	0	0
+I0	0	0.5	    0	    0.5	0	0
+M1	0	0	    0	    0	0	1.0
+D1	0	0	    0	    0	0	1.0
+I1	0	0	    0	    0	0	0
+E	0	0	    0	    0	0	0
+--------
+	A	B
+S	0	0
+I0	1.0	0
+M1	0.5	0.5
+D1	0	0
+I1	0	0
+E	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+    }
+
     /**
-     * this is a simple test of multiple insert states at the start of the alignment
+     * this is a simple test
      */
     @Test
     @DisplayName("Profile Alignment Test Simple Test 1")
@@ -141,10 +176,9 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
             --------
             A B C
             --------
-            ABBB
-            -C--
-            --BB
-            --BB
+            CCC
+            C--
+            C--
         """.trimIndent()
 
         val expectedResultsString = """
@@ -167,6 +201,136 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+    }
+
+    /**
+     * test multiple inserts following a match column
+     */
+    @Test
+    @DisplayName("Profile Alignment Test Simple Test 2")
+    fun testProfileAlignmentSimpleTest2() {
+        val inputData = """
+            0.3
+            --------
+            A B C
+            --------
+            CCC
+            C--
+            C--
+        """.trimIndent()
+
+        val expectedResultsString = """
+            S	I0	M1	D1	I1	E
+        S	0.0	0.0	1.0	0.0	0.0	0.0
+        I0	0.0	0.0	0.0	0.0	0.0	0.0
+        M1	0.0	0.0	0.0	0.0	0.33	0.66
+        D1	0.0	0.0	0.0	0.0	0.0	0.0
+        I1	0.0	0.0	0.0	0.0	0.5	0.5
+        E	0.0	0.0	0.0	0.0	0.0	0.0
+        --------
+            A	B	C
+        S	0.0	0.0	0.0
+        I0	0.0	0.0	0.0
+        M1	0.0	0.0	1.0
+        D1	0.0	0.0	0.0
+        I1	0.0	0.0	1.0
+        E	0.0	0.0	0.0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+    }
+
+    /**
+     * test multiple inserts preceeding a match column
+     */
+    @Test
+    @DisplayName("Profile Alignment Test Simple Test 3")
+    fun testProfileAlignmentSimpleTest3() {
+        val inputData = """
+            0.3
+            --------
+            A B C D
+            --------
+            ABCDC
+            ABC--
+            ----C
+            ----C
+        """.trimIndent()
+
+        val expectedResultsString = """
+   S   I0   M1   D1  I1  E
+S  0.0 0.33 0.66 0.0 0.0 0.0
+I0 0.0 0.75 0.25 0.0 0.0 0.0
+M1 0.0 0.0  0.0  0.0 0.0 1.0
+D1 0.0 0.0  0.0  0.0 0.0 0.0
+I1 0.0 0.0  0.0  0.0 0.0 0.0
+E  0.0 0.0  0.0  0.0 0.0 0.0
+--------
+  A B C D
+S 0.0 0.0 0.0 0.0
+I0 0.25 0.25 0.25 0.25
+M1 0.0 0.0 1.0 0.0
+D1 0.0 0.0 0.0 0.0
+I1 0.0 0.0 0.0 0.0
+E 0.0 0.0 0.0 0.0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+    }
+
+    /**
+     * test insert then delete in match column
+     */
+    @Test
+    @DisplayName("Profile Alignment Test Simple Test 4")
+    fun testProfileAlignmentSimpleTest4() {
+        val inputData = """
+            0.3
+            --------
+            A B C D
+            --------
+            A-AA
+            B-BB
+            C-CC
+            DD-D
+        """.trimIndent()
+
+        val expectedResultsString = """
+	S	I0	M1	D1	I1	M2	D2	I2	M3	D3	I3	E
+S	0.0	0.0	1.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0
+I0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0
+M1	0.0	0.0	0.0	0.0	0.25	0.75	0.0	0.0	0.0	0.0	0.0	0.0
+D1	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0
+I1	0.0	0.0	0.0	0.0	0.0	0.0	1.0	0.0	0.0	0.0	0.0	0.0
+M2	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	1.0	0.0	0.0	0.0
+D2	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	1.0	0.0	0.0	0.0
+I2	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0
+M3	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	1.0
+D3	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0
+I3	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0
+E	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0	0.0
+--------
+	A	B	C	D
+S	0	0	0	0
+I0	0	0	0	0
+M1	0.25	0.25	0.25	0.25
+D1	0	0	0	0
+I1	0	0	0	1
+M2	0.333	0.333	0.333	0
+D2	0	0	0	0
+I2	0	0	0	0
+M3	0.25	0.25	0.25	0.25
+D3	0	0	0	0
+I3	0	0	0	0
+E	0	0	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
     @Test
