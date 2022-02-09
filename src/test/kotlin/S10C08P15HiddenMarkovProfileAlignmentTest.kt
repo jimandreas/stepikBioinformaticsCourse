@@ -8,6 +8,7 @@ import algorithms.HiddenMarkovModelsHMMProfile.HMMTransitionAndEmissionMatrices
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import kotlin.math.exp
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
@@ -74,6 +75,10 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         val retVal = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
     /**
@@ -128,6 +133,10 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
     @Test
@@ -163,6 +172,10 @@ E	0	0
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
     /**
@@ -201,6 +214,10 @@ E	0	0
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
     /**
@@ -239,6 +256,10 @@ E	0	0
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
     /**
@@ -278,6 +299,10 @@ E 0.0 0.0 0.0 0.0
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
     /**
@@ -481,7 +506,14 @@ E	0	0
         assertContentEquals(expectedStruct.symbols, resultStruct.symbols)
         //assertContentEquals(expectedStruct.states, resultStruct.states)
         assertContentEquals(expectedStruct.transitions, resultStruct.transitions)
-        assertContentEquals(expectedStruct.emissions, resultStruct.emissions)
+
+        for (rowIndex in 0 until expectedStruct.emissions.size) {
+            val rowExpected = expectedStruct.emissions[rowIndex]
+            val rowResult = resultStruct.emissions[rowIndex]
+            for (col in 0 until rowExpected.size) {
+                assertEquals(rowExpected[col], rowResult[col], rowExpected[col]/100.0)
+            }
+        }
 
     }
 

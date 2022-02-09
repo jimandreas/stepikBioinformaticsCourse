@@ -89,7 +89,7 @@ class HiddenMarkovModelsHMMProfile {
                     val theChar = theStringList[row][col]
                     if (theChar != '-') {
                         tCount[row, matchGroup * 3 + 1]++  // increment the match count
-                        e[matchGroup * 3 + 1, statesCharList.indexOf(theChar)]++
+                        e[matchGroup * 3 + 2, statesCharList.indexOf(theChar)]++
                     } else { // it is a delete character
                         tCount[row, matchGroup * 3 + 2]++  // increment the delete count
                         //e[matchGroup * 3 + 2,statesCharList.indexOf(theChar)]++ // no characters in delete emission
