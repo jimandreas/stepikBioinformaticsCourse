@@ -8,7 +8,6 @@ import algorithms.HiddenMarkovModelsHMMProfile.HMMTransitionAndEmissionMatrices
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import kotlin.math.exp
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
@@ -74,8 +73,6 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
         """.trimIndent()
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
-        val retVal = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
-
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
         checkResultingOutputDataStructure(expectedStruct, result)
@@ -132,8 +129,6 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
         """.trimIndent()
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
-        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
-
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
         checkResultingOutputDataStructure(expectedStruct, result)
@@ -171,8 +166,6 @@ E	0	0
         """.trimIndent()
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
-        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
-
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
         checkResultingOutputDataStructure(expectedStruct, result)
@@ -213,8 +206,6 @@ E	0	0
         """.trimIndent()
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
-        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
-
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
         checkResultingOutputDataStructure(expectedStruct, result)
@@ -240,7 +231,7 @@ E	0	0
             S	I0	M1	D1	I1	E
         S	0.0	0.0	1.0	0.0	0.0	0.0
         I0	0.0	0.0	0.0	0.0	0.0	0.0
-        M1	0.0	0.0	0.0	0.0	0.33	0.66
+        M1	0.0	0.0	0.0	0.0	0.333	0.666
         D1	0.0	0.0	0.0	0.0	0.0	0.0
         I1	0.0	0.0	0.0	0.0	0.5	0.5
         E	0.0	0.0	0.0	0.0	0.0	0.0
@@ -255,8 +246,6 @@ E	0	0
         """.trimIndent()
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
-        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
-
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
         checkResultingOutputDataStructure(expectedStruct, result)
@@ -280,17 +269,17 @@ E	0	0
         """.trimIndent()
 
         val expectedResultsString = """
-   S   I0   M1   D1  I1  E
-S  0.0 0.33 0.66 0.0 0.0 0.0
-I0 0.0 0.75 0.25 0.0 0.0 0.0
-M1 0.0 0.0  0.0  0.0 0.0 1.0
-D1 0.0 0.0  0.0  0.0 0.0 0.0
-I1 0.0 0.0  0.0  0.0 0.0 0.0
-E  0.0 0.0  0.0  0.0 0.0 0.0
+   S    I0    M1    D1  I1  E
+S  0.0  0.5   0.5   0.0 0.0 0.0
+I0 0.0  0.714 0.143 0.143 0.0 0.0
+M1 0.0  0.0   0.0   0.0 0.0 1.0
+D1 0.0  0.0   0.0   0.0 0.0 1.0
+I1 0.0  0.0   0.0   0.0 0.0 0.0
+E  0.0  0.0   0.0   0.0 0.0 0.0
 --------
   A B C D
 S 0.0 0.0 0.0 0.0
-I0 0.25 0.25 0.25 0.25
+I0 0.286 0.286 0.286 0.143
 M1 0.0 0.0 1.0 0.0
 D1 0.0 0.0 0.0 0.0
 I1 0.0 0.0 0.0 0.0
@@ -298,8 +287,6 @@ E 0.0 0.0 0.0 0.0
         """.trimIndent()
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
-        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
-
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
         checkResultingOutputDataStructure(expectedStruct, result)
@@ -359,25 +346,25 @@ E	0	0	0	0
     }
 
     @Test
-    @DisplayName("Profile Alignment Test Sample Dataset")
-    fun testProfileAlignmentSample() {
+    @DisplayName("Profile Alignment Test STEPIK Sample Dataset")
+    fun testProfileAlignmentStepikSample() {
         val inputData = """
-            0.289
-            --------
-            A B C D E
-            --------
-            EBA
-            E-D
-            EB-
-            EED
-            EBD
-            EBE
-            E-D
-            E-D
+0.289
+--------
+A B C D E
+--------
+EBA
+E-D
+EB-
+EED
+EBD
+EBE
+E-D
+E-D
         """.trimIndent()
 
         val expectedResultsString = """
-S	I0	M1	D1	I1	M2	D2	I2	E	
+S	I0	M1	D1	I1	M2	D2	I2	E   
 S	0	0	1.0	0	0	0	0	0	0
 I0	0	0	0	0	0	0	0	0	0
 M1	0	0	0	0	0.625	0.375	0	0	0
@@ -401,10 +388,65 @@ E	0	0	0	0	0
         """.trimIndent()
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
-        hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
 
+    @Test
+    @DisplayName("Profile Alignment Test ROSALIND Sample Dataset")
+    fun testProfileAlignmentRosalindSample() {
+        val inputData = """
+0.289
+--------
+A   B   C   D   E
+--------
+EBA
+EBD
+EB-
+EED
+EBD
+EBE
+E-D
+EBD
+        """.trimIndent()
+
+        val expectedResultsString = """
+    S   I0  M1  D1  I1  M2    D2    I2  M3    D3    I3  E
+S   0   0   1.0 0   0   0     0     0   0     0     0   0
+I0  0   0   0   0   0   0     0     0   0     0     0   0
+M1  0   0   0   0   0   0.875 0.125 0   0     0     0   0
+D1  0   0   0   0   0   0     0     0   0     0     0   0
+I1  0   0   0   0   0   0     0     0   0     0     0   0
+M2  0   0   0   0   0   0     0     0   0.857 0.143 0   0
+D2  0   0   0   0   0   0     0     0   1.0   0     0   0
+I2  0   0   0   0   0   0     0     0   0     0     0   0
+M3  0   0   0   0   0   0     0     0   0     0     0   1.0
+D3  0   0   0   0   0   0     0     0   0     0     0   1.0
+I3  0   0   0   0   0   0     0     0   0     0     0   0
+E   0   0   0   0   0   0     0     0   0     0     0   0
+--------
+    A   B   C   D   E
+S   0   0   0   0   0
+I0  0   0   0   0   0
+M1  0   0   0   0   1.0
+D1  0   0   0   0   0
+I1  0   0   0   0   0
+M2  0   0.857   0   0   0.143
+D2  0   0   0   0   0
+I2  0   0   0   0   0
+M3  0.143   0   0   0.714   0.143
+D3  0   0   0   0   0
+I3  0   0   0   0   0
+E   0   0   0   0   0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+        checkResultingOutputDataStructure(expectedStruct, result)
+    }
 
     @Test
     @DisplayName("test input string parsing")
@@ -501,17 +543,24 @@ E	0	0
 
     private fun checkResultingOutputDataStructure(
         expectedStruct: HMMTransitionAndEmissionMatrices,
-        resultStruct: HMMTransitionAndEmissionMatrices) {
+        resultStruct: HMMTransitionAndEmissionMatrices
+    ) {
 
         assertContentEquals(expectedStruct.symbols, resultStruct.symbols)
-        //assertContentEquals(expectedStruct.states, resultStruct.states)
-        assertContentEquals(expectedStruct.transitions, resultStruct.transitions)
 
         for (rowIndex in 0 until expectedStruct.emissions.size) {
             val rowExpected = expectedStruct.emissions[rowIndex]
             val rowResult = resultStruct.emissions[rowIndex]
             for (col in 0 until rowExpected.size) {
-                assertEquals(rowExpected[col], rowResult[col], rowExpected[col]/100.0)
+                assertEquals(rowExpected[col], rowResult[col], rowExpected[col] / 100.0)
+            }
+        }
+
+        for (rowIndex in 0 until expectedStruct.transitions.size) {
+            val rowExpected = expectedStruct.transitions[rowIndex]
+            val rowResult = resultStruct.transitions[rowIndex]
+            for (col in 0 until rowExpected.size) {
+                assertEquals(rowExpected[col], rowResult[col], rowExpected[col] / 100.0)
             }
         }
 
@@ -525,6 +574,10 @@ E	0	0
         val transitionsNameList = l.removeFirst().split(ws).toMutableList()
         if (transitionsNameList[0] == "") {
             transitionsNameList.removeFirst()
+        }
+
+        if (transitionsNameList[transitionsNameList.size - 1] == "") {
+            transitionsNameList.removeLast()
         }
         //println("Transitions count: ${transitionsNameList.size}")
 
