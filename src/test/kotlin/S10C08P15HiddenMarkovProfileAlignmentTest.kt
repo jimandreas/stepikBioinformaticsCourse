@@ -19,6 +19,7 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
     @BeforeEach
     fun setUp() {
         hmmp = HiddenMarkovModelsHMMProfile()
+//        hmmp.debugOutput = true
     }
 
     /**
@@ -38,7 +39,7 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
 
     @Test
     @DisplayName("Profile Alignment Test Dataset 1")
-    fun testProfileAlignmentDataset1() {
+    fun profileAlignmentDataset1() {
         val inputData = """
             0.1
             --------
@@ -100,7 +101,7 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
      */
     @Test
     @DisplayName("Profile Alignment Test Dataset 2")
-    fun testProfileAlignmentDataset2() {
+    fun profileAlignmentDataset2() {
         val inputData = """
             0.4
             --------
@@ -128,6 +129,7 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
             E	0	0
         """.trimIndent()
 
+        hmmp.debugOutput = false
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
@@ -136,7 +138,7 @@ internal class S10C08P15HiddenMarkovProfileAlignmentTest {
 
     @Test
     @DisplayName("Profile Alignment Test Dataset 5")
-    fun testProfileAlignmentDataset5() {
+    fun profileAlignmentDataset5() {
         val inputData = """
             0.5
             --------
@@ -165,6 +167,7 @@ I1	0	0
 E	0	0
         """.trimIndent()
 
+        hmmp.debugOutput = false
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
@@ -176,7 +179,7 @@ E	0	0
      */
     @Test
     @DisplayName("Profile Alignment Test Simple Test 1")
-    fun testProfileAlignmentSimpleTest1() {
+    fun profileAlignmentSimpleTest1() {
         val inputData = """
             0.3
             --------
@@ -188,21 +191,21 @@ E	0	0
         """.trimIndent()
 
         val expectedResultsString = """
-                S	I0	M1	D1	I1	E
-            S	0	0	1.0	0	0	0
-            I0	0	0	0	0	0	0
-            M1	0	0	0	0	0.5	0.5
-            D1	0	0	0	0	0	0
-            I1	0	0	0	0	0	1.0
-            E	0	0	0	0	0	0
+                S    I0   M1   D1   I1   E
+            S   0    0    1.00 0    0    0
+            I0  0    0    0    0    0    0
+            M1  0    0    0    0    0.333 0.667
+            D1  0    0    0    0    0    0
+            I1  0    0    0    0    0.50 0.50
+            E   0    0    0    0    0    0
             --------
-                A	B
-            S	0	0
-            I0	0	0
-            M1	1.0	0
-            D1	0	0
-            I1	0	1.0
-            E	0	0
+                A	B	C
+            S	0.0	0.0	0.0
+            I0	0.0	0.0	0.0
+            M1	0.0	0.0	1.0
+            D1	0.0	0.0	0.0
+            I1	0.0	0.0	1.0
+            E	0.0	0.0	0.0
         """.trimIndent()
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
@@ -216,7 +219,7 @@ E	0	0
      */
     @Test
     @DisplayName("Profile Alignment Test Simple Test 2")
-    fun testProfileAlignmentSimpleTest2() {
+    fun profileAlignmentSimpleTest2() {
         val inputData = """
             0.3
             --------
@@ -256,7 +259,7 @@ E	0	0
      */
     @Test
     @DisplayName("Profile Alignment Test Simple Test 3")
-    fun testProfileAlignmentSimpleTest3() {
+    fun profileAlignmentSimpleTest3() {
         val inputData = """
             0.3
             --------
@@ -297,7 +300,7 @@ E 0.0 0.0 0.0 0.0
      */
     @Test
     @DisplayName("Profile Alignment Test Simple Test 4")
-    fun testProfileAlignmentSimpleTest4() {
+    fun profileAlignmentSimpleTest4() {
         val inputData = """
             0.3
             --------
@@ -347,7 +350,7 @@ E	0	0	0	0
 
     @Test
     @DisplayName("Profile Alignment Test STEPIK Sample Dataset")
-    fun testProfileAlignmentStepikSample() {
+    fun profileAlignmentStepikSampleTest() {
         val inputData = """
 0.289
 --------
@@ -396,7 +399,7 @@ E	0	0	0	0	0
 
     @Test
     @DisplayName("Profile Alignment Test ROSALIND Sample Dataset")
-    fun testProfileAlignmentRosalindSample() {
+    fun profileAlignmentRosalindSampleTest() {
         val inputData = """
 0.289
 --------
@@ -442,6 +445,7 @@ I3  0   0   0   0   0
 E   0   0   0   0   0
         """.trimIndent()
 
+        hmmp.debugOutput = false
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
@@ -450,7 +454,7 @@ E   0   0   0   0   0
 
     @Test
     @DisplayName("test input string parsing")
-    fun testInputStringParsing() {
+    fun inputStringParsingTest() {
         val dataFormat = """
             0.5
             --------
@@ -486,7 +490,7 @@ E   0   0   0   0   0
      */
     @Test
     @DisplayName("test output string parsing")
-    fun testOutputStringParsing() {
+    fun outputStringParsingTest() {
 
         // this is a sample expected result
         val testStringToParse = """
@@ -548,19 +552,28 @@ E	0	0
 
         assertContentEquals(expectedStruct.symbols, resultStruct.symbols)
 
-        for (rowIndex in 0 until expectedStruct.emissions.size) {
-            val rowExpected = expectedStruct.emissions[rowIndex]
-            val rowResult = resultStruct.emissions[rowIndex]
-            for (col in 0 until rowExpected.size) {
-                assertEquals(rowExpected[col], rowResult[col], rowExpected[col] / 100.0)
-            }
-        }
-
+        // check transitions
         for (rowIndex in 0 until expectedStruct.transitions.size) {
             val rowExpected = expectedStruct.transitions[rowIndex]
             val rowResult = resultStruct.transitions[rowIndex]
             for (col in 0 until rowExpected.size) {
-                assertEquals(rowExpected[col], rowResult[col], rowExpected[col] / 100.0)
+                assertEquals(
+                    rowExpected[col],
+                    rowResult[col], rowExpected[col] / 100.0,
+                    "Transitions matrix mismatch Row: $rowIndex Col: $col"
+                )
+            }
+        }
+
+        // check emissions
+        for (rowIndex in 0 until expectedStruct.emissions.size) {
+            val rowExpected = expectedStruct.emissions[rowIndex]
+            val rowResult = resultStruct.emissions[rowIndex]
+            for (col in 0 until rowExpected.size) {
+                assertEquals(
+                    rowExpected[col],
+                    rowResult[col], rowExpected[col] / 100.0,
+                    "Emissions matrix mismatch Row: $rowIndex Col: $col")
             }
         }
 
@@ -643,38 +656,5 @@ E	0	0
             alignmentStringList = alignmentStringList
         )
     }
-
-
-    @Test
-    @DisplayName("Construct Profile HMM from Multiple Alignment Sample Test")
-    fun probConstructProfileHmmSampleTest() {
-        val testInput = """
-0.289
---------
-A B C D E
---------
-EBA
-E-D
-EB-
-EED
-EBD
-EBE
-E-D
-E-D
-        """.trimIndent().lines()
-
-//        val d = createFromInputString(testInput)
-//
-//        val result = hmm.viterbiOutcomeLikelihood(
-//            d.emissionStringx,
-//            d.emissionCharList,
-//            d.statesCharList,
-//            d.transitionMatrix,
-//            d.emissionMatrix
-//        )
-
-        //println(result)
-
-    }
-
+    
 }
