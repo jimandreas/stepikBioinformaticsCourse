@@ -5,9 +5,13 @@
 
 import algorithms.HiddenMarkovModelsHMMProfile
 import algorithms.HiddenMarkovModelsHMMProfile.HMMTransitionAndEmissionMatrices
+import org.jetbrains.kotlinx.multik.ndarray.data.get
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import java.io.BufferedWriter
+import java.io.File
+import java.lang.StringBuilder
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
@@ -19,7 +23,7 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
     @BeforeEach
     fun setUp() {
         hmmp = HiddenMarkovModelsHMMProfile()
-//        hmmp.debugOutput = true
+        hmmp.debugOutput = true
     }
 
     /**
@@ -93,8 +97,408 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
 
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
-        val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
-        checkResultingOutputDataStructure(expectedStruct, result)
+        val result = hmmp.createHMMprofileWithPseudocounts(
+            dStruct.threshold,
+            dStruct.pseudocountSigma,
+            dStruct.statesCharList,
+            dStruct.alignmentStringList
+        )
+        //checkResultingOutputDataStructure(expectedStruct, result)
+
+        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+
+        val outFile = File(outputMessagesFilePath)
+        val writer = outFile.bufferedWriter()
+
+        uglyPrintTransitionMatrix(writer)
+        writer.write("--------\n")
+        uglyPrintEmissionsMatrix(writer)
+        writer.close()
+    }
+
+    /**
+    This dataset makes sure that your code is correctly applying
+    the pseudocounts to the emission matrix. This dataset is
+    identical to Test Dataset 1 except that there is one more
+    character in the alphabet: B. The emission matrix should
+    include a column for the emission probabilities of character B.
+    Without pseudocounts our emission matrix for this profile HMM
+    would have 0 probability of emitting B. Once pseudocounts are
+    added the emission probabilities for the non-silent states change.
+    If your output does not match the correct output make sure that
+    you are applying pseudocounts to the emission matrix. Remember
+    that pseudocounts are added to the probabilities, not the profile
+    counts. Also be sure that non-silent states that were never seen
+    in the multiple alignment (I0, I1) have non-zero emission probabilities.
+    States like these should have equal probabilities of emitting any character.
+     */
+    @Test
+    @DisplayName("Profile Alignment Test Dataset 2")
+    fun profileAlignmentDataset2() {
+        val inputData = """
+            0.1 0.01
+            --------
+            A B
+            --------
+            A
+        """.trimIndent()
+
+        val expectedResultsString = """
+                S	I0	M1	D1	I1	E
+            S	0	0.00971	0.981	0.00971	0	0
+            I0	0	0.333	0.333	0.333	0	0
+            M1	0	0	0	0	0.00980	0.990
+            D1	0	0	0	0	0.5	0.5
+            I1	0	0	0	0	0.5	0.5
+            E	0	0	0	0	0	0
+            --------
+                A	B
+            S	0	0
+            I0	0.5	0.5
+            M1	0.990	0.00980
+            D1	0	0
+            I1	0.5	0.5
+            E	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofileWithPseudocounts(
+            dStruct.threshold,
+            dStruct.pseudocountSigma,
+            dStruct.statesCharList,
+            dStruct.alignmentStringList
+        )
+        //checkResultingOutputDataStructure(expectedStruct, result)
+
+        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+
+        val outFile = File(outputMessagesFilePath)
+        val writer = outFile.bufferedWriter()
+
+        uglyPrintTransitionMatrix(writer)
+        writer.write("--------\n")
+        uglyPrintEmissionsMatrix(writer)
+        writer.close()
+    }
+
+    /**
+    This dataset makes sure that your code is correctly applying
+    the correct pseudocount. This dataset is identical to
+    Test Dataset 2 except for the value of the pseudocount.
+    If your code passed Test Dataset 2 but does not have the correct
+    output for this dataset you are likely not using the
+    pseudocount value from the input and are adding some constant
+    of your own choice. It is also possible that your normalization
+    after applying the pseudocounts was not correctly implemented
+    and relied on the pseudocount being of some value.
+     */
+
+    @Test
+    @DisplayName("Profile Alignment Test Dataset 3")
+    fun profileAlignmentDataset3() {
+        val inputData = """
+            0.1 0.5
+            --------
+            A B
+            --------
+            A
+        """.trimIndent()
+
+        val expectedResultsString = """
+                S	I0	M1	D1	I1	E
+            S	0	0.2	0.6	0.2	0	0
+            I0	0	0.333	0.333	0.333	0	0
+            M1	0	0	0	0	0.25	0.75
+            D1	0	0	0	0	0.5	0.5
+            I1	0	0	0	0	0.5	0.5
+            E	0	0	0	0	0	0
+            --------
+                A	B
+            S	0	0
+            I0	0.5	0.5
+            M1	0.75	0.25
+            D1	0	0
+            I1	0.5	0.5
+            E	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofileWithPseudocounts(
+            dStruct.threshold,
+            dStruct.pseudocountSigma,
+            dStruct.statesCharList,
+            dStruct.alignmentStringList
+        )
+        //checkResultingOutputDataStructure(expectedStruct, result)
+
+        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+
+        val outFile = File(outputMessagesFilePath)
+        val writer = outFile.bufferedWriter()
+
+        uglyPrintTransitionMatrix(writer)
+        writer.write("--------\n")
+        uglyPrintEmissionsMatrix(writer)
+        writer.close()
+    }
+
+    /**
+    This dataset makes sure that your code is correctly applying
+    the threshold when determining the seed alignment. It is
+    analogous to Test Dataset 3 in the Profile HMM problem.
+    Since half of the second column is gap characters the second
+    column will not be a part of the seed alignment
+    (0.5 > threshold of 0.4). If your output has the wrong states
+    your implementation of the regular profile HMM is likely
+    incorrect. If your implementation passed all the tests for
+    the regular profile HMM problem but fails this test then
+    be sure that your code does not invalidate that implementation
+    when adding pseudocounts
+     */
+
+    @Test
+    @DisplayName("Profile Alignment Test Dataset 4")
+    fun profileAlignmentDataset4() {
+        val inputData = """
+            0.4 0.01
+            --------
+            A B
+            --------
+            AB
+            A-
+        """.trimIndent()
+
+        val expectedResultsString = """
+                S	I0	M1	D1	I1	E
+            S	0	0.00971	0.981	0.00971	0	0
+            I0	0	0.333	0.333	0.333	0	0
+            M1	0	0	0	0	0.5	0.5
+            D1	0	0	0	0	0.5	0.5
+            I1	0	0	0	0	0.00980	0.990
+            E	0	0	0	0	0	0
+            --------
+                A	B
+            S	0	0
+            I0	0.5	0.5
+            M1	0.990	0.00980
+            D1	0	0
+            I1	0.00980	0.990
+            E	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofileWithPseudocounts(
+            dStruct.threshold,
+            dStruct.pseudocountSigma,
+            dStruct.statesCharList,
+            dStruct.alignmentStringList
+        )
+        //checkResultingOutputDataStructure(expectedStruct, result)
+
+        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+
+        val outFile = File(outputMessagesFilePath)
+        val writer = outFile.bufferedWriter()
+
+        uglyPrintTransitionMatrix(writer)
+        writer.write("--------\n")
+        uglyPrintEmissionsMatrix(writer)
+        writer.close()
+    }
+
+    /**
+    This dataset makes sure that your code correctly handles deletion states.
+    It is analogous to Test Dataset 4 in the Profile HMM problem. If your
+    output has the wrong states your implementation of the regular profile
+    HMM is likely incorrect. If your implementation passed all the tests
+    for the regular profile HMM problem but fails this test then be sure
+    that your code does not invalidate that implementation when adding pseudocounts.
+     */
+    @Test
+    @DisplayName("Profile Alignment Test Dataset 5")
+    fun profileAlignmentDataset5() {
+        val inputData = """
+            0.4 0.01
+            --------
+            A B
+            --------
+            A-
+            -A
+            -B
+        """.trimIndent()
+
+        val expectedResultsString = """
+                S	I0	M1	D1	I1	E
+            S	0	0.333	0.657	0.00971	0	0
+            I0	0	0.00971	0.00971	0.981	0	0
+            M1	0	0	0	0	0.00980	0.990
+            D1	0	0	0	0	0.00980	0.990
+            I1	0	0	0	0	0.5	0.5
+            E	0	0	0	0	0	0
+            --------
+                A	B
+            S	0	0
+            I0	0.990	0.00980
+            M1	0.5	0.5
+            D1	0	0
+            I1	0.5	0.5
+            E	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofileWithPseudocounts(
+            dStruct.threshold,
+            dStruct.pseudocountSigma,
+            dStruct.statesCharList,
+            dStruct.alignmentStringList
+        )
+        //checkResultingOutputDataStructure(expectedStruct, result)
+
+        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+
+        val outFile = File(outputMessagesFilePath)
+        val writer = outFile.bufferedWriter()
+
+        uglyPrintTransitionMatrix(writer)
+        writer.write("--------\n")
+        uglyPrintEmissionsMatrix(writer)
+        writer.close()
+    }
+
+    /**
+    This dataset makes sure that your code allows for insertion
+    states to transition to themselves. It is analogous to
+    Test Dataset 5 in the Profile HMM problem. If your output
+    has the wrong states your implementation of the regular
+    profile HMM is likely incorrect. If your implementation
+    passed all the tests for the regular profile HMM problem
+    but fails this test then be sure that your code does not
+    invalidate that implementation when adding pseudocounts.
+     */
+    @Test
+    @DisplayName("Profile Alignment Test Dataset 6")
+    fun profileAlignmentDataset6() {
+        val inputData = """
+            0.5 0.01
+            --------
+            A B
+            --------
+            AA-
+            --A
+            --B
+        """.trimIndent()
+
+        val expectedResultsString = """
+                S	I0	M1	D1	I1	E
+            S	0	0.333	0.657	0.00971	0	0
+            I0	0	0.495	0.00971	0.495	0	0
+            M1	0	0	0	0	0.00980	0.990
+            D1	0	0	0	0	0.00980	0.990
+            I1	0	0	0	0	0.5	0.5
+            E	0	0	0	0	0	0
+            --------
+                A	B
+            S	0	0
+            I0	0.990	0.00980
+            M1	0.5	0.5
+            D1	0	0
+            I1	0.5	0.5
+            E	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofileWithPseudocounts(
+            dStruct.threshold,
+            dStruct.pseudocountSigma,
+            dStruct.statesCharList,
+            dStruct.alignmentStringList
+        )
+        //checkResultingOutputDataStructure(expectedStruct, result)
+
+        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+
+        val outFile = File(outputMessagesFilePath)
+        val writer = outFile.bufferedWriter()
+
+        uglyPrintTransitionMatrix(writer)
+        writer.write("--------\n")
+        uglyPrintEmissionsMatrix(writer)
+        writer.close()
+    }
+
+    /**
+    This dataset makes sure that your code includes all relevant
+    columns in the seed alignment. It is analogous to
+    Test Dataset 6 in the Profile HMM problem. Since the threshold
+    value in this dataset is so high, all columns in the original
+    multiple alignment should be included in the seed alignment.
+    If your output has the wrong states your implementation of the
+    regular profile HMM is likely incorrect. If your implementation
+    passed all the tests for the regular profile HMM problem but fails
+    this test then be sure that your code does not invalidate that
+    implementation when adding pseudocounts.
+     */
+
+    @Test
+    @DisplayName("Profile Alignment Test Dataset 7")
+    fun profileAlignmentDataset7() {
+        val inputData = """
+            0.9 0.01
+            --------
+            A B
+            --------
+            A-
+            -A
+        """.trimIndent()
+
+        val expectedResultsString = """
+                S	I0	M1	D1	I1	M2	D2	I2	E
+            S	0	0.00971	0.495	0.495	0	0	0	0	0
+            I0	0	0.333	0.333	0.333	0	0	0	0	0
+            M1	0	0	0	0	0.00971	0.00971	0.981	0	0
+            D1	0	0	0	0	0.00971	0.981	0.00971	0	0
+            I1	0	0	0	0	0.333	0.333	0.333	0	0
+            M2	0	0	0	0	0	0	0	0.00980	0.990
+            D2	0	0	0	0	0	0	0	0.00980	0.990
+            I2	0	0	0	0	0	0	0	0.5	0.5
+            E	0	0	0	0	0	0	0	0	0
+            --------
+                A	B
+            S	0	0
+            I0	0.5	0.5
+            M1	0.990	0.00980
+            D1	0	0
+            I1	0.5	0.5
+            M2	0.990	0.00980
+            D2	0	0
+            I2	0.5	0.5
+            E	0	0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofileWithPseudocounts(
+            dStruct.threshold,
+            dStruct.pseudocountSigma,
+            dStruct.statesCharList,
+            dStruct.alignmentStringList
+        )
+        //checkResultingOutputDataStructure(expectedStruct, result)
+
+        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+
+        val outFile = File(outputMessagesFilePath)
+        val writer = outFile.bufferedWriter()
+
+        uglyPrintTransitionMatrix(writer)
+        writer.write("--------\n")
+        uglyPrintEmissionsMatrix(writer)
+        writer.close()
     }
 
     /****************************************************
@@ -224,7 +628,8 @@ E	0	0
                 assertEquals(
                     rowExpected[col],
                     rowResult[col], rowExpected[col] / 100.0,
-                    "Emissions matrix mismatch Row: $rowIndex Col: $col")
+                    "Emissions matrix mismatch Row: $rowIndex Col: $col"
+                )
             }
         }
 
@@ -310,5 +715,103 @@ E	0	0
             alignmentStringList = alignmentStringList
         )
     }
-    
+
+    /**
+     * print a formatted transition matrix for debugging
+     */
+    fun uglyPrintTransitionMatrix(writer: BufferedWriter) {
+        val str = StringBuilder()
+
+        val baseGroupCount = hmmp.numMatchColumns
+        val numPercentageRowsAndColumns = baseGroupCount * 3 + 3
+
+        // header
+        str.append("\tS\tI0\t")
+        for (i in 1..baseGroupCount) {
+            str.append("M$i\tD$i\tI$i\t")
+        }
+        str.append("E\n")
+
+        for (row in 0 until numPercentageRowsAndColumns) {
+            when (row) {
+                0 -> str.append("S\t")
+                1 -> str.append("I0\t")
+                numPercentageRowsAndColumns - 1 -> str.append("E	")
+                else -> {
+                    val groupNumOffset = (row - 2) % 3
+                    val groupNum = (row - 2) / 3 + 1
+                    val label = "${"MDI"[groupNumOffset]}$groupNum\t"
+                    str.append(label)
+                }
+            }
+            for (col in 0 until numPercentageRowsAndColumns) {
+                var outNum: String
+                val num = hmmp.t[row, col]
+                if (num == 0.0) {
+                    outNum = "0"
+                } else {
+//                    outNum = String.format("%6.5f", num)
+                    outNum = "$num"
+                }
+                str.append("$outNum")
+                if (col != numPercentageRowsAndColumns - 1) {
+                    str.append("\t")
+                }
+            }
+            str.append("\n")
+        }
+        writer.write(str.toString())
+    }
+
+    /**
+     * print a formatted transition matrix for debugging
+     */
+    fun uglyPrintEmissionsMatrix(writer: BufferedWriter) {
+        val str = StringBuilder()
+
+        val baseGroupCount = hmmp.numMatchColumns
+        val numStatesCharList = hmmp.statesCharList.size
+        val numPercentageRowsAndColumns = baseGroupCount * 3 + 3
+
+        // header
+        str.append("\t")
+        for (i in 0 until numStatesCharList) {
+            str.append("${hmmp.statesCharList[i]}")
+            if (i != numStatesCharList - 1) {
+                str.append("\t")
+            }
+        }
+        str.append("\n")
+
+        for (row in 0 until numPercentageRowsAndColumns) {
+            when (row) {
+                0 -> str.append("S\t")
+                1 -> str.append("I0\t")
+                numPercentageRowsAndColumns - 1 -> str.append("E\t")
+                else -> {
+                    val groupNumOffset = (row - 2) % 3
+                    val groupNum = (row - 2) / 3 + 1
+                    val label = "${"MDI"[groupNumOffset]}$groupNum\t"
+                    str.append(label)
+                }
+            }
+            for (col in 0 until numStatesCharList) {
+                var outNum: String
+                val num = hmmp.e[row, col]
+                if (num == 0.0) {
+                    outNum = "0"
+                } else {
+//                    outNum = String.format("%6.5f", num)
+                    outNum = "$num"
+                }
+                str.append(outNum)
+                if (col != numStatesCharList - 1) {
+                    str.append("\t")
+                }
+            }
+            str.append("\n")
+        }
+        writer.write(str.toString())
+    }
+
 }

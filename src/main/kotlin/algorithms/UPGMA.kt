@@ -45,7 +45,7 @@ class UPGMA /* Unweighted Pair Group Method with Arithmetic Mean */{
      */
 
 
-    val psuedoCode = """
+    val pseudoCode = """
     UPGMA(D, n) /* Unweighted Pair Group Method with Arithmetic Mean */
     Clusters ← n single-element clusters labeled 1, ... , n
     construct a graph T with n isolated nodes labeled by single elements 1, ... , n

@@ -56,8 +56,8 @@ class NeighborJoining {
      */
 
     // the actual implementation is ITERATIVE, not RECURSIVE.
-    // psuedo code (for reference) from : http://rosalind.info/problems/ba7e/
-    val psuedoCode = """
+    // pseudo code (for reference) from : http://rosalind.info/problems/ba7e/
+    val pseudoCode = """
     NeighborJoining(D)
     n ← number of rows in D
     if n = 2
