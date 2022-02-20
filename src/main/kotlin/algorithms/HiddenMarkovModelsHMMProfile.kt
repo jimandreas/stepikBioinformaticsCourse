@@ -53,7 +53,7 @@ class HiddenMarkovModelsHMMProfile {
 
     // the matrices - t - transitions, tCount - count of occurrences, e - emissions, percent of char
     lateinit var t: D2Array<Double>
-    lateinit var tCount: D2Array<Double>
+    lateinit var tCount: D2Array<Int>
     lateinit var tRepeatInsertCount: D2Array<Double>
     lateinit var e: D2Array<Double>
 
@@ -296,7 +296,7 @@ class HiddenMarkovModelsHMMProfile {
         // one row per row in the alignment strings
         //    3 columns per character INSERT MATCH DELETE plus one more for RepeatInserts
         val numCountColumns = numMatchColumns * 3
-        tCount = mk.d2array(numRows, numCountColumns + 1) { 0.0 }
+        tCount = mk.d2array(numRows, numCountColumns + 1) { 0 }
         tRepeatInsertCount = mk.d2array(numRows, numMatchColumns + 1) { 0.0 }
 
         // STEP 3 - increment the HMM states and count emission characters
@@ -383,24 +383,32 @@ class HiddenMarkovModelsHMMProfile {
     fun scoreDeleteTransitionRow(group: Int): List<Double> {
 
         val lastDeleteCol = tCount[0..numRows, (group - 1) * 3 + 2].toList()
-        val lastDeleteSum = lastDeleteCol.sum() + pseudoCount
-        if (lastDeleteSum == /*0.0*/ pseudoCount) {
-//            return listOf(0.0, 0.0, 0.0)
-            val oneThird = 1.0 / 3.0
-            return listOf(oneThird, oneThird, oneThird)
+        val lastDeleteSum = lastDeleteCol.sum().toDouble()
+        if (lastDeleteSum == 0.0) { // if delete count is zero
+            if (pseudoCount == 0.0) {
+                return listOf(0.0, 0.0, 0.0)
+            }
+            // pseudoCount is non-zero - set even probabilities
+            if (group == numMatchColumns) {
+                return listOf(0.5, 0.5) // only trailing insert and match=End state, no delete
+            }
+            return listOf(1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0)
         }
 
         // the percentage of deletions that goes to insert is the percentage
         //   of the current delete column that transforms to an insert letter
         val insertCol = tCount[0..numRows, group * 3].toList()
         var insertColEntries =
-            lastDeleteCol.filterIndexed {
-                    index, i -> lastDeleteCol[index] == 1.0 && insertCol[index] == 1.0 }.sum() + pseudoCount
-        val insertColPercent = insertColEntries / lastDeleteSum
+            lastDeleteCol.filterIndexed { index, i -> lastDeleteCol[index] == 1 && insertCol[index] == 1 }
+                .sum()
+        val insertColPercent = insertColEntries / lastDeleteSum + pseudoCount
 
         // if we are at the end of the columns, just use what is left over as the end value
         if (group == numMatchColumns) {
-            return listOf(insertColPercent, 1.0 - insertColPercent, 0.0)
+            val endMatchPercent = (lastDeleteSum - insertColEntries) / lastDeleteSum + pseudoCount
+            val sumHere = insertColPercent + endMatchPercent
+            // return insert and end values
+            return listOf(insertColPercent / sumHere, endMatchPercent / sumHere)
         }
 
         // the percentage that goes to the next match is the percentage of
@@ -408,12 +416,14 @@ class HiddenMarkovModelsHMMProfile {
         //    and (2) have a corresponding delete letter
         val nextMatchCol = tCount[0..numRows, group * 3 + 1].toList()
         var nextMatchColEntries =
-            nextMatchCol.filterIndexed {
-                    index, i -> insertCol[index] == 0.0 && lastDeleteCol[index] == 1.0 }.sum() + pseudoCount
-        val nextMatchColPercent = nextMatchColEntries / lastDeleteSum
+            nextMatchCol.filterIndexed { index, i -> insertCol[index] == 0 && lastDeleteCol[index] == 1 }
+                .sum()
+        val nextMatchColPercent = nextMatchColEntries / lastDeleteSum + pseudoCount
 
-        val deleteColPercent = 1.0 - insertColPercent - nextMatchColPercent
-        return listOf(insertColPercent, nextMatchColPercent, deleteColPercent)
+        val deleteColPercent = (lastDeleteSum - nextMatchColEntries - insertColEntries) / lastDeleteSum + pseudoCount
+
+        val sum = deleteColPercent + insertColPercent + nextMatchColPercent
+        return listOf(insertColPercent / sum, nextMatchColPercent / sum, deleteColPercent / sum)
     }
 
     /**
@@ -422,19 +432,21 @@ class HiddenMarkovModelsHMMProfile {
     fun scoreMatchTransitionRow(group: Int): List<Double> {
 
         val lastMatchCol = tCount[0..numRows, (group - 1) * 3 + 1].toList()
-        val lastMatchNumRows = lastMatchCol.sum() + pseudoCount
+        val lastMatchNumRows = lastMatchCol.sum()
 
         // the percentage that goes to insert is the percentage
         //   of the last match column that transforms to an insert letter
         val insertCol = tCount[0..numRows, group * 3].toList()
         var insertColEntries =
-            lastMatchCol.filterIndexed { index, i -> insertCol[index] == 1.0 && lastMatchCol[index] == 1.0 }
-                .sum() + pseudoCount
-        val insertColPercent = insertColEntries / lastMatchNumRows
+            lastMatchCol.filterIndexed { index, i -> insertCol[index] == 1 && lastMatchCol[index] == 1 }.sum()
+        val insertColPercent = insertColEntries.toDouble() / lastMatchNumRows + pseudoCount
 
         // if we are at the end of the columns, just use what is left over as the end value
         if (group == numMatchColumns) {
-            return listOf(insertColPercent, 1.0 - insertColPercent, pseudoCount)
+            val endMatchPercent = (lastMatchNumRows - insertColEntries).toDouble() / lastMatchNumRows + pseudoCount
+            val sumHere = insertColPercent + endMatchPercent
+            // return insert and end values
+            return listOf(insertColPercent / sumHere, endMatchPercent / sumHere)
         }
 
         // the percentage that goes to the next match is the percentage of
@@ -442,55 +454,66 @@ class HiddenMarkovModelsHMMProfile {
         //    and (2) have a corresponding match letter
         val nextMatchCol = tCount[0..numRows, group * 3 + 1].toList()
         var nextMatchColEntries =
-            nextMatchCol.filterIndexed { index, i -> insertCol[index] == 0.0 && lastMatchCol[index] == 1.0 }
-                .sum() + pseudoCount
-        val nextMatchColPercent = nextMatchColEntries / lastMatchNumRows
+            nextMatchCol.filterIndexed { index, i -> insertCol[index] == 0 && lastMatchCol[index] == 1 }
+        val nextMatchColPercent = nextMatchColEntries.sum().toDouble() / lastMatchNumRows + pseudoCount
 
         // the delete percentage is similar but it must have
         //   a previous match entry, a delete entry, and no insert entry
         var deleteColPercent = 0.0
         val deleteCol = tCount[0..numRows, group * 3 + 2].toList()
         var deleteColEntries =
-            deleteCol.filterIndexed { index, i -> lastMatchCol[index] == 1.0 && insertCol[index] == 0.0 && deleteCol[index] == 1.0 }
-                .sum() + pseudoCount
-        deleteColPercent = deleteColEntries / lastMatchNumRows
+            deleteCol.filterIndexed { index, i -> lastMatchCol[index] == 1 && insertCol[index] == 0 && deleteCol[index] == 1 }
+        deleteColPercent = deleteColEntries.sum().toDouble() / lastMatchNumRows + pseudoCount
 
-        return listOf(insertColPercent, nextMatchColPercent, deleteColPercent)
+        val sum = insertColPercent + nextMatchColPercent + deleteColPercent
+
+        return listOf(insertColPercent / sum, nextMatchColPercent / sum, deleteColPercent / sum)
     }
 
     /**
-     * calculate transition percentages for Insert to Match and Delete
-     *    values returned - percentage to repeat insert,
-     *      to match and then to delete
+     * calculate transition percentages for Insert to (repeat Insert), Match and Delete
+     *    values returned - percentage to repeat insert, to match and then to delete
      */
     fun scoreInsertTransitionRow(group: Int): List<Double> {
 
         val insertCol = tCount[0..numRows, group * 3]
-        val insertColSum = insertCol.sum().toDouble() + pseudoCount
-        if (insertColSum == /*0.0*/ pseudoCount) {
-//            return listOf(0.0, 0.0, 0.0)
-            val oneThird = 1.0 / 3.0
-            return listOf(oneThird, oneThird, oneThird)
+        val insertColSum = insertCol.sum().toDouble()
+        if (insertColSum == 0.0) { // if insert count is zero
+            if (pseudoCount == 0.0) {
+                return listOf(0.0, 0.0, 0.0)
+            }
+            // pseudoCount is non-zero - set even probabilities
+            if (group == numMatchColumns) {
+                return listOf(0.5, 0.5) // only trailing insert and match=End state, no delete
+            }
+            return listOf(1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0)
         }
-        val repeatInsertSum = tRepeatInsertCount[0..numRows, group].sum() + pseudoCount
+        val repeatInsertSum = tRepeatInsertCount[0..numRows, group].sum().toDouble()
         // probability of repeating the insert transition
-        val repeatInsertPercentage = repeatInsertSum / (insertColSum + repeatInsertSum)
+        val repeatInsertPercentage = repeatInsertSum / (insertColSum + repeatInsertSum) + pseudoCount
 
-        // if we are at the end, the last insert line has only a division of repeats and end states
+        // if we are at the end of the columns, just use what is left over as the end value
         if (group == numMatchColumns) {
-            return listOf(repeatInsertPercentage, 1.0 - repeatInsertPercentage, /*0.0*/ pseudoCount)
+            val endInsertPercent = (insertColSum - repeatInsertSum) / insertColSum + pseudoCount
+            val sumHere = endInsertPercent + repeatInsertPercentage
+            // return insert and end values
+            return listOf(repeatInsertPercentage / sumHere, endInsertPercent / sumHere)
         }
+
         // calculate percentage of the left over probability to allocate to matching transitions
         //   the matches must be shadowed after the insert letters
         val matchCol = tCount[0..numRows, group * 3 + 1].toList()
-        var matchColEntriesSum = matchCol.filterIndexed { index, i -> insertCol[index] == 1.0 }.sum() + pseudoCount
-        val matchColShadowedPercent = matchColEntriesSum / insertColSum
+        var matchColEntriesSum = matchCol.filterIndexed { index, i -> insertCol[index] == 1 }.sum()
+        val matchColShadowedPercent = matchColEntriesSum / insertColSum + pseudoCount
+
         val matchColPercentageOfInsertTransition = (1.0 - repeatInsertPercentage) * matchColShadowedPercent
 
         // and now allocate to the delete probability
         val deleteCol = tCount[0..numRows, group * 3 + 2].toList()
-        var deleteColEntriesSum = deleteCol.filterIndexed { index, i -> insertCol[index] == 1.0 }.sum() + pseudoCount
-        val deleteColShadowedPercent = deleteColEntriesSum / insertColSum
+        var deleteColEntriesSum = deleteCol.filterIndexed { index, i -> insertCol[index] == 1 }.sum()
+        val deleteColShadowedPercent = deleteColEntriesSum / insertColSum + pseudoCount
+
+
         val deleteColPercentageOfInsertTransition = (1.0 - repeatInsertPercentage) * deleteColShadowedPercent
 
         return listOf(
@@ -506,15 +529,15 @@ class HiddenMarkovModelsHMMProfile {
      */
     fun scoreStartInsertMatchDelete(group: Int): List<Double> {
         val insertCol = tCount[0..numRows, group * 3]
-        val insertColPercent = insertCol.sum().toDouble()
+        val insertColPercent = insertCol.sum().toDouble() / numRows.toDouble() + pseudoCount
 
         val matchCol = tCount[0..numRows, group * 3 + 1].toList()
-        var matchColEntries = matchCol.filterIndexed { index, i -> insertCol[index] < 1.0 }
-        val matchColPercent = matchColEntries.sum()
+        var matchColEntries = matchCol.filterIndexed { index, i -> insertCol[index] == 0 }
+        val matchColPercent = matchColEntries.sum().toDouble() / numRows.toDouble() + pseudoCount
 
         val deleteCol = tCount[0..numRows, group * 3 + 2].toList()
-        var deleteColEntries = deleteCol.filterIndexed { index, i -> insertCol[index] < 1.0 }
-        val deleteColPercent = deleteColEntries.sum()
+        var deleteColEntries = deleteCol.filterIndexed { index, i -> insertCol[index] == 0 }
+        val deleteColPercent = deleteColEntries.sum().toDouble() / numRows.toDouble() + pseudoCount
 
         val sum = insertColPercent + matchColPercent + deleteColPercent
 

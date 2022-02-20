@@ -103,7 +103,7 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
             dStruct.statesCharList,
             dStruct.alignmentStringList
         )
-        //checkResultingOutputDataStructure(expectedStruct, result)
+        checkResultingOutputDataStructure(expectedStruct, result)
 
         val outputMessagesFilePath = "zzhiddenMarkov.txt"
 
@@ -169,7 +169,7 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
             dStruct.statesCharList,
             dStruct.alignmentStringList
         )
-        //checkResultingOutputDataStructure(expectedStruct, result)
+        checkResultingOutputDataStructure(expectedStruct, result)
 
         val outputMessagesFilePath = "zzhiddenMarkov.txt"
 
@@ -231,7 +231,7 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
             dStruct.statesCharList,
             dStruct.alignmentStringList
         )
-        //checkResultingOutputDataStructure(expectedStruct, result)
+        checkResultingOutputDataStructure(expectedStruct, result)
 
         val outputMessagesFilePath = "zzhiddenMarkov.txt"
 
@@ -296,7 +296,7 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
             dStruct.statesCharList,
             dStruct.alignmentStringList
         )
-        //checkResultingOutputDataStructure(expectedStruct, result)
+
 
         val outputMessagesFilePath = "zzhiddenMarkov.txt"
 
@@ -307,6 +307,8 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
         writer.write("--------\n")
         uglyPrintEmissionsMatrix(writer)
         writer.close()
+
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
     /**
@@ -488,7 +490,7 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
             dStruct.statesCharList,
             dStruct.alignmentStringList
         )
-        //checkResultingOutputDataStructure(expectedStruct, result)
+        checkResultingOutputDataStructure(expectedStruct, result)
 
         val outputMessagesFilePath = "zzhiddenMarkov.txt"
 
