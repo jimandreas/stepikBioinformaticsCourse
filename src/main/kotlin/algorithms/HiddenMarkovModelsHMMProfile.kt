@@ -399,16 +399,18 @@ class HiddenMarkovModelsHMMProfile {
             }
             return listOf(1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0)
         }
-        val repeatInsertSum = tRepeatInsertCount[0..numRows, group].sum().toDouble()
+        val repeatInsertCol = tRepeatInsertCount[0..numRows, group]
+        val repeatInsertSum = repeatInsertCol.sum().toDouble()
+        val repeatInsertPercent = repeatInsertSum / insertColSum + pseudoCount
         // probability of repeating the insert transition
-        val repeatInsertPercentage = repeatInsertSum / (insertColSum + repeatInsertSum) + pseudoCount
 
         // if we are at the end of the columns, just use what is left over as the end value
         if (group == numMatchColumns) {
-            val endInsertPercent = insertColSum / (insertColSum + repeatInsertSum) + pseudoCount
-            val sumHere = endInsertPercent + repeatInsertPercentage
+            val repeatInsertEndingPercentage = repeatInsertSum / (repeatInsertSum + insertColSum)  + pseudoCount
+            val endInsertPercent = insertColSum / (repeatInsertSum + insertColSum) + pseudoCount
+            val sumHere = endInsertPercent + repeatInsertEndingPercentage
             // return insert and end values
-            return listOf(repeatInsertPercentage / sumHere, endInsertPercent / sumHere)
+            return listOf(repeatInsertEndingPercentage / sumHere, endInsertPercent / sumHere)
         }
 
         // calculate percentage of the left over probability to allocate to matching transitions
@@ -422,10 +424,10 @@ class HiddenMarkovModelsHMMProfile {
         var deleteColEntriesSum = deleteCol.filterIndexed { index, i -> insertCol[index] == 1 }.sum()
         val deleteColShadowedPercent = deleteColEntriesSum / insertColSum + pseudoCount
 
-        val sum = repeatInsertPercentage + matchColShadowedPercent + deleteColShadowedPercent
+        val sum = repeatInsertPercent + matchColShadowedPercent + deleteColShadowedPercent
 
         return listOf(
-            repeatInsertPercentage / sum,
+            repeatInsertPercent / sum,
             matchColShadowedPercent / sum,
             deleteColShadowedPercent / sum
         )

@@ -1,6 +1,12 @@
 @file:Suppress(
-    "UNUSED_VARIABLE", "MemberVisibilityCanBePrivate", "UNUSED_PARAMETER", "unused",
-    "ReplaceManualRangeWithIndicesCalls", "ReplaceSizeZeroCheckWithIsEmpty", "SameParameterValue", "UnnecessaryVariable",
+    "UNUSED_VARIABLE",
+    "MemberVisibilityCanBePrivate",
+    "UNUSED_PARAMETER",
+    "unused",
+    "ReplaceManualRangeWithIndicesCalls",
+    "ReplaceSizeZeroCheckWithIsEmpty",
+    "SameParameterValue",
+    "UnnecessaryVariable",
     "LiftReturnOrAssignment"
 )
 
@@ -24,7 +30,7 @@ internal class S10C08P15HiddenMarkovProfileAlignmentQuizTest {
     @BeforeEach
     fun setUp() {
         hmmp = HiddenMarkovModelsHMMProfile()
-        hmmp.debugOutput = false
+        //hmmp.debugOutput = false
     }
 
     /**
@@ -42,7 +48,7 @@ internal class S10C08P15HiddenMarkovProfileAlignmentQuizTest {
     Return: The transition and emission probabilities of the profile HMM HMM(Alignment, θ).
      */
 
-   // Extra dataset
+    // Extra dataset
 
     @Test
     @DisplayName("Profile Alignment Test Extra Dataset")
@@ -105,12 +111,18 @@ E	0	0	0	0	0
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
-        checkResultingOutputDataStructure(expectedStruct, result)
 
-//        println("Output:")
-//        uglyPrintTransitionMatrix()
-//        println("--------")
-//        uglyPrintEmissionsMatrix()
+//        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+//
+//        val outFile = File(outputMessagesFilePath)
+//        val writer = outFile.bufferedWriter()
+//
+//        uglyPrintTransitionMatrix(writer)
+//        writer.write("--------\n")
+//        uglyPrintEmissionsMatrix(writer)
+//        writer.close()
+
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
 
@@ -275,17 +287,19 @@ E 0.0 0.0 0.0 0.0 0.0
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
+
+
+//        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+//
+//        val outFile = File(outputMessagesFilePath)
+//        val writer = outFile.bufferedWriter()
+//
+//        uglyPrintTransitionMatrix(writer)
+//        writer.write("--------\n")
+//        uglyPrintEmissionsMatrix(writer)
+//        writer.close()
+
         checkResultingOutputDataStructure(expectedStruct, result)
-
-        val outputMessagesFilePath = "zzhiddenMarkov.txt"
-
-        val outFile = File(outputMessagesFilePath)
-        val writer = outFile.bufferedWriter()
-        
-        uglyPrintTransitionMatrix(writer)
-        writer.write("--------\n")
-        uglyPrintEmissionsMatrix(writer)
-        writer.close()
     }
 
     @Test
@@ -451,7 +465,6 @@ E	0	0	0	0	0
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
-        checkResultingOutputDataStructure(expectedStruct, result)
 
 //        val outputMessagesFilePath = "zzhiddenMarkov.txt"
 //
@@ -462,6 +475,8 @@ E	0	0	0	0	0
 //        writer.write("--------\n")
 //        uglyPrintEmissionsMatrix(writer)
 //        writer.close()
+
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
     @Test
@@ -538,7 +553,7 @@ E	0	0	0	0	0
         val dStruct = createFromInputString(inputData.lines().toMutableList())
         val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
         val result = hmmp.createHMMprofile(dStruct.threshold, dStruct.statesCharList, dStruct.alignmentStringList)
-        checkResultingOutputDataStructure(expectedStruct, result)
+
 
 //        val outputMessagesFilePath = "zzhiddenMarkov.txt"
 //
@@ -549,6 +564,8 @@ E	0	0	0	0	0
 //        writer.write("--------\n")
 //        uglyPrintEmissionsMatrix(writer)
 //        writer.close()
+
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
 
@@ -674,7 +691,8 @@ E	0	0
                 assertEquals(
                     rowExpected[col],
                     rowResult[col], rowExpected[col] / 100.0,
-                    "Emissions matrix mismatch Row: $rowIndex Col: $col")
+                    "Emissions matrix mismatch Row: $rowIndex Col: $col"
+                )
             }
         }
 
@@ -782,7 +800,7 @@ E	0	0
                 else -> {
                     val groupNumOffset = (row - 2) % 3
                     val groupNum = (row - 2) / 3 + 1
-                    val label =	"${"MDI"[groupNumOffset]}$groupNum\t"
+                    val label = "${"MDI"[groupNumOffset]}$groupNum\t"
                     str.append(label)
                 }
             }
@@ -833,7 +851,7 @@ E	0	0
                 else -> {
                     val groupNumOffset = (row - 2) % 3
                     val groupNum = (row - 2) / 3 + 1
-                    val label =	"${"MDI"[groupNumOffset]}$groupNum\t"
+                    val label = "${"MDI"[groupNumOffset]}$groupNum\t"
                     str.append(label)
                 }
             }
@@ -841,7 +859,7 @@ E	0	0
                 var outNum: String
                 val num = hmmp.e[row, col]
                 if (num == 0.0) {
-                    outNum =	"0"
+                    outNum = "0"
                 } else {
 //                    outNum = String.format("%6.5f", num)
                     outNum = "$num"
