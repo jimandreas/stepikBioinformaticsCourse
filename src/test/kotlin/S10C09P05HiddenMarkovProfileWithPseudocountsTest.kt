@@ -23,7 +23,7 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
     @BeforeEach
     fun setUp() {
         hmmp = HiddenMarkovModelsHMMProfile()
-        hmmp.debugOutput = true
+        //hmmp.debugOutput = true
     }
 
     /**
@@ -41,6 +41,74 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
     Return: The transition and emission probabilities of the profile HMM HMM(Alignment, θ, σ).
      */
 
+    @Test
+    @DisplayName("Profile Alignment Sample Test")
+    fun profileAlignmentSampleTest() {
+        val inputData = """
+            0.358   0.01
+            --------
+            A   B   C   D   E
+            --------
+            ADA
+            ADA
+            AAA
+            ADC
+            -DA
+            D-A
+        """.trimIndent()
+
+        val expectedResultsString = """
+S   I0  M1  D1  I1  M2  D2  I2  M3  D3  I3  E
+S   0   0.01    0.819   0.172   0   0   0   0   0   0   0   0
+I0  0   0.333   0.333   0.333   0   0   0   0   0   0   0   0
+M1  0   0   0   0   0.01    0.786   0.204   0   0   0   0   0
+D1  0   0   0   0   0.01    0.981   0.01    0   0   0   0   0
+I1  0   0   0   0   0.333   0.333   0.333   0   0   0   0   0
+M2  0   0   0   0   0   0   0   0.01    0.981   0.01    0   0
+D2  0   0   0   0   0   0   0   0.01    0.981   0.01    0   0
+I2  0   0   0   0   0   0   0   0.333   0.333   0.333   0   0
+M3  0   0   0   0   0   0   0   0   0   0   0.01    0.99
+D3  0   0   0   0   0   0   0   0   0   0   0.5 0.5
+I3  0   0   0   0   0   0   0   0   0   0   0.5 0.5
+E   0   0   0   0   0   0   0   0   0   0   0   0
+--------
+    A   B   C   D   E
+S   0   0   0   0   0
+I0  0.2 0.2 0.2 0.2 0.2
+M1  0.771   0.01    0.01    0.2 0.01
+D1  0   0   0   0   0
+I1  0.2 0.2 0.2 0.2 0.2
+M2  0.2 0.01    0.01    0.771   0.01
+D2  0   0   0   0   0
+I2  0.2 0.2 0.2 0.2 0.2
+M3  0.803   0.01    0.168   0.01    0.01
+D3  0   0   0   0   0
+I3  0.2 0.2 0.2 0.2 0.2
+E   0   0   0   0   0
+        """.trimIndent()
+
+        val dStruct = createFromInputString(inputData.lines().toMutableList())
+        val expectedStruct = createExpectedOutputDataStructure(dStruct.statesCharList, expectedResultsString)
+        val result = hmmp.createHMMprofileWithPseudocounts(
+            dStruct.threshold,
+            dStruct.pseudocountSigma,
+            dStruct.statesCharList,
+            dStruct.alignmentStringList
+        )
+
+
+//        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+//
+//        val outFile = File(outputMessagesFilePath)
+//        val writer = outFile.bufferedWriter()
+//
+//        uglyPrintTransitionMatrix(writer)
+//        writer.write("--------\n")
+//        uglyPrintEmissionsMatrix(writer)
+//        writer.close()
+
+        checkResultingOutputDataStructure(expectedStruct, result)
+    }
 
     /**
     This dataset makes sure that your code is correctly
@@ -103,17 +171,19 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
             dStruct.statesCharList,
             dStruct.alignmentStringList
         )
+
+
+//        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+//
+//        val outFile = File(outputMessagesFilePath)
+//        val writer = outFile.bufferedWriter()
+//
+//        uglyPrintTransitionMatrix(writer)
+//        writer.write("--------\n")
+//        uglyPrintEmissionsMatrix(writer)
+//        writer.close()
+
         checkResultingOutputDataStructure(expectedStruct, result)
-
-        val outputMessagesFilePath = "zzhiddenMarkov.txt"
-
-        val outFile = File(outputMessagesFilePath)
-        val writer = outFile.bufferedWriter()
-
-        uglyPrintTransitionMatrix(writer)
-        writer.write("--------\n")
-        uglyPrintEmissionsMatrix(writer)
-        writer.close()
     }
 
     /**
@@ -171,15 +241,15 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
         )
         checkResultingOutputDataStructure(expectedStruct, result)
 
-        val outputMessagesFilePath = "zzhiddenMarkov.txt"
-
-        val outFile = File(outputMessagesFilePath)
-        val writer = outFile.bufferedWriter()
-
-        uglyPrintTransitionMatrix(writer)
-        writer.write("--------\n")
-        uglyPrintEmissionsMatrix(writer)
-        writer.close()
+//        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+//
+//        val outFile = File(outputMessagesFilePath)
+//        val writer = outFile.bufferedWriter()
+//
+//        uglyPrintTransitionMatrix(writer)
+//        writer.write("--------\n")
+//        uglyPrintEmissionsMatrix(writer)
+//        writer.close()
     }
 
     /**
@@ -233,15 +303,15 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
         )
         checkResultingOutputDataStructure(expectedStruct, result)
 
-        val outputMessagesFilePath = "zzhiddenMarkov.txt"
-
-        val outFile = File(outputMessagesFilePath)
-        val writer = outFile.bufferedWriter()
-
-        uglyPrintTransitionMatrix(writer)
-        writer.write("--------\n")
-        uglyPrintEmissionsMatrix(writer)
-        writer.close()
+//        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+//
+//        val outFile = File(outputMessagesFilePath)
+//        val writer = outFile.bufferedWriter()
+//
+//        uglyPrintTransitionMatrix(writer)
+//        writer.write("--------\n")
+//        uglyPrintEmissionsMatrix(writer)
+//        writer.close()
     }
 
     /**
@@ -298,15 +368,15 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
         )
 
 
-        val outputMessagesFilePath = "zzhiddenMarkov.txt"
-
-        val outFile = File(outputMessagesFilePath)
-        val writer = outFile.bufferedWriter()
-
-        uglyPrintTransitionMatrix(writer)
-        writer.write("--------\n")
-        uglyPrintEmissionsMatrix(writer)
-        writer.close()
+//        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+//
+//        val outFile = File(outputMessagesFilePath)
+//        val writer = outFile.bufferedWriter()
+//
+//        uglyPrintTransitionMatrix(writer)
+//        writer.write("--------\n")
+//        uglyPrintEmissionsMatrix(writer)
+//        writer.close()
 
         checkResultingOutputDataStructure(expectedStruct, result)
     }
@@ -358,17 +428,17 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
             dStruct.statesCharList,
             dStruct.alignmentStringList
         )
-        //checkResultingOutputDataStructure(expectedStruct, result)
+        checkResultingOutputDataStructure(expectedStruct, result)
 
-        val outputMessagesFilePath = "zzhiddenMarkov.txt"
-
-        val outFile = File(outputMessagesFilePath)
-        val writer = outFile.bufferedWriter()
-
-        uglyPrintTransitionMatrix(writer)
-        writer.write("--------\n")
-        uglyPrintEmissionsMatrix(writer)
-        writer.close()
+//        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+//
+//        val outFile = File(outputMessagesFilePath)
+//        val writer = outFile.bufferedWriter()
+//
+//        uglyPrintTransitionMatrix(writer)
+//        writer.write("--------\n")
+//        uglyPrintEmissionsMatrix(writer)
+//        writer.close()
     }
 
     /**
@@ -420,7 +490,7 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
             dStruct.statesCharList,
             dStruct.alignmentStringList
         )
-        //checkResultingOutputDataStructure(expectedStruct, result)
+
 
         val outputMessagesFilePath = "zzhiddenMarkov.txt"
 
@@ -431,6 +501,8 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
         writer.write("--------\n")
         uglyPrintEmissionsMatrix(writer)
         writer.close()
+
+        checkResultingOutputDataStructure(expectedStruct, result)
     }
 
     /**
@@ -492,15 +564,15 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
         )
         checkResultingOutputDataStructure(expectedStruct, result)
 
-        val outputMessagesFilePath = "zzhiddenMarkov.txt"
-
-        val outFile = File(outputMessagesFilePath)
-        val writer = outFile.bufferedWriter()
-
-        uglyPrintTransitionMatrix(writer)
-        writer.write("--------\n")
-        uglyPrintEmissionsMatrix(writer)
-        writer.close()
+//        val outputMessagesFilePath = "zzhiddenMarkov.txt"
+//
+//        val outFile = File(outputMessagesFilePath)
+//        val writer = outFile.bufferedWriter()
+//
+//        uglyPrintTransitionMatrix(writer)
+//        writer.write("--------\n")
+//        uglyPrintEmissionsMatrix(writer)
+//        writer.close()
     }
 
     /****************************************************
@@ -616,7 +688,7 @@ E	0	0
             for (col in 0 until rowExpected.size) {
                 assertEquals(
                     rowExpected[col],
-                    rowResult[col], rowExpected[col] / 100.0,
+                    rowResult[col], 0.01,
                     "Transitions matrix mismatch Row: $rowIndex Col: $col"
                 )
             }
@@ -629,7 +701,7 @@ E	0	0
             for (col in 0 until rowExpected.size) {
                 assertEquals(
                     rowExpected[col],
-                    rowResult[col], rowExpected[col] / 100.0,
+                    rowResult[col], 0.01,
                     "Emissions matrix mismatch Row: $rowIndex Col: $col"
                 )
             }

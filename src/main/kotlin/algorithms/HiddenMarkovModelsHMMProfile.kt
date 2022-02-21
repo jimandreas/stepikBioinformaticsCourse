@@ -75,85 +75,6 @@ class HiddenMarkovModelsHMMProfile {
     var pseudoCount = 0.0 // pseudoCount Sigma
 
     /**
-     * insert pseudoCounts to any non-zero Start, Insert, Match, and Delete transition
-     * matrix cells.  Also insert pseudoCounts to any non-zero Insert and Match emission states.
-     */
-    fun insertPseudocounts() {
-        if (pseudoCount == 0.0) {
-            return
-        }
-        val p = pseudoCount
-
-        /*
-         * transmission count matrix:
-         * inject p into all non-zero Insert, Match, and Delete cells for non-zero entries
-         */
-        val numCountRows = numMatchColumns
-        val numCountColumns = numMatchColumns * 3 + 1
-        for (row in 0 until numCountRows) {
-//            var injectThisRow = false
-//            when (row) {
-//                0 -> {
-//                    // S row
-//                }
-//                1 -> {// I0
-//                    injectThisRow = true
-//                }
-//                else -> {
-//                    val groupNumOffset = (row - 2) % 3
-//                    if (groupNumOffset == 0 || groupNumOffset == 2) {
-//                        // M row or I row
-//                        injectThisRow = true
-//                    }
-//                }
-//            }
-//            if (injectThisRow) {
-            for (col in 0 until numCountColumns) {
-                // tCount[row, col] += p
-            }
-//            }
-
-        }
-
-        for (row in 0 until numMatchColumns) {
-            for (col in 0 until numMatchColumns + 1) {
-                // tRepeatInsertCount[row, col] += p
-            }
-        }
-
-        /*
-         * emission matrix:
-         * add p to all Insert and Match rows
-         */
-        val numCountEmissionRows = numMatchColumns * 3 + 2
-        val numCountEmissionColumns = statesCharList.size
-        for (row in 0 until numCountEmissionRows) {
-            var injectThisRow = false
-            when (row) {
-                0 -> {
-                    // S row
-                }
-                1 -> {// I0
-                    injectThisRow = true
-                }
-
-                else -> {
-                    val groupNumOffset = (row - 2) % 3
-                    if (groupNumOffset == 0 || groupNumOffset == 2) {
-                        // M row or I row
-                        injectThisRow = true
-                    }
-                }
-            }
-            if (injectThisRow) {
-                for (col in 0 until numCountEmissionColumns) {
-                    e[row, col] += p
-                }
-            }
-        }
-    }
-
-    /**
      * traverse each row in theStringList
      *   maintain a state machine to count the occurrences of each state
      *
@@ -302,16 +223,6 @@ class HiddenMarkovModelsHMMProfile {
         // STEP 3 - increment the HMM states and count emission characters
 
         countOccurrences()
-
-        // STEP 3A - insert pseudocounts (if set to non-zero)
-        insertPseudocounts()
-        if (debugOutput) {
-            println("After Pseudocounts")
-            println(tCount)
-            println(tRepeatInsertCount)
-            println(e)
-            println("")
-        }
 
         // STEP 4 - score transition matrix and emission matrix
         scoreTransmissionCounts()
@@ -494,7 +405,7 @@ class HiddenMarkovModelsHMMProfile {
 
         // if we are at the end of the columns, just use what is left over as the end value
         if (group == numMatchColumns) {
-            val endInsertPercent = (insertColSum - repeatInsertSum) / insertColSum + pseudoCount
+            val endInsertPercent = insertColSum / (insertColSum + repeatInsertSum) + pseudoCount
             val sumHere = endInsertPercent + repeatInsertPercentage
             // return insert and end values
             return listOf(repeatInsertPercentage / sumHere, endInsertPercent / sumHere)
@@ -506,20 +417,17 @@ class HiddenMarkovModelsHMMProfile {
         var matchColEntriesSum = matchCol.filterIndexed { index, i -> insertCol[index] == 1 }.sum()
         val matchColShadowedPercent = matchColEntriesSum / insertColSum + pseudoCount
 
-        val matchColPercentageOfInsertTransition = (1.0 - repeatInsertPercentage) * matchColShadowedPercent
-
         // and now allocate to the delete probability
         val deleteCol = tCount[0..numRows, group * 3 + 2].toList()
         var deleteColEntriesSum = deleteCol.filterIndexed { index, i -> insertCol[index] == 1 }.sum()
         val deleteColShadowedPercent = deleteColEntriesSum / insertColSum + pseudoCount
 
-
-        val deleteColPercentageOfInsertTransition = (1.0 - repeatInsertPercentage) * deleteColShadowedPercent
+        val sum = repeatInsertPercentage + matchColShadowedPercent + deleteColShadowedPercent
 
         return listOf(
-            repeatInsertPercentage,
-            matchColPercentageOfInsertTransition,
-            deleteColPercentageOfInsertTransition
+            repeatInsertPercentage / sum,
+            matchColShadowedPercent / sum,
+            deleteColShadowedPercent / sum
         )
     }
 
@@ -557,6 +465,31 @@ class HiddenMarkovModelsHMMProfile {
                 for (col in 0 until numCountColumns) {
                     e[row, col] = e[row, col] / sum
                 }
+            }
+        }
+
+        // if pseudocounts are non-zero, then add to all I* and M* rows and then normalize
+        if (pseudoCount == 0.0) {
+            return
+        }
+        addPseudocountsToEmissions(1) // I0
+        for (row in 0 until numMatchColumns) {
+            addPseudocountsToEmissions(row * 3 + 2)
+            //addPseudocountsToEmissions(row * 3 + 3)  // don't add to the D* rows
+            addPseudocountsToEmissions(row * 3 + 4)
+        }
+
+    }
+
+    fun addPseudocountsToEmissions(row: Int) {
+        val numCountColumns = statesCharList.size
+        if (pseudoCount != 0.0) {
+            for (col in 0 until numCountColumns) {
+                e[row, col] += pseudoCount
+            }
+            val sum = e[row, 0..numCountColumns].sum()
+            for (col in 0 until numCountColumns) {
+                e[row, col] /= sum
             }
         }
     }
