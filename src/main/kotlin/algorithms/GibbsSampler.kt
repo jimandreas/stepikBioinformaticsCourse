@@ -32,7 +32,7 @@ so you may wish to return to this problem later.
 /**
  *  PseudoCode
  */
-val psuedoCodeGibbsSampler = """
+val pseudoCodeGibbsSampler = """
 GIBBSSAMPLER(Dna, k, t, N) 
 
   Dna - list of strings

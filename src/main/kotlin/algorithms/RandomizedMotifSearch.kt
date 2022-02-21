@@ -25,7 +25,7 @@ RandomizedMotifSearch(Dna, k, t) 1,000 times. Remember to use pseudocounts!
 /**
  *  PseudoCode
  */
-val psuedoCodeRanomizedMotifSearch = """
+val pseudoCodeRanomizedMotifSearch = """
 RANDOMIZEDMOTIFSEARCH(Dna, k, t)
   randomly select k-mers Motifs = (Motif1, . . . , Motift) in each string from Dna
   BestMotifs Motifs

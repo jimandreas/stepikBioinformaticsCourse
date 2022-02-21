@@ -62,7 +62,7 @@ class SmallParsimonyNearestNeighborInterchange : SmallParsimonyNearestNeighborsO
     Each step should be separated by a blank line.
      */
 
-    val psuedoCode = """
+    val pseudoCode = """
         NearestNeighborInterchange(Strings)
      score ← ∞
      generate an arbitrary unrooted binary tree Tree with |Strings| leaves

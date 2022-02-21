@@ -44,7 +44,7 @@ class Clustering {
      * https://www.youtube.com/watch?v=Aly7YiDjxZs
      */
 
-    var farthestFirstTraversalPsuedocode = """
+    var farthestFirstTraversalPseudocode = """
         FarthestFirstTraversal(Data, k) 
             Centers ← the set consisting of a single randomly chosen point from Data
             while |Centers| < k 
