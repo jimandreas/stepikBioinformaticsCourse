@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm") version "1.6.0"
 }
@@ -20,6 +22,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.0")
     testImplementation(platform("org.junit:junit-bom:5.8.1"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.test {
@@ -55,3 +58,11 @@ tasks {
     }
 }
 
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
+val compileTestKotlin: KotlinCompile by tasks
+compileTestKotlin.kotlinOptions {
+    jvmTarget = "1.8"
+}
