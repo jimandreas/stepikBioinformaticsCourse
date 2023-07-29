@@ -1,7 +1,7 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+//import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.0"
+    kotlin("jvm") version "1.8.20"
 }
 
 group = "me.jim"
@@ -44,6 +44,7 @@ tasks {
 
             override fun afterSuite(suite: TestDescriptor, result: TestResult) {
                 val suiteName = suite.name
+                println(suiteName)
                 if (suiteName.contains("Test Executor")) { // root suite
                     println(
                         "Test summary: ${result.testCount} tests, " +
@@ -58,11 +59,11 @@ tasks {
     }
 }
 
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
-}
+//val compileKotlin: KotlinCompile by tasks
+//compileKotlin.kotlinOptions {
+//    jvmTarget = "1.8"
+//}
+//val compileTestKotlin: KotlinCompile by tasks
+//compileTestKotlin.kotlinOptions {
+//    jvmTarget = "1.8"
+//}
