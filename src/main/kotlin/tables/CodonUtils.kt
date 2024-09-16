@@ -1,6 +1,6 @@
 @file:Suppress(
     "unused", "UNUSED_PARAMETER", "UNUSED_VARIABLE", "ReplaceManualRangeWithIndicesCalls",
-    "ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE", "UNUSED_VALUE", "UnnecessaryVariable", "CanBeVal",
+    "ASSIGNED_BUT_NEVER_ACCESSED_VARIABLE",  "UnnecessaryVariable", "CanBeVal",
     "KotlinConstantConditions", "KotlinConstantConditions", "KotlinConstantConditions", "KotlinConstantConditions"
 )
 
