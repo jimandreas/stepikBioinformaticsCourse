@@ -3,7 +3,7 @@ plugins {
     kotlin("jvm") version "2.0.21"
 }
 
-group = "me.jim"
+group = "com.jimandreas"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -22,6 +22,10 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.8.1"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     implementation(kotlin("stdlib-jdk8"))
+}
+
+kotlin {
+    jvmToolchain(20) // Use Java 17 or higher
 }
 
 // https://github.com/sauravjha/kotlin-application-multiple-test-config/blob/master/build.gradle.kts
