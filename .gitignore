@@ -1,3 +1,5 @@
+# The Database
+DB
 # built application files
 *.apk
 *.ap_
@@ -27,6 +29,7 @@ local.properties
 # IDEA/Android Studio project files, because
 # the project can be imported from settings.gradle.kts
 .idea
+.kotlin
 *.iml
 
 # Old-style IDEA project files
@@ -45,4 +48,7 @@ _sandbox
 
 # signing for release version
 gradle/signing.properties
+
+# profiling files
+*.hprof
 

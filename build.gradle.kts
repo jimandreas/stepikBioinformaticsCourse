@@ -1,7 +1,6 @@
-//import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.8.20"
+    kotlin("jvm") version "2.0.21"
 }
 
 group = "me.jim"
@@ -23,13 +22,6 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.8.1"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
     implementation(kotlin("stdlib-jdk8"))
-}
-
-tasks.test {
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-    }
 }
 
 // https://github.com/sauravjha/kotlin-application-multiple-test-config/blob/master/build.gradle.kts
@@ -58,12 +50,3 @@ tasks {
         })
     }
 }
-
-//val compileKotlin: KotlinCompile by tasks
-//compileKotlin.kotlinOptions {
-//    jvmTarget = "1.8"
-//}
-//val compileTestKotlin: KotlinCompile by tasks
-//compileTestKotlin.kotlinOptions {
-//    jvmTarget = "1.8"
-//}
