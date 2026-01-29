@@ -21,11 +21,12 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.0")
     testImplementation(platform("org.junit:junit-bom:5.8.1"))
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation(kotlin("stdlib-jdk8"))
 }
 
 kotlin {
-    jvmToolchain(20) // Use Java 17 or higher
+    jvmToolchain(17) // Use Java 17 or higher
 }
 
 // https://github.com/sauravjha/kotlin-application-multiple-test-config/blob/master/build.gradle.kts

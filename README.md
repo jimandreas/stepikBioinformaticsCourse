@@ -42,7 +42,7 @@ Note: the problems in this repo were solved using the Kotlin language.
 The repo is configured for the Intellij IDEA system and Gradle.
 Gradle can be used to build it
 
-`./gradlew init build test`
+`./gradlew build test`
 
 All exercises contain a corresponding "Jupiter" (junit) test module located 
 in the `src/test/kotlin` folder.  

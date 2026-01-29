@@ -29,7 +29,6 @@ local.properties
 # IDEA/Android Studio project files, because
 # the project can be imported from settings.gradle.kts
 .idea
-.kotlin
 *.iml
 
 # Old-style IDEA project files
@@ -51,4 +50,10 @@ gradle/signing.properties
 
 # profiling files
 *.hprof
+
+# kotlin
+.kotlin
+
+# claude
+.claude
 
