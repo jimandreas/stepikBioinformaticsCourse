@@ -67,6 +67,16 @@ the stepik course.
 This branch contains the compiled documentation in the `docs` folder.  It is compiled using 
 the `mkdocs` and `mkdocs-material` facilities.
 
+## Dependency notes
+
+### multik (multidimensional array library)
+
+`multik-api` and `multik-default` are pinned at **0.1.1**. Versions 0.2.x introduce an
+off-by-one bug in `NDArrayIterator.next()` that causes `ArrayIndexOutOfBoundsException`
+at runtime (e.g. `Index N out of bounds for length N`) in `SmallParsimony` and the
+Hidden Markov Model profile alignment code. Do not upgrade multik until this is fixed
+upstream.
+
 ## Other notes
 
 TODO: The following problems need work:
