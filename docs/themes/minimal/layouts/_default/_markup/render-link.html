@@ -1,0 +1,4 @@
+{{- $dest := .Destination | safeURL -}}
+{{- $title := .Title -}}
+<a href="{{ $dest }}"{{ with $title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- /* render-link.html - opens all links in same tab */ -}}

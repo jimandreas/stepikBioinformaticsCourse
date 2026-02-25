@@ -1,0 +1,34 @@
+baseURL = "https://jimandreas.github.io/stepikBioinformaticsCourse/"
+languageCode = "en-us"
+title = "Stepik and Rosalind Bioinformatics in Kotlin"
+theme = "minimal"
+
+[params]
+  description = "Kotlin implementations of algorithms from the Stepik and Rosalind Bioinformatics courses"
+  author = "Jim Andreas"
+  github = "https://github.com/jimandreas/stepikBioinformaticsCourse"
+
+[markup]
+  [markup.tableOfContents]
+    endLevel = 4
+    startLevel = 2
+  [markup.highlight]
+    style = "dracula"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[[menus.main]]
+  name = "Home"
+  url = "/"
+  weight = 1
+
+[[menus.main]]
+  name = "Notes"
+  url = "/notes/"
+  weight = 2
+
+[[menus.main]]
+  name = "Parsimony"
+  url = "/parsimony/"
+  weight = 3
