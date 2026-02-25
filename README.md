@@ -1,6 +1,6 @@
 # Bioinformatics Algorithms: An Active Learning Approach
 
-https://stepik.org/course/55789/syllabus
+~~https://stepik.org/course/55789/syllabus~~ *(course no longer available — stepik.org now returns 404 for this course)*
 
 http://rosalind.info/problems/list-view/?location=bioinformatics-textbook-track
 
