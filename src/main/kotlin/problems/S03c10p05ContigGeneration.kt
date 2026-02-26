@@ -12,7 +12,6 @@ Input: A collection of k-mers Patterns.
 Output: All contigs in DeBruijn(Patterns).
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240263/step/5?unit=212609
  * rosalind: @link: http://rosalind.info/problems/ba3k/
  */
 

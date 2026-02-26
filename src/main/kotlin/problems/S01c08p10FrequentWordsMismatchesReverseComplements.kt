@@ -5,7 +5,6 @@ package problems
 import algorithms.frequentWordsWithMismatches
 
 /**
- * @link: https://stepik.org/lesson/240221/step/10?unit=212567
 
 1.8 Some Hidden Messages are More Elusive than Others
 
@@ -30,7 +29,6 @@ Sample Output:
 ATGT ACAT
 
 See also:
-stepik: https://stepik.org/lesson/240221/step/10?unit=212567
 rosalind: http://rosalind.info/problems/ba1j/
  */
 

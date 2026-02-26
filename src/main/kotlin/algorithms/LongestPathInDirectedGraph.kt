@@ -20,7 +20,6 @@ Output: The length of a longest path in the graph, followed by a longest path.
 (If multiple longest paths exist, you may return any one.)
  *
  * See also:
- * stepik: @link: https://stepik.org/lesson/240303/step/7?unit=212649
  * rosalind: @link: http://rosalind.info/users/jimandreas/
  * book (5.8):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */

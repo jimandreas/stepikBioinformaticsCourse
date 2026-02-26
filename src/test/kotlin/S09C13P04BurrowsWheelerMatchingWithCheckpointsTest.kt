@@ -25,7 +25,6 @@ internal class S09C13P04BurrowsWheelerMatchingWithCheckpointsTest {
     }
 
     /**
-     * Stepik: https://stepik.org/lesson/240386/step/4?unit=212732
      * Rosalind: https://rosalind.info/problems/ba9n/
      *
      * See also:
@@ -94,7 +93,6 @@ internal class S09C13P04BurrowsWheelerMatchingWithCheckpointsTest {
 
 
     // https://rosalind.info/problems/ba9n/
-    // https://stepik.org/lesson/240386/step/4?unit=212732
     @Test
     @DisplayName("Burrows Wheeler Better Matching Sample Test")
     fun burrowsWheelerCheckpointsMultiplePatternRosalindSampleTest() {

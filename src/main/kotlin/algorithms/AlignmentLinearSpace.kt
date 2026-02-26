@@ -16,9 +16,6 @@ Output: The maximum alignment score of these strings, followed by an alignment a
 maximum score. Use the BLOSUM62 scoring matrix and indel penalty σ = 5.
 
  * See also:
- * stepik: @link:
- * https://stepik.org/lesson/240308/step/12?unit=212654  MiddleEdge problem
- * https://stepik.org/lesson/240308/step/14?unit=212654  LinearSpaceAlignment
  * rosalind: @link:
  * http://rosalind.info/problems/ba5k/  MiddleEdge
  * http://rosalind.info/problems/ba5l/  LinearSpaceAlignment

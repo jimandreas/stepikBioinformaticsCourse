@@ -6,7 +6,6 @@ import algorithms.EulerianPathSymbolicMap
 
 /**
  * @link:
- * Stepik: https://stepik.org/lesson/240261/step/6?unit=212607
  * Rosalind: http://rosalind.info/problems/ba3g/
  *
 Code Challenge: Solve the Eulerian Path Problem.

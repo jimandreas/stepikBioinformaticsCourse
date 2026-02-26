@@ -50,7 +50,6 @@ internal class UtilTestsSpectralConvolution {
 
     /**
      * quiz
-     * @link https://stepik.org/lesson/240284/step/4?unit=212630
      * @link http://rosalind.info/problems/ba4h/
      */
 /*    @Test
@@ -130,7 +129,6 @@ internal class UtilTestsSpectralConvolution {
     }
 
     /**
-     * link: https://stepik.org/lesson/240284/step/8
      * Exercise Break: Run ConvolutionCyclopeptideSequencing on Spectrum25
      * with N = 1000 and M = 20. Identify the 86 highest-scoring peptides
      * using the cyclic scoring function. (Return the peptides in integer
@@ -138,7 +136,6 @@ internal class UtilTestsSpectralConvolution {
      *
      * ** Note that the spectrum that seems to **WORK** is sourced from the
      * earlier problem:
-     * @link https://stepik.org/lesson/240282/step/10?unit=212628
      *
      */
 

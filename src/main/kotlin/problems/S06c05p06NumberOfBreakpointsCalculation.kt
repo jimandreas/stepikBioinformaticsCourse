@@ -12,7 +12,6 @@ Input: A permutation.
 Output: The number of breakpoints in this permutation.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240320/step/6?unit=212666
  * rosalind: @link: http://rosalind.info/problems/ba6b/
  *
  * Transforming Men into Mice

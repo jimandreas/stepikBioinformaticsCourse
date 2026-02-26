@@ -15,12 +15,7 @@ From Genomes to the Breakpoint Graph
 Various functions that handle pieces of the breakpoint graph processing.
 
  * See also:
- * stepik:
  * @link:
- * https://stepik.org/lesson/240327/step/4?unit=212673
- * https://stepik.org/lesson/240327/step/5?unit=212673
- * https://stepik.org/lesson/240327/step/7?unit=212673
- * https://stepik.org/lesson/240327/step/8?unit=212673
  *
  * rosalind:
  * @link: http://rosalind.info/problems/ba6f/ 6g, 6h, 6i

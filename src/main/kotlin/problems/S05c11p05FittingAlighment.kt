@@ -24,7 +24,6 @@ The changes involve using the scoring matrix to calculate the winning value
 for each cell.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240306/step/5?unit=212652
  * rosalind: @link: http://rosalind.info/problems/ba5h/
  * book (5.11):  http://rosalind.info/problems/ba5f/
  */

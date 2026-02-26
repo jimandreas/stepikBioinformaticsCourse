@@ -24,7 +24,6 @@ internal class S10C06P07ViterbiDecodingTest {
     }
 
     /**
-     * https://stepik.org/lesson/240400/step/7?unit=212746
      * https://rosalind.info/problems/ba10c/
      */
 

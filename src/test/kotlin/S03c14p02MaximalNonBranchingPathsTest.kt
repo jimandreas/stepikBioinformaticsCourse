@@ -11,7 +11,6 @@ Input: The adjacency list of a graph whose nodes are integers.
 Output: The collection of all maximal nonbranching paths in this graph.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240267/step/2?unit=212613
  * rosalind: @link: http://rosalind.info/problems/ba3m/
  */
 internal class S03c14p02MaximalNonBranchingPathsTest {

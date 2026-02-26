@@ -25,7 +25,6 @@ internal class S05c10p03AlignmentGlobalReflexiveTest {
     * Note that the answer differs from that given in the problem statement.
     *
     * The answer is also different from -MEA--N-LY given in the LinearSpaceAlignment
-    * at https://stepik.org/lesson/240308/step/14?unit=212654
     */
     @Test
     @DisplayName("global alignment test sample")

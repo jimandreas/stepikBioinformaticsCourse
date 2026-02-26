@@ -18,7 +18,6 @@ internal class UtilTestsTurnpikeReconstructionDepthFirst {
     Output: A set of integers A such that ∆A = L.
 
     Code Challenge: Solve the Turnpike Problem.
-    @link: https://stepik.org/lesson/240294/step/1?unit=212640
     @link: http://rosalind.info/problems/ba4m/
 
     and for reference:

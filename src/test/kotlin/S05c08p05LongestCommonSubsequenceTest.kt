@@ -10,7 +10,6 @@ import kotlin.test.assertNotNull
  * Code Challenge: Find the length of a longest path in the Manhattan Tourist Problem.
  *
  * See also:
- * stepik: @link: https://stepik.org/lesson/240301/step/10?unit=212647
  * rosalind: @link: http://rosalind.info/problems/ba5b/
  * book (5.6):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */

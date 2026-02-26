@@ -19,7 +19,6 @@ internal class S09C06P02SuffixArrayTest {
     }
     /**
      * Construct the Suffix Array of a String
-     * Stepik: https://stepik.org/lesson/240379/step/2?unit=212725
      * Rosalind: https://rosalind.info/problems/ba9g/
      *
      */

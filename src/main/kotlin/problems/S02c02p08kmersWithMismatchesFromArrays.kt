@@ -25,7 +25,6 @@ remove duplicates from Patterns
 return Patterns
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240238/step/8?unit=212584
  * rosalind: @link: http://rosalind.info/problems/ba2a/
  */
 

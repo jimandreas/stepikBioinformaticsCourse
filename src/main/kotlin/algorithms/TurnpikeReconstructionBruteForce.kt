@@ -10,7 +10,6 @@ package algorithms
  * also known as:
  * find set of X satisfying the Difference Multiset
  *
- *  Stepik:  https://stepik.org/lesson/240294/step/1?unit=212640
  *  Turnpike Problem: Given all pairwise distances between points on a line segment, reconstruct the positions of those points.
  *
  *  Input: A collection of integers L.

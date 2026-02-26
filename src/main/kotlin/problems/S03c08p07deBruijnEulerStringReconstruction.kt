@@ -8,7 +8,6 @@ import algorithms.deBruijnGraphFromKmers
 import algorithms.pathToGenome
 
 /**
- * @link: https://stepik.org/lesson/240261/step/6?unit=212607
  *
 Code Challenge: Solve the Eulerian Path Problem.
 

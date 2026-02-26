@@ -26,7 +26,6 @@ import kotlin.test.assertEquals
  * https://www.youtube.com/watch?v=09eD4A_HxVQ
  *
  * Limb Length:
- * stepik: https://stepik.org/lesson/240339/step/8?unit=212685
  * rosalind: http://rosalind.info/problems/ba7d/
  *
  * Uses the Kotlin Multik multidimensional array library
@@ -100,7 +99,6 @@ internal class S07c06p08UPGMAtest {
     }
 
     // example from:
-    // https://stepik.org/lesson/240339/step/8?unit=212685
 
     @Test
     @DisplayName("UPGMA sample test")
@@ -307,7 +305,6 @@ internal class S07c06p08UPGMAtest {
     }
 
     // example from:
-    // https://stepik.org/lesson/240339/step/8?unit=212685
 
     @Test
     @DisplayName("UPGMA quiz")

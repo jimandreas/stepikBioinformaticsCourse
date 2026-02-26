@@ -33,7 +33,6 @@ internal class UtilTestsSpectrumLinearCyclic {
     }
 
     /**
-     * @link: https://stepik.org/lesson/240286/step/2?unit=212632
      * test question for mass spectrum for large linear peptide
      */
     @Test
@@ -64,7 +63,6 @@ internal class UtilTestsSpectrumLinearCyclic {
     0 113 114 128 129 227 242 242 257 355 356 370 371 484
 
      Links:
-     Stepik: https://stepik.org/lesson/240279/step/4?unit=212625
      Rosalind: http://rosalind.info/problems/ba4j/
 
      */

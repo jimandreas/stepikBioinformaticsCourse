@@ -7,7 +7,6 @@ package algorithms
  * NOTE: this code is now obsolete.
  * It has been replaced by the DeBruijn paired Graph algorithm coupled with the EulerianPathOverReadPairs processing.
  *
- *  https://stepik.org/lesson/240266/step/4?unit=212612
  *  Code Challenge: Implement StringSpelledByGappedPatterns.
 
 Input: Integers k and d followed by a sequence of (k, d)-mers

@@ -21,7 +21,6 @@ internal class S09C11P07BurrowsWheelerBetterMatchingTest {
     }
     /**
      *  Pattern Matching with the Burrows-Wheeler Transform
-     * Stepik: https://stepik.org/lesson/240383/step/8?unit=212729
      * Rosalind: https://rosalind.info/problems/ba9l/
      *
      * Finding the Matched Patterns (7/10)

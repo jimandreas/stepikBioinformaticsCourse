@@ -14,7 +14,6 @@ Output: A longest common subsequence of s and t. (Note: more than one solution m
 
  *
  * See also:
- * stepik: @link: https://stepik.org/lesson/240303/step/5?unit=212649
  * rosalind: @link: http://rosalind.info/problems/ba5c/
  * book (5.8):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */

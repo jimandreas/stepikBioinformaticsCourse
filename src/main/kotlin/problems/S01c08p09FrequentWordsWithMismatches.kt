@@ -5,7 +5,6 @@ package problems
 import algorithms.frequentWordsWithMismatches
 
 /**
- * @link: https://stepik.org/lesson/240221/step/9?unit=212567
  *
 1.8 Some Hidden Messages are More Elusive than Others
 Code Challenge: Solve the Frequent Words with Mismatches Problem.
@@ -25,7 +24,6 @@ Sample Output:
 GATG ATGC ATGT
 
 See also:
-stepik: https://stepik.org/lesson/240221/step/9?unit=212567
 rosalind: http://rosalind.info/problems/ba1i/
  */
 

@@ -28,7 +28,6 @@ GGACCGTTGAC
 Sample Output:  3
 
 See also:
-stepik: https://stepik.org/lesson/240221/step/3?unit=212567
 rosalind: http://rosalind.info/problems/ba1g/
  */
 

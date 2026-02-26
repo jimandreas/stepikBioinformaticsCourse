@@ -28,7 +28,6 @@ Input:  An integer n followed by the adjacency list of a weighted tree with n le
 Output: An n x n matrix (di,j), where di,j is the length of the path between leaves i and j.
 
  * See also:
- * stepik: https://stepik.org/lesson/240335/step/12?unit=212681
  * rosalind: http://rosalind.info/problems/ba7a/
  */
 

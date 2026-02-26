@@ -10,7 +10,6 @@ Input: Strings Text and Pattern.
 Output: Count(Text, Pattern).
 
 See also:
-stepik: https://stepik.org/lesson/240214/step/6?unit=212561
 rosalind: http://rosalind.info/problems/ba1a/
  */
 

@@ -17,7 +17,6 @@ Output: A k-mer Pattern that minimizes d(Pattern, Dna) among all
 possible choices of k-mers. (If there are multiple such strings Pattern, then you may return any one.)
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240240/step/9?unit=212586
  * rosalind: @link: http://rosalind.info/problems/ba2b/
 
  */

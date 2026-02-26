@@ -11,9 +11,6 @@ class Clustering {
 
     /**
      * See also:
-     * Stepik: https://stepik.org/lesson/240358/step/2?unit=212704
-     * (squared error distorition): https://stepik.org/lesson/240359/step/3?unit=212705
-     * (lloyd k-Means clustering): https://stepik.org/lesson/240360/step/3?unit=212706
      * (Soft k-Means Clustering Algorithm) - No equivalent stepik problem
      *
      * Rosalind: https://rosalind.info/problems/ba8a/
@@ -293,7 +290,6 @@ class Clustering {
      *    This scalar value is applied uniformly across the multidimensional point values
      *
      * Reference:
-     * @link: https://stepik.org/lesson/240365/step/7?unit=212711
      *
      */
     fun calcNewCenter(hiddenMatrix: List<Double>, points: List<List<Double>>): List<Double> {

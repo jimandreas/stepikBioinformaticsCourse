@@ -18,7 +18,6 @@ achieving this maximum score. Use an alignment score in which
 matches count +1 and both the mismatch and indel penalties are 2.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240306/step/7?unit=212652
  * rosalind: @link: http://rosalind.info/problems/ba5i/
  * book (5.11):  http://rosalind.info/problems/ba5f/
  */

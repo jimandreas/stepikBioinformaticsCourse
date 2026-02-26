@@ -34,7 +34,6 @@ internal class S10C08P15HiddenMarkovProfileAlignmentQuizTest {
     }
 
     /**
-     * https://stepik.org/lesson/240402/step/15?unit=212748
      * https://rosalind.info/problems/ba10e/
      */
 

@@ -34,7 +34,6 @@ class BurrowsWheelerMatchingWithCheckpoints {
 
 
     /**
-     * Stepik: https://stepik.org/lesson/240386/step/4?unit=212732
      * Rosalind: https://rosalind.info/problems/ba9n/
      */
 
@@ -266,7 +265,6 @@ class BurrowsWheelerMatchingWithCheckpoints {
 
 
     /**
-     * Stepik: https://stepik.org/lesson/240387/step/10?unit=212733
      * Rosalind: https://rosalind.info/problems/ba9o/
      *
      * Youtube:

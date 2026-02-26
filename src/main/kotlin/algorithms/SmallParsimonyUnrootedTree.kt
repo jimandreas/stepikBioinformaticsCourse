@@ -18,7 +18,6 @@ import kotlin.collections.set
 /**
  *
  * See also:
- * Stepik: https://stepik.org/lesson/240342/step/12?unit=212688
  * Rosalind: http://rosalind.info/problems/ba7g/
  * Youtube: https://www.youtube.com/watch?v=Rfa-2SvxslE
  *

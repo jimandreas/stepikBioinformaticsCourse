@@ -12,7 +12,6 @@ import kotlin.test.assertEquals
 /**
  *
  * See also:
- * Stepik: https://stepik.org/lesson/240342/step/10?unit=212688
  * Rosalind: http://rosalind.info/problems/ba7f/
  * Youtube: https://www.youtube.com/watch?v=h515dSZWEyM
  *

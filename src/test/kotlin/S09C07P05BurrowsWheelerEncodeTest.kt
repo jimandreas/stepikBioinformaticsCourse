@@ -19,7 +19,6 @@ internal class S09C07P05BurrowsWheelerEncodeTest {
     }
     /**
      * Construct the Burrows-Wheeler transform of a string.
-     * Stepik: https://stepik.org/lesson/240380/step/5?unit=212726
      * Rosalind: https://rosalind.info/problems/ba9i/
      *
      * String Compression and the Burrows-Wheeler Transform (4/10)

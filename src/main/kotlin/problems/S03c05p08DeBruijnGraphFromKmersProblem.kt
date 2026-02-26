@@ -6,7 +6,6 @@ import algorithms.deBruijnGraphFromKmers
 import java.io.File
 
 /**
- * @link: https://stepik.org/lesson/240257/step/6?unit=212603
  *
 Code Challenge: Solve the De Bruijn Graph from a String Problem.
 

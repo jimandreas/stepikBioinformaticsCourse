@@ -253,7 +253,6 @@ internal class UtilTests {
     }
 
     /**
-     * https://stepik.org/lesson/240248/step/1?unit=212594
      * http://rosalind.info/problems/ba2h/
      * given problem
      */

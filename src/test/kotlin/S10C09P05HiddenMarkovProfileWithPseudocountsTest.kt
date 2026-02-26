@@ -27,7 +27,6 @@ internal class S10C09P05HiddenMarkovProfileWithPseudocountsTest {
     }
 
     /**
-     * https://stepik.org/lesson/240403/step/5?unit=212749
      * https://rosalind.info/problems/ba10f/
      */
 

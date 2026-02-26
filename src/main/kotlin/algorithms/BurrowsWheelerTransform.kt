@@ -18,7 +18,6 @@ class BurrowsWheelerTransform {
 
     /**
      * Construct the Burrows-Wheeler transform of a string.
-     * Stepik: https://stepik.org/lesson/240380/step/5?unit=212726
      * Rosalind: https://rosalind.info/problems/ba9i/
      *
      * String Compression and the Burrows-Wheeler Transform (4/10)
@@ -182,7 +181,6 @@ class BurrowsWheelerTransform {
     Output: A space-separated list of integers, where the i-th integer
     corresponds to the number of substring matches of the i-th member of Patterns in Text.
 
-    Stepik: https://stepik.org/lesson/240383/step/8?unit=212729
     Rosalind: https://rosalind.info/problems/ba9l/
      */
 

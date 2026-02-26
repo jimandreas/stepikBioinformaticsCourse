@@ -12,9 +12,6 @@ Input: Two amino acid strings.
 Output: A middle edge in the alignment graph in the form "(i, j) (k, l)", where (i, j) connects to (k, l).
 
  * See also:
- * stepik: @link:
- * https://stepik.org/lesson/240308/step/12?unit=212654  MiddleEdge problem
- * https://stepik.org/lesson/240308/step/14?unit=212654  LinearSpaceAlignment
  * rosalind: @link:
  * http://rosalind.info/problems/ba5k/  MiddleEdge
  * http://rosalind.info/problems/ba5l/  LinearSpaceAlignment

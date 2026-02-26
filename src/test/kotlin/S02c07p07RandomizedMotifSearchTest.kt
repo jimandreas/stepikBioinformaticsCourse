@@ -15,7 +15,6 @@ Output: A collection BestMotifs resulting from running
 RandomizedMotifSearch(Dna, k, t) 1,000 times. Remember to use pseudocounts!
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240243/step/5?unit=212589
  * rosalind: @link: http://rosalind.info/problems/ba2f/
  *
  * youtube:

@@ -21,7 +21,6 @@ The changes involve using the scoring matrix to calculate the winning value
 for each cell.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240307/step/8?unit=212653
  * rosalind: @link: http://rosalind.info/problems/ba5j/
  * book (5.12):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */

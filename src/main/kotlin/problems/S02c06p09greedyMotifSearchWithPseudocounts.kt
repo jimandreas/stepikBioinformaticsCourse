@@ -15,7 +15,6 @@ k-mer in a given string, use the one occurring first.
 
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240242/step/9?unit=212588
  * rosalind: @link: http://rosalind.info/problems/ba2e/
  */
 

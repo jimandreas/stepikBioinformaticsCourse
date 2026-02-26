@@ -12,7 +12,6 @@ Input: A string Text and an integer k.
 Output: All most frequent k-mers in Text.
 
 See also:
-stepik: https://stepik.org/lesson/240214/step/13?unit=212561
 rosalind: http://rosalind.info/problems/ba1b/
  */
 

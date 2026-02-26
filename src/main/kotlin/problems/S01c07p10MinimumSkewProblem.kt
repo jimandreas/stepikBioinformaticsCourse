@@ -20,7 +20,6 @@ Sample Output:
 11 24
 
 See also:
-stepik: https://stepik.org/lesson/240220/step/10?unit=212566
 rosalind: http://rosalind.info/problems/ba1f/
  */
 

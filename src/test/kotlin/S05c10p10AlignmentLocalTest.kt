@@ -29,7 +29,6 @@ The changes involve using the scoring matrix to calculate the winning value
 for each cell.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240305/step/10?unit=212651
  * rosalind: @link: http://rosalind.info/problems/ba5e/
  * book (5.10):  http://rosalind.info/problems/ba5f/
  */
@@ -175,7 +174,6 @@ internal class S05c10p10AlignmentLocalTest {
     For example, the best global, local, and fitting alignments of v = CGTAGGCTTAAGGTTA
     and w = ATAGATA are shown in the figure below (with mismatch and indel penalties equal to 1).
 
-    @link: https://stepik.org/lesson/240306/step/4?unit=212652
 
      "Note in the figure that the optimal local alignment (with score 3)
     is not a valid fitting alignment. On the other hand, the score of the

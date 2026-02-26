@@ -24,7 +24,6 @@ internal class S10C05P10HiddenMarkovOutcomeProbabilityTest {
     }
 
     /**
-     * Stepik: https://stepik.org/lesson/240399/step/10?unit=212745
      * Rosalind: https://rosalind.info/problems/ba10b/
      */
 

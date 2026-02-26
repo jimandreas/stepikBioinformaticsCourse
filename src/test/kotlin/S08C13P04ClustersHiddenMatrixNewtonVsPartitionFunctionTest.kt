@@ -13,7 +13,6 @@ import kotlin.test.assertEquals
 
 /**
  * See also:
- * Stepik: https://stepik.org/lesson/240365/step/3?unit=212711
  * Rosalind: https://rosalind.info/problems/ba8d/
  *
  * Youtube:
@@ -32,7 +31,6 @@ internal class S08C13P04ClustersHiddenMatrixNewtonVsPartitionFunctionTest {
 
     /**
      * a touch test of the hiddenMatrixNewtonian weighting function
-     * @link: https://stepik.org/lesson/240365/step/4?unit=212711
      */
     @Test
     @DisplayName("Clusters hiddenMatrixNewtonian test")
@@ -70,7 +68,6 @@ internal class S08C13P04ClustersHiddenMatrixNewtonVsPartitionFunctionTest {
 
     /**
      * a touch test of the hiddenMatrixPartitionFunction weighting function
-     * @link: https://stepik.org/lesson/240365/step/4?unit=212711
      * @link: https://rosalind.info/problems/ba8d/
      */
     @Test
@@ -127,7 +124,6 @@ internal class S08C13P04ClustersHiddenMatrixNewtonVsPartitionFunctionTest {
 
     /**
      * a touch test of the hiddenMatrixPartitionFunction weighting function
-     * @link: https://stepik.org/lesson/240365/step/4?unit=212711
      * @link: https://rosalind.info/problems/ba8d/
      */
     @Test
@@ -149,7 +145,6 @@ internal class S08C13P04ClustersHiddenMatrixNewtonVsPartitionFunctionTest {
         val hiddenMatrix0 = listOf(0.993, 0.982, 0.500, 0.018, 0.007)
         val hiddenMatrix1 = listOf(0.007, 0.018, 0.500, 0.982, 0.993)
 
-        // see: https://stepik.org/lesson/240365/step/7?unit=212711
 
         val center0 = cluster.calcNewCenter(hiddenMatrix0, points)
         assertEquals(-1.9544, center0[0], 0.01)

@@ -27,7 +27,6 @@ internal class S10C09P14SequenceAlignmentWithProfileHmmTest {
     }
 
     /**
-     * https://stepik.org/lesson/240403/step/14?unit=212749
      * https://rosalind.info/problems/ba10g/
      */
     /**

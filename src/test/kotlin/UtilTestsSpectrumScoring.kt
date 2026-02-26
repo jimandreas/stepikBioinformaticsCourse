@@ -27,7 +27,6 @@ internal class UtilTestsSpectrumScoring {
     11
 
      Links:
-     Stepik: https://stepik.org/lesson/240282/step/3?unit=212628
      Rosalind: http://rosalind.info/problems/ba4k/
      */
     @Test

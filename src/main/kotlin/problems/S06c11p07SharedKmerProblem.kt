@@ -15,7 +15,6 @@ Output: All k-mers shared by these strings, in the form of ordered
 pairs (x, y) corresponding to starting positions of these k-mers in the respective strings.
 
  * See also:
- * stepik: https://stepik.org/lesson/240326/step/5?unit=212672
  * rosalind: http://rosalind.info/problems/ba6e/
  *
  * Part 9 of 9 of a series of lectures on "Are There Fragile Regions in the Human Genome?"

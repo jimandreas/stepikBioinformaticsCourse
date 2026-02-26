@@ -21,7 +21,6 @@ Output: A Profile-most probable k-mer in Text.
 Code Challenge: Solve the Profile-most Probable k-mer Problem.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240241/step/3?unit=212587
  * rosalind: @link: http://rosalind.info/problems/ba2c/
  */
 

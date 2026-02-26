@@ -16,9 +16,6 @@ import kotlin.test.assertEquals
 Various functions that handle pieces of the breakpoint graph processing.
 
  * See also:
- * stepik:
- * @link: https://stepik.org/lesson/240328/step/2?unit=212674
- * https://stepik.org/lesson/240328/step/3?unit=212674
  *
  * rosalind:
  * @link: http://rosalind.info/problems/ba6j/ 6k

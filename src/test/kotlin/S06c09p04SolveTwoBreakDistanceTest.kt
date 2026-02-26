@@ -18,7 +18,6 @@ Output: The 2-break distance d(P, Q).
 
 
  * See also:
- * stepik: https://stepik.org/lesson/240324/step/4?unit=212670
  * rosalind: http://rosalind.info/problems/ba6c/
  *
  * Part 7 of 9 of a series of lectures on "Are There Fragile Regions in the Human Genome?"

@@ -13,7 +13,6 @@ GreedyMotifSearch(Dna, k, t). If at any step you find more than one
 Profile-most probable k-mer in a given string, use the one occurring first.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240241/step/5?unit=212587
  * rosalind: @link: http://rosalind.info/problems/ba2d/
  */
 

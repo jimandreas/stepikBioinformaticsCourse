@@ -14,7 +14,6 @@ Output: Patternrc , the reverse complement of Pattern.
 
 
 See also:
-stepik: https://stepik.org/lesson/240215/step/2?unit=212562
 rosalind: http://rosalind.info/problems/ba1c/
  */
 

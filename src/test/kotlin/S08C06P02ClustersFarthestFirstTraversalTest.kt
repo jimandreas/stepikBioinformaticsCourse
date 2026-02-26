@@ -11,7 +11,6 @@ import kotlin.test.assertContentEquals
 
 /**
  * See also:
- * Stepik: https://stepik.org/lesson/240358/step/2?unit=212704
  * Rosalind: https://rosalind.info/problems/ba8a/
  *
  * Youtube:

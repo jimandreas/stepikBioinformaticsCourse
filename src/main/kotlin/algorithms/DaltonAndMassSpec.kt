@@ -289,7 +289,6 @@ fun cyclopeptideScoreFromMasses(peptide: List<Int>, testSpectrum: List<Int>, isC
 /**
  * Trim
  * trimLeaderboard()
- * @link https://stepik.org/lesson/240288/step/3?unit=212634
  * @link http://rosalind.info/problems/ba4l/
  *
  * Trim a leaderboard of peptides.
@@ -355,7 +354,6 @@ fun trimLeaderboardMasses(
 
 /**
  * LeaderboardCyclopeptideSequencing
- * @link https://stepik.org/lesson/240282/step/8?unit=212628
  * @link http://rosalind.info/problems/ba4g/
  *
  * NOTE: in stepik the leaderboard pruning function is called "Trim", in rosalind "Cut"

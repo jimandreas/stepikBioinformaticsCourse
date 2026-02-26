@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test
 /**
  * see also:
  * From Euler's Theorem to an Algorithm for Finding Eulerian Cycles
- * https://stepik.org/lesson/240261/step/7?unit=212607
  *
 You now have a method to assemble a genome, since the String Reconstruction Problem
 reduces to finding an Eulerian path in the de Bruijn graph generated from reads.

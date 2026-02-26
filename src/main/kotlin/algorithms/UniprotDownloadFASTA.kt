@@ -21,7 +21,7 @@ class UniprotDownloadFASTA {
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                val body = response.body?.string()
+                val body = response.body.string()
                 //println(body)
                 return body!!
             }

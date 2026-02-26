@@ -6,7 +6,6 @@ import algorithms.ManhattanTouristProblem
 
 
 /**
- * stepik:   @link: https://stepik.org/lesson/240301/step/10?unit=212647
  * rosalind: @link: http://rosalind.info/problems/ba5b/
  *
 Code Challenge: Find the length of a longest path in the Manhattan Tourist Problem.

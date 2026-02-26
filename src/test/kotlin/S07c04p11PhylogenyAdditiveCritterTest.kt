@@ -18,7 +18,6 @@ import kotlin.test.assertEquals
 /**
  *
  * See also:
- * stepik: https://stepik.org/lesson/240337/step/11?unit=212683
  * rosalind: N/A (not applicable)
  */
 

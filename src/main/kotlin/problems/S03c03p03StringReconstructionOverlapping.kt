@@ -4,7 +4,6 @@ package problems
 
 /**
  * @link:
- * stepik: https://stepik.org/lesson/240255/step/3?unit=212601
  * rosalind: http://rosalind.info/problems/ba3b/
  *
 String Reconstruction practice problem

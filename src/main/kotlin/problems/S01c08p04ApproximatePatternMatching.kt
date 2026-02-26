@@ -34,7 +34,6 @@ Sample Output:
 
 6 7 26 27
 See also:
-stepik: https://stepik.org/lesson/240221/step/4?unit=212567
 rosalind: http://rosalind.info/problems/ba1h/
  */
 

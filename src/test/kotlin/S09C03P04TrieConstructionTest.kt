@@ -11,7 +11,6 @@ import kotlin.test.assertContentEquals
 
 /**
  * See also:
- * Stepik: https://stepik.org/lesson/240376/step/4?unit=212722
  * Rosalind: https://rosalind.info/problems/ba9a/
  *
  * Using the Trie 2/10

@@ -13,7 +13,6 @@ import org.jetbrains.kotlinx.multik.api.mk
 /**
  *
  * See also:
- * Stepik: https://stepik.org/lesson/240343/step/8?unit=212689
  * Rosalind: no equivalent problem
  *
  * Youtube:

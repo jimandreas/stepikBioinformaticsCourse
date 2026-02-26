@@ -25,7 +25,6 @@ so you may wish to return to this problem later.
 
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240245/step/4?unit=212591
  * rosalind: @link: http://rosalind.info/problems/ba2g/
  */
 

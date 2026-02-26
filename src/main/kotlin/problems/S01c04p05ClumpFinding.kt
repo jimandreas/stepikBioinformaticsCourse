@@ -28,7 +28,6 @@ Sample Output:
 CGACA GAAGA
 
 See also:
- stepik: https://stepik.org/lesson/240217/step/5?unit=212563
  rosalind: http://rosalind.info/problems/ba1e/
 
 */

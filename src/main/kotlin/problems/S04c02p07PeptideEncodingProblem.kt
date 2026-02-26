@@ -6,7 +6,6 @@ import algorithms.*
 
 
 /**
- * @link: https://stepik.org/lesson/240277/step/7?unit=212623
  *
 Peptide Encoding Problem: Find substrings of a genome encoding a given amino acid sequence.
 

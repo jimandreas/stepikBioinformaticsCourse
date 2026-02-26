@@ -23,7 +23,6 @@ internal class S09C13P04BurrowsWheelerMismatchTolerantTest {
     }
 
     /**
-     * Stepik: https://stepik.org/lesson/240387/step/10?unit=212733
      * Rosalind: https://rosalind.info/problems/ba9o/
      *
      * Youtube:
@@ -72,7 +71,6 @@ internal class S09C13P04BurrowsWheelerMismatchTolerantTest {
         val result03 = bwmwc.makeSeeds(seed03, i03)
         assertEquals(expectedResult03, result03)
 
-        // https://stepik.org/lesson/240387/step/3?unit=212733
         val seed04 = "acttaggctcgggataatccgga"
         val i04 = 3
         val expectedResult04 = listOf(Pair("actta", 0), Pair("ggctc", 5), Pair("gggat", 10), Pair("aatccgga", 15))

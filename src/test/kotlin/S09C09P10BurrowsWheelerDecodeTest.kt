@@ -19,7 +19,6 @@ internal class S09C09P10BurrowsWheelerDecodeTest {
     }
     /**
      * Inverse Burrows-Wheeler Transform Problem
-     * Stepik: https://stepik.org/lesson/240382/step/10?unit=212728
      * Rosalind: https://rosalind.info/problems/ba9j/
      *
      * String Compression and the Burrows-Wheeler Transform (4/10)

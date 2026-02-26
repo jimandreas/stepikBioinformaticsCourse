@@ -12,7 +12,6 @@ Input: An integer k and a string Text.
 Output: DeBruijnk(Text), in the form of an adjacency list.
 
  * @link:
- * Stepik: https://stepik.org/lesson/240257/step/6?unit=212603
  * Rosalind: http://rosalind.info/problems/ba3d/
  */
 

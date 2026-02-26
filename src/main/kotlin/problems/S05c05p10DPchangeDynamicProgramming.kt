@@ -4,7 +4,6 @@ package problems
 
 
 /**
- * stepik:   @link: https://stepik.org/lesson/240300/step/10?unit=212646
  * rosalind: @link: http://rosalind.info/problems/ba5a/
  *
 Code Challenge: Solve the Change Problem.

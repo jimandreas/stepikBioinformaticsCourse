@@ -14,7 +14,6 @@ Return: The sequence of permutations corresponding to applying
 GreedySorting to P, ending with the identity permutation.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240319/step/4?unit=212665
  * rosalind: @link: http://rosalind.info/problems/ba6a/
  *
  * Transforming Men into Mice

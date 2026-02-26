@@ -16,7 +16,6 @@ import kotlin.test.assertNotNull
 /**
  *
  * See also:
- * Stepik: https://stepik.org/lesson/240342/step/10?unit=212688
  * Rosalind: http://rosalind.info/problems/ba7f/
  * Youtube: https://www.youtube.com/watch?v=h515dSZWEyM
  *
@@ -96,7 +95,6 @@ CAAATCCC->ATAGCCAC:5
     /**
      * Test basic scoring of left and right {ACGT}
      * from example graph, see:
-     * https://stepik.org/lesson/240342/step/7?unit=212688
      */
     @Test
     @DisplayName("Small Parsimony scoring1 test")
@@ -126,7 +124,6 @@ CAAATCCC->ATAGCCAC:5
 
     /*
      * scoring a tree as compared to:
-     * https://stepik.org/lesson/240342/step/8?unit=212688
      *
      * this test parses and scores the full tree
      *   (dna strings are all one letter long)

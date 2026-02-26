@@ -22,7 +22,6 @@ Input: Three DNA strings of length at most 10.
 Output: The length of a longest common subsequence of these three strings, followed by a multiple alignment of the three strings corresponding to such an alignment.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240309/step/5?unit=212655
  * rosalind: @link: http://rosalind.info/problems/ba5m/
  * book (5 Epilogue): @link: https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  * youtube: @link: https://www.youtube.com/watch?v=CTPiYiTQcuA&list=PLQ-85lQlPqFNmbPEsMoxb5dM5qtRaVShn&index=10  Multiple Sequence Alignment

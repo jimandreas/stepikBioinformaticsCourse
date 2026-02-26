@@ -10,7 +10,6 @@ import algorithms.reassembleStringFromPairs
 
 /**
  * @link:
- * Stepik: https://stepik.org/lesson/240262/step/16?unit=212608
  * Rosalind: http://rosalind.info/problems/ba3l/
  *
 Code Challenge: Implement StringSpelledByGappedPatterns.

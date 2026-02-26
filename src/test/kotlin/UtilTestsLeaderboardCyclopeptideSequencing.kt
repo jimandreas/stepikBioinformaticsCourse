@@ -78,7 +78,6 @@ internal class UtilTestsLeaderboardCyclopeptideSequencing {
 
 
     /**
-     * @link https://stepik.org/lesson/240282/step/10?unit=212628
      * Exercise Break: Run LeaderboardCyclopeptideSequencing on Spectrum25 with N = 1000.
      */
     @Test

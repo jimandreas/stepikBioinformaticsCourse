@@ -23,7 +23,6 @@ import org.jetbrains.kotlinx.multik.ndarray.data.set
  * Youtube: https://www.youtube.com/watch?v=8-8eZdeqUsw
  *
  * Limb Length:
- * stepik: https://stepik.org/lesson/240339/step/8?unit=212685
  * rosalind: http://rosalind.info/problems/ba7d/
  *
  * Uses the Kotlin Multik multidimensional array library
@@ -198,7 +197,7 @@ class UPGMA /* Unweighted Pair Group Method with Arithmetic Mean */{
     ) {
         val first = coord.first
         val second = coord.second
-        val distance = doubledMatrix[first, second].toFloat() / 2.0f
+        val distance = doubledMatrix[first, second] / 2.0f
 
         when {
             // easy case: just a cluster of two leaf nodes

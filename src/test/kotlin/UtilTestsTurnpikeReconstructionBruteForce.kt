@@ -19,7 +19,6 @@ internal class UtilTestsTurnpikeReconstructionBruteForce {
     Output: A set of integers A such that ∆A = L.
 
     Code Challenge: Solve the Turnpike Problem.
-    @link: https://stepik.org/lesson/240294/step/1?unit=212640
     @link: http://rosalind.info/problems/pdpl/
     @link: http://rosalind.info/glossary/difference-multiset/
      */
@@ -79,7 +78,6 @@ internal class UtilTestsTurnpikeReconstructionBruteForce {
 
     Code Challenge: Solve the Turnpike Problem.
 
-    @link: https://stepik.org/lesson/240294/step/1?unit=212640
 
      */
 

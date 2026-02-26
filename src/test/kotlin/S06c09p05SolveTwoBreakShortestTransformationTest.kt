@@ -23,7 +23,6 @@ Output: The sequence of genomes resulting from applying a shortest sequence of
 Also Known As:  Shortest Rearrangement Scenario (see Pseudocode below)
 
  * See also:
- * stepik: https://stepik.org/lesson/240324/step/5?unit=212670
  * rosalind: http://rosalind.info/problems/ba6d/
  *
  * Part 7 of 9 of a series of lectures on "Are There Fragile Regions in the Human Genome?"

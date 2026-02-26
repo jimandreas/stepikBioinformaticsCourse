@@ -22,7 +22,6 @@ For each j, we can compute LimbLength(j) by finding the minimum value of
 over all pairs of leaves i and k.
 
  * See also:
- * stepik: https://stepik.org/lesson/240336/step/11?unit=212682
  * rosalind: http://rosalind.info/problems/ba7b/
  */
 

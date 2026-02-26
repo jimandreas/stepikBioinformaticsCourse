@@ -18,11 +18,9 @@ import java.lang.Math.min
  * Youtube: https://www.youtube.com/watch?v=HjDz2ak5BUk
  *
  * Limb Length:
- * stepik: https://stepik.org/lesson/240336/step/11?unit=212682
  * rosalind: http://rosalind.info/problems/ba7b/
  *
  * Additive:
- * stepik: https://stepik.org/lesson/240337/step/6?unit=212683
  * rosalind: http://rosalind.info/problems/ba7c/
  *
  * Uses the Kotlin Multik multidimensional array library

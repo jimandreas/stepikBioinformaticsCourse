@@ -26,7 +26,6 @@ import java.util.*
  * Youtube: https://www.youtube.com/watch?v=Dj24mCLQYUE
  *
  * Limb Length:
- * stepik: https://stepik.org/lesson/240340/step/7?unit=212686
  * rosalind: http://rosalind.info/problems/ba7e/
  *
  * Uses the Kotlin Multik multidimensional array library
@@ -377,7 +376,7 @@ class NeighborJoining {
     ) {
         val first = coord.first
         val second = coord.second
-        val distance = distanceMatrix[first, second].toFloat()
+        val distance = distanceMatrix[first, second]
 
         // operating matrix size is the number of clusters
         val nSize = joinedPairMap.size

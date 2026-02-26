@@ -14,7 +14,6 @@ achieving this maximum score. Use the BLOSUM62 scoring matrix for matches
 and mismatches as well as the indel penalty σ = 5.
  *
  * See also:
- * stepik: @link: https://stepik.org/lesson/240305/step/3?unit=212651
  * rosalind: @link: http://rosalind.info/problems/ba5e/
  * book (5.10):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */

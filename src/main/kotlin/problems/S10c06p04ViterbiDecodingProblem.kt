@@ -14,7 +14,6 @@ import org.jetbrains.kotlinx.multik.ndarray.data.set
 /**
  *
 
-stepik: https://stepik.org/lesson/240400/step/4?unit=212746
 
 Every hidden path π in the HMM now corresponds to a
 path from source to sink in the Viterbi graph with

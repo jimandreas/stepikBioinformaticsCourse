@@ -6,7 +6,6 @@ import algorithms.EulerianPathArrayBased
 import java.util.*
 
 /**
- * @link: https://stepik.org/lesson/240261/step/2?unit=212607
  *
 Code Challenge: Solve the Eulerian Cycle Problem.
 

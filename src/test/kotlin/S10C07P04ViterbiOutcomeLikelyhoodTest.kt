@@ -25,7 +25,6 @@ internal class S10C07P04ViterbiOutcomeLikelyhoodTest {
     }
 
     /**
-     * https://stepik.org/lesson/240401/step/4?unit=212747
      * https://rosalind.info/problems/ba10d/
      */
 

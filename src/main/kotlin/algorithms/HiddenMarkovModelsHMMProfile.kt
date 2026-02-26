@@ -35,10 +35,8 @@ class HiddenMarkovModelsHMMProfile {
      * @link: https://github.com/Kotlin/multik
      * @link: https://blog.jetbrains.com/kotlin/2021/02/multik-multidimensional-arrays-in-kotlin/
      *
-     * https://stepik.org/lesson/240402/step/15?unit=212748
      * https://rosalind.info/problems/ba10e/
      *
-     * https://stepik.org/lesson/240403/step/5?unit=212749
      * https://rosalind.info/problems/ba10f/
      */
 
@@ -400,7 +398,7 @@ class HiddenMarkovModelsHMMProfile {
             return listOf(1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0)
         }
         val repeatInsertCol = tRepeatInsertCount[0..numRows, group]
-        val repeatInsertSum = repeatInsertCol.sum().toDouble()
+        val repeatInsertSum = repeatInsertCol.sum()
         val repeatInsertPercent = repeatInsertSum / insertColSum + pseudoCount
         // probability of repeating the insert transition
 

@@ -12,7 +12,6 @@ Output: A collection of space-separated integers specifying
 all starting positions where Pattern appears as a substring of Genome.
 
 See also:
-stepik: https://stepik.org/lesson/240215/step/5?unit=212562
 rosalind: http://rosalind.info/problems/ba1d/
  */
 

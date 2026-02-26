@@ -14,7 +14,6 @@ Profile-most probable k-mer in a given string, use the one occurring first.
  *  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-2
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240241/step/5?unit=212587
  * rosalind: @link: http://rosalind.info/problems/ba2d/
  */
 fun greedyMotifSearch(dnaList: List<String>, kmerLength: Int, applyLaplace: Boolean = false): List<String> {

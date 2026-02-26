@@ -6,7 +6,6 @@ import java.io.File
 
 /**
  * @link:
- * stepik: https://stepik.org/lesson/240255/step/3?unit=212601
  * rosalind: http://rosalind.info/problems/ba3a/
  *
 String Reconstruction practice problem

@@ -4,7 +4,6 @@ package problems
 
 /**
  * @link:
- * Stepik: https://stepik.org/lesson/240257/step/6?unit=212603
  *
  *
 From composition to paired composition

@@ -17,7 +17,6 @@ These are set up when the class is instantiated.
 This routine calls into the GlobalAlignment function to do the string to string work.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240306/step/3?unit=212652
  * rosalind: @link: http://rosalind.info/problems/ba5g/
  * book (5.11):  https://www.bioinformaticsalgorithms.org/bioinformatics-chapter-5
  */

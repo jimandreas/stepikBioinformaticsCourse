@@ -91,7 +91,6 @@ Output: A cyclic peptide LeaderPeptide with amino acids taken only from the top
 M elements (and ties) of the convolution of Spectrum that fall between 57 and 200,
 and where the size of Leaderboard is restricted to the top N (and ties).
 
- * stepik: @link: https://stepik.org/lesson/240284/step/7?unit=212630
  * rosalind: @link: http://rosalind.info/problems/ba4i/
  * youtube: @link: https://www.youtube.com/watch?v=qSJSM1dJ6ZY&list=PLQ-85lQlPqFPdIS_5qv_Q3XWieobVPLlc&index=8
  */

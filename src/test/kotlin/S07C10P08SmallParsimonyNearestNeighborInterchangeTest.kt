@@ -13,7 +13,6 @@ import kotlin.test.assertEquals
 /**
  *
  * See also:
- * Stepik: https://stepik.org/lesson/240343/step/6?unit=212689
  * Rosalind: no equivalent problem
  *
  * "Evolutionary Tree Reconstruction in the Modern Era"

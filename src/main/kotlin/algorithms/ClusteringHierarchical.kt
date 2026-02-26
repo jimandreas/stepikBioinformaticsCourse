@@ -11,7 +11,6 @@ class ClusteringHierarchical {
 
     /**
      * See also:
-     * Stepik: https://stepik.org/lesson/240366/step/4?unit=212712
      * Rosalind: https://rosalind.info/problems/ba8e/
      *
      * Hierarchical Clustering 9/9

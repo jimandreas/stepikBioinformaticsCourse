@@ -11,11 +11,9 @@ import kotlin.test.assertContentEquals
 
 /**
  * Construct a Trie from a Collection of Patterns
- * Stepik: https://stepik.org/lesson/240376/step/4?unit=212722
  * Rosalind: https://rosalind.info/problems/ba9a/
  *
  * TrieMatching
- * Stepik: https://stepik.org/lesson/240376/step/8?unit=212722
  * Rosalind: https://rosalind.info/problems/ba9b/
  *
  * Using the Trie 2/10

@@ -11,11 +11,9 @@ import kotlin.test.assertContentEquals
 
 /**
  * Construct the Suffix Tree of a String
- * Stepik: https://stepik.org/lesson/240378/step/4?unit=212724
  * Rosalind: https://rosalind.info/problems/ba9c/
  *
  * SEE ALSO for a tree example:
- * https://stepik.org/lesson/240388/step/2?unit=212734
  * also:
  * https://www.bioinformaticsalgorithms.org/faq-chapter-9
  * (see :  What are the edge labels in the suffix tree for "panamabananas$"?)

@@ -23,7 +23,6 @@ import kotlin.test.assertEquals
  * Youtube: https://www.youtube.com/watch?v=Dj24mCLQYUE
  *
  * Limb Length:
- * stepik: https://stepik.org/lesson/240340/step/7?unit=212686
  * rosalind: http://rosalind.info/problems/ba7e/
  *
  * Uses the Kotlin Multik multidimensional array library
@@ -148,7 +147,6 @@ internal class S07c07p07NeighborJoiningTest {
     }
 
     // example from:
-    // https://stepik.org/lesson/240340/step/7?unit=212686
 
     @Test
     @DisplayName("Neighbor Joining sample test")
@@ -200,7 +198,6 @@ internal class S07c07p07NeighborJoiningTest {
      * try applying it to the additive and non-additive distance matrices shown below.
      */
     // example from:
-    // https://stepik.org/lesson/240340/step/6?unit=212686
 
     @Test
     @DisplayName("Neighbor Joining additive example test")

@@ -5,7 +5,6 @@ package problems
 import algorithms.mostProbableKmer
 
 /**
- * @link: https://stepik.org/lesson/240241/step/3?unit=212587
  *
 Given a profile matrix Profile, we can evaluate the probability of every k-mer
 in a string Text and find a Profile-most probable k-mer in Text, i.e.,
@@ -23,7 +22,6 @@ Output: A Profile-most probable k-mer in Text.
 Code Challenge: Solve the Profile-most Probable k-mer Problem.
 
  * See also:
- * stepik: @link: https://stepik.org/lesson/240241/step/3?unit=212587
  * rosalind: @link: http://rosalind.info/problems/ba2c/
  */
 
