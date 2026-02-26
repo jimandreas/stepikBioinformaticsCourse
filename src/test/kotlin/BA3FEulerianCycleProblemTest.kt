@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-internal class S03c08p02EulerianCycleProblemTest {
+internal class BA3FEulerianCycleProblemTest {
 
     private val ep = EulerianPathArrayBased()
 

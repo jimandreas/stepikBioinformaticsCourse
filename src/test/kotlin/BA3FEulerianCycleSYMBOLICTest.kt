@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
  *  testing the euler cycle code - converted to handle the nodes as hash key entries
  *  rather than array indexes.
  */
-internal class S03c08p06EulerianCycleSYMBOLICTest {
+internal class BA3FEulerianCycleSYMBOLICTest {
 
     private val ep = EulerianPathSymbolicMap()
 

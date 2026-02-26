@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 
-internal class S09C05P07ShortestNonSharedSubstringTest {
+internal class BA9FShortestNonSharedSubstringTest {
 
     lateinit var pmst: PatternMatchingSuffixTrees
 

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 
-internal class S09C05P06LongestSharedSubstringTest {
+internal class BA9ELongestSharedSubstringTest {
 
     lateinit var pmst: PatternMatchingSuffixTrees
 
