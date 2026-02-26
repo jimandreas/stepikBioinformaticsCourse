@@ -16,12 +16,13 @@ The project uses Kotlin and Gradle (Kotlin DSL), targeting JVM 17.
 ```bash
 ./gradlew build          # compile
 ./gradlew test           # run all 522 tests
-./gradlew test --tests "S01c02p06PatternCountTest"  # run a single test class
+./gradlew test --tests "BA1APatternCountTest"  # run a single test class
 ```
 
 All exercises have a corresponding JUnit 5 test in `src/test/kotlin/`. Test class names
-follow the Stepik course numbering convention — e.g. `S05c10p03AlignmentGlobalTest` maps
-to Section 5, Chapter 10, Problem 3.
+use the Rosalind problem ID prefix — e.g. `BA1APatternCountTest` maps to
+[BA1A](https://rosalind.info/problems/ba1a/). A small number of files without a Rosalind
+equivalent retain the original Stepik course numbering (e.g. `S07C10P06...`).
 
 ## Repository Structure
 

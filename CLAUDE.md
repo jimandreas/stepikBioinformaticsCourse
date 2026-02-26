@@ -11,17 +11,17 @@ Kotlin implementations of bioinformatics algorithms from the Stepik course "Bioi
 ```bash
 ./gradlew build          # Build the project
 ./gradlew test           # Run all tests
-./gradlew test --tests "S01c02p06PatternCountTest"  # Run a single test class
+./gradlew test --tests "BA1APatternCountTest"  # Run a single test class
 ```
 
 ## Architecture
 
 - **`src/main/kotlin/algorithms/`** — Core algorithm implementations (alignment, pattern matching, graph algorithms, clustering, motif finding, etc.). Most are standalone classes or functions.
-- **`src/main/kotlin/problems/`** — Problem-specific solutions tied to Stepik course structure. Naming convention: `S01c02p06` = Section 1, Chapter 2, Problem 6.
+- **`src/main/kotlin/problems/`** — Problem-specific solutions. Most use the Rosalind problem ID prefix (e.g., `BA1APatternCount.kt`). A few files without a Rosalind equivalent retain the original Stepik numbering (`S##c##p##`).
 - **`src/main/kotlin/tables/`** — Genetic code tables (27 NCBI codon tables) in `CodonHashMaps.kt` and utilities.
 - **`src/main/kotlin/ResourceReader.kt`** — Loads scoring matrices and data files from resources.
 - **`src/main/resources/`** — Data files including BLOSUM62 and PAM250 scoring matrices.
-- **`src/test/kotlin/`** — JUnit 5 tests. Test files mirror the problem naming (e.g., `S01c02p06PatternCountTest.kt`).
+- **`src/test/kotlin/`** — JUnit 5 tests. Test files mirror the problem naming (e.g., `BA1APatternCountTest.kt`).
 
 ## Key Patterns
 
